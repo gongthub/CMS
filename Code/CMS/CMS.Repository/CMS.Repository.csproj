@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CMS.Repository</RootNamespace>
+    <AssemblyName>CMS.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemManage\AreaRepository.cs" />
+    <Compile Include="SystemManage\ItemsDetailRepository.cs" />
+    <Compile Include="SystemManage\ItemsRepository.cs" />
+    <Compile Include="SystemManage\ModuleButtonRepository.cs" />
+    <Compile Include="SystemManage\ModuleRepository.cs" />
+    <Compile Include="SystemManage\OrganizeRepository.cs" />
+    <Compile Include="SystemManage\RoleAuthorizeRepository.cs" />
+    <Compile Include="SystemManage\RoleRepository.cs" />
+    <Compile Include="SystemManage\UserLogOnRepository.cs" />
+    <Compile Include="SystemManage\UserRepository.cs" />
+    <Compile Include="SystemSecurity\DbBackupRepository.cs" />
+    <Compile Include="SystemSecurity\FilterIPRepository.cs" />
+    <Compile Include="SystemSecurity\LogRepository.cs" />
+    <Compile Include="WebManage\C_ModulesRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CMS.Code\CMS.Code.csproj">
+      <Project>{4d383bb6-954f-4a80-b37c-d280f2ee37f9}</Project>
+      <Name>CMS.Code</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.Data\CMS.Data.csproj">
+      <Project>{ad5e0635-dc2a-4c78-a802-8571b9e965d9}</Project>
+      <Name>CMS.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj">
+      <Project>{a7d0b5f6-bc95-4798-b054-6ca6d14a5e10}</Project>
+      <Name>CMS.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
