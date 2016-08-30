@@ -153,6 +153,7 @@
     <Content Include="Content\js\bootstrap\bootstrap.min.css" />
     <Content Include="Content\js\charts\Chart.js" />
     <Content Include="Content\js\charts\Chart.min.js" />
+    <Content Include="Content\js\Common.js" />
     <Content Include="Content\js\cookie\jquery.cookie.js" />
     <Content Include="Content\js\datepicker\calendar.js" />
     <Content Include="Content\js\datepicker\DatePicker.js" />
@@ -338,6 +339,7 @@
     <Content Include="Content\js\zsign\jquery.zsign.js" />
     <Content Include="Content\js\zsign\signet.gif" />
     <Content Include="Global.asax" />
+    <Content Include="Html\Index.html" />
     <Content Include="Index.htm" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -375,6 +377,7 @@
     <Compile Include="Areas\SystemSecurity\Controllers\ServerMonitoringController.cs" />
     <Compile Include="Areas\SystemSecurity\SystemSecurityAreaRegistration.cs" />
     <Compile Include="Areas\WebManage\Controllers\C_ModulesController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\C_TempletController.cs" />
     <Compile Include="Areas\WebManage\WebManageAreaRegistration.cs" />
     <Compile Include="Controllers\ClientsDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -480,6 +483,9 @@
     <Content Include="packages.config" />
     <Content Include="Areas\WebManage\Views\C_Modules\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Web.config" />
+    <Content Include="Areas\WebManage\Views\C_Templet\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Templet\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Templet\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

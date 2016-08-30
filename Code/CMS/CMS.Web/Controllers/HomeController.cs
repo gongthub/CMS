@@ -20,6 +20,22 @@ namespace CMS.Web.Controllers
         public ActionResult Default()
         {
             return View();
-        } 
+        }
+
+
+        [HttpGet]
+        public ActionResult ModulM(string id)
+        {
+            string srcs = @"/html/" + id + ".html";
+            srcs = Server.MapPath(srcs);
+            string strLine;
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(srcs))
+            {
+                strLine = sr.ReadToEnd();
+            }
+
+
+            return Content(strLine);
+        }
     }
 }

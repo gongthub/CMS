@@ -60,6 +60,7 @@
     <Compile Include="SystemSecurity\FilterIPApp.cs" />
     <Compile Include="SystemSecurity\LogApp.cs" />
     <Compile Include="WebManage\C_ModulesApp.cs" />
+    <Compile Include="WebManage\C_TempletApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMS.Code\CMS.Code.csproj">
