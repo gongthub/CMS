@@ -486,6 +486,8 @@
     <Content Include="Areas\WebManage\Views\C_Templet\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\C_Templet\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\C_Templet\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Modules\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Modules\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

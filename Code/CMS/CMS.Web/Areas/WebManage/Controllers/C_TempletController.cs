@@ -29,6 +29,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetGridJson()
+        {
+            var data = templetApp.GetList();  
+            return Content(data.ToJson());
+        }
+        [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
         {

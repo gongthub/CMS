@@ -15,7 +15,7 @@ namespace CMS.Application.WebManage
 
         public List<C_ModulesEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.C_Name).ToList();
+            return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
         }
         public C_ModulesEntity GetForm(string keyValue)
         {
@@ -23,7 +23,7 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
-            service.Delete(t => t.C_ID == keyValue);
+            service.Delete(t => t.F_Id == keyValue);
         }
         public void SubmitForm(C_ModulesEntity moduleEntity, string keyValue)
         {

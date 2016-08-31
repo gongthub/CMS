@@ -13,7 +13,7 @@ namespace CMS.Mapping.WebManage
         public C_ModulesMap()
         {
             this.ToTable("C_Modules");
-            this.HasKey(t => t.C_ID);
+            this.HasKey(t => t.F_Id);
         }
     }
 }
