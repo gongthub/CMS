@@ -19,7 +19,7 @@ namespace CMS.Web
             if (OperatorProvider.Provider.GetCurrent() == null)
             {
                 WebHelper.WriteCookie("cms_login_error", "overdue");
-                filterContext.HttpContext.Response.Write("<script>top.location.href = '/Login/Index';</script>");
+                //filterContext.HttpContext.Response.Write("<script>top.location.href = '/Login/Index';</script>");
                 return;
             }
         }

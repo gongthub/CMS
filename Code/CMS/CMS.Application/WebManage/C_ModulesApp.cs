@@ -30,13 +30,58 @@ namespace CMS.Application.WebManage
             if (!string.IsNullOrEmpty(keyValue))
             {
                 moduleEntity.Modify(keyValue);
+                if (moduleEntity.F_MainMark == true)
+                {
+                    List<C_ModulesEntity> models = service.IQueryable().Where(m => m.F_DeleteMark != true && m.F_Id != moduleEntity.F_Id).ToList();
+                    if (models != null && models.Count > 0)
+                    {
+                        models.ForEach(delegate(C_ModulesEntity model)
+                        {
+                            model.F_MainMark = false;
+                            service.Update(model);
+                        });
+                    }
+                }
                 service.Update(moduleEntity);
             }
             else
             {
                 moduleEntity.Create();
+
+                if (moduleEntity.F_MainMark == true)
+                {
+                    List<C_ModulesEntity> models = service.IQueryable().Where(m => m.F_DeleteMark != true && m.F_Id != moduleEntity.F_Id).ToList();
+                    if (models != null && models.Count > 0)
+                    {
+                        models.ForEach(delegate(C_ModulesEntity model)
+                        {
+                            model.F_MainMark = false;
+                            service.Update(model);
+                        });
+                    }
+                }
                 service.Insert(moduleEntity);
             }
         }
+
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public C_ModulesEntity GetMain()
+        {
+            return service.IQueryable().Where(m => m.F_DeleteMark != true && m.F_MainMark == true).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public C_ModulesEntity GetModelByActionName(string actionName)
+        {
+            return service.IQueryable().Where(m => m.F_DeleteMark != true && m.F_ActionName == actionName).FirstOrDefault();
+        }
+
+        
     }
 }

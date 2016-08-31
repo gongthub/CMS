@@ -38,6 +38,12 @@
                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 },
+                {
+                    label: "主页", name: "F_MainMark", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
                 { label: '描述', name: 'F_Description', width: 300, align: 'left' }
             ]
         });

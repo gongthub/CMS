@@ -23,6 +23,7 @@ namespace CMS.Domain.Entity.WebManage
         public string F_Icon { get; set; }
         public bool F_EnabledMark { get; set; }
         public bool? F_DeleteMark { get; set; }
+        public bool? F_MainMark { get; set; }
         public string F_CreatorUserId { get; set; }
         public DateTime? F_CreatorTime { get; set; }
         public string F_DeleteUserId { get; set; }

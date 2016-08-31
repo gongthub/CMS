@@ -49,5 +49,37 @@ namespace CMS.Application.WebManage
                 service.Insert(moduleEntity);
             }
         }
+
+        /// <summary>
+        /// 获取默认模板
+        /// </summary>
+        /// <returns></returns>
+        public C_TempletEntity GetMain()
+        {
+            C_TempletEntity templet = new C_TempletEntity();
+            C_ModulesApp moduleApp=new C_ModulesApp();
+            C_ModulesEntity module = moduleApp.GetMain();
+            if (module != null)
+            {
+                templet = service.FindEntity(m => m.F_Id == module.F_TempletId);
+            }
+            return templet;
+        }
+
+        /// <summary>
+        /// 根据名称获取模板
+        /// </summary>
+        /// <returns></returns>
+        public C_TempletEntity GetModelByActionName(string actionName)
+        {
+            C_TempletEntity templet = new C_TempletEntity();
+            C_ModulesApp moduleApp = new C_ModulesApp();
+            C_ModulesEntity module = moduleApp.GetModelByActionName(actionName);
+            if (module != null)
+            {
+                templet = service.FindEntity(m => m.F_Id == module.F_TempletId);
+            }
+            return templet;
+        }
     }
 }
