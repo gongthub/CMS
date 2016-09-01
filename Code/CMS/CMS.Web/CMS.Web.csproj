@@ -538,6 +538,9 @@
     <Content Include="Html\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Html\fonts\Nunito\Nunito-Regular.ttf" />
     <Content Include="Html\fonts\Pacifico\Pacifico.ttf" />
+    <Content Include="Areas\WebManage\Views\C_Content\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Content\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\C_Content\Form.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

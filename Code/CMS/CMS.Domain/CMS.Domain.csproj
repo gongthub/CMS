@@ -52,6 +52,7 @@
     <Compile Include="Entity\SystemSecurity\DbBackupEntity.cs" />
     <Compile Include="Entity\SystemSecurity\FilterIPEntity.cs" />
     <Compile Include="Entity\SystemSecurity\LogEntity.cs" />
+    <Compile Include="Entity\WebManage\C_ContentEntity.cs" />
     <Compile Include="Entity\WebManage\C_ModulesEntity.cs" />
     <Compile Include="Entity\WebManage\C_TempletEntity.cs" />
     <Compile Include="Infrastructure\ICreationAudited.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="IRepository\SystemSecurity\IDbBackupRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\ILogRepository.cs" />
+    <Compile Include="IRepository\WebManage\IC_ContentRepository.cs" />
     <Compile Include="IRepository\WebManage\IC_TempletRepository.cs" />
     <Compile Include="IRepository\WebManage\IC_ModulesRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

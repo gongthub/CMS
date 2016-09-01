@@ -29,7 +29,29 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
             return Content(treeList.TreeSelectJson());
         }
-         
+
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetTreeJson()
+        {
+            var data = c_moduleApp.GetList();
+            var treeList = new List<TreeViewModel>();
+            foreach (C_ModulesEntity item in data)
+            {
+                TreeViewModel tree = new TreeViewModel();
+                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
+                tree.id = item.F_Id;
+                tree.text = item.F_FullName;
+                tree.value = item.F_ActionName;
+                tree.parentId = item.F_ParentId;
+                tree.isexpand = true;
+                tree.complete = true;
+                tree.hasChildren = hasChildren;
+                treeList.Add(tree);
+            }
+            return Content(treeList.TreeViewJson());
+        }
+
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTypeSelectJson()

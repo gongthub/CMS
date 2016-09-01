@@ -53,6 +53,7 @@
     <Compile Include="SystemSecurity\DbBackupRepository.cs" />
     <Compile Include="SystemSecurity\FilterIPRepository.cs" />
     <Compile Include="SystemSecurity\LogRepository.cs" />
+    <Compile Include="WebManage\C_ContentRepository.cs" />
     <Compile Include="WebManage\C_ModulesRepository.cs" />
     <Compile Include="WebManage\C_TempletRepository.cs" />
   </ItemGroup>
