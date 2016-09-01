@@ -29,6 +29,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
             return Content(treeList.TreeSelectJson());
         }
+         
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetTypeSelectJson()
+        {
+            List<EnumModel> models = EnumHelp.enumHelp.EnumToList(typeof(CMS.Code.Enums.ModuleType));
+             
+            return Content(models.ToJson());
+        }
 
         [HttpGet]
         [HandlerAjaxOnly]

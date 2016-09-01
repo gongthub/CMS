@@ -12,6 +12,7 @@ namespace CMS.Domain.Entity.WebManage
         public string F_Id { get; set; }
         public string F_ParentId { get; set; }
         public string F_TempletId { get; set; }
+        public string F_CTempletId { get; set; }
         public int F_SortCode { get; set; }
         public string F_FullName { get; set; }
 
