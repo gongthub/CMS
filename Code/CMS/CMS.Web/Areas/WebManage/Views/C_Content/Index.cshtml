@@ -22,12 +22,12 @@
         $gridList.dataGrid({
             height: $(window).height() - 96,
             colModel: [
-                { label: "主键", name: "F_Id", hidden: true, key: true }, 
+                { label: "主键", name: "F_Id", hidden: true, key: true },
                 { label: '名称', name: 'F_FullName', width: 120, align: 'left' },
                 {
                     label: '栏目', name: 'F_ModuleId', width: 80, align: 'left',
                     formatter: function (cellvalue, options, rowObject) {
-                        return top.clients.Modules[cellvalue] == null ? "" : top.clients.Modules[cellvalue].fullname;
+                        return top.clients.modules[cellvalue] == null ? "" : top.clients.modules[cellvalue].fullname;
                     }
                 },
                 { label: '作者', name: 'F_Author', width: 80, align: 'left' },
@@ -45,7 +45,7 @@
                         return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 },
-                { label: '连接地址', name: 'F_UrlAddress', width: 150, align: 'left' }, 
+                { label: '连接地址', name: 'F_UrlPage', width: 150, align: 'left' },
                 { label: "备注", name: "F_Description", index: "F_Description", width: 200, align: "left", sortable: false }
             ]
         });
@@ -57,9 +57,28 @@
         });
     }
     function btn_add() {
+        if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
+            alert("请选择左侧栏目！");
+            return false;
+        }
+        var type = $("#itemTree").getCurrentNode().value;
+        var gridRows = $("#gridList").jqGrid('getGridParam', 'records');
+        if (type == 0) {
+            alert("栏目为导航，不需要添加内容！");
+            return false;
+        }
+        if (type == 1 && gridRows >= 1) {
+            alert("栏目为内容，只能添加一条数据！");
+            return false;
+        }
+        if (type == 3) {
+            alert("栏目为连接，不需要添加内容！");
+            return false;
+        }
         var moduleId = $("#itemTree").getCurrentNode().id;
         var moduleName = $("#itemTree").getCurrentNode().text;
         if (!moduleId) {
+            alert("请选择左侧栏目！");
             return false;
         }
         $.modalOpen({
@@ -104,6 +123,17 @@
             btn: null,
         });
     }
+    //生成静态页
+    function btn_staticpage() { 
+        $.getStaticPage({
+            url: "/WebManage/C_Content/GetStaticPage",
+            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            success: function () {
+                $("#gridList").resetSelection();
+                $("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
 </script>
 <div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
     <div class="ui-layout-west">
@@ -124,6 +154,7 @@
                         <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改内容</a></li>
                         <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除内容</a></li>
                         <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看内容</a></li>
+                        <li><a id="NF-StaticPage" authorize="yes" onclick="btn_staticpage()"><i class="fa fa-pencil-square-o"></i>生成静态页</a></li>
                     </ul>
                     <a href="javascript:;" class="close"></a>
                 </div>

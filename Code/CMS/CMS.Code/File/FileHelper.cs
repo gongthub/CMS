@@ -848,5 +848,41 @@ namespace CMS.Code
             return HttpContext.Current.Server.MapPath(path);
         }
         #endregion
+
+
+        #region 将内容写入文本文件(如果文件path存在就打开，不存在就新建)
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="FilePath">路径</param>
+        /// <param name="FileName">文件名称</param>
+        /// <param name="WriteStr">写入数据</param>
+        public static void CreateAndWrite(string FilePath, string FileName, string WriteStr)
+        {
+            FilePath = MapPath(FilePath);
+            string fileSrc = FilePath + FileName;
+            if (!IsExistDirectory(FilePath))
+            {
+                Directory.CreateDirectory(FilePath);
+            }
+            ExistsFile(fileSrc);
+
+            FileInfo finfo = new FileInfo(fileSrc);
+            using (FileStream fs = finfo.OpenWrite())
+            {
+                //根据上面创建的文件流创建写数据流 
+                StreamWriter strwriter = new StreamWriter(fs);
+                //设置写数据流的起始位置为文件流的末尾 
+                strwriter.BaseStream.Seek(0, SeekOrigin.End);
+                //写入相关记录信息
+                strwriter.Write(WriteStr);
+                //清空缓冲区内容，并把缓冲区内容写入基础流 
+                strwriter.Flush();
+                strwriter.Close();
+                fs.Close();
+            }
+
+        }
+        #endregion
     }
 }

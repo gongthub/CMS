@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace CMS.Domain.Entity.WebManage
         public string F_DeleteUserId { get; set; }
         public DateTime? F_DeleteTime { get; set; }
         public string F_LastModifyUserId { get; set; }
-        public DateTime? F_LastModifyTime { get; set; } 
+        public DateTime? F_LastModifyTime { get; set; }
+
+       [NotMapped]
+        public string F_UrlPage { get; set; }
     }
 }

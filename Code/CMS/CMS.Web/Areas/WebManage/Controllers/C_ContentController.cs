@@ -44,5 +44,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
             c_contentApp.DeleteForm(keyValue);
             return Success("删除成功。");
         }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult GetStaticPage(string keyValue)
+        {  
+            c_contentApp.GetStaticPage(keyValue); 
+            return Success("生成成功。");
+        }
     }
 }

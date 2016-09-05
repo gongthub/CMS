@@ -377,7 +377,6 @@
     <Content Include="Html\images\tb1.jpg" />
     <Content Include="Html\images\tb2.jpg" />
     <Content Include="Html\images\tb3.jpg" />
-    <Content Include="Html\index.html" />
     <Content Include="Html\js\bootstrap.min.js" />
     <Content Include="Html\js\jquery-2.1.4.min.js" />
     <Content Include="Html\js\jquery.circlechart.js" />
@@ -541,6 +540,7 @@
     <Content Include="Areas\WebManage\Views\C_Content\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\C_Content\Details.cshtml" />
     <Content Include="Areas\WebManage\Views\C_Content\Form.cshtml" />
+    <None Include="Properties\PublishProfiles\cms.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

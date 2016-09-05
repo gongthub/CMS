@@ -1,6 +1,8 @@
 ﻿using CMS.Application.SystemManage;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.Entity.WebManage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,7 @@ namespace CMS.Web.Controllers
                 user = "",
                 authorizeMenu = this.GetMenuList(),
                 authorizeButton = this.GetMenuButtonList(),
+                modules = this.GetModulesList(),
             };
             return Content(data.ToJson());
         }
@@ -124,6 +127,23 @@ namespace CMS.Web.Controllers
             {
                 var buttonList = data.Where(t => t.F_ModuleId.Equals(item.F_ModuleId));
                 dictionary.Add(item.F_ModuleId, buttonList);
+            }
+            return dictionary;
+        }
+
+        private object GetModulesList()
+        {
+            C_ModulesApp moduleApp = new C_ModulesApp();
+            var data = moduleApp.GetList();
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            foreach (C_ModulesEntity item in data)
+            {
+                var fieldItem = new
+                {
+                    encode = item.F_ActionName,
+                    fullname = item.F_FullName
+                };
+                dictionary.Add(item.F_Id, fieldItem);
             }
             return dictionary;
         }

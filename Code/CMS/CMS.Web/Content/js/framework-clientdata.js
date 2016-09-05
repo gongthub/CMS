@@ -10,7 +10,8 @@ $.clientsInit = function () {
         duty: [],
         user: [],
         authorizeMenu: [],
-        authorizeButton: []
+        authorizeButton: [],
+        modules: []
     };
     var init = function () {
         $.ajax({
@@ -25,6 +26,7 @@ $.clientsInit = function () {
                 dataJson.duty = data.duty;
                 dataJson.authorizeMenu = eval(data.authorizeMenu);
                 dataJson.authorizeButton = data.authorizeButton;
+                dataJson.modules = data.modules;
             }
         });
     }

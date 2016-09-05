@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -17,6 +18,7 @@ namespace CMS.Application.WebManage
 
         public List<C_ContentEntity> GetList(string itemId = "", string keyword = "")
         {
+            List<C_ContentEntity> models = new List<C_ContentEntity>();
             var expression = ExtLinq.True<C_ContentEntity>();
             if (!string.IsNullOrEmpty(itemId))
             {
@@ -24,24 +26,59 @@ namespace CMS.Application.WebManage
             }
             if (!string.IsNullOrEmpty(keyword))
             {
-                expression = expression.And(t => t.F_FullName.Contains(keyword)); 
+                expression = expression.And(t => t.F_FullName.Contains(keyword));
             }
-            return service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
-        } 
+            models = service.IQueryable(expression).OrderBy(t => t.F_SortCode).ToList();
+            models.ForEach(delegate(C_ContentEntity model)
+            {
+
+                if (model != null && model.F_UrlAddress != null)
+                {
+                    model.F_UrlPage = model.F_UrlAddress;
+                    model.F_UrlPage = model.F_UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
+        }
 
         public List<C_ContentEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
+            List<C_ContentEntity> models = new List<C_ContentEntity>();
+            models= service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
+            models.ForEach(delegate(C_ContentEntity model)
+            {
+
+                if (model != null && model.F_UrlAddress != null)
+                {
+                    model.F_UrlPage = model.F_UrlAddress;
+                    model.F_UrlPage = model.F_UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
         }
 
         public List<C_ContentEntity> GetList(Pagination pagination, string keyword)
         {
+            List<C_ContentEntity> models = new List<C_ContentEntity>();
             var expression = ExtLinq.True<C_ContentEntity>();
             if (!string.IsNullOrEmpty(keyword))
             {
                 expression = expression.And(t => t.F_FullName.Contains(keyword));
             }
-            return service.FindList(expression, pagination);
+            models= service.FindList(expression, pagination);
+            models.ForEach(delegate(C_ContentEntity model)
+            {
+
+                if (model != null && model.F_UrlAddress != null)
+                {
+                    model.F_UrlPage = model.F_UrlAddress;
+                    model.F_UrlPage = model.F_UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
         }
         public C_ContentEntity GetForm(string keyValue)
         {
@@ -64,6 +101,35 @@ namespace CMS.Application.WebManage
                 service.Insert(moduleEntity);
             }
         }
-         
+
+
+        public C_ModulesEntity GetModuleByContentID(string keyValue)
+        {
+            C_ModulesEntity module = new C_ModulesEntity();
+            C_ModulesApp moduleapp = new C_ModulesApp();
+            C_ContentEntity content = GetForm(keyValue);
+            if (content != null)
+            {
+                module = moduleapp.GetForm(content.F_ModuleId);
+            }
+            return module;
+        }
+
+        public void GetStaticPage(string keyValue)
+        {
+            C_ModulesEntity module = GetModuleByContentID(keyValue);
+            C_ContentEntity content = GetForm(keyValue);
+            if (module != null)
+            {
+                C_TempletApp templetapp = new C_TempletApp();
+                C_TempletEntity templet = templetapp.GetForm(module.F_TempletId);
+                if (templet != null)
+                {
+                    string templets = System.Web.HttpUtility.HtmlDecode(templet.F_Content);
+                    TempHelp temphelp = new TempHelp();
+                    temphelp.GetHtmlPage(templets, keyValue);
+                }
+            }
+        }
     }
 }

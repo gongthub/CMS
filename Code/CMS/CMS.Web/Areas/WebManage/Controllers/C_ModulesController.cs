@@ -16,7 +16,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson()
-        {
+        {  
             var data = c_moduleApp.GetList();
             var treeList = new List<TreeSelectModel>();
             foreach (C_ModulesEntity item in data)
@@ -42,7 +42,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
                 tree.id = item.F_Id;
                 tree.text = item.F_FullName;
-                tree.value = item.F_ActionName;
+                tree.value = item.F_Type.ToString();
                 tree.parentId = item.F_ParentId;
                 tree.isexpand = true;
                 tree.complete = true;

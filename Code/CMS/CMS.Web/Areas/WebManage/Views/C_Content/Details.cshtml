@@ -36,6 +36,7 @@
                 async: false,
                 success: function (data) {
                     data.F_Content = htmlDecode(data.F_Content);
+                    editor.setValue(data.F_Content)
                     $("#form1").formSerialize(data);
                     $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
                     $("#form1").find('div.ckbox label').attr('for', '');
