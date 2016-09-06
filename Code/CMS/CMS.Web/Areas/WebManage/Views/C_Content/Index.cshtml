@@ -12,6 +12,9 @@
         $("#itemTree").treeview({
             url: "/WebManage/C_Modules/GetTreeJson",
             onnodeclick: function (item) {
+
+                var $operate = $(".operate");
+                $operate.animate({ "left": '-100.1%' }, 200);
                 $("#txt_keyword").val('');
                 $('#btn_search').trigger("click");
             }
@@ -125,6 +128,15 @@
     }
     //生成静态页
     function btn_staticpage() { 
+        if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
+            alert("请选择左侧栏目！");
+            return false;
+        }
+        var type = $("#itemTree").getCurrentNode().value;
+        if (type != 2) {
+            alert("栏目只能为列表才能生成静态页！");
+            return false;
+        } 
         $.getStaticPage({
             url: "/WebManage/C_Content/GetStaticPage",
             param: { keyValue: $("#gridList").jqGridRowValue().F_Id },

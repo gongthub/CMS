@@ -17,6 +17,10 @@ namespace CMS.Application.WebManage
         {
             return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
         }
+        public C_ModulesEntity GetFormByActionName(string actionName)
+        {
+            return service.IQueryable(m => m.F_ActionName.ToLower() == actionName.ToLower() && m.F_DeleteMark !=true).FirstOrDefault();
+        }
         public C_ModulesEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

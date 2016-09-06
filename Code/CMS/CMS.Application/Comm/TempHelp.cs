@@ -20,11 +20,28 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 模板开始特殊符
         /// </summary>
-        private static readonly string STARTCHAR = "{{";
+        private static readonly string STARTCHAR = "{{#";
         /// <summary>
         /// 模板结束特殊符
         /// </summary>
-        private static readonly string ENDCHAR = "}}";
+        private static readonly string ENDCHAR = "#}}";
+        /// <summary>
+        /// 模板列表内容开始特殊符
+        /// </summary>
+        private static readonly string STARTMCHAR = "{";
+        /// <summary>
+        /// 模板列表内容结束特殊符
+        /// </summary>
+        private static readonly string ENDMCHAR = "}";
+
+        /// <summary>
+        /// 模板列表内容开始特殊符
+        /// </summary>
+        private static readonly string STARTMC = "@[";
+        /// <summary>
+        /// 模板列表内容结束特殊符
+        /// </summary>
+        private static readonly string ENDMC = "]@";
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
@@ -129,7 +146,7 @@ namespace CMS.Application.Comm
                 }
                 string templets = System.Web.HttpUtility.HtmlDecode(codes);
                 int i = templets.IndexOf(STARTCHAR);
-                int j = templets.IndexOf(ENDCHAR) + 2;
+                int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                 while (i > 0 && j > 0)
                 {
                     string templetst = templets.Substring(i, j - i);
@@ -138,12 +155,25 @@ namespace CMS.Application.Comm
 
                     if (strts.Length >= 2 && strts[1] != null)
                     {
-                        string htmlt = GetTModel(strt, Id);
+                        string templetstm = "";
+                        if (strts[0] == "models")
+                        {
+                            int mitemp = templetst.IndexOf(STARTMCHAR);
+                            int mjtemp = templetst.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
+                            if (mitemp >= 0 && mjtemp >= 0)
+                            {
+                                templetstm = templetst.Substring(mitemp, mjtemp - mitemp);
+
+                                strt = strt.Replace(templetstm,"");
+                                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
+                            }
+                        }
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
                     i = templets.IndexOf(STARTCHAR);
-                    j = templets.IndexOf(ENDCHAR) + 2;
+                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                 }
                 string filePaths = "";
                 //创建静态页面
@@ -163,6 +193,94 @@ namespace CMS.Application.Comm
             return b;
 
         }
+
+        /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPages(string codes, string Id)
+        {
+            string strs = "";
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTCHAR);
+                int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string templetstm = "";
+                        if (strts[0] == "models")
+                        {
+                            int mitemp = strt.IndexOf(STARTMCHAR);
+                            int mjtemp = strt.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
+                            if (mitemp >= 0 && mjtemp >= 0)
+                            {
+                                templetstm = strt.Substring(mitemp, mjtemp - mitemp);
+                                strt = strt.Replace(templetstm, "");
+                                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
+                            }
+                        }
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTCHAR);
+                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                }
+                strs = templets;
+            }
+            catch (Exception ex)
+            {
+                strs = "";
+            }
+            return strs;
+
+        }
+
+        /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPage(string codes, C_ContentEntity model)
+        {
+            string strs = "";
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTMC);
+                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string htmlt = GetModelById(strts[1], model);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTMC);
+                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                }
+                strs = templets;
+            }
+            catch (Exception ex)
+            {
+                strs = "";
+            }
+            return strs;
+
+        }
         #endregion
 
         #region 获取html静态页面
@@ -170,7 +288,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string Id)
+        private string GetTModel(string codes, string mcodes, string Id)
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -180,11 +298,18 @@ namespace CMS.Application.Comm
                 string modelName = strs[0];
                 //获取指定内容
                 string modelStr = strs[1];
-
                 switch (modelName)
                 {
                     case "model":
                         htmls = GetModelById(modelStr, Id);
+                        break;
+                    case "models":
+                        switch (modelStr)
+                        {
+                            case "contents":
+                                htmls = GetContentsById(Id, mcodes);
+                                break;
+                        }
                         break;
                 }
 
@@ -242,6 +367,64 @@ namespace CMS.Application.Comm
 
             return strs;
         }
+        /// <summary>
+        /// 根据model获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById(string name, C_ContentEntity model)
+        {
+            string strs = "";
+
+            if (model != null)
+            {
+                PropertyInfo[] propertys = model.GetType().GetProperties();
+                if (propertys != null && propertys.Length > 0)
+                {
+                    foreach (PropertyInfo property in propertys)
+                    {
+                        if (property.Name == name || property.Name.Replace("F_", "") == name)
+                        {
+                            object obj = property.GetValue(model, null);
+                            if (obj != null)
+                            {
+                                strs = obj.ToString();
+                                if (IsHtmlEnCode(strs))
+                                {
+                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return strs;
+        }
+
+        #endregion
+
+        #region 根据栏目id获取内容集合
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetContentsById(string Ids, string mcodes)
+        {
+            string strs = "";
+            C_ContentApp contentapp = new C_ContentApp();
+            List<C_ContentEntity> contententitys = new List<C_ContentEntity>();
+            contententitys = contentapp.GetList(Ids);
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                foreach (C_ContentEntity contententity in contententitys)
+                {
+                    strs += GetHtmlPage(mcodes, contententity);
+                }
+            }
+            return strs;
+        }
 
         #endregion
 
@@ -259,7 +442,7 @@ namespace CMS.Application.Comm
                 contentEntity.F_UrlAddress = url;
                 contentapp.SubmitForm(contentEntity, Ids);
             }
-        } 
+        }
         #endregion
 
     }

@@ -1,4 +1,5 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.Comm;
+using CMS.Application.WebManage;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,24 @@ namespace CMS.Web.Controllers
         {
             C_TempletApp templetApp = new C_TempletApp();
             C_TempletEntity model = new C_TempletEntity();
+            C_ModulesApp modulesApp = new C_ModulesApp();
+            C_ModulesEntity moduleentity = new C_ModulesEntity();
             if (string.IsNullOrEmpty(name))
             {
-                model = templetApp.GetMain(); 
+                model = templetApp.GetMain();
             }
             else
             {
-                model = templetApp.GetModelByActionName(name); 
+                model = templetApp.GetModelByActionName(name);
             }
             string htmls = Server.HtmlDecode(model.F_Content);
+            moduleentity = modulesApp.GetFormByActionName(name);
+            if (moduleentity != null)
+            {
+                TempHelp temphelp = new TempHelp();
+                htmls = temphelp.GetHtmlPages(htmls, moduleentity.F_Id);
+            }
+
             return Content(htmls);
         }
     }

@@ -122,7 +122,7 @@ namespace CMS.Application.WebManage
             if (module != null)
             {
                 C_TempletApp templetapp = new C_TempletApp();
-                C_TempletEntity templet = templetapp.GetForm(module.F_TempletId);
+                C_TempletEntity templet = templetapp.GetForm(module.F_CTempletId);
                 if (templet != null)
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.F_Content);
