@@ -117,7 +117,9 @@ namespace CMS.Application.Comm
         }
         #endregion
 
-        #region 获取模板元素集合
+        #region 获取html
+
+        #region 获取模板元素集合 +bool GetHtmlPage(string codes, string Id)
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
@@ -144,37 +146,38 @@ namespace CMS.Application.Comm
                     }
 
                 }
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                int i = templets.IndexOf(STARTCHAR);
-                int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                while (i > 0 && j > 0)
-                {
-                    string templetst = templets.Substring(i, j - i);
-                    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
-                    string[] strts = strt.Split('.');
+                //string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                //int i = templets.IndexOf(STARTCHAR);
+                //int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                //while (i > 0 && j > 0)
+                //{
+                //    string templetst = templets.Substring(i, j - i);
+                //    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
+                //    string[] strts = strt.Split('.');
 
-                    if (strts.Length >= 2 && strts[1] != null)
-                    {
-                        string templetstm = "";
-                        if (strts[0] == "models")
-                        {
-                            int mitemp = templetst.IndexOf(STARTMCHAR);
-                            int mjtemp = templetst.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
-                            if (mitemp >= 0 && mjtemp >= 0)
-                            {
-                                templetstm = templetst.Substring(mitemp, mjtemp - mitemp);
+                //    if (strts.Length >= 2 && strts[1] != null)
+                //    {
+                //        string templetstm = "";
+                //        if (strts[0] == "models")
+                //        {
+                //            int mitemp = templetst.IndexOf(STARTMCHAR);
+                //            int mjtemp = templetst.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
+                //            if (mitemp >= 0 && mjtemp >= 0)
+                //            {
+                //                templetstm = templetst.Substring(mitemp, mjtemp - mitemp);
 
-                                strt = strt.Replace(templetstm,"");
-                                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
-                            }
-                        }
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
-                        templets = templets.Replace(templetst, htmlt);
+                //                strt = strt.Replace(templetstm,"");
+                //                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
+                //            }
+                //        }
+                //        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
+                //        templets = templets.Replace(templetst, htmlt);
 
-                    }
-                    i = templets.IndexOf(STARTCHAR);
-                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                }
+                //    }
+                //    i = templets.IndexOf(STARTCHAR);
+                //    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                //}
+                string templets = GetHtmlPages(codes, Id);
                 string filePaths = "";
                 //创建静态页面
                 CreateHtml(templets, out filePaths);
@@ -192,8 +195,10 @@ namespace CMS.Application.Comm
             }
             return b;
 
-        }
+        } 
+        #endregion
 
+        #region 获取模板元素集合 +string GetHtmlPages(string codes, string Id)
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
@@ -216,7 +221,7 @@ namespace CMS.Application.Comm
                     if (strts.Length >= 2 && strts[1] != null)
                     {
                         string templetstm = "";
-                        if (strts[0] == "models")
+                        if (strts[0].Trim().ToLower() == "models")
                         {
                             int mitemp = strt.IndexOf(STARTMCHAR);
                             int mjtemp = strt.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
@@ -242,8 +247,10 @@ namespace CMS.Application.Comm
             }
             return strs;
 
-        }
+        } 
+        #endregion
 
+        #region 获取模板元素集合 +string GetHtmlPage(string codes, C_ContentEntity model)
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
@@ -281,9 +288,12 @@ namespace CMS.Application.Comm
             return strs;
 
         }
+        
         #endregion
 
-        #region 获取html静态页面
+        #endregion
+
+        #region 获取html静态页面 -GetTModel(string codes, string mcodes, string Id)
         /// <summary>
         /// 获取html静态页面
         /// </summary>
@@ -298,18 +308,21 @@ namespace CMS.Application.Comm
                 string modelName = strs[0];
                 //获取指定内容
                 string modelStr = strs[1];
-                switch (modelName)
+                switch (modelName.Trim().ToLower())
                 {
                     case "model":
                         htmls = GetModelById(modelStr, Id);
                         break;
                     case "models":
-                        switch (modelStr)
+                        switch (modelStr.Trim().ToLower())
                         {
                             case "contents":
                                 htmls = GetContentsById(Id, mcodes);
                                 break;
                         }
+                        break;
+                    case "templet":
+                        htmls = GetHtmlsByTempletName(modelStr,Id);
                         break;
                 }
 
@@ -318,7 +331,7 @@ namespace CMS.Application.Comm
         }
         #endregion
 
-        #region 根据id获取内容
+        #region 根据id获取内容 -string GetModelById(string name, string Ids)
         /// <summary>
         /// 根据id获取内容
         /// </summary>
@@ -404,7 +417,7 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据栏目id获取内容集合
+        #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes)
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
@@ -428,7 +441,7 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据id更新内容链接
+        #region 根据id更新内容链接 -void UpdateContentById(string url, string Ids)
         /// <summary>
         /// 根据id更新内容链接
         /// </summary>
@@ -445,5 +458,25 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        #region 根据模板名称获取模板信息 -string GetHtmlsByTempletName(string name, string Id)
+        /// <summary>
+        /// 根据模板名称获取模板信息
+        /// </summary>
+        /// <returns></returns>
+        private string GetHtmlsByTempletName(string name, string Id)
+        {
+            string strs = "";
+            C_TempletApp templetapp = new C_TempletApp();
+            C_TempletEntity templet = templetapp.GetFormByName(name);
+            if (templet != null)
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(templet.F_Content);
+                TempHelp temphelp = new TempHelp();
+                strs = temphelp.GetHtmlPages(templets, Id);
+            }
+            return strs;
+        }
+        
+        #endregion
     }
 }

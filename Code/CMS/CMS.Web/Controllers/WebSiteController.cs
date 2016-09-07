@@ -26,13 +26,14 @@ namespace CMS.Web.Controllers
             if (string.IsNullOrEmpty(name))
             {
                 model = templetApp.GetMain();
+                moduleentity = modulesApp.GetMain();
             }
             else
             {
                 model = templetApp.GetModelByActionName(name);
+                moduleentity = modulesApp.GetFormByActionName(name);
             }
             string htmls = Server.HtmlDecode(model.F_Content);
-            moduleentity = modulesApp.GetFormByActionName(name);
             if (moduleentity != null)
             {
                 TempHelp temphelp = new TempHelp();

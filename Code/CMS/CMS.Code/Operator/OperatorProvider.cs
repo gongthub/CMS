@@ -10,6 +10,7 @@
         private string LoginProvider = Configs.GetValue("LoginProvider");
 
         public OperatorModel GetCurrent()
+        
         {
             OperatorModel operatorModel = new OperatorModel();
             if (LoginProvider == "Cookie")
@@ -26,7 +27,7 @@
         {
             if (LoginProvider == "Cookie")
             {
-                WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()), 60);
+                WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()), 30);
             }
             else
             {

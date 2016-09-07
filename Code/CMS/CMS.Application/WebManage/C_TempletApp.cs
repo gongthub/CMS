@@ -19,6 +19,12 @@ namespace CMS.Application.WebManage
             return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
         }
 
+        public C_TempletEntity GetFormByName(string Name)
+        {
+            C_TempletEntity model = new C_TempletEntity(); 
+            model = service.FindEntity(m => m.F_FullName == Name && m.F_DeleteMark != true);
+            return model;
+        }
         public List<C_TempletEntity> GetList(Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<C_TempletEntity>();
