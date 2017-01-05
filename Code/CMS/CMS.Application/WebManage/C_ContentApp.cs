@@ -42,6 +42,23 @@ namespace CMS.Application.WebManage
             return models;
         }
 
+        public IQueryable<C_ContentEntity> GetListIq(string itemId = "", string keyword = "")
+        {
+            IQueryable<C_ContentEntity> models;
+            var expression = ExtLinq.True<C_ContentEntity>();
+            if (!string.IsNullOrEmpty(itemId))
+            {
+                expression = expression.And(t => t.F_ModuleId == itemId);
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.F_FullName.Contains(keyword));
+            }
+            models = service.IQueryable(expression).OrderBy(t => t.F_SortCode);
+       
+            return models;
+        }
+
         public List<C_ContentEntity> GetList()
         {
             List<C_ContentEntity> models = new List<C_ContentEntity>();

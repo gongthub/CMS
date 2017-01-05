@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,20 @@ namespace CMS.Application.Comm
         /// 模板列表内容结束特殊符
         /// </summary>
         private static readonly string ENDMC = "]@";
+
+        /// <summary>
+        /// 模板列表内容开始特殊符
+        /// </summary>
+        private static readonly string STARTMCNA = "[";
+        /// <summary>
+        /// 模板列表内容结束特殊符
+        /// </summary>
+        private static readonly string ENDMCNA = "]";
+
+        /// <summary>
+        /// 模板列表内容结束特殊符
+        /// </summary>
+        private static readonly string ATTRS = "@attrs=";
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
@@ -195,7 +210,7 @@ namespace CMS.Application.Comm
             }
             return b;
 
-        } 
+        }
         #endregion
 
         #region 获取模板元素集合 +string GetHtmlPages(string codes, string Id)
@@ -215,7 +230,12 @@ namespace CMS.Application.Comm
                 while (i > 0 && j > 0)
                 {
                     string templetst = templets.Substring(i, j - i);
+                    string strAttr = "";
+                    //获取属性
+                    Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
                     string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
+                    if (!string.IsNullOrEmpty(strAttr))
+                        strt = strt.Replace(strAttr, "");
                     string[] strts = strt.Split('.');
 
                     if (strts.Length >= 2 && strts[1] != null)
@@ -232,7 +252,7 @@ namespace CMS.Application.Comm
                                 templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
                             }
                         }
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -247,7 +267,7 @@ namespace CMS.Application.Comm
             }
             return strs;
 
-        } 
+        }
         #endregion
 
         #region 获取模板元素集合 +string GetHtmlPage(string codes, C_ContentEntity model)
@@ -288,17 +308,17 @@ namespace CMS.Application.Comm
             return strs;
 
         }
-        
-        #endregion
 
         #endregion
 
-        #region 获取html静态页面 -GetTModel(string codes, string mcodes, string Id)
+        #endregion
+
+        #region 获取html静态页面 -GetTModel(string codes, string mcodes, string Id, string attrs)
         /// <summary>
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id)
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs)
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -317,12 +337,12 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "contents":
-                                htmls = GetContentsById(Id, mcodes);
+                                htmls = GetContentsById(Id, mcodes, attrs);
                                 break;
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(modelStr,Id);
+                        htmls = GetHtmlsByTempletName(modelStr, Id);
                         break;
                 }
 
@@ -417,18 +437,52 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes)
+        #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes,Dictionary<string, string> attrs)
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetContentsById(string Ids, string mcodes)
+        private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = "";
             C_ContentApp contentapp = new C_ContentApp();
             List<C_ContentEntity> contententitys = new List<C_ContentEntity>();
-            contententitys = contentapp.GetList(Ids);
+            IQueryable<C_ContentEntity> contententitysT = contentapp.GetListIq(Ids);
+
+            //排序
+            if (attrs.ContainsKey("sort"))
+            {
+                string val = "";
+                attrs.TryGetValue("sort", out val);
+
+                string sortName = "F_" + val; 
+              contententitysT =  contententitysT.OrderBy(sortName);
+
+
+            }
+            //排序
+            if (attrs.ContainsKey("sortdesc"))
+            {
+                string val = "";
+                attrs.TryGetValue("sortdesc", out val);
+
+                string sortName = "F_" + val; 
+                contententitysT = contententitysT.OrderBy(sortName,true); 
+
+            }
+            //行数
+            if (attrs.ContainsKey("tatol"))
+            {
+                string val = "";
+                attrs.TryGetValue("tatol", out val);
+                int tatolnum = 0;
+                if (int.TryParse(val, out tatolnum))
+                {
+                    contententitys = contententitysT.Take(tatolnum).ToList(); 
+                }
+
+            };
             if (contententitys != null && contententitys.Count > 0)
             {
                 foreach (C_ContentEntity contententity in contententitys)
@@ -476,7 +530,111 @@ namespace CMS.Application.Comm
             }
             return strs;
         }
-        
+
         #endregion
+
+        #region 获取属性集合 -Dictionary<string, string> GetAttrs(string attrs)
+        /// <summary>
+        /// 获取属性集合
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetAttrs(string templetst)
+        {
+            Dictionary<string, string> attrsD = new Dictionary<string, string>();
+
+            int i = templetst.IndexOf(ATTRS);
+            int j = templetst.IndexOf(ENDMCNA) + ENDMCNA.Length;
+            if (i >= 0 && j >= 0 && j >= i)
+            {
+                string attrs = templetst.Substring(i, j - i);
+                if (!string.IsNullOrEmpty(attrs))
+                {
+                    string sStrT = ATTRS + STARTMCNA;
+                    int iT = attrs.IndexOf(sStrT) + sStrT.Length;
+                    int jT = attrs.IndexOf(ENDMCNA);
+                    if (iT >= 0 && jT >= 0 && jT >= iT)
+                    {
+                        string attrsT = attrs.Substring(iT, jT - iT);
+                        if (!string.IsNullOrEmpty(attrsT))
+                        {
+                            string[] attrsTs = attrsT.Split(',');
+                            if (attrsTs != null && attrsTs.Count() > 0)
+                            {
+                                foreach (string item in attrsTs)
+                                {
+                                    string[] itemT = item.Split('=');
+                                    if (itemT != null && itemT.Length == 2)
+                                    {
+                                        attrsD.Add(itemT[0], itemT[1]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return attrsD;
+        }
+
+        /// <summary>
+        /// 获取属性集合
+        /// </summary>
+        /// <param name="attrs"></param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetAttrs(string templetst, out string attrStr)
+        {
+            Dictionary<string, string> attrsD = new Dictionary<string, string>();
+            attrStr = "";
+            int i = templetst.IndexOf(ATTRS);
+            int j = templetst.IndexOf(ENDMCNA) + ENDMCNA.Length;
+            if (i >= 0 && j >= 0 && j >= i)
+            {
+                string attrs = templetst.Substring(i, j - i);
+                attrStr = attrs;
+                if (!string.IsNullOrEmpty(attrs))
+                {
+                    string sStrT = ATTRS + STARTMCNA;
+                    int iT = attrs.IndexOf(sStrT) + sStrT.Length;
+                    int jT = attrs.IndexOf(ENDMCNA);
+                    if (iT >= 0 && jT >= 0 && jT >= iT)
+                    {
+                        string attrsT = attrs.Substring(iT, jT - iT);
+                        if (!string.IsNullOrEmpty(attrsT))
+                        {
+                            string[] attrsTs = attrsT.Split(',');
+                            if (attrsTs != null && attrsTs.Count() > 0)
+                            {
+                                foreach (string item in attrsTs)
+                                {
+                                    string[] itemT = item.Split('=');
+                                    if (itemT != null && itemT.Length == 2)
+                                    {
+                                        attrsD.Add(itemT[0], itemT[1]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return attrsD;
+        }
+        #endregion
+    }
+
+    public static class QueryableExtensions
+    {
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName)
+        {
+            return OrderBy(queryable, propertyName, false);
+        }
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName, bool desc)
+        {
+            var param = Expression.Parameter(typeof(T));
+            var body = Expression.Property(param, propertyName);
+            dynamic keySelector = Expression.Lambda(body, param);
+            return desc ? Queryable.OrderByDescending(queryable, keySelector) : Queryable.OrderBy(queryable, keySelector);
+        }
     }
 }
