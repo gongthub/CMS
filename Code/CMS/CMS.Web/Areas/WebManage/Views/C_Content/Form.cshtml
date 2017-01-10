@@ -7,6 +7,7 @@
 <script src="~/Content/js/simditor/js/module.min.js"></script>
 <script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
 <script src="~/Content/js/simditor/js/simditor.min.js"></script>
+<script src="~/Content/js/uploadPreview.js"></script>
 <style>
     .simditor {
         border-left: none;
@@ -15,10 +16,10 @@
     }
 
     .Content_Form_divContents {
-        position:fixed;
+        position: fixed;
         width: 100%;
         height: 100%;
-        overflow:auto;
+        overflow: auto;
     }
 </style>
 <script>
@@ -34,13 +35,16 @@
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
-                success: function (data) { 
+                success: function (data) {
                     data.F_Content = htmlDecode(data.F_Content);
-                    editor.setValue(data.F_Content)
+                    editor.setValue(data.F_Content) 
+                    $("#ImgPr").attr("src", data.F_Icon);
                     $("#form1").formSerialize(data);
                 }
             });
         }
+
+        $("#F_Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
     })
     function initControl() {
         $('#wizard').wizard().on('change', function (e, data) {
@@ -63,19 +67,39 @@
                 $next.show();
             }
         });
-
+        //toolbar = ['title', 'bold', 'italic', 'underline', 'strikethrough',
+        //  'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|',
+        //  'link', 'image', 'hr', '|', 'indent', 'outdent'];
+        //editor = new Simditor({
+        //    textarea: $('#F_Content'),
+        //    placeholder: '这里输入内容...',
+        //    toolbar: toolbar,  //工具栏
+        //    defaultImage: 'simditor-2.0.1/images/image.png', //编辑器插入图片时使用的默认图片
+        //    upload: {
+        //        url: 'ImgUpload.action', //文件上传的接口地址
+        //        params: null, //键值对,指定文件上传接口的额外参数,上传的时候随文件一起提交
+        //        fileKey: 'fileDataFileName', //服务器端获取文件数据的参数名
+        //        connectionCount: 3,
+        //        leaveConfirm: '正在上传文件'
+        //    }
+        //});
         editor = new Simditor({
             textarea: $('#F_Content'),
             toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
-        }); 
+        });
     }
     function submitForm() {
+
         if (!$('#form1').formValid()) {
             return false;
         }
+         
+        var filePaths = uploadImg(); 
         var postData = $("#form1").formSerialize();
-        postData["F_Content"] = htmlEncode(postData["F_Content"]); 
+        //var postData = $("#form1").serialize();
+        postData["F_Content"] = htmlEncode(postData["F_Content"]);
         postData["F_ModuleId"] = moduleId;
+        postData["F_Icon"] = filePaths;
         $.submitForm({
             url: "/WebManage/C_Content/SubmitForm?keyValue=" + keyValue,
             param: postData,
@@ -84,8 +108,37 @@
             }
         });
     }
+    //上传图片
+    function uploadImg() {
+        var filePath = "";
+        var formData = new FormData();
+        formData.append("fileicon", $("#F_Icon")[0].files[0]);
+        $.ajax({
+            type: "POST",
+            url: "/WebManage/C_Content/UploadImg",
+            dataType: "json",
+            data: formData,
+            async:false,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            success: function (data) {
+                var jsonData = eval(data);
+                if (jsonData.message == "true") { 
+                    if (jsonData.data != null && jsonData.data != undefined) {
+                        filePath = jsonData.data; 
+                    } 
+                } else {
+                    alert(jsonData.data);
+                    return;
+                }
+            }
+        });
+        return filePath;
+    }
 </script>
-<form id="form1">
+<form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
             <ul class="steps">
@@ -122,7 +175,17 @@
                             <tr>
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
-                                    <input id="F_Icon" name="F_Icon" type="text" class="form-control" placeholder="请输入图标" />
+                                    @*<input id="F_Icon" name="F_Icon" type="text" class="form-control" placeholder="请输入图标" />*@
+                                    <div>
+                                        @*<form action="/WebManage/C_Content/UploadImg" id="form_uploadimg">*@
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="F_Icon" name="F_Icon" type="file" />请选择图片
+                                            </div>
+                                            <img id="ImgPr" width="30" height="30" />
+                                        </div>
+                                        @*</form>*@
+                                    </div>
                                 </td>
                                 <th class="formTitle" style="height: 35px;">是否有效</th>
                                 <td class="formValue" style="padding-top: 1px;">

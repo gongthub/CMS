@@ -266,6 +266,7 @@
     <Content Include="Content\js\simditor\js\simditor.min.js" />
     <Content Include="Content\js\simditor\js\uploader.js" />
     <Content Include="Content\js\simditor\js\uploader.min.js" />
+    <Content Include="Content\js\uploadPreview.js" />
     <Content Include="Content\js\validate\jquery.validate.min.js" />
     <Content Include="Content\js\wdtree\images\icons\add.png" />
     <Content Include="Content\js\wdtree\images\icons\addStep.gif" />
