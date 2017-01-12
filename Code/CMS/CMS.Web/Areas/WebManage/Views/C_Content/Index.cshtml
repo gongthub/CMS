@@ -3,11 +3,13 @@
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
 <script>
+
     $(function () {
         $('#layout').layout();
         treeView();
         gridList();
     });
+
     function treeView() {
         $("#itemTree").treeview({
             url: "/WebManage/C_Modules/GetTreeJson",
@@ -20,6 +22,7 @@
             }
         });
     }
+
     function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
@@ -59,6 +62,7 @@
             }).trigger('reloadGrid');
         });
     }
+
     function btn_add() {
         if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
             alert("请选择左侧栏目！");
@@ -74,77 +78,119 @@
             alert("栏目为内容，只能添加一条数据！");
             return false;
         }
-        if (type == 3) {
-            alert("栏目为连接，不需要添加内容！");
-            return false;
-        }
         var moduleId = $("#itemTree").getCurrentNode().id;
         var moduleName = $("#itemTree").getCurrentNode().text;
         if (!moduleId) {
             alert("请选择左侧栏目！");
             return false;
         }
-        $.modalOpen({
-            id: "Form",
-            title: moduleName + " 》新增内容",
-            url: "/WebManage/C_Content/Form?moduleId=" + moduleId,
-            width: "1000px",
-            height: "650px",
-            btn: null
-        });
+        //3为链接
+        if (type == 3) {
+            $.modalOpen({
+                id: "LinkForm",
+                title: moduleName + " 》新增连接",
+                url: "/WebManage/C_Content/LinkForm?moduleId=" + moduleId,
+                width: "1000px",
+                height: "650px",
+                btn: null
+            });
+        } else {
+            $.modalOpen({
+                id: "Form",
+                title: moduleName + " 》新增内容",
+                url: "/WebManage/C_Content/Form?moduleId=" + moduleId,
+                width: "1000px",
+                height: "650px",
+                btn: null
+            });
+        }
     }
+
     function btn_edit() {
         var moduleName = $("#itemTree").getCurrentNode().text;
         var keyValue = $("#gridList").jqGridRowValue().F_Id;
-        $.modalOpen({
-            id: "Form",
-            title: moduleName + " 》修改内容",
-            url: "/WebManage/C_Content/Form?keyValue=" + keyValue,
-            width: "1000px",
-            height: "650px",
-            btn: null
-        });
-    }
-    function btn_delete() {
-        $.deleteForm({
-            url: "/WebManage/C_Content/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
-            success: function () {
-                $("#gridList").resetSelection();
-                $("#gridList").trigger("reloadGrid");
-            }
-        })
-    }
-    function btn_details() {
-        var keyValue = $("#gridList").jqGridRowValue().F_Id;
-        $.modalOpen({
-            id: "Details",
-            title: "查看内容",
-            url: "/WebManage/C_Content/Details?keyValue=" + keyValue,
-            width: "1000px",
-            height: "650px",
-            btn: null,
-        });
-    }
-    //生成静态页
-    function btn_staticpage() { 
-        if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
-            alert("请选择左侧栏目！");
-            return false;
-        }
         var type = $("#itemTree").getCurrentNode().value;
-        if (type != 2) {
-            alert("栏目只能为列表才能生成静态页！");
-            return false;
-        } 
-        $.getStaticPage({
-            url: "/WebManage/C_Content/GetStaticPage",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
-            success: function () {
-                $("#gridList").resetSelection();
-                $("#gridList").trigger("reloadGrid");
+        if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            //3为链接
+            if (type == 3) {
+                $.modalOpen({
+                    id: "LinkForm",
+                    title: moduleName + " 》修改连接",
+                    url: "/WebManage/C_Content/LinkForm?keyValue=" + keyValue,
+                    width: "1000px",
+                    height: "650px",
+                    btn: null
+                });
+            } else {
+                $.modalOpen({
+                    id: "Form",
+                    title: moduleName + " 》修改内容",
+                    url: "/WebManage/C_Content/Form?keyValue=" + keyValue,
+                    width: "1000px",
+                    height: "650px",
+                    btn: null
+                });
             }
-        })
+        } else {
+            alert("请选择一条数据！");
+        }
+    }
+
+    function btn_delete() {
+        var moduleName = $("#itemTree").getCurrentNode().text;
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            $.deleteForm({
+                url: "/WebManage/C_Content/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $("#gridList").resetSelection();
+                    $("#gridList").trigger("reloadGrid");
+                }
+            })
+        } else {
+            alert("请选择一条数据！");
+        }
+    }
+
+    function btn_details() {
+        var moduleName = $("#itemTree").getCurrentNode().text;
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            $.modalOpen({
+                id: "Details",
+                title: "查看内容",
+                url: "/WebManage/C_Content/Details?keyValue=" + keyValue,
+                width: "1000px",
+                height: "650px",
+                btn: null,
+            });
+        } else {
+            alert("请选择一条数据！");
+        }
+    }
+
+    //生成静态页
+    function btn_staticpage() {
+        var moduleName = $("#itemTree").getCurrentNode().text;
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            var type = $("#itemTree").getCurrentNode().value;
+            if (type != 2) {
+                alert("栏目只能为列表才能生成静态页！");
+                return false;
+            }
+            $.getStaticPage({
+                url: "/WebManage/C_Content/GetStaticPage",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $("#gridList").resetSelection();
+                    $("#gridList").trigger("reloadGrid");
+                }
+            })
+        } else {
+            alert("请选择一条数据！");
+        }
     }
 </script>
 <div class="ui-layout" id="layout" style="height: 100%; width: 100%;">

@@ -35,29 +35,6 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                string upPaths = "~/Uploads/";
-                if (HttpContext.Request.Files.Count > 0 && HttpContext.Request.Files["F_Icon"] != null)
-                {
-                    var iconFile = HttpContext.Request.Files["F_Icon"];
-                    if (iconFile != null)
-                    {
-                        // 文件上传后的保存路径
-                        string filePath = Server.MapPath(upPaths);
-                        if (!Directory.Exists(filePath))
-                        {
-                            Directory.CreateDirectory(filePath);
-                        }
-                        string fileName = Path.GetFileName(iconFile.FileName);// 原始文件名称
-                        string fileExtension = Path.GetExtension(fileName); // 文件扩展名
-                        Random random = new Random();
-                        string randomStr = random.Next(0000, 9999).ToString();
-                        string saveName = DateTime.Now.ToString("yyyyMMddHHmmss") + randomStr + fileExtension; // 保存文件名称
-                        string filePaths = upPaths + saveName;
-                        iconFile.SaveAs(filePaths);
-                        c_ContentEntity.F_Icon = filePaths;
-                    }
-
-                }
                 c_contentApp.SubmitForm(c_ContentEntity, keyValue);
                 return Success("操作成功。");
 
@@ -87,8 +64,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
             return Success("生成成功。");
         }
 
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult LinkForm()
+        {
+            return View();
+        }
 
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [HandlerAuthorize]
         public ActionResult UploadImg()
         {
             try
@@ -112,7 +96,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
                         Random random = new Random();
                         string randomStr = random.Next(0000, 9999).ToString();
                         string saveName = DateTime.Now.ToString("yyyyMMddHHmmss") + randomStr + fileExtension; // 保存文件名称
-                        filePaths = upPathsT + saveName; 
+                        filePaths = upPathsT + saveName;
                         upFiles.SaveAs(filePath + saveName);
                     }
                 }
@@ -125,7 +109,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
             catch (Exception ex)
             {
-                return Success("false",ex.Message);
+                return Success("false", ex.Message);
             }
         }
     }
