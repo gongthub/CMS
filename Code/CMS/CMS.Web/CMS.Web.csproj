@@ -266,6 +266,7 @@
     <Content Include="Content\js\simditor\js\simditor.min.js" />
     <Content Include="Content\js\simditor\js\uploader.js" />
     <Content Include="Content\js\simditor\js\uploader.min.js" />
+    <Content Include="Content\js\TabPage\cmsPage.js" />
     <Content Include="Content\js\umeditor\dialogs\emotion\emotion.css" />
     <Content Include="Content\js\umeditor\dialogs\emotion\emotion.js" />
     <Content Include="Content\js\umeditor\dialogs\emotion\images\0.gif" />
@@ -456,8 +457,6 @@
     <Content Include="Html\images\tb3.jpg" />
     <Content Include="Html\js\bootstrap.min.js" />
     <Content Include="Html\js\jquery-2.1.4.min.js" />
-    <Content Include="Html\js\jquery.circlechart.js" />
-    <Content Include="Html\js\nivo-lightbox.min.js" />
     <Content Include="Index.htm" />
     <Content Include="Web.config" />
   </ItemGroup>
