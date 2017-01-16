@@ -122,14 +122,14 @@ namespace CMS.Application.WebManage
 
         public C_ModulesEntity GetModuleByContentID(string keyValue)
         {
-            C_ModulesEntity module = new C_ModulesEntity();
+            C_ModulesEntity moduleEntity = new C_ModulesEntity();
             C_ModulesApp moduleapp = new C_ModulesApp();
-            C_ContentEntity content = GetForm(keyValue);
-            if (content != null)
+            C_ContentEntity contentEntity = GetForm(keyValue);
+            if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ContentEntity>(contentEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(contentEntity.F_ModuleId))
             {
-                module = moduleapp.GetForm(content.F_ModuleId);
+                moduleEntity = moduleapp.GetForm(contentEntity.F_ModuleId);
             }
-            return module;
+            return moduleEntity;
         }
 
         public void GetStaticPage(string keyValue)
@@ -144,7 +144,7 @@ namespace CMS.Application.WebManage
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.F_Content);
                     TempHelp temphelp = new TempHelp();
-                    temphelp.GetHtmlPage(templets, keyValue);
+                    temphelp.GenHtmlPage(templets, keyValue);
                 }
             }
         }

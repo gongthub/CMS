@@ -1,5 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
+using CMS.Code.Html;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -60,56 +61,78 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
-        private static string HTMLSRC = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+        private static string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
 
         private C_ContentEntity CONTENTENTITY = new C_ContentEntity();
 
-        private void InitHtmlSrc()
+        private void InitHtmlSavePath()
         {
-            HTMLSRC = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+            HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
         }
 
-        #region 获取文件名称 -string GetUrlName()
         /// <summary>
-        /// 获取文件名称
+        /// 初始化
+        /// </summary>
+        /// <param name="Id"></param>
+        private void InitHtmlSavePath(string Id)
+        {
+
+            if (!string.IsNullOrEmpty(Id))
+            {
+                if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Id)
+                {
+                    C_ContentApp contentapp = new C_ContentApp();
+                    CONTENTENTITY = contentapp.GetForm(Id);
+                    C_ModulesEntity moduleentity = contentapp.GetModuleByContentID(Id);
+
+                    if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleentity))
+                    {
+                        HTMLSAVEPATH += moduleentity.F_ActionName + @"\";
+                    }
+                }
+            }
+        }
+
+        #region 生成文件名称 -string GenUrlName()
+        /// <summary>
+        /// 生成文件名称
         /// </summary>
         /// <returns></returns>
-        private string GetUrlName()
+        private string GenUrlName()
         {
-            string names = "";
             Random rand = new Random();
             int rd = rand.Next(00, 99);
-            names = DateTime.Now.ToString("yyyyMMddHHmm") + rd.ToString();
+            string names = DateTime.Now.ToString("yyyyMMddHHmm") + rd.ToString();
             return names;
         }
         #endregion
 
-        #region 创建静态页面 -void CreateHtml(string htmls)
+        #region 创建静态页面 -void GenHtml(string htmls)
         /// <summary>
         /// 创建静态页面
         /// </summary>
         /// <param name="htmls"></param>
-        private void CreateHtml(string htmls)
+        private void GenHtml(string htmls)
         {
-            string filename = GetUrlName() + HTMLFOR;
-            FileHelper.CreateAndWrite(HTMLSRC, filename, htmls);
+            string filename = GenUrlName() + HTMLFOR;
+            FileHelper.CreateAndWrite(HTMLSAVEPATH, filename, htmls);
         }
         /// <summary>
         /// 创建静态页面
         /// </summary>
         /// <param name="htmls"></param>
-        private void CreateHtml(string htmls, out string filePath)
+        private void GenHtml(string htmls, out string filePath)
         {
-            string filename = GetUrlName() + HTMLFOR;
-            FileHelper.CreateAndWrite(HTMLSRC, filename, htmls);
-            int index = HTMLSRC.LastIndexOf('\\');
+            string filename = GenUrlName() + HTMLFOR;
+            FileHelper.CreateAndWrite(HTMLSAVEPATH, filename, htmls);
+            int index = HTMLSAVEPATH.LastIndexOf('\\');
             if (index >= 0)
             {
-                filePath = HTMLSRC + filename;
+                filePath = HTMLSAVEPATH + filename;
             }
             else
             {
-                filePath = HTMLSRC + @"\" + filename;
+                filePath = HTMLSAVEPATH + @"\" + filename;
             }
         }
         #endregion
@@ -130,72 +153,28 @@ namespace CMS.Application.Comm
             }
             return b;
         }
+
         #endregion
 
-        #region 获取html
+        #region 生成html
 
-        #region 获取模板元素集合 +bool GetHtmlPage(string codes, string Id)
+        #region 生成静态页面保存文件 +bool GenHtmlPage(string codes, string Id)
         /// <summary>
-        /// 获取模板元素集合
+        /// 生成静态页面保存文件
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public bool GetHtmlPage(string codes, string Id)
+        public bool GenHtmlPage(string codes, string Id)
         {
-            InitHtmlSrc();
+            InitHtmlSavePath();
             bool b = true;
             try
             {
-                if (Id != null)
-                {
-                    C_ContentApp contentapp = new C_ContentApp();
-                    CONTENTENTITY = contentapp.GetForm(Id);
-                    if (CONTENTENTITY != null && CONTENTENTITY.F_ModuleId != null)
-                    {
-                        C_ModulesApp moduleapp = new C_ModulesApp();
-                        C_ModulesEntity moduleentity = moduleapp.GetForm(CONTENTENTITY.F_ModuleId);
-                        if (moduleentity != null)
-                        {
-                            HTMLSRC += moduleentity.F_ActionName + @"\";
-                        }
-                    }
-
-                }
-                //string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                //int i = templets.IndexOf(STARTCHAR);
-                //int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                //while (i > 0 && j > 0)
-                //{
-                //    string templetst = templets.Substring(i, j - i);
-                //    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
-                //    string[] strts = strt.Split('.');
-
-                //    if (strts.Length >= 2 && strts[1] != null)
-                //    {
-                //        string templetstm = "";
-                //        if (strts[0] == "models")
-                //        {
-                //            int mitemp = templetst.IndexOf(STARTMCHAR);
-                //            int mjtemp = templetst.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
-                //            if (mitemp >= 0 && mjtemp >= 0)
-                //            {
-                //                templetstm = templetst.Substring(mitemp, mjtemp - mitemp);
-
-                //                strt = strt.Replace(templetstm,"");
-                //                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
-                //            }
-                //        }
-                //        string htmlt = GetTModel(strt.Trim(), templetstm, Id);
-                //        templets = templets.Replace(templetst, htmlt);
-
-                //    }
-                //    i = templets.IndexOf(STARTCHAR);
-                //    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                //}
+                InitHtmlSavePath(Id);
                 string templets = GetHtmlPages(codes, Id);
                 string filePaths = "";
                 //创建静态页面
-                CreateHtml(templets, out filePaths);
+                GenHtml(templets, out filePaths);
                 //更新链接地址
                 UpdateContentById(filePaths, Id);
                 //删除原有页面
@@ -240,18 +219,7 @@ namespace CMS.Application.Comm
 
                     if (strts.Length >= 2 && strts[1] != null)
                     {
-                        string templetstm = "";
-                        if (strts[0].Trim().ToLower() == "models")
-                        {
-                            int mitemp = strt.IndexOf(STARTMCHAR);
-                            int mjtemp = strt.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
-                            if (mitemp >= 0 && mjtemp >= 0)
-                            {
-                                templetstm = strt.Substring(mitemp, mjtemp - mitemp);
-                                strt = strt.Replace(templetstm, "");
-                                templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
-                            }
-                        }
+                        string templetstm = ProModels(ref strt, strts);
                         string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs);
                         templets = templets.Replace(templetst, htmlt);
 
@@ -260,6 +228,8 @@ namespace CMS.Application.Comm
                     j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                 }
                 strs = templets;
+                //格式化
+                //strs = HtmlCodeFormat.Format(strs);
             }
             catch (Exception ex)
             {
@@ -268,6 +238,29 @@ namespace CMS.Application.Comm
             return strs;
 
         }
+        /// <summary>
+        /// 处理存在内容时
+        /// </summary>
+        /// <param name="strt"></param>
+        /// <param name="strts"></param>
+        /// <returns></returns>
+        private static string ProModels(ref string strt, string[] strts)
+        { 
+            string templetstm = "";
+            if (strts[0].Trim().ToLower() == "models")
+            {
+                int mitemp = strt.IndexOf(STARTMCHAR);
+                int mjtemp = strt.IndexOf(ENDMCHAR) + ENDMCHAR.Length;
+                if (mitemp >= 0 && mjtemp >= 0)
+                {
+                    templetstm = strt.Substring(mitemp, mjtemp - mitemp);
+                    strt = strt.Replace(templetstm, "");
+                    templetstm = templetstm.Replace(STARTMCHAR, "").Replace(ENDMCHAR, "");
+                }
+            }
+            return templetstm;
+        }
+
         #endregion
 
         #region 获取模板元素集合 +string GetHtmlPage(string codes, C_ContentEntity model)
@@ -313,7 +306,7 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 获取html静态页面 -GetTModel(string codes, string mcodes, string Id, string attrs)
+        #region 获取html静态页面 -string GetTModel(string codes, string mcodes, string Id, string attrs)
         /// <summary>
         /// 获取html静态页面
         /// </summary>
@@ -360,20 +353,8 @@ namespace CMS.Application.Comm
         private string GetModelById(string name, string Ids)
         {
             string strs = "";
-            if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Ids)
-            {
-                C_ContentApp contentapp = new C_ContentApp();
-                CONTENTENTITY = contentapp.GetForm(Ids);
-                if (CONTENTENTITY != null && CONTENTENTITY.F_ModuleId != null)
-                {
-                    C_ModulesApp moduleapp = new C_ModulesApp();
-                    C_ModulesEntity moduleentity = moduleapp.GetForm(CONTENTENTITY.F_ModuleId);
-                    if (moduleentity != null)
-                    {
-                        HTMLSRC += moduleentity.F_ActionName + @"\";
-                    }
-                }
-            }
+
+            InitHtmlSavePath(Ids); 
 
             if (CONTENTENTITY != null)
             {
@@ -382,24 +363,38 @@ namespace CMS.Application.Comm
                 {
                     foreach (PropertyInfo property in propertys)
                     {
-                        if (property.Name == name || property.Name.Replace("F_", "") == name)
-                        {
-                            object obj = property.GetValue(CONTENTENTITY, null);
-                            if (obj != null)
-                            {
-                                strs = obj.ToString();
-                                if (IsHtmlEnCode(strs))
-                                {
-                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
-                                }
-                            }
-                        }
+                        strs = ProContent(name, strs, property);
                     }
                 }
             }
 
             return strs;
         }
+
+        /// <summary>
+        /// 处理内容
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="strs"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        private string ProContent(string name, string strs, PropertyInfo property)
+        {
+            if (property.Name == name || property.Name.Replace("F_", "") == name)
+            {
+                object obj = property.GetValue(CONTENTENTITY, null);
+                if (obj != null)
+                {
+                    strs = obj.ToString();
+                    if (IsHtmlEnCode(strs))
+                    {
+                        strs = System.Web.HttpUtility.HtmlDecode(strs);
+                    }
+                }
+            }
+            return strs;
+        }
+
         /// <summary>
         /// 根据model获取内容
         /// </summary>
@@ -448,46 +443,77 @@ namespace CMS.Application.Comm
             string strs = "";
             C_ContentApp contentapp = new C_ContentApp();
             List<C_ContentEntity> contententitys = new List<C_ContentEntity>();
-            IQueryable<C_ContentEntity> contententitysT = contentapp.GetListIq(Ids);
+            IQueryable<C_ContentEntity> contententitysT = null;
 
-            //排序
-            if (attrs.ContainsKey("sort"))
+            //数据源
+            if (attrs.ContainsKey("sourcename"))
             {
-                string val = "";
-                attrs.TryGetValue("sort", out val);
-
-                string sortName = "F_" + val; 
-              contententitysT =  contententitysT.OrderBy(sortName);
-
-
-            }
-            //排序
-            if (attrs.ContainsKey("sortdesc"))
-            {
-                string val = "";
-                attrs.TryGetValue("sortdesc", out val);
-
-                string sortName = "F_" + val; 
-                contententitysT = contententitysT.OrderBy(sortName,true); 
-
-            }
-            //行数
-            if (attrs.ContainsKey("tatol"))
-            {
-                string val = "";
-                attrs.TryGetValue("tatol", out val);
-                int tatolnum = 0;
-                if (int.TryParse(val, out tatolnum))
+                string sourceName = "";
+                attrs.TryGetValue("sourcename", out sourceName);
+                C_ModulesApp modulesApp = new C_ModulesApp();
+                C_ModulesEntity moduleentity = new C_ModulesEntity();
+                moduleentity = modulesApp.GetFormByActionName(sourceName);
+                if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
                 {
-                    contententitys = contententitysT.Take(tatolnum).ToList(); 
+                    contententitysT = contentapp.GetListIq(moduleentity.F_Id);
                 }
-
-            };
-            if (contententitys != null && contententitys.Count > 0)
+            }
+            else
             {
-                foreach (C_ContentEntity contententity in contententitys)
+                contententitysT = contentapp.GetListIq(Ids);
+            }
+            if (contententitysT != null)
+            {
+                //排序
+                if (attrs.ContainsKey("sort"))
                 {
-                    strs += GetHtmlPage(mcodes, contententity);
+                    string val = "";
+                    attrs.TryGetValue("sort", out val);
+
+                    string sortName = "F_" + val;
+                    contententitysT = contententitysT.OrderBy(sortName);
+
+
+                }
+                //排序
+                if (attrs.ContainsKey("sortdesc"))
+                {
+                    string val = "";
+                    attrs.TryGetValue("sortdesc", out val);
+
+                    string sortName = "F_" + val;
+                    contententitysT = contententitysT.OrderBy(sortName, true);
+
+                }
+                //行数
+                if (attrs.ContainsKey("tatol"))
+                {
+                    string val = "";
+                    attrs.TryGetValue("tatol", out val);
+                    int tatolnum = 0;
+                    if (int.TryParse(val, out tatolnum))
+                    {
+                        contententitys = contententitysT.Take(tatolnum).ToList();
+                    }
+
+                }
+                //处理连接地址
+                contententitys.ForEach(delegate(C_ContentEntity model)
+                {
+
+                    if (model != null && model.F_UrlAddress != null)
+                    {
+                        model.F_UrlPage = model.F_UrlAddress;
+                        model.F_UrlPage = model.F_UrlPage.Replace(@"\", "/");
+                    }
+
+                });
+                if (contententitys != null && contententitys.Count > 0)
+                {
+                    foreach (C_ContentEntity contententity in contententitys)
+                    {
+                        strs += GetHtmlPage(mcodes, contententity);
+                    }
                 }
             }
             return strs;
@@ -566,7 +592,7 @@ namespace CMS.Application.Comm
                                     string[] itemT = item.Split('=');
                                     if (itemT != null && itemT.Length == 2)
                                     {
-                                        attrsD.Add(itemT[0], itemT[1]);
+                                        attrsD.Add(itemT[0].ToLower(), itemT[1]);
                                     }
                                 }
                             }
@@ -610,7 +636,7 @@ namespace CMS.Application.Comm
                                     string[] itemT = item.Split('=');
                                     if (itemT != null && itemT.Length == 2)
                                     {
-                                        attrsD.Add(itemT[0], itemT[1]);
+                                        attrsD.Add(itemT[0].ToLower(), itemT[1]);
                                     }
                                 }
                             }
@@ -621,6 +647,7 @@ namespace CMS.Application.Comm
             return attrsD;
         }
         #endregion
+
     }
 
     public static class QueryableExtensions
