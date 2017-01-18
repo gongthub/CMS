@@ -3,6 +3,7 @@ using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -12,6 +13,10 @@ namespace CMS.Web.Areas.WebManage.Controllers
     public class C_ContentController : ControllerBase
     {
 
+        /// <summary>
+        /// 上传图片保存路径
+        /// </summary>
+        private static string UPLOADIMGPATH = ConfigurationManager.AppSettings["UploadImg"].ToString();
         private C_ContentApp c_contentApp = new C_ContentApp();
 
         [HttpGet]
@@ -77,8 +82,9 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                string upPaths = "~/Uploads/";
-                string upPathsT = "/Uploads/";
+                string dates = DateTime.Now.ToString("yyyyMMdd");
+                string upPaths = UPLOADIMGPATH + dates + "/";
+                string upPathsT = upPaths.Replace("~", "");
                 string filePaths = string.Empty;
                 if (HttpContext.Request.Files.Count > 0)
                 {
@@ -94,7 +100,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
                         string fileName = Path.GetFileName(upFiles.FileName);// 原始文件名称
                         string fileExtension = Path.GetExtension(fileName); // 文件扩展名
                         Random random = new Random();
-                        string randomStr = random.Next(0000, 9999).ToString();
+                        string randomStr = random.Next(0000, 9999).ToString(); 
                         string saveName = DateTime.Now.ToString("yyyyMMddHHmmss") + randomStr + fileExtension; // 保存文件名称
                         filePaths = upPathsT + saveName;
                         upFiles.SaveAs(filePath + saveName);
