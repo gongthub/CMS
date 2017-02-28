@@ -245,7 +245,7 @@ namespace CMS.Application.Comm
         /// <param name="strts"></param>
         /// <returns></returns>
         private static string ProModels(ref string strt, string[] strts)
-        { 
+        {
             string templetstm = "";
             if (strts[0].Trim().ToLower() == "models")
             {
@@ -324,7 +324,7 @@ namespace CMS.Application.Comm
                 switch (modelName.Trim().ToLower())
                 {
                     case "model":
-                        htmls = GetModelById(modelStr, Id);
+                        htmls = GetModelById(modelStr, Id, attrs);
                         break;
                     case "models":
                         switch (modelStr.Trim().ToLower())
@@ -354,7 +354,45 @@ namespace CMS.Application.Comm
         {
             string strs = "";
 
-            InitHtmlSavePath(Ids); 
+            InitHtmlSavePath(Ids);
+
+            if (CONTENTENTITY != null)
+            {
+                PropertyInfo[] propertys = CONTENTENTITY.GetType().GetProperties();
+                if (propertys != null && propertys.Length > 0)
+                {
+                    foreach (PropertyInfo property in propertys)
+                    {
+                        strs = ProContent(name, strs, property);
+                    }
+                }
+            }
+
+            return strs;
+        }
+
+        /// <summary>
+        /// 根据id获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById(string name, string Ids, Dictionary<string, string> attrs)
+        {
+            string strs = "";
+            //数据源
+            if (attrs.ContainsKey("sourcename"))
+            {
+                string sourceName = "";
+                attrs.TryGetValue("sourcename", out sourceName);
+                C_ModulesApp modulesApp = new C_ModulesApp();
+                C_ModulesEntity moduleentity = new C_ModulesEntity();
+                moduleentity = modulesApp.GetFormByActionName(sourceName);
+                if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
+                {
+                    Ids = moduleentity.F_Id.ToString();
+                }
+            }
+            InitHtmlSavePath(Ids);
 
             if (CONTENTENTITY != null)
             {

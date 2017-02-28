@@ -1,0 +1,22 @@
+1、获取对应模板名称模板内容
+{{# 
+templet.OtherFiles
+#}}
+
+2、生成列表
+tatol：显示页数
+sort：指定正序，sortdesc：指定倒序（正序和倒序只能存在一个）
+sourcename：指定源 为栏目简称
+{{#
+@attrs=[tatol=10,sort=FullName,sourcename=About]
+models.contents{ 
+<li><a href="@[model.UrlPage]@">@[model.FullName]@</a></li>
+}
+#}}
+
+
+3、获取单个
+{{#
+@attrs=[sourcename=About]
+model.Content
+#}}

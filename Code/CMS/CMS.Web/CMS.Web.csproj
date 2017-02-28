@@ -601,7 +601,9 @@
     <Content Include="Views\Shared\_Form.cshtml" />
     <Content Include="Views\Shared\_Index.cshtml" />
     <Content Include="Views\Shared\_LayoutIndex.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="Areas\WebManage\Views\C_Modules\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Web.config" />
