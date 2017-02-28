@@ -10,14 +10,14 @@ namespace CMS.Web.Areas.WebManage.Controllers
 {
     public class C_ModulesController : ControllerBase
     {
-
-        private C_ModulesApp c_moduleApp = new C_ModulesApp(); 
+         
 
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson()
-        {  
-            var data = c_moduleApp.GetList();
+        {
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            var data = c_ModulesApp.GetList();
             var treeList = new List<TreeSelectModel>();
             foreach (C_ModulesEntity item in data)
             {
@@ -34,7 +34,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeJson()
         {
-            var data = c_moduleApp.GetList();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            var data = c_ModulesApp.GetList();
             var treeList = new List<TreeViewModel>();
             foreach (C_ModulesEntity item in data)
             {
@@ -65,7 +66,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeGridJson(string keyword)
         {
-            var data = c_moduleApp.GetList();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            var data = c_ModulesApp.GetList();
             if (!string.IsNullOrEmpty(keyword))
             {
                 data = data.TreeWhere(t => t.F_FullName.Contains(keyword));
@@ -89,7 +91,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
         {
-            var data = c_moduleApp.GetForm(keyValue);
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            var data = c_ModulesApp.GetForm(keyValue);
             return Content(data.ToJson());
         }
 
@@ -98,7 +101,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(C_ModulesEntity moduleEntity, string keyValue)
         {
-            c_moduleApp.SubmitForm(moduleEntity, keyValue);
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            c_ModulesApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }
 
@@ -108,7 +112,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
-            c_moduleApp.DeleteForm(keyValue);
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            c_ModulesApp.DeleteForm(keyValue);
             return Success("删除成功。");
         }
     }

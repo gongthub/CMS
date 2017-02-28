@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMS.Application.Comm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,8 +26,9 @@ namespace CMS.Web
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-
+        { 
+            HttpContext context = HttpContext.Current; 
+            RequestHelp.requestHelp.InitRequest(context);
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

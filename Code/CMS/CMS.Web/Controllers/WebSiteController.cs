@@ -21,23 +21,22 @@ namespace CMS.Web.Controllers
         {
             C_TempletApp templetApp = new C_TempletApp();
             C_TempletEntity model = new C_TempletEntity();
-            C_ModulesApp modulesApp = new C_ModulesApp();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
             C_ModulesEntity moduleentity = new C_ModulesEntity();
             if (string.IsNullOrEmpty(name))
             {
                 model = templetApp.GetMain();
-                moduleentity = modulesApp.GetMain();
+                moduleentity = c_ModulesApp.GetMain();
             }
             else
             {
                 model = templetApp.GetModelByActionName(name);
-                moduleentity = modulesApp.GetFormByActionName(name);
+                moduleentity = c_ModulesApp.GetFormByActionName(name);
             }
             string htmls = Server.HtmlDecode(model.F_Content);
             if (moduleentity != null)
             {
-                TempHelp temphelp = new TempHelp();
-                htmls = temphelp.GetHtmlPages(htmls, moduleentity.F_Id);
+                htmls = TempHelp.tempHelp.GetHtmlPages(htmls, moduleentity.F_Id);
             }
 
             return Content(htmls);

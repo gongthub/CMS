@@ -705,6 +705,29 @@ namespace CMS.Code
             //向文件写入内容
             File.WriteAllText(filePath, text, encoding);
         }
+        /// <summary>
+        /// 向文本文件中写入内容
+        /// </summary>
+        /// <param name="filePath">文件的绝对路径</param>
+        /// <param name="text">写入的内容</param>
+        public static void WriteText(string filePath, string WriteStr)
+        {
+            filePath = MapPath(filePath);
+            FileInfo finfo = new FileInfo(filePath);
+            using (FileStream fs = finfo.OpenWrite())
+            {
+                //根据上面创建的文件流创建写数据流 
+                StreamWriter strwriter = new StreamWriter(fs);
+                //设置写数据流的起始位置为文件流的末尾 
+                strwriter.BaseStream.Seek(0, SeekOrigin.End);
+                //写入相关记录信息
+                strwriter.Write(WriteStr);
+                //清空缓冲区内容，并把缓冲区内容写入基础流 
+                strwriter.Flush();
+                strwriter.Close();
+                fs.Close();
+            }
+        }
         #endregion
 
         #region 向文本文件的尾部追加内容

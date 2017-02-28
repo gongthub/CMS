@@ -11,15 +11,15 @@ namespace CMS.Application.WebManage
 {
     public class C_ModulesApp
     {
-        private IC_ModulesRepository service = new C_ModulesRepository();
-
+        private IC_ModulesRepository service  = new C_ModulesRepository();
+         
         public List<C_ModulesEntity> GetList()
         {
             return service.IQueryable().OrderBy(t => t.F_SortCode).ToList();
         }
         public C_ModulesEntity GetFormByActionName(string actionName)
         {
-            return service.IQueryable(m => m.F_ActionName.ToLower() == actionName.ToLower() && m.F_DeleteMark !=true).FirstOrDefault();
+            return service.IQueryable(m => m.F_ActionName.ToLower() == actionName.ToLower() && m.F_DeleteMark != true).FirstOrDefault();
         }
         public C_ModulesEntity GetForm(string keyValue)
         {
@@ -86,6 +86,6 @@ namespace CMS.Application.WebManage
             return service.IQueryable().Where(m => m.F_DeleteMark != true && m.F_ActionName == actionName).FirstOrDefault();
         }
 
-        
+
     }
 }

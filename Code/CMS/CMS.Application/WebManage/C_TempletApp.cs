@@ -63,8 +63,8 @@ namespace CMS.Application.WebManage
         public C_TempletEntity GetMain()
         {
             C_TempletEntity templet = new C_TempletEntity();
-            C_ModulesApp moduleApp=new C_ModulesApp();
-            C_ModulesEntity module = moduleApp.GetMain();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            C_ModulesEntity module = c_ModulesApp.GetMain();
             if (module != null)
             {
                 templet = service.FindEntity(m => m.F_Id == module.F_TempletId);
@@ -79,8 +79,8 @@ namespace CMS.Application.WebManage
         public C_TempletEntity GetModelByActionName(string actionName)
         {
             C_TempletEntity templet = new C_TempletEntity();
-            C_ModulesApp moduleApp = new C_ModulesApp();
-            C_ModulesEntity module = moduleApp.GetModelByActionName(actionName);
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            C_ModulesEntity module = c_ModulesApp.GetModelByActionName(actionName);
             if (module != null)
             {
                 templet = service.FindEntity(m => m.F_Id == module.F_TempletId);

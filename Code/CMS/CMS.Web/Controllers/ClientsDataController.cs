@@ -133,8 +133,8 @@ namespace CMS.Web.Controllers
 
         private object GetModulesList()
         {
-            C_ModulesApp moduleApp = new C_ModulesApp();
-            var data = moduleApp.GetList();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            var data = c_ModulesApp.GetList();
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (C_ModulesEntity item in data)
             {

@@ -15,6 +15,34 @@ namespace CMS.Application.Comm
 {
     public class TempHelp
     {
+        #region 单例模式创建对象
+        //单例模式创建对象
+        private static TempHelp _tempHelp = null;
+        // Creates an syn object.
+        private static readonly object SynObject = new object();
+        TempHelp()
+        {
+        }
+
+        public static TempHelp tempHelp
+        {
+            get
+            {
+                // Double-Checked Locking
+                if (null == _tempHelp)
+                {
+                    lock (SynObject)
+                    {
+                        if (null == _tempHelp)
+                        {
+                            _tempHelp = new TempHelp();
+                        }
+                    }
+                }
+                return _tempHelp;
+            }
+        }
+        #endregion
         /// <summary>
         /// 输出文件格式
         /// </summary>
@@ -81,9 +109,9 @@ namespace CMS.Application.Comm
             {
                 if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Id)
                 {
-                    C_ContentApp contentapp = new C_ContentApp();
-                    CONTENTENTITY = contentapp.GetForm(Id);
-                    C_ModulesEntity moduleentity = contentapp.GetModuleByContentID(Id);
+                    C_ContentApp c_ContentApp = new C_ContentApp();
+                    CONTENTENTITY = c_ContentApp.GetForm(Id);
+                    C_ModulesEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
 
                     if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleentity))
                     {
@@ -135,6 +163,14 @@ namespace CMS.Application.Comm
                 filePath = HTMLSAVEPATH + @"\" + filename;
             }
         }
+        /// <summary>
+        /// 创建静态页面
+        /// </summary>
+        /// <param name="htmls"></param>
+        private void GenHtml(string paths, string htmls)
+        { 
+            FileHelper.WriteText(paths, htmls);
+        }
         #endregion
 
         #region 判断字符串是否经过htmlEncode -bool IsHtmlEnCode(string contents)
@@ -172,15 +208,25 @@ namespace CMS.Application.Comm
             {
                 InitHtmlSavePath(Id);
                 string templets = GetHtmlPages(codes, Id);
-                string filePaths = "";
-                //创建静态页面
-                GenHtml(templets, out filePaths);
-                //更新链接地址
-                UpdateContentById(filePaths, Id);
-                //删除原有页面
+
                 if (CONTENTENTITY != null && CONTENTENTITY.F_ModuleId != null && CONTENTENTITY.F_UrlAddress != null)
                 {
-                    FileHelper.DeleteFile(CONTENTENTITY.F_UrlAddress);
+                     
+                    //已生成静态文件时
+                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + CONTENTENTITY.F_UrlAddress))
+                    {
+                        FileHelper.DeleteFile(CONTENTENTITY.F_UrlAddress);
+                        GenHtml(CONTENTENTITY.F_UrlAddress, templets);
+                    }
+                    else
+                    {
+                        string filePaths = "";
+
+                        //创建静态页面
+                        GenHtml(templets, out filePaths);
+                        //更新链接地址
+                        UpdateContentById(filePaths, Id);
+                    }
                 }
             }
             catch (Exception ex)
@@ -384,9 +430,9 @@ namespace CMS.Application.Comm
             {
                 string sourceName = "";
                 attrs.TryGetValue("sourcename", out sourceName);
-                C_ModulesApp modulesApp = new C_ModulesApp();
+                C_ModulesApp c_ModulesApp = new C_ModulesApp();
                 C_ModulesEntity moduleentity = new C_ModulesEntity();
-                moduleentity = modulesApp.GetFormByActionName(sourceName);
+                moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
                 if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
                 {
                     Ids = moduleentity.F_Id.ToString();
@@ -479,26 +525,26 @@ namespace CMS.Application.Comm
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = "";
-            C_ContentApp contentapp = new C_ContentApp();
             List<C_ContentEntity> contententitys = new List<C_ContentEntity>();
             IQueryable<C_ContentEntity> contententitysT = null;
 
+            C_ContentApp c_ContentApp = new C_ContentApp();
             //数据源
             if (attrs.ContainsKey("sourcename"))
             {
                 string sourceName = "";
                 attrs.TryGetValue("sourcename", out sourceName);
-                C_ModulesApp modulesApp = new C_ModulesApp();
                 C_ModulesEntity moduleentity = new C_ModulesEntity();
-                moduleentity = modulesApp.GetFormByActionName(sourceName);
+                C_ModulesApp c_ModulesApp = new C_ModulesApp();
+                moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
                 if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
                 {
-                    contententitysT = contentapp.GetListIq(moduleentity.F_Id);
+                    contententitysT = c_ContentApp.GetListIq(moduleentity.F_Id);
                 }
             }
             else
             {
-                contententitysT = contentapp.GetListIq(Ids);
+                contententitysT = c_ContentApp.GetListIq(Ids);
             }
             if (contententitysT != null)
             {
@@ -566,12 +612,12 @@ namespace CMS.Application.Comm
         /// <param name="Ids"></param>
         private void UpdateContentById(string url, string Ids)
         {
-            C_ContentApp contentapp = new C_ContentApp();
-            C_ContentEntity contentEntity = contentapp.GetForm(Ids);
+            C_ContentApp c_ContentApp = new C_ContentApp();
+            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             if (contentEntity != null)
             {
                 contentEntity.F_UrlAddress = url;
-                contentapp.SubmitForm(contentEntity, Ids);
+                c_ContentApp.SubmitForm(contentEntity, Ids);
             }
         }
         #endregion
@@ -685,6 +731,98 @@ namespace CMS.Application.Comm
             return attrsD;
         }
         #endregion
+
+        /// <summary>
+        /// 根据urlRaw获取html
+        /// </summary>
+        /// <param name="urlRaw"></param>
+        /// <returns></returns>
+        public string GetHtmlByUrl(string urlRaw)
+        {
+            List<string> urlRaws = GetUrls(urlRaw);
+            C_TempletApp templetApp = new C_TempletApp();
+            C_TempletEntity model = new C_TempletEntity();
+            C_ModulesEntity moduleentity = new C_ModulesEntity();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            string Ids = "";
+            if (urlRaws == null || urlRaws.Count == 0)
+            {
+                model = templetApp.GetMain();
+                moduleentity = c_ModulesApp.GetMain();
+                if (moduleentity != null)
+                    Ids = moduleentity.F_Id;
+            }
+            else
+            {
+                if (urlRaws.Count > 0)
+                {
+                    model = templetApp.GetModelByActionName(urlRaws.FirstOrDefault());
+                    moduleentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault());
+                }
+                if (moduleentity != null)
+                    Ids = moduleentity.F_Id;
+                if (urlRaws.Count == 2)
+                {
+                    Ids = urlRaws.LastOrDefault();
+                }
+            }
+            string htmls = System.Web.HttpUtility.HtmlDecode(model.F_Content);
+            if (moduleentity != null)
+            {
+                TempHelp temphelp = new TempHelp();
+                htmls = temphelp.GetHtmlPages(htmls, Ids);
+            }
+
+            return htmls;
+        }
+
+        /// <summary>
+        /// 获取URL参数
+        /// </summary>
+        /// <param name="urlRaw"></param>
+        /// <returns></returns>
+        private List<string> GetUrls(string urlRaw)
+        {
+            List<string> strs = new List<string>();
+            String[] urlTstrs = urlRaw.Split('/');
+            if (urlTstrs != null && urlTstrs.Length > 0)
+            {
+                foreach (String item in urlTstrs)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        strs.Add(item);
+                    }
+                }
+            }
+            return strs;
+        }
+
+        /// <summary>
+        /// 判断请求路径是否为网站前台地址
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public bool IsWebSite(string urlRaw)
+        {
+            bool retBol = true;
+            List<string> urlRaws = GetUrls(urlRaw);
+
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            List<C_ModulesEntity> models = c_ModulesApp.GetList();
+            if (models != null && models.Count > 0)
+            {
+                List<string> actionNames = models.Select(m => m.F_ActionName).ToList();
+                if (urlRaws.Count > 0)
+                {
+                    if (!actionNames.Contains(urlRaws.FirstOrDefault()))
+                    {
+                        retBol = false;
+                    }
+                }
+            }
+            return retBol;
+        }
 
     }
 
