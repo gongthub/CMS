@@ -15,12 +15,13 @@ namespace CMS.Domain.Entity.WebManage
         public string F_FullName { get; set; }
         public string F_Author { get; set; }
 
-        private DateTime f_EditTime;
-        public DateTime F_EditTime
-        {
-            get { return DateTime.Now; }
-            set { value = f_EditTime; }
-        }
+        public DateTime? F_EditTime { get; set; }
+        //private DateTime f_EditTime;
+        //public DateTime F_EditTime
+        //{
+        //    get { return DateTime.Now; }
+        //    set { value = f_EditTime; }
+        //}
         public string F_Description { get; set; }
         public string F_UrlAddress { get; set; }
         public string F_Icon { get; set; }
