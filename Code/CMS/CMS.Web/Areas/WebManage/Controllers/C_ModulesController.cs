@@ -10,13 +10,13 @@ namespace CMS.Web.Areas.WebManage.Controllers
 {
     public class C_ModulesController : ControllerBase
     {
-         
+
+        private C_ModulesApp c_ModulesApp = new C_ModulesApp();
 
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson()
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             var data = c_ModulesApp.GetList();
             var treeList = new List<TreeSelectModel>();
             foreach (C_ModulesEntity item in data)
@@ -33,8 +33,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeJson()
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             var data = c_ModulesApp.GetList();
             var treeList = new List<TreeViewModel>();
             foreach (C_ModulesEntity item in data)
@@ -65,8 +64,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeGridJson(string keyword)
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             var data = c_ModulesApp.GetList();
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -90,8 +88,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             var data = c_ModulesApp.GetForm(keyValue);
             return Content(data.ToJson());
         }
@@ -100,8 +97,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(C_ModulesEntity moduleEntity, string keyValue)
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             c_ModulesApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }
@@ -111,8 +107,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
-        {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        { 
             c_ModulesApp.DeleteForm(keyValue);
             return Success("删除成功。");
         }

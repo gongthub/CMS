@@ -13,8 +13,8 @@ namespace CMS.Application.WebManage
 {
     public class C_ContentApp
     {
-        private static IC_ContentRepository service = new C_ContentRepository();
-         
+        private IC_ContentRepository service = new C_ContentRepository();
+           
 
         public List<C_ContentEntity> GetList(string itemId = "", string keyword = "")
         {
@@ -183,6 +183,6 @@ namespace CMS.Application.WebManage
             }
 
             return htmls;
-        }
+        } 
     }
 }
