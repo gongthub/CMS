@@ -142,6 +142,25 @@ namespace CMS.Application.WebManage
             return moduleEntity;
         }
 
+        /// <summary>
+        /// 根据模块名称获取一个内容
+        /// </summary>
+        /// <param name="actionCode"></param>
+        /// <returns></returns>
+        public C_ContentEntity GetContentByActionCode(string actionCode)
+        {
+            C_ModulesEntity moduleEntity = new C_ModulesEntity();
+            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            C_ContentEntity contentEntity = new C_ContentEntity();
+            moduleEntity = c_ModulesApp.GetFormByActionName(actionCode);
+            if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.F_Id))
+            {
+                contentEntity = service.IQueryable(m => m.F_ModuleId == moduleEntity.F_Id).FirstOrDefault();
+                
+            }
+            return contentEntity;
+        }
+
         public void GetStaticPage(string keyValue)
         {
             C_ModulesEntity module = GetModuleByContentID(keyValue);

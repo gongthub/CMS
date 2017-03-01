@@ -168,7 +168,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="htmls"></param>
         private void GenHtml(string paths, string htmls)
-        { 
+        {
             FileHelper.WriteText(paths, htmls);
         }
         #endregion
@@ -211,7 +211,7 @@ namespace CMS.Application.Comm
 
                 if (CONTENTENTITY != null && CONTENTENTITY.F_ModuleId != null && CONTENTENTITY.F_UrlAddress != null)
                 {
-                     
+
                     //已生成静态文件时
                     if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + CONTENTENTITY.F_UrlAddress))
                     {
@@ -430,13 +430,14 @@ namespace CMS.Application.Comm
             {
                 string sourceName = "";
                 attrs.TryGetValue("sourcename", out sourceName);
-                C_ModulesApp c_ModulesApp = new C_ModulesApp();
-                C_ModulesEntity moduleentity = new C_ModulesEntity();
-                moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
-                if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
+                C_ContentEntity contentEntity = new C_ContentEntity();
+                C_ContentApp contentApp = new C_ContentApp();
+                contentEntity = contentApp.GetContentByActionCode(sourceName);
+                if (contentEntity != null && contentEntity.F_Id != Guid.Empty.ToString())
                 {
-                    Ids = moduleentity.F_Id.ToString();
+                    Ids = contentEntity.F_Id.ToString();
                 }
+
             }
             InitHtmlSavePath(Ids);
 
