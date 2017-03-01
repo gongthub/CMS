@@ -89,35 +89,35 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
-        private static string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+        private static readonly string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
 
-        private C_ContentEntity CONTENTENTITY = new C_ContentEntity();
+        //private C_ContentEntity CONTENTENTITY = new C_ContentEntity();
 
-        private void InitHtmlSavePath()
-        {
-            HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
-        }
+        //private void InitHtmlSavePath()
+        //{
+        //    //HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+        //}
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="Id"></param>
-        private void InitHtmlSavePath(string Id)
+        private void InitHtmlSavePath(string Id, out string filePath)
         {
-
+            filePath = "";
             if (!string.IsNullOrEmpty(Id))
             {
-                if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Id)
-                {
-                    C_ContentApp c_ContentApp = new C_ContentApp();
-                    CONTENTENTITY = c_ContentApp.GetForm(Id);
-                    C_ModulesEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
+                C_ContentApp c_ContentApp = new C_ContentApp();
+                //CONTENTENTITY = c_ContentApp.GetForm(Id);
+                //if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Id)
+                //{
+                C_ModulesEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
 
-                    if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleentity))
-                    {
-                        HTMLSAVEPATH += moduleentity.F_ActionName + @"\";
-                    }
+                if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleentity))
+                {
+                    filePath = HTMLSAVEPATH + moduleentity.F_ActionName + @"\";
                 }
+                //}
             }
         }
 
@@ -167,6 +167,24 @@ namespace CMS.Application.Comm
         /// 创建静态页面
         /// </summary>
         /// <param name="htmls"></param>
+        private void GenHtmlByFilePath(string htmls,ref string filePath)
+        {
+            string filename = GenUrlName() + HTMLFOR;
+            FileHelper.CreateAndWrite(filePath, filename, htmls);
+            int index = filePath.LastIndexOf('\\');
+            if (index >= 0)
+            {
+                filePath = filePath + filename;
+            }
+            else
+            {
+                filePath = filePath + @"\" + filename;
+            }
+        }
+        /// <summary>
+        /// 创建静态页面
+        /// </summary>
+        /// <param name="htmls"></param>
         private void GenHtml(string paths, string htmls)
         {
             FileHelper.WriteText(paths, htmls);
@@ -202,28 +220,30 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public bool GenHtmlPage(string codes, string Id)
         {
-            InitHtmlSavePath();
+            //InitHtmlSavePath();
             bool b = true;
             try
             {
-                InitHtmlSavePath(Id);
                 string templets = GetHtmlPages(codes, Id);
 
-                if (CONTENTENTITY != null && CONTENTENTITY.F_ModuleId != null && CONTENTENTITY.F_UrlAddress != null)
+                C_ContentApp c_ContentApp = new C_ContentApp();
+                C_ContentEntity contentEntity = c_ContentApp.GetForm(Id);
+                if (contentEntity != null && contentEntity.F_ModuleId != null && contentEntity.F_UrlAddress != null)
                 {
 
                     //已生成静态文件时
-                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + CONTENTENTITY.F_UrlAddress))
+                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.F_UrlAddress))
                     {
-                        FileHelper.DeleteFile(CONTENTENTITY.F_UrlAddress);
-                        GenHtml(CONTENTENTITY.F_UrlAddress, templets);
+                        FileHelper.DeleteFile(contentEntity.F_UrlAddress);
+                        GenHtml(contentEntity.F_UrlAddress, templets);
                     }
                     else
                     {
-                        string filePaths = "";
 
+                        string filePaths = "";
+                        InitHtmlSavePath(Id, out filePaths);
                         //创建静态页面
-                        GenHtml(templets, out filePaths);
+                        GenHtmlByFilePath(templets,ref filePaths);
                         //更新链接地址
                         UpdateContentById(filePaths, Id);
                     }
@@ -400,16 +420,18 @@ namespace CMS.Application.Comm
         {
             string strs = "";
 
-            InitHtmlSavePath(Ids);
+            //InitHtmlSavePath(Ids);
 
-            if (CONTENTENTITY != null)
+            C_ContentApp c_ContentApp = new C_ContentApp();
+            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            if (contentEntity != null)
             {
-                PropertyInfo[] propertys = CONTENTENTITY.GetType().GetProperties();
+                PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
                 if (propertys != null && propertys.Length > 0)
                 {
                     foreach (PropertyInfo property in propertys)
                     {
-                        strs = ProContent(name, strs, property);
+                        strs = ProContent(name, strs, property, contentEntity);
                     }
                 }
             }
@@ -430,25 +452,28 @@ namespace CMS.Application.Comm
             {
                 string sourceName = "";
                 attrs.TryGetValue("sourcename", out sourceName);
-                C_ContentEntity contentEntity = new C_ContentEntity();
+                C_ContentEntity contentEntityT = new C_ContentEntity();
                 C_ContentApp contentApp = new C_ContentApp();
-                contentEntity = contentApp.GetContentByActionCode(sourceName);
-                if (contentEntity != null && contentEntity.F_Id != Guid.Empty.ToString())
+                contentEntityT = contentApp.GetContentByActionCode(sourceName);
+                if (contentEntityT != null && contentEntityT.F_Id != Guid.Empty.ToString())
                 {
-                    Ids = contentEntity.F_Id.ToString();
+                    Ids = contentEntityT.F_Id.ToString();
                 }
 
             }
-            InitHtmlSavePath(Ids);
+            //InitHtmlSavePath(Ids);
 
-            if (CONTENTENTITY != null)
+
+            C_ContentApp c_ContentApp = new C_ContentApp();
+            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            if (contentEntity != null)
             {
-                PropertyInfo[] propertys = CONTENTENTITY.GetType().GetProperties();
+                PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
                 if (propertys != null && propertys.Length > 0)
                 {
                     foreach (PropertyInfo property in propertys)
                     {
-                        strs = ProContent(name, strs, property);
+                        strs = ProContent(name, strs, property, contentEntity);
                     }
                 }
             }
@@ -463,11 +488,11 @@ namespace CMS.Application.Comm
         /// <param name="strs"></param>
         /// <param name="property"></param>
         /// <returns></returns>
-        private string ProContent(string name, string strs, PropertyInfo property)
+        private string ProContent(string name, string strs, PropertyInfo property, C_ContentEntity contentEntity)
         {
             if (property.Name == name || property.Name.Replace("F_", "") == name)
             {
-                object obj = property.GetValue(CONTENTENTITY, null);
+                object obj = property.GetValue(contentEntity, null);
                 if (obj != null)
                 {
                     strs = obj.ToString();

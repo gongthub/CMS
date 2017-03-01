@@ -164,7 +164,7 @@ namespace CMS.Application.WebManage
         public void GetStaticPage(string keyValue)
         {
             C_ModulesEntity module = GetModuleByContentID(keyValue);
-            C_ContentEntity content = GetForm(keyValue);
+            //C_ContentEntity content = GetForm(keyValue);
             if (module != null)
             {
                 C_TempletApp templetapp = new C_TempletApp();
@@ -187,7 +187,7 @@ namespace CMS.Application.WebManage
         {
             string htmls = "";
             C_ModulesEntity module = GetModuleByContentID(keyValue);
-            C_ContentEntity content = GetForm(keyValue);
+            //C_ContentEntity content = GetForm(keyValue);
             if (module != null)
             {
                 C_TempletApp templetapp = new C_TempletApp();
