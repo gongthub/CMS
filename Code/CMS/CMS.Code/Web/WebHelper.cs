@@ -118,6 +118,31 @@ namespace CMS.Code
 
         #endregion
 
+        #region 获取URL参数 +static List<string> GetUrls(string urlRaw)
+        /// <summary>
+        /// 获取URL参数
+        /// </summary>
+        /// <param name="urlRaw"></param>
+        /// <returns></returns>
+        public static List<string> GetUrls(string urlRaw)
+        {
+            List<string> strs = new List<string>();
+            String[] urlTstrs = urlRaw.Split('/');
+            if (urlTstrs != null && urlTstrs.Length > 0)
+            {
+                foreach (String item in urlTstrs)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        strs.Add(item);
+                    }
+                }
+            }
+            return strs;
+        }
+
+        #endregion
+
         #region Session操作
         /// <summary>
         /// 写Session

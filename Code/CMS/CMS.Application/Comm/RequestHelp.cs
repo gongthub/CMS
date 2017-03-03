@@ -37,6 +37,11 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        #region 处理请求 +void InitRequest(System.Web.HttpContext context)
+        /// <summary>
+        /// 处理请求
+        /// </summary>
+        /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
 
@@ -49,7 +54,8 @@ namespace CMS.Application.Comm
             string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlRaw);
             context.Response.Write(htmls);
             context.Response.End();
-        }
+        } 
+        #endregion
 
 
     }

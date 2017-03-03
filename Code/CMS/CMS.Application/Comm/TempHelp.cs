@@ -861,6 +861,7 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        #region 根据urlRaw获取html +string GetHtmlByUrl(string urlRaw)
         /// <summary>
         /// 根据urlRaw获取html
         /// </summary>
@@ -868,7 +869,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlByUrl(string urlRaw)
         {
-            List<string> urlRaws = GetUrls(urlRaw);
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
             C_TempletApp templetApp = new C_TempletApp();
             C_TempletEntity model = new C_TempletEntity();
             C_ModulesEntity moduleentity = new C_ModulesEntity();
@@ -903,30 +904,10 @@ namespace CMS.Application.Comm
             }
 
             return htmls;
-        }
+        } 
+        #endregion
 
-        /// <summary>
-        /// 获取URL参数
-        /// </summary>
-        /// <param name="urlRaw"></param>
-        /// <returns></returns>
-        private List<string> GetUrls(string urlRaw)
-        {
-            List<string> strs = new List<string>();
-            String[] urlTstrs = urlRaw.Split('/');
-            if (urlTstrs != null && urlTstrs.Length > 0)
-            {
-                foreach (String item in urlTstrs)
-                {
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        strs.Add(item);
-                    }
-                }
-            }
-            return strs;
-        }
-
+        #region 判断请求路径是否为网站前台地址 +bool IsWebSite(string urlRaw)
         /// <summary>
         /// 判断请求路径是否为网站前台地址
         /// </summary>
@@ -935,7 +916,7 @@ namespace CMS.Application.Comm
         public bool IsWebSite(string urlRaw)
         {
             bool retBol = true;
-            List<string> urlRaws = GetUrls(urlRaw);
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
 
             C_ModulesApp c_ModulesApp = new C_ModulesApp();
             List<C_ModulesEntity> models = c_ModulesApp.GetList();
@@ -951,8 +932,10 @@ namespace CMS.Application.Comm
                 }
             }
             return retBol;
-        }
+        } 
+        #endregion
 
+        #region 字段格式化处理 -InitFormat(string context, Dictionary<string, string> attrs)
         /// <summary>
         /// 字段格式化处理
         /// </summary>
@@ -980,8 +963,10 @@ namespace CMS.Application.Comm
                 }
             }
             return contexts;
-        }
+        } 
+        #endregion
 
+        #region 字段格式化处理 -string InitFormat(string name, string context, Dictionary<string, string> attrs)
         /// <summary>
         /// 字段格式化处理
         /// </summary>
@@ -1009,16 +994,18 @@ namespace CMS.Application.Comm
                 }
             }
             return contexts;
-        }
+        } 
+        #endregion
 
+        #region 初始化单个模板属性 -C_ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
         /// <summary>
         /// 初始化单个模板属性
         /// </summary>
         /// <returns></returns>
         private C_ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
-        { 
+        {
             C_ContentApp c_ContentApp = new C_ContentApp();
-            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids); 
+            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             //数据源
             if (attrs.ContainsKey("sourcename"))
             {
@@ -1116,10 +1103,11 @@ namespace CMS.Application.Comm
                 }
             }
 
-            contentEntity = c_ContentApp.GetForm(Ids); 
+            contentEntity = c_ContentApp.GetForm(Ids);
             return contentEntity;
         }
-    }
+    } 
+        #endregion
 
     public static class QueryableExtensions
     {
