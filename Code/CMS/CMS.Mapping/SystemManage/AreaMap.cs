@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public AreaMap()
         {
             this.ToTable("Sys_Area");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

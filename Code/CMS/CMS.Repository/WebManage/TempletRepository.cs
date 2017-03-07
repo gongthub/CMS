@@ -1,14 +1,15 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.WebManage;
+using CMS.Domain.IRepository.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Domain.IRepository.WebManage
+namespace CMS.Repository.WebManage
 {
-    public interface IC_TempletRepository : IRepositoryBase<C_TempletEntity>
+    public class TempletRepository : RepositoryBase<TempletEntity>, ITempletRepository
     {
     }
 }

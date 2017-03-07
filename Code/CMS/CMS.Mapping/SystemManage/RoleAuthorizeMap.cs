@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public RoleAuthorizeMap()
         {
             this.ToTable("Sys_RoleAuthorize");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

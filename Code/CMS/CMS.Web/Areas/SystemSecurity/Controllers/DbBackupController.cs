@@ -21,8 +21,8 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(DbBackupEntity dbBackupEntity)
         {
-            dbBackupEntity.F_FilePath = Server.MapPath("~/Resource/DbBackup/" + dbBackupEntity.F_FileName + ".bak");
-            dbBackupEntity.F_FileName = dbBackupEntity.F_FileName + ".bak";
+            dbBackupEntity.FilePath = Server.MapPath("~/Resource/DbBackup/" + dbBackupEntity.FileName + ".bak");
+            dbBackupEntity.FileName = dbBackupEntity.FileName + ".bak";
             dbBackupApp.SubmitForm(dbBackupEntity);
             return Success("操作成功。");
         }
@@ -40,8 +40,8 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         public void DownloadBackup(string keyValue)
         {
             var data = dbBackupApp.GetForm(keyValue);
-            string filename = Server.UrlDecode(data.F_FileName);
-            string filepath = Server.MapPath(data.F_FilePath);
+            string filename = Server.UrlDecode(data.FileName);
+            string filepath = Server.MapPath(data.FilePath);
             if (FileDownHelper.FileExists(filepath))
             {
                 FileDownHelper.DownLoadold(filepath, filename);

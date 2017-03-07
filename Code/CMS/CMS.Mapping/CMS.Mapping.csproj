@@ -59,9 +59,10 @@
     <Compile Include="SystemSecurity\DbBackupMap.cs" />
     <Compile Include="SystemSecurity\FilterIPMap.cs" />
     <Compile Include="SystemSecurity\LogMap.cs" />
-    <Compile Include="WebManage\C_ContentMap.cs" />
-    <Compile Include="WebManage\C_ModulesMap.cs" />
-    <Compile Include="WebManage\C_TempletMap.cs" />
+    <Compile Include="WebManage\ContentMap.cs" />
+    <Compile Include="WebManage\ColumnsMap.cs" />
+    <Compile Include="WebManage\TempletMap.cs" />
+    <Compile Include="WebManage\WebSiteMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj">

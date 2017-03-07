@@ -11,15 +11,15 @@
         $gridList.dataGrid({
             treeGrid: true,
             treeGridModel: "adjacency",
-            ExpandColumn: "F_UrlAddress",
-            url: "/WebManage/C_Modules/GetTreeGridJson",
+            ExpandColumn: "UrlAddress",
+            url: "/WebManage/Columns/GetTreeGridJson",
             height: $(window).height() - 96,
             colModel: [
-                { label: "主键", name: "F_Id", hidden: true, key: true },
-                { label: '名称', name: 'F_FullName', width: 200, align: 'left' },
-                { label: '连接', name: 'F_UrlAddress', width: 260, align: 'left' },
+                { label: "主键", name: "Id", hidden: true, key: true },
+                { label: '名称', name: 'FullName', width: 200, align: 'left' },
+                { label: '连接', name: 'UrlAddress', width: 260, align: 'left' },
                 {
-                    label: '目标', name: 'F_Type', width: 80, align: 'center',
+                    label: '目标', name: 'Type', width: 80, align: 'center',
                     formatter: function (cellvalue) {
                         if (cellvalue == "0") {
                             return "导航";
@@ -33,18 +33,18 @@
                     }
                 },
                 {
-                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
+                    label: "有效", name: "EnabledMark", width: 60, align: "center",
                     formatter: function (cellvalue) {
                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 },
                 {
-                    label: "主页", name: "F_MainMark", width: 60, align: "center",
+                    label: "主页", name: "MainMark", width: 60, align: "center",
                     formatter: function (cellvalue) {
                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 },
-                { label: '描述', name: 'F_Description', width: 300, align: 'left' }
+                { label: '描述', name: 'Description', width: 300, align: 'left' }
             ]
         });
         $("#btn_search").click(function () {
@@ -57,7 +57,7 @@
         $.modalOpen({
             id: "Form",
             title: "新增模块",
-            url: "/WebManage/C_Modules/Form",
+            url: "/WebManage/Columns/Form",
             width: "700px",
             height: "440px",
             callBack: function (iframeId) {
@@ -66,11 +66,11 @@
         });
     }
     function btn_edit() {
-        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Form",
             title: "修改模块",
-            url: "/WebManage/C_Modules/Form?keyValue=" + keyValue,
+            url: "/WebManage/Columns/Form?keyValue=" + keyValue,
             width: "700px",
             height: "440px",
             callBack: function (iframeId) {
@@ -80,8 +80,8 @@
     }
     function btn_delete() {
         $.deleteForm({
-            url: "/WebManage/C_Modules/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            url: "/WebManage/Columns/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().Id },
             success: function () {
                 $.currentWindow().$("#gridList").resetSelection();
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
@@ -89,11 +89,11 @@
         })
     }
     function btn_details() {
-        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Details",
             title: "查看模块",
-            url: "/WebManage/C_Modules/Details?keyValue=" + keyValue,
+            url: "/WebManage/Columns/Details?keyValue=" + keyValue,
             width: "700px",
             height: "490px",
             btn: null,

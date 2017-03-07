@@ -36,13 +36,13 @@ namespace CMS.Web.Controllers
             Dictionary<string, object> dictionaryItem = new Dictionary<string, object>();
             foreach (var item in new ItemsApp().GetList())
             {
-                var dataItemList = itemdata.FindAll(t => t.F_ItemId.Equals(item.F_Id));
+                var dataItemList = itemdata.FindAll(t => t.ItemId.Equals(item.Id));
                 Dictionary<string, string> dictionaryItemList = new Dictionary<string, string>();
                 foreach (var itemList in dataItemList)
                 {
-                    dictionaryItemList.Add(itemList.F_ItemCode, itemList.F_ItemName);
+                    dictionaryItemList.Add(itemList.ItemCode, itemList.ItemName);
                 }
-                dictionaryItem.Add(item.F_EnCode, dictionaryItemList);
+                dictionaryItem.Add(item.EnCode, dictionaryItemList);
             }
             return dictionaryItem;
         }
@@ -55,10 +55,10 @@ namespace CMS.Web.Controllers
             {
                 var fieldItem = new
                 {
-                    encode = item.F_EnCode,
-                    fullname = item.F_FullName
+                    encode = item.EnCode,
+                    fullname = item.FullName
                 };
-                dictionary.Add(item.F_Id, fieldItem);
+                dictionary.Add(item.Id, fieldItem);
             }
             return dictionary;
         }
@@ -71,10 +71,10 @@ namespace CMS.Web.Controllers
             {
                 var fieldItem = new
                 {
-                    encode = item.F_EnCode,
-                    fullname = item.F_FullName
+                    encode = item.EnCode,
+                    fullname = item.FullName
                 };
-                dictionary.Add(item.F_Id, fieldItem);
+                dictionary.Add(item.Id, fieldItem);
             }
             return dictionary;
         }
@@ -87,10 +87,10 @@ namespace CMS.Web.Controllers
             {
                 var fieldItem = new
                 {
-                    encode = item.F_EnCode,
-                    fullname = item.F_FullName
+                    encode = item.EnCode,
+                    fullname = item.FullName
                 };
-                dictionary.Add(item.F_Id, fieldItem);
+                dictionary.Add(item.Id, fieldItem);
             }
             return dictionary;
         }
@@ -103,13 +103,13 @@ namespace CMS.Web.Controllers
         {
             StringBuilder sbJson = new StringBuilder();
             sbJson.Append("[");
-            List<ModuleEntity> entitys = data.FindAll(t => t.F_ParentId == parentId);
+            List<ModuleEntity> entitys = data.FindAll(t => t.ParentId == parentId);
             if (entitys.Count > 0)
             {
                 foreach (var item in entitys)
                 {
                     string strJson = item.ToJson();
-                    strJson = strJson.Insert(strJson.Length - 1, ",\"ChildNodes\":" + ToMenuJson(data, item.F_Id) + "");
+                    strJson = strJson.Insert(strJson.Length - 1, ",\"ChildNodes\":" + ToMenuJson(data, item.Id) + "");
                     sbJson.Append(strJson + ",");
                 }
                 sbJson = sbJson.Remove(sbJson.Length - 1, 1);
@@ -121,29 +121,29 @@ namespace CMS.Web.Controllers
         {
             var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
             var data = new RoleAuthorizeApp().GetButtonList(roleId);
-            var dataModuleId = data.Distinct(new ExtList<ModuleButtonEntity>("F_ModuleId"));
+            var dataModuleId = data.Distinct(new ExtList<ModuleButtonEntity>("ModuleId"));
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (ModuleButtonEntity item in dataModuleId)
             {
-                var buttonList = data.Where(t => t.F_ModuleId.Equals(item.F_ModuleId));
-                dictionary.Add(item.F_ModuleId, buttonList);
+                var buttonList = data.Where(t => t.ModuleId.Equals(item.ModuleId));
+                dictionary.Add(item.ModuleId, buttonList);
             }
             return dictionary;
         }
 
         private object GetModulesList()
         {
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
             var data = c_ModulesApp.GetList();
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
-            foreach (C_ModulesEntity item in data)
+            foreach (ColumnsEntity item in data)
             {
                 var fieldItem = new
                 {
-                    encode = item.F_ActionName,
-                    fullname = item.F_FullName
+                    encode = item.ActionName,
+                    fullname = item.FullName
                 };
-                dictionary.Add(item.F_Id, fieldItem);
+                dictionary.Add(item.Id, fieldItem);
             }
             return dictionary;
         }

@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemSecurity
         public FilterIPMap()
         {
             this.ToTable("Sys_FilterIP");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

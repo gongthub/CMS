@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace CMS.Mapping.WebManage
 {
-    public class C_TempletMap : EntityTypeConfiguration<C_TempletEntity>
+    public class ColumnsMap : EntityTypeConfiguration<ColumnsEntity>
     {
-        public C_TempletMap()
+        public ColumnsMap()
         {
-            this.ToTable("C_Templets");
-            this.HasKey(t => t.F_Id);
+            this.ToTable("C_Columns");
+            this.HasKey(t => t.Id);
         }
     }
 }

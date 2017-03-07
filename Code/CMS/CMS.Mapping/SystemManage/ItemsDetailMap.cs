@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public ItemsDetailMap()
         {
             this.ToTable("Sys_ItemsDetail");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public ModuleButtonMap()
         {
             this.ToTable("Sys_ModuleButton");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

@@ -9,22 +9,22 @@
     function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
-            url: "/WebManage/C_Templet/GetGrid",
+            url: "/WebManage/Templet/GetGrid",
             height: $(window).height() - 96,
             colModel: [
-                { label: "主键", name: "F_Id", hidden: true, key: true },
-                { label: '名称', name: 'F_FullName', width: 150, align: 'left' },
-                { label: '排序', name: 'F_SortCode', width: 150, align: 'left' },
-                { label: '描述', name: 'F_Description', width: 150, align: 'left' },
+                { label: "主键", name: "Id", hidden: true, key: true },
+                { label: '名称', name: 'FullName', width: 150, align: 'left' },
+                { label: '排序', name: 'SortCode', width: 150, align: 'left' },
+                { label: '描述', name: 'Description', width: 150, align: 'left' },
                 {
-                    label: "有效", name: "F_EnabledMark", width: 60, align: "center",
+                    label: "有效", name: "EnabledMark", width: 60, align: "center",
                     formatter: function (cellvalue) {
                         return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
                     }
                 }
             ],
             pager: "#gridPager",
-            sortname: 'F_FullName asc,F_Description desc',
+            sortname: 'FullName asc,Description desc',
             viewrecords: true
         });
         $("#btn_search").click(function () {
@@ -37,18 +37,18 @@
         $.modalOpen({
             id: "Form",
             title: "新增模板",
-            url: "/WebManage/C_Templet/Form",
+            url: "/WebManage/Templet/Form",
             width: "1050px",
             height: "670px",
             btn: null
         });
     }
     function btn_edit() {
-        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Form",
             title: "修改模板",
-            url: "/WebManage/C_Templet/Form?keyValue=" + keyValue,
+            url: "/WebManage/Templet/Form?keyValue=" + keyValue,
             width: "1050px",
             height: "670px",
             btn: null
@@ -56,19 +56,19 @@
     }
     function btn_delete() {
         $.deleteForm({
-            url: "/WebManage/C_Templet/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            url: "/WebManage/Templet/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().Id },
             success: function () {
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
             }
         })
     }
     function btn_details() {
-        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Details",
             title: "查看模板",
-            url: "/WebManage/C_Templet/Details?keyValue=" + keyValue,
+            url: "/WebManage/Templet/Details?keyValue=" + keyValue,
             width: "1050px",
             height: "670px",
             btn: null,

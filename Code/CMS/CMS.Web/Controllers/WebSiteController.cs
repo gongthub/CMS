@@ -12,17 +12,17 @@ namespace CMS.Web.Controllers
     {
         //public ActionResult Index()
         //{
-        //    C_TempletApp templetApp = new C_TempletApp();
-        //    C_TempletEntity model = templetApp.GetMain();
-        //    string htmls = Server.HtmlDecode(model.F_Content);
+        //    TempletApp templetApp = new TempletApp();
+        //    TempletEntity model = templetApp.GetMain();
+        //    string htmls = Server.HtmlDecode(model.Content);
         //    return Content(htmls);
         //}
         public ActionResult Index(string name)
         {
-            C_TempletApp templetApp = new C_TempletApp();
-            C_TempletEntity model = new C_TempletEntity();
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
-            C_ModulesEntity moduleentity = new C_ModulesEntity();
+            TempletApp templetApp = new TempletApp();
+            TempletEntity model = new TempletEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            ColumnsEntity moduleentity = new ColumnsEntity();
             if (string.IsNullOrEmpty(name))
             {
                 model = templetApp.GetMain();
@@ -33,10 +33,10 @@ namespace CMS.Web.Controllers
                 model = templetApp.GetModelByActionName(name);
                 moduleentity = c_ModulesApp.GetFormByActionName(name);
             }
-            string htmls = Server.HtmlDecode(model.F_Content);
+            string htmls = Server.HtmlDecode(model.Content);
             if (moduleentity != null)
             {
-                htmls = TempHelp.tempHelp.GetHtmlPages(htmls, moduleentity.F_Id);
+                htmls = TempHelp.tempHelp.GetHtmlPages(htmls, moduleentity.Id);
             }
 
             return Content(htmls);

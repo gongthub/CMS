@@ -495,9 +495,10 @@
     <Compile Include="Areas\SystemSecurity\Controllers\LogController.cs" />
     <Compile Include="Areas\SystemSecurity\Controllers\ServerMonitoringController.cs" />
     <Compile Include="Areas\SystemSecurity\SystemSecurityAreaRegistration.cs" />
-    <Compile Include="Areas\WebManage\Controllers\C_ContentController.cs" />
-    <Compile Include="Areas\WebManage\Controllers\C_ModulesController.cs" />
-    <Compile Include="Areas\WebManage\Controllers\C_TempletController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\ContentController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\ColumnsController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\TempletController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\WebSiteController.cs" />
     <Compile Include="Areas\WebManage\WebManageAreaRegistration.cs" />
     <Compile Include="Content\js\umeditor\net\Uploader.cs" />
     <Compile Include="Controllers\ClientsDataController.cs" />

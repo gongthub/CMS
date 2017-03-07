@@ -16,7 +16,7 @@ namespace CMS.Repository.SystemSecurity
                 var dbBackupEntity = db.FindEntity<DbBackupEntity>(keyValue);
                 if (dbBackupEntity != null)
                 {
-                    FileHelper.DeleteFile(dbBackupEntity.F_FilePath);
+                    FileHelper.DeleteFile(dbBackupEntity.FilePath);
                 }
                 db.Delete<DbBackupEntity>(dbBackupEntity);
                 db.Commit();
@@ -24,9 +24,9 @@ namespace CMS.Repository.SystemSecurity
         }
         public void ExecuteDbBackup(DbBackupEntity dbBackupEntity)
         {
-            DbHelper.ExecuteSqlCommand(string.Format("backup database {0} to disk ='{1}'", dbBackupEntity.F_DbName, dbBackupEntity.F_FilePath));
-            dbBackupEntity.F_FileSize = FileHelper.ToFileSize(FileHelper.GetFileSize(dbBackupEntity.F_FilePath));
-            dbBackupEntity.F_FilePath = "/Resource/DbBackup/" + dbBackupEntity.F_FileName;
+            DbHelper.ExecuteSqlCommand(string.Format("backup database {0} to disk ='{1}'", dbBackupEntity.DbName, dbBackupEntity.FilePath));
+            dbBackupEntity.FileSize = FileHelper.ToFileSize(FileHelper.GetFileSize(dbBackupEntity.FilePath));
+            dbBackupEntity.FilePath = "/Resource/DbBackup/" + dbBackupEntity.FileName;
             this.Insert(dbBackupEntity);
         }
     }

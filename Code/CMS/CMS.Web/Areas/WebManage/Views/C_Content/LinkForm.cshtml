@@ -11,19 +11,19 @@
     $(function () { 
         if (!!keyValue) {
             $.ajax({
-                url: "/WebManage/C_Content/GetFormJson",
+                url: "/WebManage/Content/GetFormJson",
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    data.F_Content = htmlDecode(data.F_Content);
-                    $("#ImgPr").attr("src", data.F_Icon);
+                    data.Content = htmlDecode(data.Content);
+                    $("#ImgPr").attr("src", data.Icon);
                     $("#form1").formSerialize(data);
                 }
             });
         }
 
-        $("#F_Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        $("#Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
     })
 
     function submitForm() {
@@ -34,11 +34,11 @@
 
         var filePaths = uploadImg();
         var postData = $("#form1").formSerialize();
-        postData["F_Content"] = htmlEncode(postData["F_Content"]);
-        postData["F_ModuleId"] = moduleId;
-        postData["F_Icon"] = filePaths;
+        postData["Content"] = htmlEncode(postData["Content"]);
+        postData["ModuleId"] = moduleId;
+        postData["Icon"] = filePaths;
         $.submitForm({
-            url: "/WebManage/C_Content/SubmitForm?keyValue=" + keyValue,
+            url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
             param: postData,
             success: function () {
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
@@ -50,10 +50,10 @@
     function uploadImg() {
         var filePath = "";
         var formData = new FormData();
-        formData.append("fileicon", $("#F_Icon")[0].files[0]);
+        formData.append("fileicon", $("#Icon")[0].files[0]);
         $.ajax({
             type: "POST",
-            url: "/WebManage/C_Content/UploadImg",
+            url: "/WebManage/Content/UploadImg",
             dataType: "json",
             data: formData,
             async: false,
@@ -92,17 +92,17 @@
                             <tr>
                                 <th class="formTitle">排序</th>
                                 <td class="formValue">
-                                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
                                 </td>
                                 <th class="formTitle">名称</th>
                                 <td class="formValue">
-                                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">地址</th>
                                 <td class="formValue" colspan="3">
-                                    <input id="F_UrlAddress" name="F_UrlAddress" type="text" class="form-control required" placeholder="请输入地址" />
+                                    <input id="UrlAddress" name="UrlAddress" type="text" class="form-control required" placeholder="请输入地址" />
                                 </td>
                             </tr>
                             <tr>
@@ -111,7 +111,7 @@
                                     <div>
                                         <div class="sys-div-imgupload">
                                             <div class="sys-div-upload">
-                                                <input id="F_Icon" name="F_Icon" type="file" />请选择图片
+                                                <input id="Icon" name="Icon" type="file" />请选择图片
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>
@@ -120,7 +120,7 @@
                                 <th class="formTitle" style="height: 35px;">是否有效</th>
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
-                                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
                                     </div>
                                 </td>
                             </tr>
@@ -129,7 +129,7 @@
                                     备注
                                 </th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>

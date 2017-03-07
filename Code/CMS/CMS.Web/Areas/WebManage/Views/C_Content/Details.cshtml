@@ -30,13 +30,13 @@
         initControl();
         if (!!keyValue) {
             $.ajax({
-                url: "/WebManage/C_Content/GetFormJson",
+                url: "/WebManage/Content/GetFormJson",
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    data.F_Content = htmlDecode(data.F_Content);
-                    editor.setValue(data.F_Content)
+                    data.Content = htmlDecode(data.Content);
+                    editor.setValue(data.Content)
                     $("#form1").formSerialize(data);
                     $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
                     $("#form1").find('div.ckbox label').attr('for', '');
@@ -67,7 +67,7 @@
         });
 
         editor = new Simditor({
-            textarea: $('#F_Content'),
+            textarea: $('#Content'),
             toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
         });
     } 
@@ -89,32 +89,32 @@
                             <tr>
                                 <th class="formTitle">排序</th>
                                 <td class="formValue">
-                                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control" placeholder="请输入排序" />
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control" placeholder="请输入排序" />
                                 </td>
                                 <th class="formTitle">名称</th>
                                 <td class="formValue">
-                                    <input id="F_FullName" name="F_FullName" type="text" class="form-control" placeholder="请输入名称" />
+                                    <input id="FullName" name="FullName" type="text" class="form-control" placeholder="请输入名称" />
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">作者</th>
                                 <td class="formValue">
-                                    <input id="F_Author" name="F_Author" type="text" class="form-control" placeholder="请输入作者" />
+                                    <input id="Author" name="Author" type="text" class="form-control" placeholder="请输入作者" />
                                 </td>
                                 <th class="formTitle">时间</th>
                                 <td class="formValue">
-                                    <input id="F_EditTime" name="F_EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+                                    <input id="EditTime" name="EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
-                                    <input id="F_Icon" name="F_Icon" type="text" class="form-control" placeholder="请输入图标" />
+                                    <input id="Icon" name="Icon" type="text" class="form-control" placeholder="请输入图标" />
                                 </td>
                                 <th class="formTitle" style="height: 35px;">是否有效</th>
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
-                                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
                                     </div>
                                 </td>
                             </tr>
@@ -123,7 +123,7 @@
                                     备注
                                 </th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -137,13 +137,13 @@
                             <tr>
                                 <th class="formTitle">SEO标题</th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEOTitle" name="F_SEOTitle" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEOTitle" name="SEOTitle" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">SEO关键字</th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEOKeyWords" name="F_SEOKeyWords" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEOKeyWords" name="SEOKeyWords" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -151,7 +151,7 @@
                                     SEO备注
                                 </th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEODesc" name="F_SEODesc" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEODesc" name="SEODesc" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -160,7 +160,7 @@
             </div>
             <div class="step-pane" id="step-3">
                 <div class="Content_Form_divContents">
-                    <textarea id="F_Content" name="F_Content"></textarea>
+                    <textarea id="Content" name="Content"></textarea>
                 </div>
             </div>
         </div>

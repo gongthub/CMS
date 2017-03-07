@@ -8,9 +8,9 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
-    public class C_TempletController : ControllerBase
+    public class TempletController : ControllerBase
     {
-        private C_TempletApp templetApp = new C_TempletApp();
+        private TempletApp templetApp = new TempletApp();
 
 
         [HttpGet]
@@ -46,9 +46,9 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult SubmitForm(C_TempletEntity moduleEntity, string keyValue)
+        public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            //moduleEntity.F_Content = Server.HtmlEncode(moduleEntity.F_Content);
+            //moduleEntity.Content = Server.HtmlEncode(moduleEntity.Content);
             templetApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }

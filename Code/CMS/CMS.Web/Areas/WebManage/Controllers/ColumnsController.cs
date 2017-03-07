@@ -8,10 +8,10 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
-    public class C_ModulesController : ControllerBase
+    public class ColumnsController : ControllerBase
     {
 
-        private C_ModulesApp c_ModulesApp = new C_ModulesApp();
+        private ColumnsApp c_ModulesApp = new ColumnsApp();
 
         [HttpGet]
         [HandlerAjaxOnly]
@@ -19,12 +19,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         { 
             var data = c_ModulesApp.GetList();
             var treeList = new List<TreeSelectModel>();
-            foreach (C_ModulesEntity item in data)
+            foreach (ColumnsEntity item in data)
             {
                 TreeSelectModel treeModel = new TreeSelectModel();
-                treeModel.id = item.F_Id;
-                treeModel.text = item.F_FullName;
-                treeModel.parentId = item.F_ParentId;
+                treeModel.id = item.Id;
+                treeModel.text = item.FullName;
+                treeModel.parentId = item.ParentId;
                 treeList.Add(treeModel);
             }
             return Content(treeList.TreeSelectJson());
@@ -36,14 +36,14 @@ namespace CMS.Web.Areas.WebManage.Controllers
         { 
             var data = c_ModulesApp.GetList();
             var treeList = new List<TreeViewModel>();
-            foreach (C_ModulesEntity item in data)
+            foreach (ColumnsEntity item in data)
             {
                 TreeViewModel tree = new TreeViewModel();
-                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
-                tree.id = item.F_Id;
-                tree.text = item.F_FullName;
-                tree.value = item.F_Type.ToString();
-                tree.parentId = item.F_ParentId;
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                tree.id = item.Id;
+                tree.text = item.FullName;
+                tree.value = item.Type.ToString();
+                tree.parentId = item.ParentId;
                 tree.isexpand = true;
                 tree.complete = true;
                 tree.hasChildren = hasChildren;
@@ -68,16 +68,16 @@ namespace CMS.Web.Areas.WebManage.Controllers
             var data = c_ModulesApp.GetList();
             if (!string.IsNullOrEmpty(keyword))
             {
-                data = data.TreeWhere(t => t.F_FullName.Contains(keyword));
+                data = data.TreeWhere(t => t.FullName.Contains(keyword));
             }
             var treeList = new List<TreeGridModel>();
-            foreach (C_ModulesEntity item in data)
+            foreach (ColumnsEntity item in data)
             {
                 TreeGridModel treeModel = new TreeGridModel();
-                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
-                treeModel.id = item.F_Id;
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                treeModel.id = item.Id;
                 treeModel.isLeaf = hasChildren;
-                treeModel.parentId = item.F_ParentId;
+                treeModel.parentId = item.ParentId;
                 treeModel.expanded = hasChildren;
                 treeModel.entityJson = item.ToJson();
                 treeList.Add(treeModel);
@@ -96,7 +96,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(C_ModulesEntity moduleEntity, string keyValue)
+        public ActionResult SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         { 
             c_ModulesApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");

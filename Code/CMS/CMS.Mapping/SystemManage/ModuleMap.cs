@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public ModuleMap()
         {
             this.ToTable("Sys_Module");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }

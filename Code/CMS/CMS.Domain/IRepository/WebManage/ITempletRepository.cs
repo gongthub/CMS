@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Domain.IRepository.WebManage
 {
-    public interface IC_ContentRepository : IRepositoryBase<C_ContentEntity>
+    public interface ITempletRepository : IRepositoryBase<TempletEntity>
     {
     }
 }

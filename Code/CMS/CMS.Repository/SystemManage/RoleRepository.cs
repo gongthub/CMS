@@ -12,8 +12,8 @@ namespace CMS.Repository.SystemManage
         {
             using (var db = new RepositoryBase().BeginTrans())
             {
-                db.Delete<RoleEntity>(t => t.F_Id == keyValue);
-                db.Delete<RoleAuthorizeEntity>(t => t.F_ObjectId == keyValue);
+                db.Delete<RoleEntity>(t => t.Id == keyValue);
+                db.Delete<RoleAuthorizeEntity>(t => t.ObjectId == keyValue);
                 db.Commit();
             }
         }
@@ -27,10 +27,10 @@ namespace CMS.Repository.SystemManage
                 }
                 else
                 {
-                    roleEntity.F_Category = 1;
+                    roleEntity.Category = 1;
                     db.Insert(roleEntity);
                 }
-                db.Delete<RoleAuthorizeEntity>(t => t.F_ObjectId == roleEntity.F_Id);
+                db.Delete<RoleAuthorizeEntity>(t => t.ObjectId == roleEntity.Id);
                 db.Insert(roleAuthorizeEntitys);
                 db.Commit();
             }

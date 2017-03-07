@@ -8,7 +8,7 @@
         initControl();
         if (!!keyValue) {
             $.ajax({
-                url: "/WebManage/C_Modules/GetFormJson",
+                url: "/WebManage/Columns/GetFormJson",
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
@@ -19,23 +19,23 @@
         }
     });
     function initControl() {
-        $("#F_TempletId").bindSelect({
-            url: "/WebManage/C_Templet/GetGridJson",
-            id: "F_Id",
-            text: "F_FullName"
+        $("#TempletId").bindSelect({
+            url: "/WebManage/Templet/GetGridJson",
+            id: "Id",
+            text: "FullName"
         });
-        $("#F_CTempletId").bindSelect({
-            url: "/WebManage/C_Templet/GetGridJson",
-            id: "F_Id",
-            text: "F_FullName"
+        $("#CTempletId").bindSelect({
+            url: "/WebManage/Templet/GetGridJson",
+            id: "Id",
+            text: "FullName"
         });
-        $("#F_Type").bindSelect({
-            url: "/WebManage/C_Modules/GetTypeSelectJson",
+        $("#Type").bindSelect({
+            url: "/WebManage/Columns/GetTypeSelectJson",
             id: "Value",
             text: "Desc"
         });
-        $("#F_ParentId").bindSelect({
-            url: "/WebManage/C_Modules/GetTreeSelectJson",
+        $("#ParentId").bindSelect({
+            url: "/WebManage/Columns/GetTreeSelectJson",
         });
     }
     function submitForm() {
@@ -43,7 +43,7 @@
             return false;
         }
         $.submitForm({
-            url: "/WebManage/C_Modules/SubmitForm?keyValue=" + keyValue,
+            url: "/WebManage/Columns/SubmitForm?keyValue=" + keyValue,
             param: $("#form1").formSerialize(),
             success: function () {
                 $.currentWindow().$("#gridList").resetSelection();
@@ -59,25 +59,25 @@
                 <tr>
                     <th class="formTitle">上级</th>
                     <td class="formValue">
-                        <select id="F_ParentId" name="F_ParentId" class="form-control required">
+                        <select id="ParentId" name="ParentId" class="form-control required">
                             <option value="0">父节点</option>
                         </select>
                     </td>
                     <th class="formTitle">名称</th>
                     <td class="formValue">
-                        <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                        <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
                     </td>
                 </tr>
                 <tr>
                     <th class="formTitle">类别</th>
                     <td class="formValue">
-                        <select id="F_Type" name="F_Type" class="form-control required">
+                        <select id="Type" name="Type" class="form-control required">
                             <option value="">==请选择==</option> 
                         </select>
                     </td>
                     <th class="formTitle">栏目模板</th>
                     <td class="formValue">
-                        <select id="F_TempletId" name="F_TempletId" class="form-control required">
+                        <select id="TempletId" name="TempletId" class="form-control required">
                             <option value="">==请选择==</option>
                         </select>
                     </td>
@@ -85,30 +85,30 @@
                 <tr>
                     <th class="formTitle">内容模板</th>
                     <td class="formValue">
-                        <select id="F_CTempletId" name="F_CTempletId" class="form-control">
+                        <select id="CTempletId" name="CTempletId" class="form-control">
                             <option value="">==请选择==</option>
                         </select>
                     </td>
                     <th class="formTitle">排序</th>
                     <td class="formValue">
-                        <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                        <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
                     </td>
                 </tr>
                 <tr>
                     <th class="formTitle">简称</th>
                     <td class="formValue">
-                        <input id="F_ActionName" name="F_ActionName" type="text" class="form-control required" />
+                        <input id="ActionName" name="ActionName" type="text" class="form-control required" />
                     </td>
                     <th class="formTitle">连接</th>
                     <td class="formValue">
-                        <input id="F_UrlAddress" name="F_UrlAddress" type="text" class="form-control" />
+                        <input id="UrlAddress" name="UrlAddress" type="text" class="form-control" />
                     </td>
                 </tr>
                 @*<tr>
                         <th class="formTitle">图标</th>
                         <td class="formValue">
                             <div class="input-group">
-                                <input id="F_Icon" name="F_Icon" type="text" class="form-control">
+                                <input id="Icon" name="Icon" type="text" class="form-control">
                                 <span class="input-group-btn">
                                     <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
                                 </span>
@@ -118,14 +118,14 @@
                 <tr>
                     <th class="formTitle">有效</th>
                     <td class="formValue">
-                        <select id="F_EnabledMark" name="F_EnabledMark" class="form-control">
+                        <select id="EnabledMark" name="EnabledMark" class="form-control">
                             <option value="true">是</option>
                             <option value="false">否</option>
                         </select>
                     </td>
                     <th class="formTitle">主页</th>
                     <td class="formValue">
-                        <select id="F_MainMark" name="F_MainMark" class="form-control">
+                        <select id="MainMark" name="MainMark" class="form-control">
                             <option value="false">否</option>
                             <option value="true">是</option>
                         </select>
@@ -136,7 +136,7 @@
                         描述
                     </th>
                     <td class="formValue" colspan="3">
-                        <textarea id="F_Description" name="F_Descriptions" class="form-control" style="height: 100px;"></textarea>
+                        <textarea id="Description" name="Descriptions" class="form-control" style="height: 100px;"></textarea>
                     </td>
                 </tr>
             </table>

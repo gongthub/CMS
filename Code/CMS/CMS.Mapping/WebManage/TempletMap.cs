@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace CMS.Mapping.WebManage
 {
-    public class C_ContentMap : EntityTypeConfiguration<C_ContentEntity>
+    public class TempletMap : EntityTypeConfiguration<TempletEntity>
     {
-      public C_ContentMap()
+        public TempletMap()
         {
-            this.ToTable("C_Contents");
-            this.HasKey(t => t.F_Id);
+            this.ToTable("C_Templets");
+            this.HasKey(t => t.Id);
         }
     }
 }

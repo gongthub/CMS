@@ -10,14 +10,14 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
-    public class C_ContentController : ControllerBase
+    public class ContentController : ControllerBase
     {
 
         /// <summary>
         /// 上传图片保存路径
         /// </summary>
         private static string UPLOADIMGPATH = ConfigurationManager.AppSettings["UploadImg"].ToString();
-        private C_ContentApp c_contentApp = new C_ContentApp();
+        private ContentApp c_contentApp = new ContentApp();
 
         [HttpGet]
         [HandlerAjaxOnly]
@@ -36,7 +36,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(C_ContentEntity c_ContentEntity, string keyValue)
+        public ActionResult SubmitForm(ContentEntity c_ContentEntity, string keyValue)
         {
             try
             {

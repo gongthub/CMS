@@ -32,20 +32,20 @@
         initControl();
         if (!!keyValue) {
             $.ajax({
-                url: "/WebManage/C_Content/GetFormJson",
+                url: "/WebManage/Content/GetFormJson",
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    data.F_Content = htmlDecode(data.F_Content);
-                    editor.setValue(data.F_Content)
-                    $("#ImgPr").attr("src", data.F_Icon);
+                    data.Content = htmlDecode(data.Content);
+                    editor.setValue(data.Content)
+                    $("#ImgPr").attr("src", data.Icon);
                     $("#form1").formSerialize(data);
                 }
             });
         }
 
-        $("#F_Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        $("#Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
     })
     function initControl() {
         $('#wizard').wizard().on('change', function (e, data) {
@@ -70,10 +70,10 @@
         }); 
         toolbar = ['title', 'bold', 'italic', 'underline', 'fontScale', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'];
         editor = new Simditor({
-            textarea: $('#F_Content'),
+            textarea: $('#Content'),
             toolbar: toolbar,
             upload: {
-                url: '/WebManage/C_Content/UploadImg', //文件上传的接口地址
+                url: '/WebManage/Content/UploadImg', //文件上传的接口地址
                 params: null, //键值对,指定文件上传接口的额外参数,上传的时候随文件一起提交
                 fileKey: 'fileDataFileName', //服务器端获取文件数据的参数名
                 connectionCount: 3,
@@ -90,11 +90,11 @@
         var filePaths = uploadImg();
         var postData = $("#form1").formSerialize();
         //var postData = $("#form1").serialize();
-        postData["F_Content"] = htmlEncode(postData["F_Content"]);
-        postData["F_ModuleId"] = moduleId;
-        postData["F_Icon"] = filePaths;
+        postData["Content"] = htmlEncode(postData["Content"]);
+        postData["ModuleId"] = moduleId;
+        postData["Icon"] = filePaths;
         $.submitForm({
-            url: "/WebManage/C_Content/SubmitForm?keyValue=" + keyValue,
+            url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
             param: postData,
             success: function () {
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
@@ -105,10 +105,10 @@
     function uploadImg() {
         var filePath = "";
         var formData = new FormData();
-        formData.append("fileicon", $("#F_Icon")[0].files[0]);
+        formData.append("fileicon", $("#Icon")[0].files[0]);
         $.ajax({
             type: "POST",
-            url: "/WebManage/C_Content/UploadImg",
+            url: "/WebManage/Content/UploadImg",
             dataType: "json",
             data: formData,
             async: false,
@@ -148,32 +148,32 @@
                             <tr>
                                 <th class="formTitle">排序</th>
                                 <td class="formValue">
-                                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
                                 </td>
                                 <th class="formTitle">名称</th>
                                 <td class="formValue">
-                                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">作者</th>
                                 <td class="formValue">
-                                    <input id="F_Author" name="F_Author" type="text" class="form-control" placeholder="请输入作者" />
+                                    <input id="Author" name="Author" type="text" class="form-control" placeholder="请输入作者" />
                                 </td>
                                 <th class="formTitle">时间</th>
                                 <td class="formValue">
-                                    <input id="F_EditTime" name="F_EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
+                                    <input id="EditTime" name="EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
-                                    @*<input id="F_Icon" name="F_Icon" type="text" class="form-control" placeholder="请输入图标" />*@
+                                    @*<input id="Icon" name="Icon" type="text" class="form-control" placeholder="请输入图标" />*@
                                     <div>
-                                        @*<form action="/WebManage/C_Content/UploadImg" id="form_uploadimg">*@
+                                        @*<form action="/WebManage/Content/UploadImg" id="form_uploadimg">*@
                                         <div class="sys-div-imgupload">
                                             <div class="sys-div-upload">
-                                                <input id="F_Icon" name="F_Icon" type="file" />请选择图片
+                                                <input id="Icon" name="Icon" type="file" />请选择图片
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>
@@ -183,7 +183,7 @@
                                 <th class="formTitle" style="height: 35px;">是否有效</th>
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
-                                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
                                     </div>
                                 </td>
                             </tr>
@@ -192,7 +192,7 @@
                                     备注
                                 </th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -206,13 +206,13 @@
                             <tr>
                                 <th class="formTitle">SEO标题</th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEOTitle" name="F_SEOTitle" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEOTitle" name="SEOTitle" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="formTitle">SEO关键字</th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEOKeyWords" name="F_SEOKeyWords" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEOKeyWords" name="SEOKeyWords" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -220,7 +220,7 @@
                                     SEO备注
                                 </th>
                                 <td class="formValue" colspan="3">
-                                    <textarea id="F_SEODesc" name="F_SEODesc" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="SEODesc" name="SEODesc" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -229,7 +229,7 @@
             </div>
             <div class="step-pane" id="step-3">
                 <div class="Content_Form_divContents">
-                    <textarea id="F_Content" name="F_Content"></textarea>
+                    <textarea id="Content" name="Content"></textarea>
                 </div>
             </div>
         </div>

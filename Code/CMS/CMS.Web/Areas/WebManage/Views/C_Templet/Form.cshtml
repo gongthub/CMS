@@ -11,12 +11,12 @@
         initControl();
         if (!!keyValue) {
             $.ajax({
-                url: "/WebManage/C_Templet/GetFormJson",
+                url: "/WebManage/Templet/GetFormJson",
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
                 success: function (data) { 
-                    data.F_Content = htmlDecode(data.F_Content); 
+                    data.Content = htmlDecode(data.Content); 
                     $("#form1").formSerialize(data);
                 }
             });
@@ -46,9 +46,9 @@
     }
     function submitForm() {
         var postData = $("#form1").formSerialize(); 
-        postData["F_Content"] = htmlEncode(postData["F_Content"]); 
+        postData["Content"] = htmlEncode(postData["Content"]); 
         $.submitForm({
-            url: "/WebManage/C_Templet/SubmitForm?keyValue=" + keyValue,
+            url: "/WebManage/Templet/SubmitForm?keyValue=" + keyValue,
             param: postData,
             success: function () {
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
@@ -75,13 +75,13 @@
                             <tr>
                                 <th class="formTitle">模板名称</th>
                                 <td class="formValue">
-                                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="模板名称" />
+                                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="模板名称" />
                                 </td>
                             </tr> 
                             <tr>
                                 <th class="formTitle">显示顺序</th>
                                 <td class="formValue">
-                                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入显示顺序" />
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入显示顺序" />
                                 </td>
                             </tr>
                             <tr>
@@ -89,7 +89,7 @@
                                 <td class="formValue" style="padding-top: 1px;">
                                   
                                     <div class="ckbox">
-                                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
                                     </div>
                                 </td>
                             </tr>
@@ -97,7 +97,7 @@
                                 <th class="formTitle" valign="top" style="padding-top: 5px;">备注
                                 </th>
                                 <td class="formValue">
-                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 80px;"></textarea>
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="step-pane" id="step-2"> 
-                <textarea id="F_Content" name="F_Content" class="form-control" style="width:100%;height:490px"></textarea> 
+                <textarea id="Content" name="Content" class="form-control" style="width:100%;height:490px"></textarea> 
             </div>
         </div>
         <div class="form-button" id="wizard-actions">

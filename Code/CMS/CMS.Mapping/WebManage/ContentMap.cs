@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace CMS.Mapping.WebManage
 {
-    public class C_ModulesMap : EntityTypeConfiguration<C_ModulesEntity>
+    public class ContentMap : EntityTypeConfiguration<ContentEntity>
     {
-        public C_ModulesMap()
+      public ContentMap()
         {
-            this.ToTable("C_Modules");
-            this.HasKey(t => t.F_Id);
+            this.ToTable("C_Contents");
+            this.HasKey(t => t.Id);
         }
     }
 }

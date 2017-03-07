@@ -20,9 +20,9 @@ namespace CMS.Web.Areas.SystemManage.Controllers
             foreach (ItemsEntity item in data)
             {
                 TreeSelectModel treeModel = new TreeSelectModel();
-                treeModel.id = item.F_Id;
-                treeModel.text = item.F_FullName;
-                treeModel.parentId = item.F_ParentId;
+                treeModel.id = item.Id;
+                treeModel.text = item.FullName;
+                treeModel.parentId = item.ParentId;
                 treeList.Add(treeModel);
             }
             return Content(treeList.TreeSelectJson());
@@ -36,11 +36,11 @@ namespace CMS.Web.Areas.SystemManage.Controllers
             foreach (ItemsEntity item in data)
             {
                 TreeViewModel tree = new TreeViewModel();
-                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
-                tree.id = item.F_Id;
-                tree.text = item.F_FullName;
-                tree.value = item.F_EnCode;
-                tree.parentId = item.F_ParentId;
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                tree.id = item.Id;
+                tree.text = item.FullName;
+                tree.value = item.EnCode;
+                tree.parentId = item.ParentId;
                 tree.isexpand = true;
                 tree.complete = true;
                 tree.hasChildren = hasChildren;
@@ -57,10 +57,10 @@ namespace CMS.Web.Areas.SystemManage.Controllers
             foreach (ItemsEntity item in data)
             {
                 TreeGridModel treeModel = new TreeGridModel();
-                bool hasChildren = data.Count(t => t.F_ParentId == item.F_Id) == 0 ? false : true;
-                treeModel.id = item.F_Id;
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                treeModel.id = item.Id;
                 treeModel.isLeaf = hasChildren;
-                treeModel.parentId = item.F_ParentId;
+                treeModel.parentId = item.ParentId;
                 treeModel.expanded = hasChildren;
                 treeModel.entityJson = item.ToJson();
                 treeList.Add(treeModel);

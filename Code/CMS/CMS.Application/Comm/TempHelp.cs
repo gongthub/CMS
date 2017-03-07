@@ -91,7 +91,7 @@ namespace CMS.Application.Comm
         /// </summary>
         private static readonly string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
 
-        //private C_ContentEntity CONTENTENTITY = new C_ContentEntity();
+        //private ContentEntity CONTENTENTITY = new ContentEntity();
 
         //private void InitHtmlSavePath()
         //{
@@ -107,15 +107,15 @@ namespace CMS.Application.Comm
             filePath = "";
             if (!string.IsNullOrEmpty(Id))
             {
-                C_ContentApp c_ContentApp = new C_ContentApp();
+                ContentApp c_ContentApp = new ContentApp();
                 //CONTENTENTITY = c_ContentApp.GetForm(Id);
-                //if (CONTENTENTITY == null || CONTENTENTITY.F_Id != Id)
+                //if (CONTENTENTITY == null || CONTENTENTITY.Id != Id)
                 //{
-                C_ModulesEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
+                ColumnsEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
 
-                if (JudgmentHelp.judgmentHelp.IsNullEntity<C_ModulesEntity>(moduleentity))
+                if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleentity))
                 {
-                    filePath = HTMLSAVEPATH + moduleentity.F_ActionName + @"\";
+                    filePath = HTMLSAVEPATH + moduleentity.ActionName + @"\";
                 }
                 //}
             }
@@ -226,16 +226,16 @@ namespace CMS.Application.Comm
             {
                 string templets = GetHtmlPages(codes, Id);
 
-                C_ContentApp c_ContentApp = new C_ContentApp();
-                C_ContentEntity contentEntity = c_ContentApp.GetForm(Id);
-                if (contentEntity != null && contentEntity.F_ModuleId != null && contentEntity.F_UrlAddress != null)
+                ContentApp c_ContentApp = new ContentApp();
+                ContentEntity contentEntity = c_ContentApp.GetForm(Id);
+                if (contentEntity != null && contentEntity.ModuleId != null && contentEntity.UrlAddress != null)
                 {
 
                     //已生成静态文件时
-                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.F_UrlAddress))
+                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlAddress))
                     {
-                        FileHelper.DeleteFile(contentEntity.F_UrlAddress);
-                        GenHtml(contentEntity.F_UrlAddress, templets);
+                        FileHelper.DeleteFile(contentEntity.UrlAddress);
+                        GenHtml(contentEntity.UrlAddress, templets);
                     }
                     else
                     {
@@ -329,13 +329,13 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 获取模板元素集合 +string GetHtmlPage(string codes, C_ContentEntity model)
+        #region 获取模板元素集合 +string GetHtmlPage(string codes, ContentEntity model)
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPage(string codes, C_ContentEntity model)
+        public string GetHtmlPage(string codes, ContentEntity model)
         {
             string strs = "";
             try
@@ -373,7 +373,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPage(string codes, C_ContentEntity model, Dictionary<string, string> attrs)
+        public string GetHtmlPage(string codes, ContentEntity model, Dictionary<string, string> attrs)
         {
             string strs = "";
             try
@@ -460,8 +460,8 @@ namespace CMS.Application.Comm
 
             //InitHtmlSavePath(Ids);
 
-            C_ContentApp c_ContentApp = new C_ContentApp();
-            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             if (contentEntity != null)
             {
                 PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
@@ -491,12 +491,12 @@ namespace CMS.Application.Comm
             //    string sourceName = "";
             //    if (attrs.TryGetValue("sourcename", out sourceName))
             //    {
-            //        C_ContentEntity contentEntityT = new C_ContentEntity();
-            //        C_ContentApp contentApp = new C_ContentApp();
+            //        ContentEntity contentEntityT = new ContentEntity();
+            //        ContentApp contentApp = new ContentApp();
             //        contentEntityT = contentApp.GetContentByActionCode(sourceName);
-            //        if (contentEntityT != null && contentEntityT.F_Id != Guid.Empty.ToString())
+            //        if (contentEntityT != null && contentEntityT.Id != Guid.Empty.ToString())
             //        {
-            //            Ids = contentEntityT.F_Id.ToString();
+            //            Ids = contentEntityT.Id.ToString();
             //        }
             //    }
 
@@ -504,9 +504,9 @@ namespace CMS.Application.Comm
             ////InitHtmlSavePath(Ids);
 
 
-            //C_ContentApp c_ContentApp = new C_ContentApp();
-            //C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
-            C_ContentEntity contentEntity = InitModelAttr(Ids, attrs);
+            //ContentApp c_ContentApp = new ContentApp();
+            //ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentEntity contentEntity = InitModelAttr(Ids, attrs);
             if (contentEntity != null)
             {
                 PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
@@ -529,9 +529,9 @@ namespace CMS.Application.Comm
         /// <param name="strs"></param>
         /// <param name="property"></param>
         /// <returns></returns>
-        private string ProContent(string name, string strs, PropertyInfo property, C_ContentEntity contentEntity)
+        private string ProContent(string name, string strs, PropertyInfo property, ContentEntity contentEntity)
         {
-            if (property.Name == name || property.Name.Replace("F_", "") == name)
+            if (property.Name == name )
             {
                 object obj = property.GetValue(contentEntity, null);
                 if (obj != null)
@@ -553,9 +553,9 @@ namespace CMS.Application.Comm
         /// <param name="strs"></param>
         /// <param name="property"></param>
         /// <returns></returns>
-        private string ProContent(string name, string strs, PropertyInfo property, C_ContentEntity contentEntity, Dictionary<string, string> attrs)
+        private string ProContent(string name, string strs, PropertyInfo property, ContentEntity contentEntity, Dictionary<string, string> attrs)
         {
-            if (property.Name == name || property.Name.Replace("F_", "") == name)
+            if (property.Name == name)
             {
                 object obj = property.GetValue(contentEntity, null);
                 if (obj != null)
@@ -576,7 +576,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetModelById(string name, C_ContentEntity model)
+        private string GetModelById(string name, ContentEntity model)
         {
             string strs = "";
 
@@ -587,7 +587,7 @@ namespace CMS.Application.Comm
                 {
                     foreach (PropertyInfo property in propertys)
                     {
-                        if (property.Name == name || property.Name.Replace("F_", "") == name)
+                        if (property.Name == name)
                         {
                             object obj = property.GetValue(model, null);
                             if (obj != null)
@@ -612,7 +612,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetModelById(string name, C_ContentEntity model, Dictionary<string, string> attrs)
+        private string GetModelById(string name, ContentEntity model, Dictionary<string, string> attrs)
         {
             string strs = "";
 
@@ -623,7 +623,7 @@ namespace CMS.Application.Comm
                 {
                     foreach (PropertyInfo property in propertys)
                     {
-                        if (property.Name == name || property.Name.Replace("F_", "") == name)
+                        if (property.Name == name)
                         {
                             object obj = property.GetValue(model, null);
                             if (obj != null)
@@ -654,21 +654,21 @@ namespace CMS.Application.Comm
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = "";
-            List<C_ContentEntity> contententitys = new List<C_ContentEntity>();
-            IQueryable<C_ContentEntity> contententitysT = null;
+            List<ContentEntity> contententitys = new List<ContentEntity>();
+            IQueryable<ContentEntity> contententitysT = null;
 
-            C_ContentApp c_ContentApp = new C_ContentApp();
+            ContentApp c_ContentApp = new ContentApp();
             //数据源
             if (attrs.ContainsKey("sourcename"))
             {
                 string sourceName = "";
                 attrs.TryGetValue("sourcename", out sourceName);
-                C_ModulesEntity moduleentity = new C_ModulesEntity();
-                C_ModulesApp c_ModulesApp = new C_ModulesApp();
+                ColumnsEntity moduleentity = new ColumnsEntity();
+                ColumnsApp c_ModulesApp = new ColumnsApp();
                 moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
-                if (moduleentity != null && moduleentity.F_Id != Guid.Empty.ToString())
+                if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
                 {
-                    contententitysT = c_ContentApp.GetListIq(moduleentity.F_Id);
+                    contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
                 }
             }
             else
@@ -683,7 +683,7 @@ namespace CMS.Application.Comm
                     string val = "";
                     attrs.TryGetValue("sort", out val);
 
-                    string sortName = "F_" + val;
+                    string sortName = val;
                     contententitysT = contententitysT.OrderBy(sortName);
 
 
@@ -694,7 +694,7 @@ namespace CMS.Application.Comm
                     string val = "";
                     attrs.TryGetValue("sortdesc", out val);
 
-                    string sortName = "F_" + val;
+                    string sortName = val;
                     contententitysT = contententitysT.OrderBy(sortName, true);
 
                 }
@@ -711,19 +711,19 @@ namespace CMS.Application.Comm
 
                 }
                 //处理连接地址
-                contententitys.ForEach(delegate(C_ContentEntity model)
+                contententitys.ForEach(delegate(ContentEntity model)
                 {
 
-                    if (model != null && model.F_UrlAddress != null)
+                    if (model != null && model.UrlAddress != null)
                     {
-                        model.F_UrlPage = model.F_UrlAddress;
-                        model.F_UrlPage = model.F_UrlPage.Replace(@"\", "/");
+                        model.UrlPage = model.UrlAddress;
+                        model.UrlPage = model.UrlPage.Replace(@"\", "/");
                     }
 
                 });
                 if (contententitys != null && contententitys.Count > 0)
                 {
-                    foreach (C_ContentEntity contententity in contententitys)
+                    foreach (ContentEntity contententity in contententitys)
                     {
                         strs += GetHtmlPage(mcodes, contententity, attrs);
                     }
@@ -741,11 +741,11 @@ namespace CMS.Application.Comm
         /// <param name="Ids"></param>
         private void UpdateContentById(string url, string Ids)
         {
-            C_ContentApp c_ContentApp = new C_ContentApp();
-            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             if (contentEntity != null)
             {
-                contentEntity.F_UrlAddress = url;
+                contentEntity.UrlAddress = url;
                 c_ContentApp.SubmitForm(contentEntity, Ids);
             }
         }
@@ -759,11 +759,11 @@ namespace CMS.Application.Comm
         private string GetHtmlsByTempletName(string name, string Id)
         {
             string strs = "";
-            C_TempletApp templetapp = new C_TempletApp();
-            C_TempletEntity templet = templetapp.GetFormByName(name);
+            TempletApp templetapp = new TempletApp();
+            TempletEntity templet = templetapp.GetFormByName(name);
             if (templet != null)
             {
-                string templets = System.Web.HttpUtility.HtmlDecode(templet.F_Content);
+                string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
                 TempHelp temphelp = new TempHelp();
                 strs = temphelp.GetHtmlPages(templets, Id);
             }
@@ -870,17 +870,17 @@ namespace CMS.Application.Comm
         public string GetHtmlByUrl(string urlRaw)
         {
             List<string> urlRaws = WebHelper.GetUrls(urlRaw);
-            C_TempletApp templetApp = new C_TempletApp();
-            C_TempletEntity model = new C_TempletEntity();
-            C_ModulesEntity moduleentity = new C_ModulesEntity();
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
+            TempletApp templetApp = new TempletApp();
+            TempletEntity model = new TempletEntity();
+            ColumnsEntity moduleentity = new ColumnsEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
             string Ids = "";
             if (urlRaws == null || urlRaws.Count == 0)
             {
                 model = templetApp.GetMain();
                 moduleentity = c_ModulesApp.GetMain();
                 if (moduleentity != null)
-                    Ids = moduleentity.F_Id;
+                    Ids = moduleentity.Id;
             }
             else
             {
@@ -890,13 +890,13 @@ namespace CMS.Application.Comm
                     moduleentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault());
                 }
                 if (moduleentity != null)
-                    Ids = moduleentity.F_Id;
+                    Ids = moduleentity.Id;
                 if (urlRaws.Count == 2)
                 {
                     Ids = urlRaws.LastOrDefault();
                 }
             }
-            string htmls = System.Web.HttpUtility.HtmlDecode(model.F_Content);
+            string htmls = System.Web.HttpUtility.HtmlDecode(model.Content);
             if (moduleentity != null)
             {
                 TempHelp temphelp = new TempHelp();
@@ -918,11 +918,11 @@ namespace CMS.Application.Comm
             bool retBol = true;
             List<string> urlRaws = WebHelper.GetUrls(urlRaw);
 
-            C_ModulesApp c_ModulesApp = new C_ModulesApp();
-            List<C_ModulesEntity> models = c_ModulesApp.GetList();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            List<ColumnsEntity> models = c_ModulesApp.GetList();
             if (models != null && models.Count > 0)
             {
-                List<string> actionNames = models.Select(m => m.F_ActionName).ToList();
+                List<string> actionNames = models.Select(m => m.ActionName).ToList();
                 if (urlRaws.Count > 0)
                 {
                     if (!actionNames.Contains(urlRaws.FirstOrDefault()))
@@ -997,33 +997,33 @@ namespace CMS.Application.Comm
         } 
         #endregion
 
-        #region 初始化单个模板属性 -C_ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
+        #region 初始化单个模板属性 -ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
         /// <summary>
         /// 初始化单个模板属性
         /// </summary>
         /// <returns></returns>
-        private C_ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
+        private ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
         {
-            C_ContentApp c_ContentApp = new C_ContentApp();
-            C_ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             //数据源
             if (attrs.ContainsKey("sourcename"))
             {
                 string sourceName = "";
                 if (attrs.TryGetValue("sourcename", out sourceName))
                 {
-                    C_ContentEntity contentEntityT = new C_ContentEntity();
-                    C_ContentApp contentApp = new C_ContentApp();
+                    ContentEntity contentEntityT = new ContentEntity();
+                    ContentApp contentApp = new ContentApp();
                     contentEntityT = contentApp.GetContentByActionCode(sourceName);
-                    if (contentEntityT != null && contentEntityT.F_Id != Guid.Empty.ToString())
+                    if (contentEntityT != null && contentEntityT.Id != Guid.Empty.ToString())
                     {
-                        Ids = contentEntityT.F_Id.ToString();
+                        Ids = contentEntityT.Id.ToString();
                     }
                 }
             }
             else
             {
-                if (contentEntity != null && contentEntity.F_Id != null && contentEntity.F_ModuleId != null)
+                if (contentEntity != null && contentEntity.Id != null && contentEntity.ModuleId != null)
                 {
 
                     //上一个或下一个
@@ -1031,14 +1031,14 @@ namespace CMS.Application.Comm
                     {
                         if (attrs.ContainsKey("sort") || attrs.ContainsKey("sortdesc"))
                         {
-                            IQueryable<C_ContentEntity> contentEntitys = null;
-                            contentEntitys = c_ContentApp.GetListIq(contentEntity.F_ModuleId);
+                            IQueryable<ContentEntity> contentEntitys = null;
+                            contentEntitys = c_ContentApp.GetListIq(contentEntity.ModuleId);
                             if (attrs.ContainsKey("sort"))
                             {
                                 string sortName = "";
                                 if (attrs.TryGetValue("sort", out sortName))
                                 {
-                                    contentEntitys.OrderBy("F_" + sortName);
+                                    contentEntitys.OrderBy(sortName);
                                 }
                             }
                             else
@@ -1046,11 +1046,11 @@ namespace CMS.Application.Comm
                                 string sortName = "";
                                 if (attrs.TryGetValue("sortdesc", out sortName))
                                 {
-                                    contentEntitys.OrderBy("F_" + sortName, true);
+                                    contentEntitys.OrderBy(sortName, true);
                                 }
                             }
 
-                            List<C_ContentEntity> contentEntitysT = contentEntitys.ToList();
+                            List<ContentEntity> contentEntitysT = contentEntitys.ToList();
                             if (contentEntitysT != null && contentEntitysT.Count > 0)
                             {
                                 string lastornextVal = "";
@@ -1062,10 +1062,10 @@ namespace CMS.Application.Comm
                                             int TempNum = 0;
                                             for (int i = 0; i < contentEntitysT.Count(); i++)
                                             {
-                                                if (i != 0 && contentEntitysT[i].F_Id == Ids)
+                                                if (i != 0 && contentEntitysT[i].Id == Ids)
                                                 {
                                                     contentEntity = contentEntitysT[i - 1];
-                                                    Ids = contentEntity.F_Id;
+                                                    Ids = contentEntity.Id;
                                                     TempNum = 1;
                                                     break;
                                                 }
@@ -1081,10 +1081,10 @@ namespace CMS.Application.Comm
                                                 int TempNumJ = 0;
                                                 for (int i = 0; i < contentEntitysT.Count(); i++)
                                                 {
-                                                    if (i != contentEntitysT.Count() - 1 && contentEntitysT[i].F_Id == Ids)
+                                                    if (i != contentEntitysT.Count() - 1 && contentEntitysT[i].Id == Ids)
                                                     {
                                                         contentEntity = contentEntitysT[i + 1];
-                                                        Ids = contentEntity.F_Id;
+                                                        Ids = contentEntity.Id;
                                                         TempNumJ = 1;
                                                         break;
                                                     }

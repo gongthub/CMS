@@ -8,7 +8,7 @@ namespace CMS.Mapping.SystemManage
         public RoleMap()
         {
             this.ToTable("Sys_Role");
-            this.HasKey(t => t.F_Id);
+            this.HasKey(t => t.Id);
         }
     }
 }
