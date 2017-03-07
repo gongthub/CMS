@@ -606,22 +606,22 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="packages.config" />
-    <Content Include="Areas\WebManage\Views\C_Modules\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Columns\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Web.config" />
-    <Content Include="Areas\WebManage\Views\C_Templet\Index.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Templet\Form.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Templet\Details.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Modules\Form.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Modules\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\Templet\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Templet\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\Templet\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\Columns\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\Columns\Details.cshtml" />
     <Content Include="Html\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Html\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Html\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Html\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Html\fonts\Nunito\Nunito-Regular.ttf" />
     <Content Include="Html\fonts\Pacifico\Pacifico.ttf" />
-    <Content Include="Areas\WebManage\Views\C_Content\Index.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Content\Details.cshtml" />
-    <Content Include="Areas\WebManage\Views\C_Content\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\Form.cshtml" />
     <Content Include="Content\js\umeditor\net\getContent.ashx" />
     <Content Include="Content\js\umeditor\net\imageUp.ashx" />
     <Content Include="Content\js\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />
@@ -640,8 +640,10 @@
     <Content Include="Content\js\umeditor\third-party\mathquill\font\Symbola.otf" />
     <Content Include="Content\js\umeditor\third-party\mathquill\font\Symbola.ttf" />
     <Content Include="Content\js\umeditor\third-party\mathquill\font\Symbola.woff" />
-    <Content Include="Areas\WebManage\Views\C_Content\LinkForm.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\LinkForm.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
+    <Content Include="Views\Home\WebSite.cshtml" />
+    <Content Include="Views\Home\WebSiteList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

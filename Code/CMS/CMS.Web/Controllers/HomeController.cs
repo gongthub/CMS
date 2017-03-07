@@ -12,8 +12,17 @@ namespace CMS.Web.Controllers
     {
         [HttpGet]
         public ActionResult Index()
+        { 
+            return View();
+        }
+        [HttpGet]
+        public ActionResult WebSite(string webSiteId)
+        { 
+            return View();
+        }
+        [HttpGet]
+        public ActionResult WebSiteList()
         {
-
             return View();
         }
         [HttpGet]
