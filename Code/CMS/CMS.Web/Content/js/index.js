@@ -90,6 +90,7 @@ $(function ($) {
             $item.children('.submenu').slideUp('fast');
         }
     });
+    GetLoadNavIndex();
     GetLoadNav();
     $('body').on('mouseenter', '#page-wrapper.nav-small #sidebar-nav .dropdown-toggle', function (e) {
         if ($(document).width() >= 992) {
@@ -172,5 +173,31 @@ function GetLoadNav() {
             _html += '</li>';
         }
     });
-    $("#sidebar-nav ul").prepend(_html);
+    $("#sidebar-nav .nav-website").prepend(_html);
+}
+
+
+function GetLoadNavIndex() {
+    var data = top.clients.authorizeMenuIndex; 
+    var _html = "";
+    $.each(data, function (i) {
+        var row = data[i];
+        if (row.ParentId == "0") {
+            _html += '<li>';
+            _html += '<a data-id="' + row.Id + '" href="#" class="dropdown-toggle"><i class="' + row.Icon + '"></i><span>' + row.FullName + '</span><i class="fa fa-angle-right drop-icon"></i></a>';
+            var childNodes = row.ChildNodes;
+            if (childNodes.length > 0) {
+                _html += '<ul class="submenu">';
+                $.each(childNodes, function (i) {
+                    var subrow = childNodes[i];
+                    _html += '<li>';
+                    _html += '<a class="menuItem" data-id="' + subrow.Id + '" href="' + subrow.UrlAddress + '" data-index="' + subrow.SortCode + '">' + subrow.FullName + '</a>';
+                    _html += '</li>';
+                });
+                _html += '</ul>';
+            }
+            _html += '</li>';
+        }
+    });
+    $("#sidebar-nav .nav-index").prepend(_html);
 }

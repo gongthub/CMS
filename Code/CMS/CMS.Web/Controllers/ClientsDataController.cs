@@ -25,6 +25,7 @@ namespace CMS.Web.Controllers
                 duty = this.GetDutyList(),
                 user = "",
                 authorizeMenu = this.GetMenuList(),
+                authorizeMenuIndex = this.GetMenuListIndex(),
                 authorizeButton = this.GetMenuButtonList(),
                 modules = this.GetModulesList(),
             };
@@ -97,7 +98,12 @@ namespace CMS.Web.Controllers
         private object GetMenuList()
         {
             var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
-            return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId), "0");
+            return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic == false), "0");
+        }
+        private object GetMenuListIndex()
+        {
+            var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic == true), "0");
         }
         private string ToMenuJson(List<ModuleEntity> data, string parentId)
         {

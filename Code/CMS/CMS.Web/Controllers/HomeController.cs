@@ -16,7 +16,7 @@ namespace CMS.Web.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult WebSite(string webSiteId)
+        public ActionResult WebSite(string name)
         { 
             return View();
         }

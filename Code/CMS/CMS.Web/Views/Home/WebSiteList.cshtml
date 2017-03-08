@@ -8,14 +8,15 @@
             <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
         </div>
         <div class="btn-group">
-            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新增模板</a>
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新增站点</a>
         </div>
         <div class="operate">
             <ul class="nav nav-pills">
                 <li class="first">已选中<span>1</span>项</li>
-                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改模板</a></li>
-                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除模板</a></li>
-                <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看模板</a></li>
+                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改站点</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除站点</a></li>
+                <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看站点</a></li>
+                <li><a id="NF-mgr" authorize="yes" onclick="btn_mgr()"><i class="fa fa-pencil-square-o"></i>站点管理</a></li>
             </ul>
             <a href="javascript:;" class="close"></a>
         </div>
@@ -75,7 +76,7 @@
     function btn_add() {
         $.modalOpen({
             id: "Form",
-            title: "新增模板",
+            title: "新增站点",
             url: "/WebManage/Templet/Form",
             width: "1050px",
             height: "670px",
@@ -86,7 +87,7 @@
         var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Form",
-            title: "修改模板",
+            title: "修改站点",
             url: "/WebManage/Templet/Form?keyValue=" + keyValue,
             width: "1050px",
             height: "670px",
@@ -106,11 +107,16 @@
         var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Details",
-            title: "查看模板",
+            title: "查看站点",
             url: "/WebManage/Templet/Details?keyValue=" + keyValue,
             width: "1050px",
             height: "670px",
             btn: null,
         });
+    }
+    function btn_mgr() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+       
+        top.location.href = "/Home/WebSite?name=" + keyValue;
     }
 </script>

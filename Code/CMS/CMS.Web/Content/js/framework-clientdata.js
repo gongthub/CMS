@@ -10,6 +10,7 @@ $.clientsInit = function () {
         duty: [],
         user: [],
         authorizeMenu: [],
+        authorizeMenuIndex: [],
         authorizeButton: [],
         modules: []
     };
@@ -25,6 +26,7 @@ $.clientsInit = function () {
                 dataJson.role = data.role;
                 dataJson.duty = data.duty;
                 dataJson.authorizeMenu = eval(data.authorizeMenu);
+                dataJson.authorizeMenuIndex = eval(data.authorizeMenuIndex);
                 dataJson.authorizeButton = data.authorizeButton;
                 dataJson.modules = data.modules;
             }
