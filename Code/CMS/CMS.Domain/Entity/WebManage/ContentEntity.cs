@@ -10,7 +10,8 @@ namespace CMS.Domain.Entity.WebManage
    public class ContentEntity : IEntity<ContentEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
-        public string ModuleId { get; set; }
+        public string WebSiteId { get; set; }
+        public string ColumnId { get; set; }
         public int SortCode { get; set; }
         public string FullName { get; set; }
         public string Author { get; set; }

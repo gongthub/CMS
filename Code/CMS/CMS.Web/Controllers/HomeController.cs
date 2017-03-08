@@ -10,18 +10,20 @@ namespace CMS.Web.Controllers
     [HandlerLogin]
     public class HomeController : Controller
     {
+        public static readonly string WEBSITEID = "WEBSITEID";
         [HttpGet]
         public ActionResult Index()
         { 
             return View();
         }
         [HttpGet]
-        public ActionResult WebSite(string name)
-        { 
-            return View();
+        public ActionResult WebSite(string key)
+        {
+            Session[WEBSITEID] = key;
+            return RedirectToAction("WebSiteMgr");
         }
         [HttpGet]
-        public ActionResult WebSiteList()
+        public ActionResult WebSiteMgr()
         {
             return View();
         }

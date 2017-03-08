@@ -1,4 +1,5 @@
 ﻿using CMS.Code;
+using System;
 using System.Web.Mvc;
 
 namespace CMS.Web
@@ -22,6 +23,33 @@ namespace CMS.Web
             {
                 WebHelper.WriteCookie("cms_login_error", "overdue");
                 filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Login/Index';</script>");
+                return;
+            }
+        }
+    }
+
+
+    public class WebSiteMgrAttribute : AuthorizeAttribute
+    {
+        public bool Ignore = true;
+        private static string WEBURL = "";
+        public WebSiteMgrAttribute(bool ignore = true)
+        {
+            Ignore = ignore;
+            WEBURL = Configs.GetValue("WebUrl");
+        }
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            if (Ignore == false)
+            {
+                return;
+            }
+            Guid Ids = Guid.Empty;
+            if (filterContext.HttpContext.Session["WEBSITEID"] == null && !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
+            {
+
+                WebHelper.WriteCookie("cms_login_error", "nowebsite");
+                filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Home/Index';</script>");
                 return;
             }
         }

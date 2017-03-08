@@ -22,7 +22,7 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<ContentEntity>();
             if (!string.IsNullOrEmpty(itemId))
             {
-                expression = expression.And(t => t.ModuleId == itemId);
+                expression = expression.And(t => t.ColumnId == itemId);
             }
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -48,7 +48,7 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<ContentEntity>();
             if (!string.IsNullOrEmpty(itemId))
             {
-                expression = expression.And(t => t.ModuleId == itemId);
+                expression = expression.And(t => t.ColumnId == itemId);
             }
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -117,7 +117,7 @@ namespace CMS.Application.WebManage
                 moduleEntity.Create();
                 service.Insert(moduleEntity);
 
-                string mIds = moduleEntity.ModuleId;
+                string mIds = moduleEntity.ColumnId;
                 ColumnsApp c_ModulesApp = new ColumnsApp();
                 ColumnsEntity cmModel = c_ModulesApp.GetForm(mIds);
                 if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
@@ -135,9 +135,9 @@ namespace CMS.Application.WebManage
             ColumnsEntity moduleEntity = new ColumnsEntity();
             ContentEntity contentEntity = GetForm(keyValue);
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            if (JudgmentHelp.judgmentHelp.IsNullEntity<ContentEntity>(contentEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(contentEntity.ModuleId))
+            if (JudgmentHelp.judgmentHelp.IsNullEntity<ContentEntity>(contentEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(contentEntity.ColumnId))
             {
-                moduleEntity = c_ModulesApp.GetForm(contentEntity.ModuleId);
+                moduleEntity = c_ModulesApp.GetForm(contentEntity.ColumnId);
             }
             return moduleEntity;
         }
@@ -155,7 +155,7 @@ namespace CMS.Application.WebManage
             moduleEntity = c_ModulesApp.GetFormByActionName(actionCode);
             if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
             {
-                contentEntity = service.IQueryable(m => m.ModuleId == moduleEntity.Id).FirstOrDefault();
+                contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id).FirstOrDefault();
                 
             }
             return contentEntity;

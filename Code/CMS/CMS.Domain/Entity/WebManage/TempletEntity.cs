@@ -9,6 +9,7 @@ namespace CMS.Domain.Entity.WebManage
     public class TempletEntity : IEntity<TempletEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+        public string WebSiteId { get; set; }
         public int SortCode { get; set; }
         public string FullName { get; set; }
         public string Description { get; set; }

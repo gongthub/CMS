@@ -228,7 +228,7 @@ namespace CMS.Application.Comm
 
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetForm(Id);
-                if (contentEntity != null && contentEntity.ModuleId != null && contentEntity.UrlAddress != null)
+                if (contentEntity != null && contentEntity.ColumnId != null && contentEntity.UrlAddress != null)
                 {
 
                     //已生成静态文件时
@@ -1023,7 +1023,7 @@ namespace CMS.Application.Comm
             }
             else
             {
-                if (contentEntity != null && contentEntity.Id != null && contentEntity.ModuleId != null)
+                if (contentEntity != null && contentEntity.Id != null && contentEntity.ColumnId != null)
                 {
 
                     //上一个或下一个
@@ -1032,7 +1032,7 @@ namespace CMS.Application.Comm
                         if (attrs.ContainsKey("sort") || attrs.ContainsKey("sortdesc"))
                         {
                             IQueryable<ContentEntity> contentEntitys = null;
-                            contentEntitys = c_ContentApp.GetListIq(contentEntity.ModuleId);
+                            contentEntitys = c_ContentApp.GetListIq(contentEntity.ColumnId);
                             if (attrs.ContainsKey("sort"))
                             {
                                 string sortName = "";

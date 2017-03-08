@@ -14,7 +14,7 @@ namespace CMS.Application.SystemManage
 
         public List<ModuleEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
         }
         public ModuleEntity GetForm(string keyValue)
         {

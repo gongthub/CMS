@@ -10,6 +10,7 @@ namespace CMS.Domain.Entity.WebManage
     public class ColumnsEntity : IEntity<ColumnsEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+        public string WebSiteId { get; set; }
         public string ParentId { get; set; }
         public string TempletId { get; set; }
         public string CTempletId { get; set; }

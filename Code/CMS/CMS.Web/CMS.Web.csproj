@@ -641,8 +641,11 @@
     <Content Include="Content\js\umeditor\third-party\mathquill\font\Symbola.ttf" />
     <Content Include="Content\js\umeditor\third-party\mathquill\font\Symbola.woff" />
     <Content Include="Areas\WebManage\Views\Content\LinkForm.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteMgr\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteMgr\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteMgr\Details.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
-    <Content Include="Views\Home\WebSite.cshtml" />
+    <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

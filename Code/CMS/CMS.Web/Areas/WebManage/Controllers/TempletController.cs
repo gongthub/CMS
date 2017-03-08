@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
+    [WebSiteMgr]
     public class TempletController : ControllerBase
     {
         private TempletApp templetApp = new TempletApp();
@@ -31,7 +32,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         public ActionResult GetGridJson()
         {
-            var data = templetApp.GetList();  
+            var data = templetApp.GetList();
             return Content(data.ToJson());
         }
         [HttpGet]
@@ -49,6 +50,9 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
             //moduleEntity.Content = Server.HtmlEncode(moduleEntity.Content);
+
+            moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
+
             templetApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }

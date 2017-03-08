@@ -133,6 +133,9 @@
                             case "-1":
                                 $.login.formMessage("系统未知错误,请重新登录");
                                 break;
+                            case "nowebsite":
+                                $.login.formMessage("站点信息不存在，请重新选择");
+                                break;
                         }
                         top.$.cookie('cms_login_error', '', { path: "/", expires: -1 });
                     }

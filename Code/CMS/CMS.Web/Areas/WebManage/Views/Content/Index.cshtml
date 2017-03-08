@@ -31,7 +31,7 @@
                 { label: "主键", name: "Id", hidden: true, key: true },
                 { label: '名称', name: 'FullName', width: 120, align: 'left' },
                 {
-                    label: '栏目', name: 'ModuleId', width: 80, align: 'left',
+                    label: '栏目', name: 'ColumnId', width: 80, align: 'left',
                     formatter: function (cellvalue, options, rowObject) {
                         return top.clients.modules[cellvalue] == null ? "" : top.clients.modules[cellvalue].fullname;
                     }
@@ -78,9 +78,9 @@
             alert("栏目为内容，只能添加一条数据！");
             return false;
         }
-        var moduleId = $("#itemTree").getCurrentNode().id;
+        var columnId = $("#itemTree").getCurrentNode().id;
         var moduleName = $("#itemTree").getCurrentNode().text;
-        if (!moduleId) {
+        if (!columnId) {
             alert("请选择左侧栏目！");
             return false;
         }
@@ -89,7 +89,7 @@
             $.modalOpen({
                 id: "LinkForm",
                 title: moduleName + " 》新增连接",
-                url: "/WebManage/Content/LinkForm?moduleId=" + moduleId,
+                url: "/WebManage/Content/LinkForm?columnId=" + columnId,
                 width: "1000px",
                 height: "650px",
                 btn: null
@@ -98,7 +98,7 @@
             $.modalOpen({
                 id: "Form",
                 title: moduleName + " 》新增内容",
-                url: "/WebManage/Content/Form?moduleId=" + moduleId,
+                url: "/WebManage/Content/Form?columnId=" + columnId,
                 width: "1000px",
                 height: "650px",
                 btn: null

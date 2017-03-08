@@ -7,7 +7,7 @@
 <script>
 
     var keyValue = $.request("keyValue");
-    var moduleId = $.request("moduleId"); 
+    var columnId = $.request("columnId");
     $(function () { 
         if (!!keyValue) {
             $.ajax({
@@ -35,7 +35,7 @@
         var filePaths = uploadImg();
         var postData = $("#form1").formSerialize();
         postData["Content"] = htmlEncode(postData["Content"]);
-        postData["ModuleId"] = moduleId;
+        postData["ColumnId"] = columnId;
         postData["Icon"] = filePaths;
         $.submitForm({
             url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,

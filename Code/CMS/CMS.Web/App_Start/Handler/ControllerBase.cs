@@ -40,5 +40,22 @@ namespace CMS.Web
         {
             return Content(new AjaxResult { state = ResultType.error.ToString(), message = message }.ToJson());
         }
+
+        public static readonly string WEBSITEID = "WEBSITEID";
+
+        /// <summary>
+        /// 根据Session名称获取值
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string GetSessionByName(string name)
+        {
+            string val = string.Empty;
+            if (Session[name] != null)
+            {
+                val = Session[name].ToString();
+            }
+            return val;
+        }
     }
 }

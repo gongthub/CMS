@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
+    [WebSiteMgr]
     public class ContentController : ControllerBase
     {
 
@@ -36,11 +37,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(ContentEntity c_ContentEntity, string keyValue)
+        public ActionResult SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
             try
             {
-                c_contentApp.SubmitForm(c_ContentEntity, keyValue);
+                moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
+                c_contentApp.SubmitForm(moduleEntity, keyValue);
                 return Success("操作成功。");
 
             }

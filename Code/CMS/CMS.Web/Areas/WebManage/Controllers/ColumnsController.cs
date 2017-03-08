@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
+    [WebSiteMgr]
     public class ColumnsController : ControllerBase
     {
 
@@ -97,7 +98,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(ColumnsEntity moduleEntity, string keyValue)
-        { 
+        {
+            moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
             c_ModulesApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }
