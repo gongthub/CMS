@@ -21,7 +21,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
             //return Content(data.ToJson());
             var data = new
             {
-                rows = templetApp.GetList(pagination, keyword),
+                rows = templetApp.GetListByWebSiteId(pagination, keyword, Base_WebSiteId),
                 total = pagination.total,
                 page = pagination.page,
                 records = pagination.records
@@ -32,7 +32,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         public ActionResult GetGridJson()
         {
-            var data = templetApp.GetList();
+            var data = templetApp.GetListByWebSiteId(Base_WebSiteId);
             return Content(data.ToJson());
         }
         [HttpGet]
@@ -49,9 +49,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateInput(false)]
         public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            //moduleEntity.Content = Server.HtmlEncode(moduleEntity.Content);
-
-            moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
+            moduleEntity.WebSiteId = Base_WebSiteId;
 
             templetApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");

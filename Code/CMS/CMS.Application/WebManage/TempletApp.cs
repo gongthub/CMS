@@ -21,17 +21,35 @@ namespace CMS.Application.WebManage
 
         public TempletEntity GetFormByName(string Name)
         {
-            TempletEntity model = new TempletEntity(); 
+            TempletEntity model = new TempletEntity();
             model = service.FindEntity(m => m.FullName == Name && m.DeleteMark != true);
             return model;
         }
         public List<TempletEntity> GetList(Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<TempletEntity>();
+            expression = expression.And(m => m.DeleteMark != true);
             if (!string.IsNullOrEmpty(keyword))
             {
-                expression = expression.And(t => t.FullName.Contains(keyword)); 
-            } 
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            return service.FindList(expression, pagination);
+        }
+        public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+        }
+        public List<TempletEntity> GetListByWebSiteId(Pagination pagination, string keyword, string WebSiteId)
+        {
+            var expression = ExtLinq.True<TempletEntity>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            if (!string.IsNullOrEmpty(WebSiteId))
+            {
+                expression = expression.And(t => t.WebSiteId == WebSiteId);
+            }
             return service.FindList(expression, pagination);
         }
         public TempletEntity GetForm(string keyValue)

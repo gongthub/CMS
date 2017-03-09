@@ -45,7 +45,7 @@ namespace CMS.Web
                 return;
             }
             Guid Ids = Guid.Empty;
-            if (filterContext.HttpContext.Session["WEBSITEID"] == null && !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
+            if (WebHelper.GetCookie("WEBSITEID") == null || !Guid.TryParse(WebHelper.GetCookie("WEBSITEID").ToString(), out Ids))
             {
 
                 WebHelper.WriteCookie("cms_login_error", "nowebsite");

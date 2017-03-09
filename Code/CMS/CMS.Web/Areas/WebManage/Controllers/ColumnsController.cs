@@ -17,8 +17,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson()
-        { 
-            var data = c_ModulesApp.GetList();
+        {
+            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
             var treeList = new List<TreeSelectModel>();
             foreach (ColumnsEntity item in data)
             {
@@ -34,8 +34,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeJson()
-        { 
-            var data = c_ModulesApp.GetList();
+        {
+            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
             var treeList = new List<TreeViewModel>();
             foreach (ColumnsEntity item in data)
             {
@@ -65,8 +65,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetTreeGridJson(string keyword)
-        { 
-            var data = c_ModulesApp.GetList();
+        {
+            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
             if (!string.IsNullOrEmpty(keyword))
             {
                 data = data.TreeWhere(t => t.FullName.Contains(keyword));

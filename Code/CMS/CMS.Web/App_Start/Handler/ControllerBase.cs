@@ -57,5 +57,16 @@ namespace CMS.Web
             }
             return val;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string Base_WebSiteId
+        {
+            get {
+                return WebHelper.GetCookie("WEBSITEID");
+            }
+        }
     }
 }

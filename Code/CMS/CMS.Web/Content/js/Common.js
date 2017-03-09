@@ -8,4 +8,4 @@ function htmlDecode(str) {
     var ele = document.createElement('span');
     ele.innerHTML = str;
     return ele.textContent;
-}
+} 

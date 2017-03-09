@@ -11,11 +11,15 @@ namespace CMS.Application.WebManage
 {
     public class ColumnsApp
     {
-        private IColumnsRepository service  = new ColumnsRepository();
-         
+        private IColumnsRepository service = new ColumnsRepository();
+
         public List<ColumnsEntity> GetList()
         {
             return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+        }
+        public List<ColumnsEntity> GetListByWebSiteId(string webSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
         }
         public ColumnsEntity GetFormByActionName(string actionName)
         {

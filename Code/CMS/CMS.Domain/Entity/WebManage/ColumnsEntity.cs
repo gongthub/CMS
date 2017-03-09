@@ -21,6 +21,7 @@ namespace CMS.Domain.Entity.WebManage
         public int Type { get; set; }
         public string ActionName { get; set; }
         public string Description { get; set; }
+        public string UrlPath { get; set; }
         public string UrlAddress { get; set; }
         public string Icon { get; set; }
         public bool EnabledMark { get; set; }
