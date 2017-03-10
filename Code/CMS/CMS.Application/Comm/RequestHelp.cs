@@ -47,24 +47,25 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
-            string keys = "11111111";
-            //string desE = DesEncrypt("www.abc.com", keys);
-            //string desD = DesDecrypt(desE, keys);
+            //string keys = "11111111";
+            ////string desE = DesEncrypt("www.abc.com", keys);
+            ////string desD = DesDecrypt(desE, keys);
 
             
-            string rsaE = RSAEncrypt("www.abc.com", keys);
-            string rsaD = RSADecrypt(keys, rsaE);
+            //string rsaE = RSAEncrypt("www.abc.com", keys);
+            //string rsaD = RSADecrypt(keys, rsaE);
 
-            string desE = CMS.Code.DESEncrypt.Encrypt("www.abc.com", keys);
-            string desD = CMS.Code.DESEncrypt.Decrypt(desE, keys);
+            //string desE = CMS.Code.DESEncrypt.Encrypt("www.abc.com", keys);
+            //string desD = CMS.Code.DESEncrypt.Decrypt(desE, keys);
 
-            string urlHost = context.Request.Url.GetLeftPart(UriPartial.Authority);
+            string urlPath = context.Request.Url.GetLeftPart(UriPartial.Authority);
+            string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
             if (!TempHelp.tempHelp.IsWebSite(urlRaw))
             {
                 return;
             }
-            string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlRaw);
+            string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost,urlRaw);
             context.Response.Write(htmls);
             context.Response.End();
         } 

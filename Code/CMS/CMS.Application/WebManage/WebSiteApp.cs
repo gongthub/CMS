@@ -25,6 +25,12 @@ namespace CMS.Application.WebManage
             model = service.FindEntity(m => m.FullName == Name && m.DeleteMark != true);
             return model;
         }
+        public WebSiteEntity GetFormByUrl(string url)
+        {
+            WebSiteEntity model = new WebSiteEntity();
+            model = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true);
+            return model;
+        }
         public List<WebSiteEntity> GetList(Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<WebSiteEntity>();

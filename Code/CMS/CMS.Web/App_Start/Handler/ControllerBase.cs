@@ -1,4 +1,6 @@
 ﻿using CMS.Code;
+using CMS.Domain.Entity.WebManage;
+using System;
 using System.Web.Mvc;
 
 namespace CMS.Web
@@ -58,14 +60,37 @@ namespace CMS.Web
             return val;
         }
         /// <summary>
-        /// 
+        /// 站点Id
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public string Base_WebSiteId
         {
-            get {
-                return WebHelper.GetCookie("WEBSITEID");
+            get
+            {
+                string Ids = Guid.Empty.ToString();
+                if (Session["WEBSITEID"] != null)
+                {
+                    Ids = Session["WEBSITEID"].ToString();
+                }
+                return Ids;
+            }
+        }
+        /// <summary>
+        /// 站点信息
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public WebSiteEntity Base_WebSiteEntity
+        {
+            get
+            {
+                WebSiteEntity entity = new WebSiteEntity();
+                if (Session["WEBSITEENTITY"] != null)
+                {
+                    entity = Session["WEBSITEENTITY"] as WebSiteEntity;
+                }
+                return entity;
             }
         }
     }

@@ -45,11 +45,11 @@ namespace CMS.Web
                 return;
             }
             Guid Ids = Guid.Empty;
-            if (WebHelper.GetCookie("WEBSITEID") == null || !Guid.TryParse(WebHelper.GetCookie("WEBSITEID").ToString(), out Ids))
+            if (filterContext.HttpContext.Session["WEBSITEID"] == null || !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
             {
 
                 WebHelper.WriteCookie("cms_login_error", "nowebsite");
-                filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Home/Index';</script>");
+                filterContext.HttpContext.Response.Write("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
                 return;
             }
         }

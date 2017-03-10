@@ -89,6 +89,21 @@ namespace CMS.Application.WebManage
             }
             return templet;
         }
+        /// <summary>
+        /// 获取默认模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetMain(string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            ColumnsEntity module = c_ModulesApp.GetMain();
+            if (module != null)
+            {
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);
+            }
+            return templet;
+        }
 
         /// <summary>
         /// 根据名称获取模板
@@ -102,6 +117,22 @@ namespace CMS.Application.WebManage
             if (module != null)
             {
                 templet = service.FindEntity(m => m.Id == module.TempletId);
+            }
+            return templet;
+        }
+
+        /// <summary>
+        /// 根据名称获取模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetModelByActionName(string actionName, string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
+            if (module != null)
+            {
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);
             }
             return templet;
         }

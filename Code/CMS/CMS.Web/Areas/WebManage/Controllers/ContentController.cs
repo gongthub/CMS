@@ -41,7 +41,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
+                moduleEntity.WebSiteId = Base_WebSiteId;
                 c_contentApp.SubmitForm(moduleEntity, keyValue);
                 return Success("操作成功。");
 

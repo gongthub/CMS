@@ -531,7 +531,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private string ProContent(string name, string strs, PropertyInfo property, ContentEntity contentEntity)
         {
-            if (property.Name == name )
+            if (property.Name == name)
             {
                 object obj = property.GetValue(contentEntity, null);
                 if (obj != null)
@@ -904,7 +904,67 @@ namespace CMS.Application.Comm
             }
 
             return htmls;
-        } 
+        }
+
+        /// <summary>
+        /// 根据urlRaw获取html
+        /// </summary>
+        /// <param name="urlRaw"></param>
+        /// <returns></returns>
+        public string GetHtmlByUrl(string urlHost, string urlRaw)
+        {
+            WebSiteApp app = new WebSiteApp();
+            WebSiteEntity entity = app.GetFormByUrl(urlHost);
+            return GetHtmlStrsByWebSite(entity, urlRaw);
+        }
+
+        public string GetHtmlStrsByWebSite(WebSiteEntity entity, string urlRaw)
+        {
+            string htmls = string.Empty;
+            if (entity != null && !string.IsNullOrEmpty(entity.Id))
+            {
+                List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+                ContentApp contentApp = new ContentApp();
+                if (!contentApp.GetHtmlStrs(entity.Id, urlRaw, out htmls))
+                {
+                    TempletApp templetApp = new TempletApp();
+                    TempletEntity templetmodel = new TempletEntity();
+                    ColumnsEntity columnentity = new ColumnsEntity();
+                    ColumnsApp c_ModulesApp = new ColumnsApp();
+                    string Ids = "";
+                    if (urlRaws == null || urlRaws.Count == 0)
+                    {
+                        templetmodel = templetApp.GetMain(entity.Id);
+                        columnentity = c_ModulesApp.GetMain(entity.Id);
+                        if (columnentity != null)
+                            Ids = columnentity.Id;
+                    }
+                    else
+                    {
+                        if (urlRaws.Count > 0)
+                        {
+                            templetmodel = templetApp.GetModelByActionName(urlRaws.FirstOrDefault(), entity.Id);
+                            columnentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
+                        }
+                        if (columnentity != null)
+                            Ids = columnentity.Id;
+                        if (urlRaws.Count == 2)
+                        {
+                            Ids = urlRaws.LastOrDefault();
+                        }
+                    }
+                    htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
+                    if (columnentity != null)
+                    {
+                        TempHelp temphelp = new TempHelp();
+                        htmls = temphelp.GetHtmlPages(htmls, Ids);
+                    }
+
+                }
+            }
+            return htmls;
+        }
+
         #endregion
 
         #region 判断请求路径是否为网站前台地址 +bool IsWebSite(string urlRaw)
@@ -932,7 +992,7 @@ namespace CMS.Application.Comm
                 }
             }
             return retBol;
-        } 
+        }
         #endregion
 
         #region 字段格式化处理 -InitFormat(string context, Dictionary<string, string> attrs)
@@ -963,7 +1023,7 @@ namespace CMS.Application.Comm
                 }
             }
             return contexts;
-        } 
+        }
         #endregion
 
         #region 字段格式化处理 -string InitFormat(string name, string context, Dictionary<string, string> attrs)
@@ -994,7 +1054,7 @@ namespace CMS.Application.Comm
                 }
             }
             return contexts;
-        } 
+        }
         #endregion
 
         #region 初始化单个模板属性 -ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
@@ -1106,7 +1166,7 @@ namespace CMS.Application.Comm
             contentEntity = c_ContentApp.GetForm(Ids);
             return contentEntity;
         }
-    } 
+    }
         #endregion
 
     public static class QueryableExtensions

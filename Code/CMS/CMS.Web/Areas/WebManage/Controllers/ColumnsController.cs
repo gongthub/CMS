@@ -18,7 +18,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson()
         {
-            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
+            var data = c_ModulesApp.GetListByWebSiteId(Base_WebSiteId);
             var treeList = new List<TreeSelectModel>();
             foreach (ColumnsEntity item in data)
             {
@@ -35,7 +35,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeJson()
         {
-            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
+            var data = c_ModulesApp.GetListByWebSiteId(Base_WebSiteId);
             var treeList = new List<TreeViewModel>();
             foreach (ColumnsEntity item in data)
             {
@@ -66,7 +66,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeGridJson(string keyword)
         {
-            var data = c_ModulesApp.GetListByWebSiteId(GetSessionByName(WEBSITEID));
+            var data = c_ModulesApp.GetListByWebSiteId(Base_WebSiteId);
             if (!string.IsNullOrEmpty(keyword))
             {
                 data = data.TreeWhere(t => t.FullName.Contains(keyword));
@@ -99,7 +99,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
-            moduleEntity.WebSiteId = GetSessionByName(WEBSITEID);
+            moduleEntity.WebSiteId = Base_WebSiteId;
             c_ModulesApp.SubmitForm(moduleEntity, keyValue);
             return Success("操作成功。");
         }

@@ -14,7 +14,6 @@ namespace CMS.Application.WebManage
     public class ContentApp
     {
         private IContentRepository service = new ContentRepository();
-           
 
         public List<ContentEntity> GetList(string itemId = "", string keyword = "")
         {
@@ -156,7 +155,7 @@ namespace CMS.Application.WebManage
             if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
             {
                 contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id).FirstOrDefault();
-                
+
             }
             return contentEntity;
         }
@@ -204,6 +203,30 @@ namespace CMS.Application.WebManage
             return htmls;
         }
 
-         
+        /// <summary>
+        /// 根据站点ID和虚拟路径获取html
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public bool GetHtmlStrs(string webSiteId, string url, out string htmls)
+        {
+            bool isHave = false;
+            htmls = string.Empty;
+            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && m.UrlAddress == url).FirstOrDefault();
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+            {
+                string urlPath = contentEntity.UrlPath;
+
+                if (Code.FileHelper.IsExistFile(urlPath, true))
+                {
+                    htmls = Code.FileHelper.ReadTxtFile(urlPath);
+                    isHave = true;
+                }
+            }
+
+            return isHave;
+        }
+
     }
 }

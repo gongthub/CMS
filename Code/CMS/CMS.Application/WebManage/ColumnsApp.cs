@@ -25,6 +25,10 @@ namespace CMS.Application.WebManage
         {
             return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true).FirstOrDefault();
         }
+        public ColumnsEntity GetFormByActionName(string actionName, string webSiteId)
+        {
+            return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true && m.WebSiteId == webSiteId).FirstOrDefault();
+        }
         public ColumnsEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
@@ -80,6 +84,14 @@ namespace CMS.Application.WebManage
         {
             return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true).FirstOrDefault();
         }
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetMain(string webSiteId)
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true && m.WebSiteId == webSiteId).FirstOrDefault();
+        }
 
         /// <summary>
         /// 获取主页模块数据
@@ -88,6 +100,14 @@ namespace CMS.Application.WebManage
         public ColumnsEntity GetModelByActionName(string actionName)
         {
             return service.IQueryable().Where(m => m.DeleteMark != true && m.ActionName == actionName).FirstOrDefault();
+        }
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetModelByActionName(string actionName, string webSiteId)
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.ActionName == actionName && m.WebSiteId == webSiteId).FirstOrDefault();
         }
 
 

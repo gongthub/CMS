@@ -29,6 +29,22 @@ namespace CMS.Code
         {
             return File.Exists(filePath);
         }
+        /// <summary>
+        /// 检测指定文件是否存在,如果存在则返回true。
+        /// </summary>
+        /// <param name="filePath">文件的绝对路径</param>    
+        /// <param name="Isrelative">是否相对路径</param>       
+        public static bool IsExistFile(string filePath,bool Isrelative)
+        {
+            if (Isrelative)
+            {
+                return File.Exists(MapPath(filePath));
+            }
+            else
+            {
+                return File.Exists(filePath);
+            }
+        }
         #endregion
 
         #region 获取指定目录中的文件列表
@@ -872,7 +888,6 @@ namespace CMS.Code
         }
         #endregion
 
-
         #region 将内容写入文本文件(如果文件path存在就打开，不存在就新建)
         /// <summary>
         /// 写入文件
@@ -907,5 +922,85 @@ namespace CMS.Code
 
         }
         #endregion
+
+
+        #region 以只读方式读取文本文件
+        /// <summary>
+        /// 以只读方式读取文本文件
+        /// </summary>
+        /// <param name="FilePath">文件路径及文件名</param>
+        /// <returns></returns>
+        public static string ReadTxtFile(string FilePath)
+        {
+            string content = "";//返回的字符串
+            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+            {
+                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string text = string.Empty;
+                    while (!reader.EndOfStream)
+                    {
+                        text += reader.ReadLine() + "\r\n";
+                        content = text;
+                    }
+                }
+            }
+            return content;
+        }
+        /// <summary>
+        /// 以只读方式读取文本文件
+        /// </summary>
+        /// <param name="FilePath">文件路径及文件名</param>
+        /// <param name="Isrelative">是否相对路径</param>    
+        /// <returns></returns>
+        public static string ReadTxtFile(string FilePath, bool Isrelative)
+        {
+            if (Isrelative)
+            {
+                FilePath = MapPath(FilePath);
+            }
+            string content = "";//返回的字符串
+            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+            {
+                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string text = string.Empty;
+                    while (!reader.EndOfStream)
+                    {
+                        text += reader.ReadLine() + "\r\n";
+                        content = text;
+                    }
+                }
+            }
+            return content;
+        }
+        /// <summary>
+        /// 以只读方式读取文本文件前N条数据
+        /// </summary>
+        /// <param name="FilePath">文件路径及文件名</param>
+        /// <returns></returns>
+        public static string ReadTxtFileNum(string FilePath, int num)
+        {
+            string content = "";//返回的字符串
+            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+            {
+                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                {
+                    string text = string.Empty;
+                    for (int i = 0; i < num; i++)
+                    {
+                        if (!reader.EndOfStream)
+                        {
+                            text += reader.ReadLine() + "\r\n";
+                            content = text;
+                        }
+                    }
+                }
+            }
+            return content;
+        }
+
+        #endregion
+
     }
 }
