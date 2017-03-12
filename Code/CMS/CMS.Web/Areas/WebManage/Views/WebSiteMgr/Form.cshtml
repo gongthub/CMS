@@ -14,14 +14,14 @@
                 data: { keyValue: keyValue },
                 dataType: "json",
                 async: false,
-                success: function (data) {
+                success: function (data) { 
                     $("#ImgPr").attr("src", data.Icon);
-                    $("#form1").formSerialize(data);
+                    $("#form1").formSerialize(data); 
                 }
             });
         }
 
-        $("#Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        //$("#Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
     })
 
     function submitForm() {
@@ -46,7 +46,7 @@
     function uploadImg() {
         var filePath = "";
         var formData = new FormData();
-        formData.append("fileicon", $("#Icon")[0].files[0]);
+        formData.append("fileicon", $("#IconUp")[0].files[0]);
         $.ajax({
             type: "POST",
             url: "/WebManage/Content/UploadImg",
@@ -102,7 +102,7 @@
                                 </td>
                                 <th class="formTitle">所有人</th>
                                 <td class="formValue">
-                                    <input id="UserName" name="UserName" type="text" class="form-control required" placeholder="请输入所有人" />
+                                    <input id="UserName" name="UserName" type="text" class="form-control" placeholder="请输入所有人" />
                                 </td>
                             </tr>
                             <tr>
@@ -110,43 +110,41 @@
                                 <td class="formValue">
                                     <input id="UrlAddress" name="UrlAddress" type="text" class="form-control required" placeholder="请输入地址" />
                                 </td>
-                                <th class="formTitle">端口</th>
+                                <th class="formTitle">备案</th>
+                                <td class="formValue">
+                                    <input id="Record" name="Record" type="text" class="form-control" placeholder="请输入备案" />
+                                </td>
+                                @*<th class="formTitle">端口</th>
                                 <td class="formValue">
                                     <input id="Point" name="Point" type="text" class="form-control required" placeholder="请输入端口" value="80" />
-                                </td>
+                                </td>*@
                             </tr>
                             <tr>
                                 <th class="formTitle">手机号</th>
                                 <td class="formValue">
-                                    <input id="Phone" name="Phone" type="text" class="form-control required" placeholder="请输入手机号" />
+                                    <input id="Phone" name="Phone" type="text" class="form-control" placeholder="请输入手机号" />
                                 </td>
                                 <th class="formTitle">邮箱</th>
                                 <td class="formValue">
-                                    <input id="Email" name="Email" type="text" class="form-control required" placeholder="请输入邮箱" />
+                                    <input id="Email" name="Email" type="text" class="form-control" placeholder="请输入邮箱" />
                                 </td>
-                            </tr>
-                            <tr>
-                                <th class="formTitle">备案</th>
-                                <td class="formValue" colspan="3">
-                                    <input id="Record" name="Record" type="text" class="form-control required" placeholder="请输入备案" />
-                                </td>
-                            </tr>
+                            </tr> 
                             <tr>
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
                                     <div>
                                         <div class="sys-div-imgupload">
                                             <div class="sys-div-upload">
-                                                <input id="Icon" name="Icon" type="file" />请选择图片
+                                                <input id="IconUp" type="file" />请选择图片
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>
                                     </div>
                                 </td>
-                                <th class="formTitle" style="height: 35px;">是否有效</th>
+                                <th class="formTitle" style="height: 35px;">是否启用</th>
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
-                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">启用</label>
                                     </div>
                                 </td>
                             </tr>

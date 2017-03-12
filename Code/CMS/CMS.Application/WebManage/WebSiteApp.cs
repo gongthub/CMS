@@ -50,16 +50,64 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(WebSiteEntity moduleEntity, string keyValue)
         {
-            if (!string.IsNullOrEmpty(keyValue))
+            if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
             {
-                moduleEntity.Modify(keyValue);
-                service.Update(moduleEntity);
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity);
+                }
             }
             else
             {
-                moduleEntity.Create();
-                service.Insert(moduleEntity);
+                throw new Exception("域名已存在，请重新输入！");
             }
+        }
+
+        /// <summary>
+        /// 判断域名是否存在
+        /// </summary>
+        /// <param name="keyId"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public bool IsExistUrl(string keyId, string url)
+        {
+            url = url.Trim();
+            bool retBool = false;
+            int flay = 0;   //标示位 判断是否需要查询
+            if (!string.IsNullOrEmpty(keyId))
+            {
+                Guid id = Guid.Empty;
+                WebSiteEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    if (moduleEntity.UrlAddress != url)
+                    {
+                        flay = 1;
+                    }
+                }
+            }
+            else
+            {
+                flay = 1;
+            }
+            //需要判断
+            if (flay == 1)
+            {
+                Guid id = Guid.Empty;
+                WebSiteEntity moduleEntity = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    retBool = true;
+                }
+            }
+
+            return retBool;
         }
     }
 }

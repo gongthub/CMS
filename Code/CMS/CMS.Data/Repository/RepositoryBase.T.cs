@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,9 +13,18 @@ namespace CMS.Data
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class,new()
     {
-        public CMSDbContext dbcontext = new CMSDbContext();
+        public CMSDbContext dbcontext =null;
+ 
+        public RepositoryBase()
+        {
+            if (dbcontext == null)
+            {
+                dbcontext = new CMSDbContext();
+            }
+        }
         public int Insert(TEntity entity)
         {
+            RemoveHoldingEntityInContext(entity);
             dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             return dbcontext.SaveChanges();
         }
@@ -22,12 +32,14 @@ namespace CMS.Data
         {
             foreach (var entity in entitys)
             {
+                RemoveHoldingEntityInContext(entity);
                 dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             }
             return dbcontext.SaveChanges();
         }
         public int Update(TEntity entity)
         {
+            RemoveHoldingEntityInContext(entity);
             dbcontext.Set<TEntity>().Attach(entity);
             PropertyInfo[] props = entity.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
@@ -43,12 +55,13 @@ namespace CMS.Data
         }
         public int Delete(TEntity entity)
         {
+            RemoveHoldingEntityInContext(entity);
             dbcontext.Set<TEntity>().Attach(entity);
             dbcontext.Entry<TEntity>(entity).State = EntityState.Deleted;
             return dbcontext.SaveChanges();
         }
         public int Delete(Expression<Func<TEntity, bool>> predicate)
-        {
+        { 
             var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
             entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
             return dbcontext.SaveChanges();
@@ -132,6 +145,24 @@ namespace CMS.Data
             pagination.records = tempData.Count();
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToList();
+        }
+
+        //用于监测Context中的Entity是否存在，如果存在，将其Detach，防止出现问题。
+        private Boolean RemoveHoldingEntityInContext(TEntity entity)
+        {
+            var objContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
+            var objSet = objContext.CreateObjectSet<TEntity>();
+            var entityKey = objContext.CreateEntityKey(objSet.EntitySet.Name, entity);
+
+            Object foundEntity;
+            var exists = objContext.TryGetObjectByKey(entityKey, out foundEntity);
+
+            if (exists)
+            {
+                objContext.Detach(foundEntity);
+            }
+
+            return (exists);
         }
     }
 }

@@ -46,9 +46,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateInput(false)]
         public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue)
         {
-            //moduleEntity.Content = Server.HtmlEncode(moduleEntity.Content);
-            webSiteApp.SubmitForm(moduleEntity, keyValue);
-            return Success("操作成功。");
+            try
+            {
+                webSiteApp.SubmitForm(moduleEntity, keyValue);
+                return Success("操作成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
         }
         [HttpPost]
         [HandlerAjaxOnly]
