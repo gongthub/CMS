@@ -4,7 +4,7 @@ using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc; 
+using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
@@ -58,7 +58,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult GetTypeSelectJson()
         {
             List<EnumModel> models = EnumHelp.enumHelp.EnumToList(typeof(CMS.Code.Enums.ModuleType));
-             
+
             return Content(models.ToJson());
         }
 
@@ -89,7 +89,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
-        { 
+        {
             var data = c_ModulesApp.GetForm(keyValue);
             return Content(data.ToJson());
         }
@@ -99,9 +99,16 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
-            moduleEntity.WebSiteId = Base_WebSiteId;
-            c_ModulesApp.SubmitForm(moduleEntity, keyValue);
-            return Success("操作成功。");
+            try
+            {
+                moduleEntity.WebSiteId = Base_WebSiteId;
+                c_ModulesApp.SubmitForm(moduleEntity, keyValue);
+                return Success("操作成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
         }
 
         [HttpPost]
@@ -109,7 +116,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAuthorize]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
-        { 
+        {
             c_ModulesApp.DeleteForm(keyValue);
             return Success("删除成功。");
         }

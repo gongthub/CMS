@@ -73,7 +73,7 @@ namespace CMS.Application.WebManage
         /// 判断域名是否存在
         /// </summary>
         /// <param name="keyId"></param>
-        /// <param name="url"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool IsExistUrl(string keyId, string url)
         {

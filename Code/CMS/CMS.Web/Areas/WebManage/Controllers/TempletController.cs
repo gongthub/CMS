@@ -49,10 +49,16 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateInput(false)]
         public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            moduleEntity.WebSiteId = Base_WebSiteId;
-
-            templetApp.SubmitForm(moduleEntity, keyValue);
-            return Success("操作成功。");
+            try
+            {
+                moduleEntity.WebSiteId = Base_WebSiteId; 
+                templetApp.SubmitForm(moduleEntity, keyValue);
+                return Success("操作成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
         }
         [HttpPost]
         [HandlerAjaxOnly]

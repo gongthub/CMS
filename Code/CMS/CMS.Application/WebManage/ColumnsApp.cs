@@ -39,40 +39,47 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
-            if (!string.IsNullOrEmpty(keyValue))
+            if (!IsExistActionName(keyValue, moduleEntity.ActionName))
             {
-                moduleEntity.Modify(keyValue);
-                if (moduleEntity.MainMark == true)
+                if (!string.IsNullOrEmpty(keyValue))
                 {
-                    List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
-                    if (models != null && models.Count > 0)
+                    moduleEntity.Modify(keyValue);
+                    if (moduleEntity.MainMark == true)
                     {
-                        models.ForEach(delegate(ColumnsEntity model)
+                        List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                        if (models != null && models.Count > 0)
                         {
-                            model.MainMark = false;
-                            service.Update(model);
-                        });
+                            models.ForEach(delegate(ColumnsEntity model)
+                            {
+                                model.MainMark = false;
+                                service.Update(model);
+                            });
+                        }
                     }
+                    service.Update(moduleEntity);
                 }
-                service.Update(moduleEntity);
+                else
+                {
+                    moduleEntity.Create();
+
+                    if (moduleEntity.MainMark == true)
+                    {
+                        List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                        if (models != null && models.Count > 0)
+                        {
+                            models.ForEach(delegate(ColumnsEntity model)
+                            {
+                                model.MainMark = false;
+                                service.Update(model);
+                            });
+                        }
+                    }
+                    service.Insert(moduleEntity);
+                }
             }
             else
             {
-                moduleEntity.Create();
-
-                if (moduleEntity.MainMark == true)
-                {
-                    List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
-                    if (models != null && models.Count > 0)
-                    {
-                        models.ForEach(delegate(ColumnsEntity model)
-                        {
-                            model.MainMark = false;
-                            service.Update(model);
-                        });
-                    }
-                }
-                service.Insert(moduleEntity);
+                throw new Exception("简称已存在，请重新输入！");
             }
         }
 
@@ -111,5 +118,45 @@ namespace CMS.Application.WebManage
         }
 
 
+        /// <summary>
+        /// 判断简称是否存在
+        /// </summary>
+        /// <param name="keyId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool IsExistActionName(string keyId, string name)
+        {
+            name = name.Trim();
+            bool retBool = false;
+            int flay = 0;   //标示位 判断是否需要查询
+            if (!string.IsNullOrEmpty(keyId))
+            {
+                Guid id = Guid.Empty;
+                ColumnsEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    if (moduleEntity.ActionName != name)
+                    {
+                        flay = 1;
+                    }
+                }
+            }
+            else
+            {
+                flay = 1;
+            }
+            //需要判断
+            if (flay == 1)
+            {
+                Guid id = Guid.Empty;
+                ColumnsEntity moduleEntity = service.FindEntity(m => m.ActionName == name && m.DeleteMark != true);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    retBool = true;
+                }
+            }
+
+            return retBool;
+        }
     }
 }

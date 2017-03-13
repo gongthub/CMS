@@ -102,22 +102,25 @@ namespace CMS.Application.Comm
         /// 初始化
         /// </summary>
         /// <param name="Id"></param>
-        private void InitHtmlSavePath(string Id, out string filePath)
+        private void InitHtmlSavePath(string Id, out string filePath, out string urlAddress)
         {
             filePath = "";
+            urlAddress = "";
             if (!string.IsNullOrEmpty(Id))
             {
                 ContentApp c_ContentApp = new ContentApp();
-                //CONTENTENTITY = c_ContentApp.GetForm(Id);
-                //if (CONTENTENTITY == null || CONTENTENTITY.Id != Id)
-                //{
                 ColumnsEntity moduleentity = c_ContentApp.GetModuleByContentID(Id);
 
                 if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleentity))
                 {
-                    filePath = HTMLSAVEPATH + moduleentity.ActionName + @"\";
+                    WebSiteApp webSiteApp = new WebSiteApp();
+                    WebSiteEntity webSiteentity = webSiteApp.GetForm(moduleentity.WebSiteId);
+                    if (JudgmentHelp.judgmentHelp.IsNullEntity<WebSiteEntity>(webSiteentity))
+                    {
+                        filePath = HTMLSAVEPATH + webSiteentity.ShortName + @"\" + moduleentity.ActionName + @"\";
+                        urlAddress = moduleentity.ActionName + @"\";
+                    }
                 }
-                //}
             }
         }
 
@@ -167,7 +170,7 @@ namespace CMS.Application.Comm
         /// 创建静态页面
         /// </summary>
         /// <param name="htmls"></param>
-        private void GenHtmlByFilePath(string htmls, ref string filePath)
+        private void GenHtmlByFilePath(string htmls, ref string filePath, ref string urlAddress)
         {
             string filename = GenUrlName() + HTMLFOR;
             FileHelper.CreateAndWrite(filePath, filename, htmls);
@@ -175,10 +178,12 @@ namespace CMS.Application.Comm
             if (index >= 0)
             {
                 filePath = filePath + filename;
+                urlAddress = urlAddress + filename;
             }
             else
             {
                 filePath = filePath + @"\" + filename;
+                urlAddress = urlAddress + @"\" + filename;
             }
         }
         /// <summary>
@@ -241,11 +246,12 @@ namespace CMS.Application.Comm
                     {
 
                         string filePaths = "";
-                        InitHtmlSavePath(Id, out filePaths);
+                        string urlAddress = "";
+                        InitHtmlSavePath(Id, out filePaths, out urlAddress);
                         //创建静态页面
-                        GenHtmlByFilePath(templets, ref filePaths);
+                        GenHtmlByFilePath(templets, ref filePaths, ref urlAddress);
                         //更新链接地址
-                        UpdateContentById(filePaths, Id);
+                        UpdateContentById(filePaths, urlAddress, Id);
                     }
                 }
             }
@@ -734,18 +740,19 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据id更新内容链接 -void UpdateContentById(string url, string Ids)
+        #region 根据id更新内容链接 -void UpdateContentById(string name, string urlAddress,string Ids)
         /// <summary>
         /// 根据id更新内容链接
         /// </summary>
         /// <param name="Ids"></param>
-        private void UpdateContentById(string url, string Ids)
+        private void UpdateContentById(string url, string urlAddress, string Ids)
         {
             ContentApp c_ContentApp = new ContentApp();
             ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             if (contentEntity != null)
             {
-                contentEntity.UrlAddress = url;
+                contentEntity.UrlPath = url;
+                contentEntity.UrlAddress = urlAddress;
                 c_ContentApp.SubmitForm(contentEntity, Ids);
             }
         }

@@ -62,15 +62,22 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            if (!string.IsNullOrEmpty(keyValue))
+            if (!IsExistName(keyValue, moduleEntity.FullName))
             {
-                moduleEntity.Modify(keyValue);
-                service.Update(moduleEntity);
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity);
+                }
             }
             else
-            {
-                moduleEntity.Create();
-                service.Insert(moduleEntity);
+            { 
+                throw new Exception("名称已存在，请重新输入！");
             }
         }
 
@@ -135,6 +142,48 @@ namespace CMS.Application.WebManage
                 templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);
             }
             return templet;
+        }
+
+
+        /// <summary>
+        /// 判断名称是否存在
+        /// </summary>
+        /// <param name="keyId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool IsExistName(string keyId, string name)
+        {
+            name = name.Trim();
+            bool retBool = false;
+            int flay = 0;   //标示位 判断是否需要查询
+            if (!string.IsNullOrEmpty(keyId))
+            {
+                Guid id = Guid.Empty;
+                TempletEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    if (moduleEntity.FullName != name)
+                    {
+                        flay = 1;
+                    }
+                }
+            }
+            else
+            {
+                flay = 1;
+            }
+            //需要判断
+            if (flay == 1)
+            {
+                Guid id = Guid.Empty;
+                TempletEntity moduleEntity = service.FindEntity(m => m.FullName == name && m.DeleteMark != true);
+                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                {
+                    retBool = true;
+                }
+            }
+
+            return retBool;
         }
     }
 }

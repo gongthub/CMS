@@ -207,7 +207,7 @@ namespace CMS.Application.WebManage
         /// 根据站点ID和虚拟路径获取html
         /// </summary>
         /// <param name="webSiteId"></param>
-        /// <param name="url"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
         public bool GetHtmlStrs(string webSiteId, string url, out string htmls)
         {
