@@ -145,6 +145,12 @@
 </html>
 <script type="text/javascript">
 
+    $(document).ajaxComplete(function (event, request, settings) { 
+        if (request.responseText == "WebSiteLogout") {
+            alert("站点信息丢失！请重新选择站点！");
+            location.href = '/Home/Index';
+        }
+    });
     function actionIndex() { 
         top.location.href = "/Home/Index";
     }

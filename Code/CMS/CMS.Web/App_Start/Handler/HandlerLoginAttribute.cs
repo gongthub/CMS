@@ -1,5 +1,6 @@
 ﻿using CMS.Code;
 using System;
+using System.Text;
 using System.Web.Mvc;
 
 namespace CMS.Web
@@ -48,8 +49,20 @@ namespace CMS.Web
             if (filterContext.HttpContext.Session["WEBSITEID"] == null || !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
             {
 
-                WebHelper.WriteCookie("cms_login_error", "nowebsite");
-                filterContext.HttpContext.Response.Write("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
+                StringBuilder sbScript = new StringBuilder();
+                //判断是否ajax请求
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                {
+                    sbScript.Append("WebSiteLogout");
+                    filterContext.Result = new JavaScriptResult() { Script = sbScript.ToString() };
+                }
+                else
+                {
+                    sbScript.Append("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
+                    filterContext.Result = new ContentResult() { Content = sbScript.ToString() };
+                }
+                //WebHelper.WriteCookie("cms_login_error", "nowebsite");
+                //filterContext.HttpContext.Response.Write("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
                 return;
             }
         }

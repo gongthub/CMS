@@ -57,7 +57,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
-            c_contentApp.DeleteForm(keyValue);
+            c_contentApp.DeleteFormById(keyValue);
             return Success("删除成功。");
         }
 

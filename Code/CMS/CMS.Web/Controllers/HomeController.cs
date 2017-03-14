@@ -18,7 +18,7 @@ namespace CMS.Web.Controllers
         { 
             return View();
         }
-        [HttpGet]
+        [HttpGet] 
         public ActionResult WebSite(string key)
         {
             WebSiteApp app = new WebSiteApp();
@@ -33,6 +33,7 @@ namespace CMS.Web.Controllers
             return RedirectToAction("WebSiteMgr");
         }
         [HttpGet]
+        [WebSiteMgr]
         public ActionResult WebSiteMgr()
         { 
             return View();

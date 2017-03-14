@@ -16,8 +16,13 @@ namespace CMS.Data
         int Insert(TEntity entity);
         int Insert(List<TEntity> entitys);
         int Update(TEntity entity);
+        //物理删除
         int Delete(TEntity entity);
         int Delete(Expression<Func<TEntity, bool>> predicate);
+        //逻辑删除
+        int DeleteById(TEntity entity);
+        //逻辑删除
+        int DeleteById(Expression<Func<TEntity, bool>> predicate);
         TEntity FindEntity(object keyValue);
         TEntity FindEntity(Expression<Func<TEntity, bool>> predicate);
         IQueryable<TEntity> IQueryable();

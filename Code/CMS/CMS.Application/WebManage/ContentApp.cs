@@ -27,6 +27,7 @@ namespace CMS.Application.WebManage
             {
                 expression = expression.And(t => t.FullName.Contains(keyword));
             }
+            expression = expression.And(m => m.DeleteMark != true);
             models = service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
             models.ForEach(delegate(ContentEntity model)
             {
@@ -53,6 +54,7 @@ namespace CMS.Application.WebManage
             {
                 expression = expression.And(t => t.FullName.Contains(keyword));
             }
+            expression = expression.And(m => m.DeleteMark != true);
             models = service.IQueryable(expression).OrderBy(t => t.SortCode);
 
             return models;
@@ -61,7 +63,7 @@ namespace CMS.Application.WebManage
         public List<ContentEntity> GetList()
         {
             List<ContentEntity> models = new List<ContentEntity>();
-            models = service.IQueryable().OrderBy(t => t.SortCode).ToList();
+            models = service.IQueryable(t => t.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
             models.ForEach(delegate(ContentEntity model)
             {
 
@@ -83,6 +85,7 @@ namespace CMS.Application.WebManage
             {
                 expression = expression.And(t => t.FullName.Contains(keyword));
             }
+            expression = expression.And(m => m.DeleteMark != true);
             models = service.FindList(expression, pagination);
             models.ForEach(delegate(ContentEntity model)
             {
@@ -103,6 +106,10 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.Id == keyValue);
+        }
+        public void DeleteFormById(string keyValue)
+        {
+            service.DeleteById(t => t.Id == keyValue);
         }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {

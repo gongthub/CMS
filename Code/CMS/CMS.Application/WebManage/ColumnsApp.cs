@@ -35,7 +35,7 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
-            service.Delete(t => t.Id == keyValue);
+            service.DeleteById(t => t.Id == keyValue);
         }
         public void SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
