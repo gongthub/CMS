@@ -90,6 +90,10 @@ namespace CMS.Application.Comm
         /// 静态页面缓存路径
         /// </summary>
         private static readonly string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+        /// <summary>
+        /// 静态页面相对路径
+        /// </summary>
+        private static readonly string HTMLSAVEHTMLPATH = ConfigurationManager.AppSettings["htmlSrcPath"].ToString();
 
         //private ContentEntity CONTENTENTITY = new ContentEntity();
 
@@ -118,7 +122,7 @@ namespace CMS.Application.Comm
                     if (JudgmentHelp.judgmentHelp.IsNullEntity<WebSiteEntity>(webSiteentity))
                     {
                         filePath = HTMLSAVEPATH + webSiteentity.ShortName + @"\" + moduleentity.ActionName + @"\";
-                        urlAddress = moduleentity.ActionName + @"\";
+                        urlAddress = HTMLSAVEHTMLPATH + moduleentity.ActionName + @"\";
                     }
                 }
             }
@@ -233,14 +237,14 @@ namespace CMS.Application.Comm
 
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetForm(Id);
-                if (contentEntity != null && contentEntity.ColumnId != null && contentEntity.UrlAddress != null)
+                if (contentEntity != null && contentEntity.ColumnId != null && contentEntity.UrlPath != null)
                 {
 
                     //已生成静态文件时
-                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlAddress))
+                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlPath))
                     {
-                        FileHelper.DeleteFile(contentEntity.UrlAddress);
-                        GenHtml(contentEntity.UrlAddress, templets);
+                        FileHelper.DeleteFile(contentEntity.UrlPath);
+                        GenHtml(contentEntity.UrlPath, templets);
                     }
                     else
                     {
@@ -751,6 +755,7 @@ namespace CMS.Application.Comm
             ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
             if (contentEntity != null)
             {
+                urlAddress = Code.Common.ReplaceStr(urlAddress, @"\", @"/");
                 contentEntity.UrlPath = url;
                 contentEntity.UrlAddress = urlAddress;
                 c_ContentApp.SubmitForm(contentEntity, Ids);
@@ -920,6 +925,8 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlByUrl(string urlHost, string urlRaw)
         {
+            //处理Url参数
+            urlRaw = Common.HandleUrlRaw(urlRaw);
             WebSiteApp app = new WebSiteApp();
             WebSiteEntity entity = app.GetFormByUrl(urlHost);
             return GetHtmlStrsByWebSite(entity, urlRaw);

@@ -220,7 +220,7 @@ namespace CMS.Application.WebManage
 
                 if (Code.FileHelper.IsExistFile(urlPath, true))
                 {
-                    htmls = Code.FileHelper.ReadTxtFile(urlPath);
+                    htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
                     isHave = true;
                 }
             }

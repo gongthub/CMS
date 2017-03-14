@@ -12,7 +12,7 @@ namespace CMS.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.RouteExistingFiles = true;
+            //routes.RouteExistingFiles = true;
             routes.MapRoute(
                 name: "Default",
                 url: "{name}",

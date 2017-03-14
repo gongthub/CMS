@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CMS.Code
 {
@@ -10,6 +11,10 @@ namespace CMS.Code
     /// </summary>
     public class Common
     {
+        private static readonly string URLEXTENDED = Configs.GetValue("UrlExtended");
+        private static readonly bool ISHANDLEURLPARA = Configs.GetValue("IsHandleUrlPara").IsEmpty() ? false : bool.Parse(Configs.GetValue("IsHandleUrlPara"));
+         
+
         #region Stopwatch计时器
         /// <summary>
         /// 计时器开始
@@ -126,6 +131,55 @@ namespace CMS.Code
             return str;
         }
         #endregion
-         
+
+        #region 替换指定字符
+        /// <summary>
+        /// 替换指定字符
+        /// </summary>
+        public static string ReplaceStr(string str, string oldStr, string newStr)
+        {
+            return str.Replace(oldStr, newStr);
+        }
+        #endregion
+
+        #region 判断url扩展名是否存在
+        /// <summary>
+        /// 判断url扩展名是否存在
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static bool IsExistExtended(string urlRaw)
+        {
+            bool bretStatus = true;
+            if (urlRaw != "/")
+            {
+                Regex reg = new Regex("[\\w]+[\\.](" + URLEXTENDED + ")");
+                Match match = reg.Match(urlRaw);
+                bretStatus = match.Success;
+            }
+
+            return bretStatus;
+        }
+        #endregion
+
+        #region 处理Url参数
+        /// <summary>
+        /// 处理Url参数
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string HandleUrlRaw(string urlRaw)
+        {
+            string urlraws = urlRaw;
+            if (ISHANDLEURLPARA)
+            {
+                urlRaw = urlRaw.Replace('？','?');
+                string[] urlStrs = urlRaw.Split('?'); 
+                urlraws = urlStrs[0];
+            }
+
+            return urlraws;
+        }
+        #endregion
     }
 }
