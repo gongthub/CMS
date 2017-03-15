@@ -23,7 +23,7 @@
             });
         }
 
-        $("#Icon").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
     })
 
     function submitForm() {
@@ -50,10 +50,10 @@
     function uploadImg() {
         var filePath = "";
         var formData = new FormData();
-        formData.append("fileicon", $("#Icon")[0].files[0]);
+        formData.append("fileicon", $("#IconUp")[0].files[0]);
         $.ajax({
             type: "POST",
-            url: "/WebManage/Content/UploadImg",
+            url: "/SystemManage/UpFile/UploadImg",
             dataType: "json",
             data: formData,
             async: false,
@@ -111,7 +111,7 @@
                                     <div>
                                         <div class="sys-div-imgupload">
                                             <div class="sys-div-upload">
-                                                <input id="Icon" name="Icon" type="file" />请选择图片
+                                                <input id="IconUp" type="file" />请选择图片
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>

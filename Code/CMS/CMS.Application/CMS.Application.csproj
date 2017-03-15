@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comm\ConfigHelp.cs" />
     <Compile Include="Comm\RequestHelp.cs" />
     <Compile Include="Comm\TempHelp.cs" />
     <Compile Include="Infrastructure\DbLogType.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="SystemManage\OrganizeApp.cs" />
     <Compile Include="SystemManage\RoleApp.cs" />
     <Compile Include="SystemManage\RoleAuthorizeApp.cs" />
+    <Compile Include="SystemManage\UpFileApp.cs" />
     <Compile Include="SystemManage\UserApp.cs" />
     <Compile Include="SystemManage\UserLogOnApp.cs" />
     <Compile Include="SystemSecurity\DbBackupApp.cs" />

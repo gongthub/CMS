@@ -1,7 +1,8 @@
 Create TABLE Sys_UpFiles
 (
 Id varchar(50) PRIMARY KEY not null,
-PId varchar(50),
+ParentId varchar(50),
+SortCode int, 
 ModuleName nvarchar(200),
 FileName nvarchar(200),
 FileOldName nvarchar(200),

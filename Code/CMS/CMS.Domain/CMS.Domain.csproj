@@ -50,6 +50,7 @@
     <Compile Include="Entity\SystemManage\OrganizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleAuthorizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleEntity.cs" />
+    <Compile Include="Entity\SystemManage\UpFileEntity.cs" />
     <Compile Include="Entity\SystemManage\UserEntity.cs" />
     <Compile Include="Entity\SystemManage\UserLogOnEntity.cs" />
     <Compile Include="Entity\SystemSecurity\DbBackupEntity.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="IRepository\SystemManage\IOrganizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleAuthorizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleRepository.cs" />
+    <Compile Include="IRepository\SystemManage\IUpFileRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserLogOnRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IDbBackupRepository.cs" />

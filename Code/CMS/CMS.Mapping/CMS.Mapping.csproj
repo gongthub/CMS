@@ -54,6 +54,7 @@
     <Compile Include="SystemManage\OrganizeMap.cs" />
     <Compile Include="SystemManage\RoleAuthorizeMap.cs" />
     <Compile Include="SystemManage\RoleMap.cs" />
+    <Compile Include="SystemManage\UpFileMap.cs" />
     <Compile Include="SystemManage\UserLogOnMap.cs" />
     <Compile Include="SystemManage\UserMap.cs" />
     <Compile Include="SystemSecurity\DbBackupMap.cs" />

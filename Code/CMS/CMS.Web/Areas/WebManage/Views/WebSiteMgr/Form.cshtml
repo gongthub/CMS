@@ -49,7 +49,7 @@
         formData.append("fileicon", $("#IconUp")[0].files[0]);
         $.ajax({
             type: "POST",
-            url: "/WebManage/Content/UploadImg",
+            url: "/SystemManage/UpFile/UploadImg",
             dataType: "json",
             data: formData,
             async: false,
