@@ -56,10 +56,11 @@ namespace CMS.Code
         /// <returns>哈希值16进制字符串</returns>
         private static string HashFile(string fileName, string algName)
         {
-            if (!Code.FileHelper.IsExistFile(fileName))
+            string strFilePath = Code.FileHelper.MapPath(fileName);
+            if (!Code.FileHelper.IsExistFile(strFilePath))
                 return string.Empty;
 
-            System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            System.IO.FileStream fs = new System.IO.FileStream(strFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             byte[] hashBytes = HashData(fs, algName);
             fs.Close();
             return ByteArrayToHexString(hashBytes);

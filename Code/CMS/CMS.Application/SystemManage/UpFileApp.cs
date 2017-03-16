@@ -21,7 +21,7 @@ namespace CMS.Application.SystemManage
         private static readonly string UPLOADIMGPATH = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMG;
 
         private IUpFileRepository service = new UpFileRepository();
-         
+
         #region 通用方法
         /// <summary>
         /// 根据时间获取文件名称 时间格式yyyyMMddHHmmss
@@ -93,11 +93,11 @@ namespace CMS.Application.SystemManage
                 filePaths = upPathsT + saveName;
                 file.SaveAs(filePath + saveName);
 
-                entity.FileName = newFileName;
-                entity.FileOldName = saveName;
-                entity.ExtName = fileExtension;
-                entity.FilePath = filePaths;
-                entity.FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.Sys_FileName = saveName;
+                entity.Sys_FileOldName = fileName;
+                entity.Sys_ExtName = fileExtension;
+                entity.Sys_FilePath = filePaths;
+                entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
             }
             return entity;
         }
@@ -231,21 +231,50 @@ namespace CMS.Application.SystemManage
         }
 
         #endregion
-        
+
         #endregion
 
+        /// <summary>
+        /// 根据ParentId逻辑删除
+        /// </summary>
+        /// <param name="keyValue"></param>
+        public void DeleteByParentId(string keyValue)
+        {
+            service.DeleteById(t => t.ParentId == keyValue);
+        }
 
         /// <summary>
         /// 保存上传文件信息
         /// </summary>
         /// <param name="upFileEntity"></param>
         /// <returns></returns>
-        public bool SaveUpFileEntity(UpFileEntity upFileEntity)
+        public bool AddUpFileEntity(UpFileDTO upFileDtoEntity)
         {
             bool bState = false;
-              
+            if (!string.IsNullOrEmpty(upFileDtoEntity.Sys_ParentId))
+            {
+                UpFileEntity upFileEntity = new UpFileEntity();
 
-
+                upFileEntity.ParentId = upFileDtoEntity.Sys_ParentId;
+                upFileEntity.SortCode = upFileDtoEntity.Sys_SortCode;
+                upFileEntity.ModuleName = upFileDtoEntity.Sys_ModuleName;
+                upFileEntity.FileName = upFileDtoEntity.Sys_FileName;
+                upFileEntity.FileOldName = upFileDtoEntity.Sys_FileOldName;
+                upFileEntity.ExtName = upFileDtoEntity.Sys_ExtName;
+                upFileEntity.FilePath = upFileDtoEntity.Sys_FilePath;
+                upFileEntity.FileMd5 = upFileDtoEntity.Sys_FileMd5;
+                upFileEntity.Description = upFileDtoEntity.Sys_Description;
+                upFileEntity.IsMain = upFileDtoEntity.Sys_IsMain;
+                upFileEntity.Create();
+                if (service.Insert(upFileEntity) > 0)
+                {
+                    bState = true;
+                }
+            }
+            else
+            {
+                bState = true;
+            }
             return bState;
         }
     }

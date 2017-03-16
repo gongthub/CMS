@@ -26,7 +26,7 @@ namespace CMS.Repository.SystemSecurity
         {
             DbHelper.ExecuteSqlCommand(string.Format("backup database {0} to disk ='{1}'", dbBackupEntity.DbName, dbBackupEntity.FilePath));
             dbBackupEntity.FileSize = FileHelper.ToFileSize(FileHelper.GetFileSize(dbBackupEntity.FilePath));
-            dbBackupEntity.FilePath = "/Resource/DbBackup/" + dbBackupEntity.FileName;
+            dbBackupEntity.FilePath = "/Resource/DbBackup/" + dbBackupEntity.FileName; 
             this.Insert(dbBackupEntity);
         }
     }

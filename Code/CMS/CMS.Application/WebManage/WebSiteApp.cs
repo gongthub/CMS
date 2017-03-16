@@ -1,4 +1,6 @@
-﻿using CMS.Code;
+﻿using CMS.Application.SystemManage;
+using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -62,6 +64,31 @@ namespace CMS.Application.WebManage
                     moduleEntity.Create();
                     service.Insert(moduleEntity);
                 }
+            }
+            else
+            {
+                throw new Exception("域名已存在，请重新输入！");
+            }
+        }
+        public void SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
+        {
+            if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
+            {
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity, out keyValue);
+                }
+                //更新上传文件表
+                UpFileApp upFileApp = new UpFileApp();
+                upFileentity.Sys_ParentId = keyValue;
+                upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
+                upFileApp.AddUpFileEntity(upFileentity);
             }
             else
             {

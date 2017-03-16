@@ -2,7 +2,7 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
+<script> 
     var keyValue = $.request("keyValue");
     $(function () {
         initControl();
@@ -18,6 +18,27 @@
                 }
             });
         }
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        $finish.show();
+                        $next.hide();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        });
+        gridList();
     });
     function initControl() {
         $("#Gender").bindSelect()
@@ -52,109 +73,157 @@
             }
         })
     }
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/WebManage/WebSiteMgr/GetGrid",
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "主键", name: "Id", hidden: true, key: true },
+                { label: '排序', name: 'SortCode', width: 150, align: 'left' },
+                { label: '简称', name: 'ShortName', width: 150, align: 'left' },
+                { label: '名称', name: 'FullName', width: 150, align: 'left' },
+                { label: '域名', name: 'UrlAddress', width: 150, align: 'left' },
+                { label: '描述', name: 'Description', width: 150, align: 'left' },
+                {
+                    label: "有效", name: "EnabledMark", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+            ],
+            pager: "#gridPager",
+            sortname: 'SortCode asc,ShortName desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            $gridList.jqGrid('setGridParam', {
+                postData: { keyword: $("#txt_keyword").val() },
+            }).trigger('reloadGrid');
+        });
+    }
 </script>
 <form id="form1">
-    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#">基本信息</a></li>
-            <li ><a href="#">扩展信息</a></li>
-        </ul>
-        <div style="padding-top: 20px; margin-right: 30px;">
-            <table class="form">
-                <tr>
-                    <th class="formTitle">账户</th>
-                    <td class="formValue">
-                        <input id="Account" name="Account" type="text" class="form-control required" placeholder="请输入账户" />
-                    </td>
-                    <th class="formTitle">密码</th>
-                    <td class="formValue">
-                        <input id="UserPassword" name="UserPassword" type="password" class="form-control required" placeholder="请输入密码" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">公司</th>
-                    <td class="formValue">
-                        <select id="OrganizeId" name="OrganizeId" class="form-control required">
-                        </select>
-                    </td>
-                    <th class="formTitle">部门</th>
-                    <td class="formValue">
-                        <select id="DepartmentId" name="DepartmentId" class="form-control required">
-                            <option value="">==请选择==</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">角色</th>
-                    <td class="formValue">
-                        <select id="RoleId" name="RoleId" class="form-control required">
-                            <option value="">==请选择==</option>
-                        </select>
-                    </td>
-                    <th class="formTitle">岗位</th>
-                    <td class="formValue">
-                        <select id="DutyId" name="DutyId" class="form-control required">
-                            <option value="">==请选择==</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">姓名</th>
-                    <td class="formValue">
-                        <input id="RealName" name="RealName" type="text" class="form-control required" placeholder="请输入姓名" />
-                    </td>
-                    <th class="formTitle">性别</th>
-                    <td class="formValue">
-                        <select id="Gender" name="Gender" class="form-control required">
-                            <option value="true">男</option>
-                            <option value="false">女</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">手机</th>
-                    <td class="formValue">
-                        <input id="MobilePhone" name="MobilePhone" type="text" class="form-control" />
-                    </td>
-                    <th class="formTitle">生日</th>
-                    <td class="formValue">
-                        <input id="Birthday" name="Birthday" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">微信</th>
-                    <td class="formValue">
-                        <input id="WeChat" name="WeChat" type="text" class="form-control" />
-                    </td>
-                    <th class="formTitle">邮箱</th>
-                    <td class="formValue">
-                        <input id="Email" name="Email" type="text" class="form-control" />
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle">类型</th>
-                    <td class="formValue">
-                        <select id="IsAdministrator" name="IsAdministrator" class="form-control">
-                            <option value="false">普通用户</option>
-                            <option value="true">系统管理员</option>
-                        </select>
-                    </td>
-                    <th class="formTitle">允许登录</th>
-                    <td class="formValue">
-                        <select id="EnabledMark" name="EnabledMark" class="form-control">
-                            <option value="true">是</option>
-                            <option value="false">否</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="formTitle" valign="top" style="padding-top: 5px;">备注
-                    </th>
-                    <td class="formValue" colspan="3">
-                        <textarea id="Description" name="Description" class="form-control" style="height: 60px;"></textarea>
-                    </td>
-                </tr>
-            </table>
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>基本信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>扩展信息<span class="chevron"></span></li>
+            </ul>
         </div>
-    </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="width: 98%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">账户</th>
+                                <td class="formValue">
+                                    <input id="Account" name="Account" type="text" class="form-control required" placeholder="请输入账户" />
+                                </td>
+                                <th class="formTitle">密码</th>
+                                <td class="formValue">
+                                    <input id="UserPassword" name="UserPassword" type="password" class="form-control required" placeholder="请输入密码" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">公司</th>
+                                <td class="formValue">
+                                    <select id="OrganizeId" name="OrganizeId" class="form-control required"></select>
+                                </td>
+                                <th class="formTitle">部门</th>
+                                <td class="formValue">
+                                    <select id="DepartmentId" name="DepartmentId" class="form-control required">
+                                        <option value="">==请选择==</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">角色</th>
+                                <td class="formValue">
+                                    <select id="RoleId" name="RoleId" class="form-control required">
+                                        <option value="">==请选择==</option>
+                                    </select>
+                                </td>
+                                <th class="formTitle">岗位</th>
+                                <td class="formValue">
+                                    <select id="DutyId" name="DutyId" class="form-control required">
+                                        <option value="">==请选择==</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">姓名</th>
+                                <td class="formValue">
+                                    <input id="RealName" name="RealName" type="text" class="form-control required" placeholder="请输入姓名" />
+                                </td>
+                                <th class="formTitle">性别</th>
+                                <td class="formValue">
+                                    <select id="Gender" name="Gender" class="form-control required">
+                                        <option value="true">男</option>
+                                        <option value="false">女</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">手机</th>
+                                <td class="formValue">
+                                    <input id="MobilePhone" name="MobilePhone" type="text" class="form-control" />
+                                </td>
+                                <th class="formTitle">生日</th>
+                                <td class="formValue">
+                                    <input id="Birthday" name="Birthday" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">微信</th>
+                                <td class="formValue">
+                                    <input id="WeChat" name="WeChat" type="text" class="form-control" />
+                                </td>
+                                <th class="formTitle">邮箱</th>
+                                <td class="formValue">
+                                    <input id="Email" name="Email" type="text" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">类型</th>
+                                <td class="formValue">
+                                    <select id="IsAdministrator" name="IsAdministrator" class="form-control">
+                                        <option value="false">普通用户</option>
+                                        <option value="true">系统管理员</option>
+                                    </select>
+                                </td>
+                                <th class="formTitle">允许登录</th>
+                                <td class="formValue">
+                                    <select id="EnabledMark" name="EnabledMark" class="form-control">
+                                        <option value="true">是</option>
+                                        <option value="false">否</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                    备注
+                                </th>
+                                <td class="formValue" colspan="3">
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 60px;"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
+
+                <div class="gridPanel">
+                    <table id="gridList"></table>
+                    <div id="gridPager"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+            <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+        </div>
 </form>

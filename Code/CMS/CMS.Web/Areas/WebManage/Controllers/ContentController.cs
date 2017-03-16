@@ -1,5 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
     [WebSiteMgr]
     public class ContentController : ControllerBase
     {
-
-        /// <summary>
-        /// 上传图片保存路径
-        /// </summary>
-        private static string UPLOADIMGPATH = ConfigurationManager.AppSettings["UploadImg"].ToString();
+         
         private ContentApp c_contentApp = new ContentApp();
 
         [HttpGet]
@@ -37,12 +34,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(ContentEntity moduleEntity, string keyValue)
+        public ActionResult SubmitForm(ContentEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
             try
             {
                 moduleEntity.WebSiteId = Base_WebSiteId;
-                c_contentApp.SubmitForm(moduleEntity, keyValue);
+                c_contentApp.SubmitForm(moduleEntity, keyValue, upFileentity);
                 return Success("操作成功。");
 
             }
@@ -77,48 +74,6 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             return View();
         }
-
-        [HttpPost]
-        [HandlerAuthorize]
-        public ActionResult UploadImg()
-        {
-            try
-            {
-                string dates = DateTime.Now.ToString("yyyyMMdd");
-                string upPaths = UPLOADIMGPATH + dates + "/";
-                string upPathsT = upPaths.Replace("~", "");
-                string filePaths = string.Empty;
-                if (HttpContext.Request.Files.Count > 0)
-                {
-                    var upFiles = HttpContext.Request.Files[0];
-                    if (upFiles != null)
-                    {
-                        // 文件上传后的保存路径
-                        string filePath = Server.MapPath(upPaths);
-                        if (!Directory.Exists(filePath))
-                        {
-                            Directory.CreateDirectory(filePath);
-                        }
-                        string fileName = Path.GetFileName(upFiles.FileName);// 原始文件名称
-                        string fileExtension = Path.GetExtension(fileName); // 文件扩展名
-                        Random random = new Random();
-                        string randomStr = random.Next(0000, 9999).ToString(); 
-                        string saveName = DateTime.Now.ToString("yyyyMMddHHmmss") + randomStr + fileExtension; // 保存文件名称
-                        filePaths = upPathsT + saveName;
-                        upFiles.SaveAs(filePath + saveName);
-                    }
-                }
-                else
-                {
-                    return Success("true");
-                }
-                return Success("true", filePaths);
-
-            }
-            catch (Exception ex)
-            {
-                return Success("false", ex.Message);
-            }
-        }
+         
     }
 }

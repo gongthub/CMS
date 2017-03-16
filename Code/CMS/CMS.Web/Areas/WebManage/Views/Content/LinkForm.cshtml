@@ -32,11 +32,17 @@
             return false;
         }
 
-        var filePaths = uploadImg();
+        var jsonData = uploadImg("IconUp"); 
         var postData = $("#form1").formSerialize();
         postData["Content"] = htmlEncode(postData["Content"]);
-        postData["ColumnId"] = columnId;
-        postData["Icon"] = filePaths;
+        postData["ColumnId"] = columnId; 
+        postData["Icon"] = jsonData.Sys_FilePath;
+
+        postData["Sys_FileName"] = jsonData.Sys_FileName;
+        postData["Sys_FileOldName"] = jsonData.Sys_FileOldName;
+        postData["Sys_ExtName"] = jsonData.Sys_ExtName;
+        postData["Sys_FilePath"] = jsonData.Sys_FilePath;
+        postData["Sys_FileMd5"] = jsonData.Sys_FileMd5;
         $.submitForm({
             url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
             param: postData,
@@ -44,37 +50,7 @@
                 $.currentWindow().$("#gridList").trigger("reloadGrid");
             }
         });
-    }
-
-    //上传图片
-    function uploadImg() {
-        var filePath = "";
-        var formData = new FormData();
-        formData.append("fileicon", $("#IconUp")[0].files[0]);
-        $.ajax({
-            type: "POST",
-            url: "/SystemManage/UpFile/UploadImg",
-            dataType: "json",
-            data: formData,
-            async: false,
-            // 告诉jQuery不要去处理发送的数据
-            processData: false,
-            // 告诉jQuery不要去设置Content-Type请求头
-            contentType: false,
-            success: function (data) {
-                var jsonData = eval(data);
-                if (jsonData.message == "true") {
-                    if (jsonData.data != null && jsonData.data != undefined) {
-                        filePath = jsonData.data;
-                    }
-                } else {
-                    alert(jsonData.data);
-                    return;
-                }
-            }
-        });
-        return filePath;
-    }
+    } 
 
 </script>
 <form id="form1" enctype="multipart/form-data">

@@ -1,5 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -44,11 +45,11 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue)
+        public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
             try
             {
-                webSiteApp.SubmitForm(moduleEntity, keyValue);
+                webSiteApp.SubmitForm(moduleEntity, keyValue, upFileentity);
                 return Success("操作成功。");
             }
             catch (Exception e)

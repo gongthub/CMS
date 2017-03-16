@@ -46,6 +46,13 @@ namespace CMS.Application.SystemSecurity
             dbBackupEntity.Id = Common.GuId();
             dbBackupEntity.EnabledMark = true;
             dbBackupEntity.BackupTime = DateTime.Now;
+              
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                dbBackupEntity.CreatorUserId = LoginInfo.UserId;
+            }
+            dbBackupEntity.CreatorTime = DateTime.Now;
             service.ExecuteDbBackup(dbBackupEntity);
         }
     }

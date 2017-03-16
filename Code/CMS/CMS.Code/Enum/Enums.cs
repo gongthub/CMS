@@ -20,5 +20,13 @@ namespace CMS.Code
             [Description("连接")]
             Link = 3
         }
+        public enum UpFileModule
+        {
+            [Description("C_Contents")]
+            Contents = 0,
+            [Description("Sys_WebSites")]
+            WebSites = 1,
+
+        }
     }
 }

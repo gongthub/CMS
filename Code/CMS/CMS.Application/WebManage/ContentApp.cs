@@ -1,5 +1,7 @@
 ﻿using CMS.Application.Comm;
+using CMS.Application.SystemManage;
 using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -133,6 +135,34 @@ namespace CMS.Application.WebManage
                     SubmitForm(moduleEntity, moduleEntity.Id);
                 }
             }
+        }
+        public void SubmitForm(ContentEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
+        {
+            if (!string.IsNullOrEmpty(keyValue))
+            {
+                moduleEntity.Modify(keyValue);
+                service.Update(moduleEntity);
+            }
+            else
+            {
+                moduleEntity.Create();
+                service.Insert(moduleEntity, out keyValue);
+
+                string mIds = moduleEntity.ColumnId;
+                ColumnsApp c_ModulesApp = new ColumnsApp();
+                ColumnsEntity cmModel = c_ModulesApp.GetForm(mIds);
+                if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                {
+                    string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                    moduleEntity.UrlAddress = urlAddress;
+                    SubmitForm(moduleEntity, moduleEntity.Id);
+                }
+            }
+            //更新上传文件表
+            UpFileApp upFileApp = new UpFileApp();
+            upFileentity.Sys_ParentId = keyValue;
+            upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
+            upFileApp.AddUpFileEntity(upFileentity);
         }
 
 
