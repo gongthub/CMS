@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Common\UpFileDTO.cs" />
     <Compile Include="Entity\SystemManage\AreaEntity.cs" />
     <Compile Include="Entity\SystemManage\ItemsDetailEntity.cs" />
     <Compile Include="Entity\SystemManage\ItemsEntity.cs" />

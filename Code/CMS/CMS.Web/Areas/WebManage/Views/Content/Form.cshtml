@@ -87,7 +87,8 @@
             return false;
         }
 
-        var filePaths = uploadImg();
+        var jsonData = uploadImg();
+        alert(jsonData.data.FileName);
         var postData = $("#form1").formSerialize();
         //var postData = $("#form1").serialize();
         postData["Content"] = htmlEncode(postData["Content"]);
@@ -103,7 +104,7 @@
     }
     //上传图片
     function uploadImg() {
-        var filePath = "";
+        var dataret = {};
         var formData = new FormData();
         formData.append("fileicon", $("#IconUp")[0].files[0]);
         $.ajax({
@@ -120,7 +121,8 @@
                 var jsonData = eval(data);
                 if (jsonData.message == "true") {
                     if (jsonData.data != null && jsonData.data != undefined) {
-                        filePath = jsonData.data;
+                        //filePath = jsonData.data; 
+                        dataret = jsonData.data;
                     }
                 } else {
                     alert(jsonData.data);
@@ -128,7 +130,7 @@
                 }
             }
         });
-        return filePath;
+        return dataret;
     }
 </script>
 <form id="form1" enctype="multipart/form-data">

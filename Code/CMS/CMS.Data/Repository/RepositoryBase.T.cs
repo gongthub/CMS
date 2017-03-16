@@ -28,6 +28,24 @@ namespace CMS.Data
             dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             return dbcontext.SaveChanges();
         }
+        public int Insert(TEntity entity, out string Id)
+        {
+            Id = string.Empty;
+            RemoveHoldingEntityInContext(entity);
+            dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
+
+            PropertyInfo[] props = entity.GetType().GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                if (prop.GetValue(entity, null) != null)
+                {
+                    if (prop.Name.ToLower() == "Id".ToLower())
+                        Id = prop.GetValue("Id").ToString();
+                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                }
+            }
+            return dbcontext.SaveChanges();
+        }
         public int Insert(List<TEntity> entitys)
         {
             foreach (var entity in entitys)

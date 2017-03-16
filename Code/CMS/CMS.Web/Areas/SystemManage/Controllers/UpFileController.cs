@@ -1,5 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -19,21 +20,21 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                string filePaths = string.Empty;
+                UpFileDTO entity = new UpFileDTO();
                 if (HttpContext.Request.Files.Count > 0)
                 {
                     var upFiles = HttpContext.Request.Files[0];
                     if (upFiles != null)
                     {
                         CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
-                        filePaths = upfileApp.UpLoadImg(upFiles);
+                        entity = upfileApp.UpLoadImg(upFiles);
                     }
                 }
                 else
                 {
                     return Success("true");
                 }
-                return Success("true", filePaths);
+                return Success("true", entity);
 
             }
             catch (Exception ex)

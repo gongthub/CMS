@@ -1,4 +1,6 @@
-﻿using CMS.Domain.IRepository.SystemManage;
+﻿using CMS.Domain.Entity.Common;
+using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
 using System;
 using System.Collections.Generic;
@@ -64,13 +66,15 @@ namespace CMS.Application.SystemManage
         }
         #endregion
 
+        #region 上传图片
         /// <summary>
         /// 上传图片
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public string UpLoadImg(HttpPostedFileBase file)
+        public UpFileDTO UpLoadImg(HttpPostedFileBase file)
         {
+            UpFileDTO entity = new UpFileDTO();
             string filePaths = string.Empty;
             string upPaths = GetFilePathByDate();
             string upPathsT = upPaths.Replace("~", "");
@@ -81,14 +85,21 @@ namespace CMS.Application.SystemManage
 
                 string fileName = Path.GetFileName(file.FileName);// 原始文件名称
                 string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
-                 
+                string newFileName = GetFileNameByTime();
+
                 // 文件上传后的保存路径 
                 string filePath = InitSavePath(upPaths);
-                string saveName = GetFileNameByTime() + fileExtension; // 保存文件名称
+                string saveName = newFileName + fileExtension; // 保存文件名称
                 filePaths = upPathsT + saveName;
                 file.SaveAs(filePath + saveName);
+
+                entity.FileName = newFileName;
+                entity.FileOldName = saveName;
+                entity.ExtName = fileExtension;
+                entity.FilePath = filePaths;
+                entity.FileMd5 = Code.Md5.MD5File(filePaths);
             }
-            return filePaths;
+            return entity;
         }
 
         #region 上传图片验证
@@ -134,7 +145,7 @@ namespace CMS.Application.SystemManage
                 if (formatImgs != "*")
                 {
                     string[] imgs = formatImgs.Split('|');
-                    bState = imgs.Contains(formatImgs);
+                    bState = imgs.Contains(formats);
                 }
                 else
                 {
@@ -158,7 +169,7 @@ namespace CMS.Application.SystemManage
                 if (formatImgs != "*")
                 {
                     string[] imgs = formatImgs.Split('|');
-                    bState = imgs.Contains(formatImgs);
+                    bState = imgs.Contains(formats);
                 }
                 else
                 {
@@ -218,7 +229,24 @@ namespace CMS.Application.SystemManage
             maxSize = sizeT;
             return bState;
         }
+
+        #endregion
         
         #endregion
+
+
+        /// <summary>
+        /// 保存上传文件信息
+        /// </summary>
+        /// <param name="upFileEntity"></param>
+        /// <returns></returns>
+        public bool SaveUpFileEntity(UpFileEntity upFileEntity)
+        {
+            bool bState = false;
+              
+
+
+            return bState;
+        }
     }
 }

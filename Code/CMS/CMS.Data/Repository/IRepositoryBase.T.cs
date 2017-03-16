@@ -15,6 +15,7 @@ namespace CMS.Data
     {
         int Insert(TEntity entity);
         int Insert(List<TEntity> entitys);
+        int Insert(TEntity entity, out string Id);
         int Update(TEntity entity);
         //物理删除
         int Delete(TEntity entity);
