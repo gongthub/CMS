@@ -22,6 +22,7 @@ namespace CMS.Application.SystemManage
                 expression = expression.Or(t => t.EnCode.Contains(keyword));
             }
             expression = expression.And(t => t.Category == 1);
+            expression = expression.And(t => t.DeleteMark!=true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
         public RoleEntity GetForm(string keyValue)
@@ -30,7 +31,7 @@ namespace CMS.Application.SystemManage
         }
         public void DeleteForm(string keyValue)
         {
-            service.DeleteForm(keyValue);
+            service.DeleteById(m => m.Id == keyValue);
         }
         public void SubmitForm(RoleEntity roleEntity, string[] permissionIds, string keyValue)
         {

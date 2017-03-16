@@ -23,6 +23,7 @@ namespace CMS.Application.SystemManage
                 expression = expression.And(t => t.ItemName.Contains(keyword));
                 expression = expression.Or(t => t.ItemCode.Contains(keyword));
             }
+                expression = expression.Or(t => t.DeleteMark!=true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
         public List<ItemsDetailEntity> GetItemList(string enCode)
@@ -35,7 +36,7 @@ namespace CMS.Application.SystemManage
         }
         public void DeleteForm(string keyValue)
         {
-            service.Delete(t => t.Id == keyValue);
+            service.DeleteById(t => t.Id == keyValue);
         }
         public void SubmitForm(ItemsDetailEntity itemsDetailEntity, string keyValue)
         {

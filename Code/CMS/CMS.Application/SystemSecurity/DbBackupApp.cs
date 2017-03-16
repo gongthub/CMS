@@ -30,6 +30,7 @@ namespace CMS.Application.SystemSecurity
                         break;
                 }
             }
+            expression = expression.And(t => t.DeleteMark != true);
             return service.IQueryable(expression).OrderByDescending(t => t.BackupTime).ToList();
         }
         public DbBackupEntity GetForm(string keyValue)
@@ -38,7 +39,7 @@ namespace CMS.Application.SystemSecurity
         }
         public void DeleteForm(string keyValue)
         {
-            service.DeleteForm(keyValue);
+            service.DeleteById(m => m.Id == keyValue);
         }
         public void SubmitForm(DbBackupEntity dbBackupEntity)
         {

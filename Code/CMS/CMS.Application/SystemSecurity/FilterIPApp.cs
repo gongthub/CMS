@@ -18,6 +18,7 @@ namespace CMS.Application.SystemSecurity
             {
                 expression = expression.And(t => t.StartIP.Contains(keyword));
             }
+            expression = expression.And(t => t.DeleteMark != true);
             return service.IQueryable(expression).OrderByDescending(t => t.DeleteTime).ToList();
         }
         public FilterIPEntity GetForm(string keyValue)
@@ -26,7 +27,7 @@ namespace CMS.Application.SystemSecurity
         }
         public void DeleteForm(string keyValue)
         {
-            service.Delete(t => t.Id == keyValue);
+            service.DeleteById(t => t.Id == keyValue);
         }
         public void SubmitForm(FilterIPEntity filterIPEntity, string keyValue)
         {

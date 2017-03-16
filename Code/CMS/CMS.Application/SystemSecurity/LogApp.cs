@@ -64,6 +64,25 @@ namespace CMS.Application.SystemSecurity
             expression = expression.And(t => t.Date <= operateTime);
             service.Delete(expression);
         }
+        public void RemoveLogByTime(string keepTime)
+        {
+            DateTime operateTime = DateTime.Now;
+            if (keepTime == "7")            //保留近一周
+            {
+                operateTime = DateTime.Now.AddDays(-7);
+            }
+            else if (keepTime == "1")       //保留近一个月
+            {
+                operateTime = DateTime.Now.AddMonths(-1);
+            }
+            else if (keepTime == "3")       //保留近三个月
+            {
+                operateTime = DateTime.Now.AddMonths(-3);
+            }
+            var expression = ExtLinq.True<LogEntity>();
+            expression = expression.And(t => t.Date <= operateTime);
+            service.DeleteById(expression);
+        }
         public void WriteDbLog(bool result, string resultLog)
         {
             LogEntity logEntity = new LogEntity();

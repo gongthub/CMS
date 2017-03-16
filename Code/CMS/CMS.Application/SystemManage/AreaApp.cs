@@ -13,7 +13,7 @@ namespace CMS.Application.SystemManage
 
         public List<AreaEntity> GetList()
         {
-            return service.IQueryable().ToList();
+            return service.IQueryable(m => m.DeleteMark != true).ToList();
         }
         public AreaEntity GetForm(string keyValue)
         {
@@ -27,7 +27,7 @@ namespace CMS.Application.SystemManage
             }
             else
             {
-                service.Delete(t => t.Id == keyValue);
+                service.DeleteById(t => t.Id == keyValue);
             }
         }
         public void SubmitForm(AreaEntity areaEntity, string keyValue)

@@ -13,7 +13,7 @@ namespace CMS.Application.SystemManage
 
         public List<OrganizeEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.CreatorTime).ToList();
+            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.CreatorTime).ToList();
         }
         public OrganizeEntity GetForm(string keyValue)
         {
@@ -27,7 +27,7 @@ namespace CMS.Application.SystemManage
             }
             else
             {
-                service.Delete(t => t.Id == keyValue);
+                service.DeleteById(t => t.Id == keyValue);
             }
         }
         public void SubmitForm(OrganizeEntity organizeEntity, string keyValue)

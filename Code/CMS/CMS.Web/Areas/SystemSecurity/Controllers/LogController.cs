@@ -36,7 +36,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SubmitRemoveLog(string keepTime)
         {
-            logApp.RemoveLog(keepTime);
+            logApp.RemoveLogByTime(keepTime);
             return Success("清空成功。");
         }
     }

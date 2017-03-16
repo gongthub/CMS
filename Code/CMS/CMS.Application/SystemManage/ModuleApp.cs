@@ -28,7 +28,7 @@ namespace CMS.Application.SystemManage
             }
             else
             {
-                service.Delete(t => t.Id == keyValue);
+                service.DeleteById(t => t.Id == keyValue);
             }
         }
         public void SubmitForm(ModuleEntity moduleEntity, string keyValue)

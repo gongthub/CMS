@@ -19,6 +19,7 @@ namespace CMS.Application.SystemManage
             {
                 expression = expression.And(t => t.ModuleId == moduleId);
             }
+            expression = expression.And(t => t.DeleteMark != true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
         public ModuleButtonEntity GetForm(string keyValue)
@@ -33,7 +34,7 @@ namespace CMS.Application.SystemManage
             }
             else
             {
-                service.Delete(t => t.Id == keyValue);
+                service.DeleteById(t => t.Id == keyValue);
             }
         }
         public void SubmitForm(ModuleButtonEntity moduleButtonEntity, string keyValue)
