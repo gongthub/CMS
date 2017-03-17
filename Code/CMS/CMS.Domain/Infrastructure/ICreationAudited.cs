@@ -6,6 +6,7 @@ namespace CMS.Domain
     {
         string Id { get; set; }
         string CreatorUserId { get; set; }
-        DateTime? CreatorTime { get; set; }
+        DateTime? CreatorTime { get; set; } 
+        bool? DeleteMark { get; set; }
     }
 }

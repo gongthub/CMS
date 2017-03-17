@@ -20,7 +20,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         {
             var data = roleApp.GetList(keyword);
             return Content(data.ToJson());
-        }
+        } 
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)

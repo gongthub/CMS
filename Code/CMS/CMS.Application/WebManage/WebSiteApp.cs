@@ -42,6 +42,26 @@ namespace CMS.Application.WebManage
             }
             return service.FindList(expression, pagination);
         }
+        public List<WebSiteEntity> GetListForUserId()
+        {
+            var expression = ExtLinq.True<WebSiteEntity>();
+            UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
+            List<string> webSiteIds = userWebSiteApp.GetWebSiteIds();
+            expression = expression.And(t => webSiteIds.Contains(t.Id));  
+            return service.IQueryable(expression).ToList();
+        }
+        public List<WebSiteEntity> GetListForUserId(Pagination pagination, string keyword)
+        {
+            var expression = ExtLinq.True<WebSiteEntity>();
+            UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
+            List<string> webSiteIds = userWebSiteApp.GetWebSiteIds();
+            expression = expression.And(t => webSiteIds.Contains(t.Id));
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            return service.FindList(expression, pagination);
+        }
         public WebSiteEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

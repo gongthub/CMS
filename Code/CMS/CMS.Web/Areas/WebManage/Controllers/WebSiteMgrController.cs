@@ -22,7 +22,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             var data = new
             {
-                rows = webSiteApp.GetList(pagination, keyword),
+                rows = webSiteApp.GetListForUserId(pagination, keyword),
                 total = pagination.total,
                 page = pagination.page,
                 records = pagination.records
@@ -35,7 +35,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetTreeSelectJson(string userId)
         {
-            var data = webSiteApp.GetList();
+            var data = webSiteApp.GetListForUserId();
             var treeList = new List<TreeViewModel>();
             var userWebSitedata = new List<UserWebSiteEntity>();
             if (!string.IsNullOrEmpty(userId))

@@ -14,7 +14,8 @@ namespace CMS.Domain
             {
                 entity.CreatorUserId = LoginInfo.UserId;
             }
-            entity.CreatorTime = DateTime.Now;
+            entity.DeleteMark = false;
+            entity.CreatorTime = DateTime.Now; 
         }
         public void Modify(string keyValue)
         {

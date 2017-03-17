@@ -33,16 +33,18 @@ namespace CMS.Code
         /// </summary>
         public enum UserLevel
         {
+            [Description("系统用户")]
+            SystemUser = 0,
             [Description("站点用户")]
-            WebSiteName = 0,
+            WebSiteUser = 1,
             [Description("注册用户")]
-            RegisterUser = 1,
+            RegisterUser = 2,
             [Description("普通会员")]
-            OrdinaryUser = 2,
+            OrdinaryUser = 3,
             [Description("金牌会员")]
-            GoldUser = 3,
+            GoldUser = 4,
             [Description("钻石会员")]
-            DiamondUser = 4,
+            DiamondUser = 5,
         }
     }
 }

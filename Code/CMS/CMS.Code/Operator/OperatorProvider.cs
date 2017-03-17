@@ -6,7 +6,7 @@
         {
             get { return new OperatorProvider(); }
         }
-        private string LoginUserKey = "cms_loginuserkey_2016";
+        private string LoginUserKey = "CMS_LOGIN_USER_KEY";
         private string LoginProvider = Configs.GetValue("LoginProvider");
 
         public OperatorModel GetCurrent()
@@ -33,8 +33,8 @@
             {
                 WebHelper.WriteSession(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()));
             }
-            WebHelper.WriteCookie("cms_mac", Md5.md5(Net.GetMacByNetworkInterface().ToJson(), 32));
-            WebHelper.WriteCookie("cms_licence", Licence.GetLicence());
+            //WebHelper.WriteCookie("cms_mac", Md5.md5(Net.GetMacByNetworkInterface().ToJson(), 32));
+            //WebHelper.WriteCookie("cms_licence", Licence.GetLicence());
         }
         public void RemoveCurrent()
         {

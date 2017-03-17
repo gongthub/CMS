@@ -35,9 +35,10 @@ namespace CMS.Web.Controllers
         {
             var itemdata = new ItemsDetailApp().GetList();
             Dictionary<string, object> dictionaryItem = new Dictionary<string, object>();
-            foreach (var item in new ItemsApp().GetList())
+            List<ItemsEntity> itemEntity= new ItemsApp().GetList();
+            foreach (var item in itemEntity)
             {
-                var dataItemList = itemdata.FindAll(t => t.ItemId.Equals(item.Id));
+                var dataItemList = itemdata.FindAll(t => t.ItemId == item.Id);
                 Dictionary<string, string> dictionaryItemList = new Dictionary<string, string>();
                 foreach (var itemList in dataItemList)
                 {

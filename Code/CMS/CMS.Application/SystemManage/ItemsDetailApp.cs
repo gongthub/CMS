@@ -23,12 +23,15 @@ namespace CMS.Application.SystemManage
                 expression = expression.And(t => t.ItemName.Contains(keyword));
                 expression = expression.Or(t => t.ItemCode.Contains(keyword));
             }
-                expression = expression.Or(t => t.DeleteMark!=true);
+            expression = expression.And(t => t.DeleteMark != true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {
-            return service.GetItemList(enCode);
+            List<ItemsDetailEntity> lItemEntity = new List<ItemsDetailEntity>();
+            lItemEntity = service.GetItemList(enCode);
+            lItemEntity = InitItemDetails(enCode, lItemEntity);
+            return lItemEntity;
         }
         public ItemsDetailEntity GetForm(string keyValue)
         {
@@ -50,6 +53,32 @@ namespace CMS.Application.SystemManage
                 itemsDetailEntity.Create();
                 service.Insert(itemsDetailEntity);
             }
+        }
+
+        private List<ItemsDetailEntity> InitItemDetails(string enCode, List<ItemsDetailEntity> lItemEntity)
+        {
+            switch (enCode)
+            {
+                case "UserLevel":
+                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    if (LoginInfo != null)
+                    {
+                        if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
+                        {
+                            lItemEntity = lItemEntity.FindAll(t => t.ItemCode == LoginInfo.UserLevel.ToString());
+                        }
+                        else
+                        {
+                            if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
+                            {
+                                lItemEntity = lItemEntity.FindAll(t => t.ItemCode == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            return lItemEntity;
         }
     }
 }

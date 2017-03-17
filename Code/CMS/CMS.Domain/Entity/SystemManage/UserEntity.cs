@@ -4,7 +4,7 @@ namespace CMS.Domain.Entity.SystemManage
 {
     public class UserEntity : IEntity<UserEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
-        public string Id { get; set; }
+        public string Id { get; set; } 
         public string Account { get; set; }
         public string RealName { get; set; }
         public string NickName { get; set; }

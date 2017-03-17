@@ -66,7 +66,7 @@ namespace CMS.Web.Controllers
                     operatorModel.CompanyId = userEntity.OrganizeId;
                     operatorModel.DepartmentId = userEntity.DepartmentId;
                     operatorModel.RoleId = userEntity.RoleId;
-                    operatorModel.UserLevel = userEntity.UserLevel == null ? (int)Code.Enums.UserLevel.WebSiteName : (int)userEntity.UserLevel;
+                    operatorModel.UserLevel = userEntity.UserLevel == null ? (int)Code.Enums.UserLevel.WebSiteUser : (int)userEntity.UserLevel;
                     operatorModel.LoginIPAddress = Net.Ip;
                     operatorModel.LoginIPAddressName = Net.GetLocation(operatorModel.LoginIPAddress);
                     operatorModel.LoginTime = DateTime.Now;

@@ -1,7 +1,9 @@
 ﻿using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.SystemManage;
+using CMS.Repository.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace CMS.Application.SystemManage
     public class UserWebSiteApp
     {
         private IUserWebSiteRepository service = new UserWebSiteRepository();
+        private IWebSiteRepository webSiteservice = new WebSiteRepository();
 
         public List<UserWebSiteEntity> GetList(Pagination pagination, string userId)
         {
@@ -28,6 +31,37 @@ namespace CMS.Application.SystemManage
         public List<UserWebSiteEntity> GetList(string userId)
         {
             return service.IQueryable(t => t.UserId == userId && t.DeleteMark != true).ToList();
+        }
+        /// <summary>
+        /// 获取当前用户所有站点Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<string> GetWebSiteIds()
+        {
+            List<string> lstrids = new List<string>();
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.IsSystem)
+                {
+                    lstrids = webSiteservice.IQueryable(t => t.DeleteMark != true).Select(m => m.Id).ToList();
+                }
+                else
+                {
+                    lstrids = service.IQueryable(t => t.UserId == LoginInfo.UserId && t.DeleteMark != true).Select(m => m.WebSiteId).ToList();
+                }
+            }
+            return lstrids;
+        }
+        /// <summary>
+        /// 根据用户获取所属站点
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<string> GetWebSiteIds(string userId)
+        {
+            return service.IQueryable(t => t.UserId == userId && t.DeleteMark != true).Select(m => m.WebSiteId).ToList();
         }
         /// <summary>
         /// 保存用户站点关系

@@ -23,6 +23,19 @@ namespace CMS.Application.SystemManage
             }
             expression = expression.And(t => t.Account != "admin");
             expression = expression.And(t => t.DeleteMark != true);
+
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
+            {
+                expression = expression.And(t => t.UserLevel == LoginInfo.UserLevel && t.Id == LoginInfo.UserId);
+            }
+            else
+            {
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
+                {
+                    expression = expression.And(t => t.Id == LoginInfo.UserId || t.CreatorUserId == LoginInfo.UserId);
+                }
+            }
             return service.FindList(expression, pagination);
         }
         public UserEntity GetForm(string keyValue)

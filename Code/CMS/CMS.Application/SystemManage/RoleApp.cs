@@ -22,7 +22,23 @@ namespace CMS.Application.SystemManage
                 expression = expression.Or(t => t.EnCode.Contains(keyword));
             }
             expression = expression.And(t => t.Category == 1);
-            expression = expression.And(t => t.DeleteMark!=true);
+            expression = expression.And(t => t.DeleteMark != true);
+
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
+                {
+                    expression = expression.And(t => t.Type == LoginInfo.UserLevel.ToString());
+                }
+                else
+                {
+                    if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
+                    {
+                        expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                    }
+                }
+            }
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
         public RoleEntity GetForm(string keyValue)
@@ -37,10 +53,12 @@ namespace CMS.Application.SystemManage
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
+                roleEntity.Modify(keyValue);
                 roleEntity.Id = keyValue;
             }
             else
             {
+                roleEntity.Create();
                 roleEntity.Id = Common.GuId();
             }
             var moduledata = moduleApp.GetList();
