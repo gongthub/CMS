@@ -36,9 +36,9 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue)
+        public ActionResult SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string webSiteIds)
         {
-            userApp.SubmitForm(userEntity, userLogOnEntity, keyValue);
+            userApp.SubmitForm(userEntity, userLogOnEntity, keyValue, webSiteIds.Split(','));
             return Success("操作成功。");
         }
         [HttpPost]

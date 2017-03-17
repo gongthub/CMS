@@ -62,6 +62,7 @@
     <Compile Include="SystemManage\UpFileApp.cs" />
     <Compile Include="SystemManage\UserApp.cs" />
     <Compile Include="SystemManage\UserLogOnApp.cs" />
+    <Compile Include="SystemManage\UserWebSiteApp.cs" />
     <Compile Include="SystemSecurity\DbBackupApp.cs" />
     <Compile Include="SystemSecurity\FilterIPApp.cs" />
     <Compile Include="SystemSecurity\LogApp.cs" />

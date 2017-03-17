@@ -51,6 +51,7 @@
     <Compile Include="SystemManage\UpFileRepository.cs" />
     <Compile Include="SystemManage\UserLogOnRepository.cs" />
     <Compile Include="SystemManage\UserRepository.cs" />
+    <Compile Include="SystemManage\UserWebSiteRepository.cs" />
     <Compile Include="SystemSecurity\DbBackupRepository.cs" />
     <Compile Include="SystemSecurity\FilterIPRepository.cs" />
     <Compile Include="SystemSecurity\LogRepository.cs" />

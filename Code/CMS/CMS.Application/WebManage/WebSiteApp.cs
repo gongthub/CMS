@@ -18,7 +18,7 @@ namespace CMS.Application.WebManage
 
         public List<WebSiteEntity> GetList()
         {
-            return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
         }
 
         public WebSiteEntity GetFormByName(string Name)
@@ -82,7 +82,8 @@ namespace CMS.Application.WebManage
                 else
                 {
                     moduleEntity.Create();
-                    service.Insert(moduleEntity, out keyValue);
+                    service.Insert(moduleEntity);
+                    keyValue = moduleEntity.Id;
                 }
                 //更新上传文件表
                 UpFileApp upFileApp = new UpFileApp();

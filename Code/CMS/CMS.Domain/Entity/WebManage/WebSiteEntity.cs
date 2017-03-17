@@ -12,6 +12,10 @@ namespace CMS.Domain.Entity.WebManage
         /// Id
         /// </summary>		
         public string Id { get; set; }
+        /// <summary>
+        /// ParentId
+        /// </summary>		
+        public string ParentId { get; set; }
 
         /// <summary>
         /// FullName

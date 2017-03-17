@@ -15,6 +15,7 @@ namespace CMS.Domain.Entity.SystemManage
         public string Email { get; set; }
         public string WeChat { get; set; }
         public string ManagerId { get; set; }
+        public int? UserLevel { get; set; }
         public int? SecurityLevel { get; set; }
         public string Signature { get; set; }
         public string OrganizeId { get; set; }

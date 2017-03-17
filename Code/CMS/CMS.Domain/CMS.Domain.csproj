@@ -54,6 +54,7 @@
     <Compile Include="Entity\SystemManage\UpFileEntity.cs" />
     <Compile Include="Entity\SystemManage\UserEntity.cs" />
     <Compile Include="Entity\SystemManage\UserLogOnEntity.cs" />
+    <Compile Include="Entity\SystemManage\UserWebSiteEntity.cs" />
     <Compile Include="Entity\SystemSecurity\DbBackupEntity.cs" />
     <Compile Include="Entity\SystemSecurity\FilterIPEntity.cs" />
     <Compile Include="Entity\SystemSecurity\LogEntity.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="IRepository\SystemManage\IUpFileRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserLogOnRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserRepository.cs" />
+    <Compile Include="IRepository\SystemManage\IUserWebSiteRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IDbBackupRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\ILogRepository.cs" />

@@ -1,6 +1,8 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.SystemManage;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
+using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
     public class WebSiteMgrController : ControllerBase
     {
         private WebSiteApp webSiteApp = new WebSiteApp();
+        private UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
 
 
         [HttpGet]
@@ -25,6 +28,37 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 records = pagination.records
             };
             return Content(data.ToJson());
+        }
+
+
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetTreeSelectJson(string userId)
+        {
+            var data = webSiteApp.GetList();
+            var treeList = new List<TreeViewModel>();
+            var userWebSitedata = new List<UserWebSiteEntity>();
+            if (!string.IsNullOrEmpty(userId))
+            {
+                userWebSitedata = userWebSiteApp.GetList(userId);
+            }
+            foreach (WebSiteEntity item in data)
+            {
+                TreeViewModel tree = new TreeViewModel();
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                tree.id = item.Id;
+                tree.text = item.FullName;
+                tree.value = item.ShortName;
+                tree.parentId = item.ParentId == null ? "0" : item.ParentId;
+                tree.isexpand = true;
+                tree.complete = true;
+                tree.showcheck = true;
+                tree.hasChildren = true;
+                tree.checkstate = userWebSitedata.Count(t => t.WebSiteId == item.Id);
+                tree.img = "";
+                treeList.Add(tree);
+            }
+            return Content(treeList.TreeViewJson());
         }
 
         [HttpGet]

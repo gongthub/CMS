@@ -146,7 +146,8 @@ namespace CMS.Application.WebManage
             else
             {
                 moduleEntity.Create();
-                service.Insert(moduleEntity, out keyValue);
+                service.Insert(moduleEntity);
+                keyValue = moduleEntity.Id;
 
                 string mIds = moduleEntity.ColumnId;
                 ColumnsApp c_ModulesApp = new ColumnsApp();

@@ -37,5 +37,6 @@ namespace CMS.Repository.SystemManage
                 db.Commit();
             }
         }
+       
     }
 }

@@ -57,6 +57,7 @@
     <Compile Include="SystemManage\UpFileMap.cs" />
     <Compile Include="SystemManage\UserLogOnMap.cs" />
     <Compile Include="SystemManage\UserMap.cs" />
+    <Compile Include="SystemManage\UserWebSiteMap.cs" />
     <Compile Include="SystemSecurity\DbBackupMap.cs" />
     <Compile Include="SystemSecurity\FilterIPMap.cs" />
     <Compile Include="SystemSecurity\LogMap.cs" />

@@ -8,7 +8,7 @@ namespace CMS.Code
         public static string TreeViewJson(this List<TreeViewModel> data, string parentId = "0")
         {
             StringBuilder strJson = new StringBuilder();
-            List<TreeViewModel> item = data.FindAll(t => t.parentId == parentId);
+            List<TreeViewModel> item = data.FindAll(t => t.parentId == parentId); 
             strJson.Append("[");
             if (item.Count > 0)
             {

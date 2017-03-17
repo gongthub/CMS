@@ -14,8 +14,7 @@ namespace CMS.Data
     public interface IRepositoryBase<TEntity> where TEntity : class,new()
     {
         int Insert(TEntity entity);
-        int Insert(List<TEntity> entitys);
-        int Insert(TEntity entity, out string Id);
+        int Insert(List<TEntity> entitys); 
         int Update(TEntity entity);
         //物理删除
         int Delete(TEntity entity);
@@ -32,5 +31,6 @@ namespace CMS.Data
         List<TEntity> FindList(string strSql, DbParameter[] dbParameter);
         List<TEntity> FindList(Pagination pagination);
         List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate, Pagination pagination);
+         
     }
 }

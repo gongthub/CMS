@@ -10,7 +10,7 @@ namespace CMS.Code
     public class Enums
     {
         public enum ModuleType
-        { 
+        {
             [Description("导航")]
             Navigation = 0,
             [Description("内容")]
@@ -27,6 +27,22 @@ namespace CMS.Code
             [Description("Sys_WebSites")]
             WebSites = 1,
 
+        }
+        /// <summary>
+        /// 用户级别
+        /// </summary>
+        public enum UserLevel
+        {
+            [Description("站点用户")]
+            WebSiteName = 0,
+            [Description("注册用户")]
+            RegisterUser = 1,
+            [Description("普通会员")]
+            OrdinaryUser = 2,
+            [Description("金牌会员")]
+            GoldUser = 3,
+            [Description("钻石会员")]
+            DiamondUser = 4,
         }
     }
 }
