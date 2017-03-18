@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
-    [WebSiteMgr]
+    [HandlerWebSiteMgr]
     public class ContentController : ControllerBase
     {
          

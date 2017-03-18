@@ -33,6 +33,13 @@ namespace CMS.Application.SystemManage
             lItemEntity = InitItemDetails(enCode, lItemEntity);
             return lItemEntity;
         }
+        public List<ItemsDetailEntity> GetItemList(string enCode, string keyValue)
+        {
+            List<ItemsDetailEntity> lItemEntity = new List<ItemsDetailEntity>();
+            lItemEntity = service.GetItemList(enCode);
+            lItemEntity = InitItemDetails(enCode, lItemEntity, keyValue);
+            return lItemEntity;
+        }
         public ItemsDetailEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
@@ -72,6 +79,51 @@ namespace CMS.Application.SystemManage
                             if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
                             {
                                 lItemEntity = lItemEntity.FindAll(t => t.ItemCode == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            return lItemEntity;
+        }
+
+        private List<ItemsDetailEntity> InitItemDetails(string enCode, List<ItemsDetailEntity> lItemEntity, string keyValue)
+        {
+            switch (enCode)
+            {
+                case "UserLevel":
+                    string strUserLevel = string.Empty;
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        var userEntity = new UserApp().GetForm(keyValue);
+                        if (userEntity != null && userEntity.UserLevel != null)
+                            strUserLevel = userEntity.UserLevel.ToString();
+                    }
+                    else
+                    {
+                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        if (LoginInfo != null && LoginInfo.UserLevel != null)
+                            strUserLevel = LoginInfo.UserLevel.ToString();
+                    }
+                    if (!string.IsNullOrEmpty(strUserLevel))
+                    {
+                        if (strUserLevel == ((int)Code.Enums.UserLevel.WebSiteUser).ToString())
+                        {
+                            lItemEntity = lItemEntity.FindAll(t => t.ItemCode == strUserLevel);
+                        }
+                        else
+                        {
+                            if (strUserLevel == ((int)Code.Enums.UserLevel.RegisterUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.OrdinaryUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.GoldUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.DiamondUser).ToString())
+                            {
+                                if (!string.IsNullOrEmpty(keyValue))
+                                {
+                                    lItemEntity = lItemEntity.FindAll(t => t.ItemCode == strUserLevel || t.ItemCode == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                                }
+                                else
+                                {
+                                    lItemEntity = lItemEntity.FindAll(t => t.ItemCode == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                                }
                             }
                         }
                     }

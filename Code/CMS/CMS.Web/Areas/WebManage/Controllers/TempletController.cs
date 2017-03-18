@@ -1,6 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
-using CMS.Domain.Entity.WebManage;
+using CMS.Domain.Entity.WebManage; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
-    [WebSiteMgr]
+    [HandlerWebSiteMgr]
     public class TempletController : ControllerBase
     {
         private TempletApp templetApp = new TempletApp();

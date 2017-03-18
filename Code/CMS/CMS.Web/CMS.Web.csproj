@@ -471,6 +471,7 @@
     <Compile Include="App_Start\Handler\HandlerAuthorizeAttribute.cs" />
     <Compile Include="App_Start\Handler\HandlerErrorAttribute.cs" />
     <Compile Include="App_Start\Handler\HandlerLoginAttribute.cs" />
+    <Compile Include="App_Start\Handler\HandlerWebSiteMgrAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\BarCodeController.cs" />
     <Compile Include="Areas\ExampleManage\Controllers\PrintController.cs" />

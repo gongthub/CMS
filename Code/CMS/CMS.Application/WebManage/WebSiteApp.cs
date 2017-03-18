@@ -47,8 +47,32 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<WebSiteEntity>();
             UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
             List<string> webSiteIds = userWebSiteApp.GetWebSiteIds();
-            expression = expression.And(t => webSiteIds.Contains(t.Id));  
+            expression = expression.And(t => webSiteIds.Contains(t.Id));
             return service.IQueryable(expression).ToList();
+        }
+        public List<WebSiteEntity> GetListByCreatorId()
+        {
+            var expression = ExtLinq.True<WebSiteEntity>();
+            expression = expression.And(t => t.DeleteMark != true);
+
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
+            }
+            return service.IQueryable(expression).ToList();
+        }
+        public int GetCountByCreatorId()
+        {
+            var expression = ExtLinq.True<WebSiteEntity>();
+            expression = expression.And(t => t.DeleteMark != true);
+
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
+            }
+            return service.IQueryable(expression).Count();
         }
         public List<WebSiteEntity> GetListForUserId(Pagination pagination, string keyword)
         {
@@ -72,48 +96,77 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(WebSiteEntity moduleEntity, string keyValue)
         {
-            if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
+            int iWebSiteNum = 0;
+            if (IsOverNum(out iWebSiteNum))
             {
-                if (!string.IsNullOrEmpty(keyValue))
+
+                if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
                 {
-                    moduleEntity.Modify(keyValue);
-                    service.Update(moduleEntity);
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        moduleEntity.Modify(keyValue);
+                        service.Update(moduleEntity);
+                    }
+                    else
+                    {
+                        moduleEntity.Create();
+                        service.Insert(moduleEntity);
+                    }
+
+                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    if (LoginInfo != null)
+                    {
+                        new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                    }
                 }
                 else
                 {
-                    moduleEntity.Create();
-                    service.Insert(moduleEntity);
+                    throw new Exception("域名已存在，请重新输入！");
                 }
             }
             else
             {
-                throw new Exception("域名已存在，请重新输入！");
+                throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
             }
         }
         public void SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
-            if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
+            int iWebSiteNum = 0;
+            if (IsOverNum(out iWebSiteNum))
             {
-                if (!string.IsNullOrEmpty(keyValue))
+                if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
                 {
-                    moduleEntity.Modify(keyValue);
-                    service.Update(moduleEntity);
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        moduleEntity.Modify(keyValue);
+                        service.Update(moduleEntity);
+                    }
+                    else
+                    {
+                        moduleEntity.Create();
+                        service.Insert(moduleEntity);
+                        keyValue = moduleEntity.Id;
+                    }
+                    //更新上传文件表
+                    UpFileApp upFileApp = new UpFileApp();
+                    upFileentity.Sys_ParentId = keyValue;
+                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
+                    upFileApp.AddUpFileEntity(upFileentity);
+
+                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    if (LoginInfo != null)
+                    {
+                        new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                    }
                 }
                 else
                 {
-                    moduleEntity.Create();
-                    service.Insert(moduleEntity);
-                    keyValue = moduleEntity.Id;
+                    throw new Exception("域名已存在，请重新输入！");
                 }
-                //更新上传文件表
-                UpFileApp upFileApp = new UpFileApp();
-                upFileentity.Sys_ParentId = keyValue;
-                upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
-                upFileApp.AddUpFileEntity(upFileentity);
             }
             else
             {
-                throw new Exception("域名已存在，请重新输入！");
+                throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
             }
         }
 
@@ -153,6 +206,25 @@ namespace CMS.Application.WebManage
                 {
                     retBool = true;
                 }
+            }
+
+            return retBool;
+        }
+        /// <summary>
+        /// 判断当前用户添加网站数量
+        /// </summary>
+        /// <param name="keyId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool IsOverNum(out int iWebSiteNum)
+        {
+            bool retBool = false;
+
+            iWebSiteNum = new UserApp().GetUserWebSiteMaxNum();
+            int userWebSiteNum = GetCountByCreatorId();
+            if (userWebSiteNum < iWebSiteNum)
+            {
+                retBool = true;
             }
 
             return retBool;

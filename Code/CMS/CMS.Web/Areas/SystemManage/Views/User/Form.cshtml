@@ -55,7 +55,8 @@
             url: "/SystemManage/Organize/GetTreeSelectJson",
         });
         $("#RoleId").bindSelect({
-            url: "/SystemManage/Role/GetGridJson",
+            url: "/SystemManage/Role/GetGridJsons",
+            param: {keyValue: keyValue },
             id: "Id",
             text: "FullName"
         });
@@ -63,10 +64,10 @@
             url: "/SystemManage/Duty/GetGridJson",
             id: "Id",
             text: "FullName"
-        }); 
+        });
         $("#UserLevel").bindSelect({
-            url: "/SystemManage/ItemsData/GetSelectJson",
-            param: { enCode: "UserLevel" }
+            url: "/SystemManage/ItemsData/GetSelectJsons",
+            param: { enCode: "UserLevel", keyValue: keyValue }
         });
     }
     function submitForm() {

@@ -110,6 +110,44 @@ namespace CMS.Application.SystemManage
             }
         }
 
+        /// <summary>
+        /// 获取当前用户可最大添加网站数
+        /// </summary>
+        /// <returns></returns>
+        public int GetUserWebSiteMaxNum()
+        {
+            int iWebSiteNum = 0;
+
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.SystemUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_SYSTEMUSER, out iWebSiteNum);
+                }
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_WEBSITEUSER, out iWebSiteNum);
+                }
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_REGISTERUSER, out iWebSiteNum);
+                }
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_ORDINARYUSER, out iWebSiteNum);
+                }
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_GOLDUSER, out iWebSiteNum);
+                }
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
+                {
+                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_DIAMONDUSER, out iWebSiteNum);
+                }
+            }
+            return iWebSiteNum;
+        }
 
 
         /// <summary>

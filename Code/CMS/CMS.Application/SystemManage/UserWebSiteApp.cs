@@ -89,6 +89,23 @@ namespace CMS.Application.SystemManage
         }
 
         /// <summary>
+        /// 添加用户站点关系
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="webSiteIds"></param>
+        public void AddUserWebSite(string UserId, string webSiteIds)
+        {
+            if (!string.IsNullOrEmpty(webSiteIds))
+            {
+                UserWebSiteEntity entity = new UserWebSiteEntity();
+                entity.Create();
+                entity.UserId = UserId;
+                entity.WebSiteId = webSiteIds;
+                entity.EnabledMark = true;
+                service.Insert(entity);
+            }
+        }
+        /// <summary>
         /// 根据UserId删除关系
         /// </summary>
         /// <param name="keyValue"></param>

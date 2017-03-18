@@ -41,6 +41,49 @@ namespace CMS.Application.SystemManage
             }
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
+
+        public List<RoleEntity> GetLists(string keyword)
+        {
+            var expression = ExtLinq.True<RoleEntity>();
+            expression = expression.And(t => t.Category == 1);
+            expression = expression.And(t => t.DeleteMark != true);
+
+            string strUserLevel = string.Empty;
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var userEntity = new UserApp().GetForm(keyword);
+                if (userEntity != null && userEntity.UserLevel != null)
+                    strUserLevel = userEntity.UserLevel.ToString();
+            }
+            else
+            {
+                var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                if (LoginInfo != null && LoginInfo.UserLevel != null)
+                    strUserLevel = LoginInfo.UserLevel.ToString();
+            }
+            if (!string.IsNullOrEmpty(strUserLevel))
+            {
+                if (strUserLevel == ((int)Code.Enums.UserLevel.WebSiteUser).ToString())
+                {
+                    expression = expression.And(t => t.Type == strUserLevel);
+                }
+                else
+                {
+                    if (strUserLevel == ((int)Code.Enums.UserLevel.RegisterUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.OrdinaryUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.GoldUser).ToString() || strUserLevel == ((int)Code.Enums.UserLevel.DiamondUser).ToString())
+                    {
+                        if (!string.IsNullOrEmpty(keyword))
+                        {
+                            expression = expression.And(t => t.Type == strUserLevel || t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                        }
+                        else
+                        {
+                            expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                        } 
+                    }
+                }
+            }
+            return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
+        }
         public RoleEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

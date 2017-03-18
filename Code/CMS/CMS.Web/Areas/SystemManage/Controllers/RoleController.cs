@@ -23,6 +23,13 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         } 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGridJsons(string keyValue)
+        {
+            var data = roleApp.GetLists(keyValue);
+            return Content(data.ToJson());
+        } 
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
         {
             var data = roleApp.GetForm(keyValue);

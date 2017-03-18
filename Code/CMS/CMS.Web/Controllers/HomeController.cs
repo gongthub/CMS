@@ -2,7 +2,7 @@
 using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.Entity.WebManage;
+using CMS.Domain.Entity.WebManage; 
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
@@ -33,7 +33,7 @@ namespace CMS.Web.Controllers
             return RedirectToAction("WebSiteMgr");
         }
         [HttpGet]
-        [WebSiteMgr]
+        [HandlerWebSiteMgr]
         public ActionResult WebSiteMgr()
         { 
             return View();

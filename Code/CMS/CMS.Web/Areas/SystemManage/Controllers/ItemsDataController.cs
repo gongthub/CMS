@@ -32,6 +32,18 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetSelectJsons(string enCode, string keyValue)
+        {
+            var data = itemsDetailApp.GetItemList(enCode, keyValue);
+            List<object> list = new List<object>();
+            foreach (ItemsDetailEntity item in data)
+            {
+                list.Add(new { id = item.ItemCode, text = item.ItemName });
+            }
+            return Content(list.ToJson());
+        }
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)
         {
             var data = itemsDetailApp.GetForm(keyValue);

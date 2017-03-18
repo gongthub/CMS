@@ -38,6 +38,7 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        #region 上传图片配置
         /// <summary>
         /// 上传图片文件夹
         /// </summary>
@@ -45,7 +46,7 @@ namespace CMS.Application.Comm
         {
             get
             {
-                return ConfigurationManager.AppSettings["UploadImg"].ToString();
+                return Code.Configs.GetValue("UploadImg").ToString();
             }
         }
         /// <summary>
@@ -55,7 +56,7 @@ namespace CMS.Application.Comm
         {
             get
             {
-                return ConfigurationManager.AppSettings["UploadImgFormat"].ToString();
+                return Code.Configs.GetValue("UploadImgFormat").ToString();
             }
         }
         /// <summary>
@@ -65,8 +66,78 @@ namespace CMS.Application.Comm
         {
             get
             {
-                return ConfigurationManager.AppSettings["UploadImgSize"].ToString();
+                return Code.Configs.GetValue("UploadImgSize").ToString();
             }
-        }
+        } 
+        #endregion
+
+        #region 用户可添加站点数配置
+
+        /// <summary>
+        /// 系统用户可添加网站数
+        /// </summary>
+        public string WEBSITENUM_SYSTEMUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_SystemUser").ToString();
+            }
+        }  
+
+        /// <summary>
+        /// 站点用户可添加网站数
+        /// </summary>
+        public string WEBSITENUM_WEBSITEUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_WebSiteUser").ToString();
+            }
+        }  
+
+        /// <summary>
+        /// 注册用户可添加网站数
+        /// </summary>
+        public string WEBSITENUM_REGISTERUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_RegisterUser").ToString();
+            }
+        }  
+
+        /// <summary>
+        /// 普通会员可添加网站数
+        /// </summary>
+        public string WEBSITENUM_ORDINARYUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_OrdinaryUser").ToString();
+            }
+        }  
+
+        /// <summary>
+        /// 金牌会员可添加网站数
+        /// </summary>
+        public string WEBSITENUM_GOLDUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_GoldUser").ToString();
+            }
+        }  
+
+        /// <summary>
+        /// 钻石会员可添加网站数
+        /// </summary>
+        public string WEBSITENUM_DIAMONDUSER
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteNum_DiamondUser").ToString();
+            }
+        }  
+        #endregion
     }
 }

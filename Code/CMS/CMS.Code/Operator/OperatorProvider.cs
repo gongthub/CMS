@@ -10,7 +10,6 @@
         private string LoginProvider = Configs.GetValue("LoginProvider");
 
         public OperatorModel GetCurrent()
-        
         {
             OperatorModel operatorModel = new OperatorModel();
             if (LoginProvider == "Cookie")
@@ -19,7 +18,10 @@
             }
             else
             {
-                operatorModel = DESEncrypt.Decrypt(WebHelper.GetSession(LoginUserKey).ToString()).ToObject<OperatorModel>();
+                if (WebHelper.GetSession(LoginUserKey) != null)
+                    operatorModel = DESEncrypt.Decrypt(WebHelper.GetSession(LoginUserKey).ToString()).ToObject<OperatorModel>();
+                else
+                    operatorModel = null;
             }
             return operatorModel;
         }
