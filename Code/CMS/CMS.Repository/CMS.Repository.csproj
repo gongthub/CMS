@@ -58,6 +58,7 @@
     <Compile Include="WebManage\ContentRepository.cs" />
     <Compile Include="WebManage\ColumnsRepository.cs" />
     <Compile Include="WebManage\TempletRepository.cs" />
+    <Compile Include="WebManage\WebSiteForUrlRepository.cs" />
     <Compile Include="WebManage\WebSiteRepository.cs" />
   </ItemGroup>
   <ItemGroup>

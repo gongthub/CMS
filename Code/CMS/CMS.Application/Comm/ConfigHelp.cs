@@ -71,6 +71,21 @@ namespace CMS.Application.Comm
         } 
         #endregion
 
+        #region 系统错误页
+
+        /// <summary>
+        /// 系统 404 错误页
+        /// </summary>
+        public string SYSPAGE_NOFIND
+        {
+            get
+            {
+                return Code.Configs.GetValue("SysPage_NoFind").ToString();
+            }
+        }  
+        #endregion 
+
+
         #region 用户可添加站点数配置
 
         /// <summary>

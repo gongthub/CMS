@@ -82,8 +82,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
             try
-            {
-                webSiteApp.SubmitForm(moduleEntity, keyValue, upFileentity);
+            { 
+                webSiteApp.SubmitForm(moduleEntity, GetSpareUrlAddress(),keyValue, upFileentity);
                 return Success("操作成功。");
             }
             catch (Exception e)
@@ -99,6 +99,44 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             webSiteApp.DeleteForm(keyValue);
             return Success("删除成功。");
+        }
+
+        /// <summary>
+        /// 获取备用域名集合
+        /// </summary>
+        /// <returns></returns>
+        private List<WebSiteForUrlEntity> GetSpareUrlAddress()
+        {
+            List<WebSiteForUrlEntity> webSiteForUrlEntitys = new List<WebSiteForUrlEntity>();
+            List<string> strsUrlAddress = new List<string>();
+            for (int i = 1; i <= 10; i++)
+            {
+                WebSiteForUrlEntity webSiteForUrlEntity = new WebSiteForUrlEntity();
+                webSiteForUrlEntity.SortCode = i;
+                webSiteForUrlEntity.MainMark = false;
+                string paraNames = "SpareUrlAddress";
+                if (i != 10)
+                {
+                    paraNames = paraNames + "0" + i;
+                }
+                else
+                {
+                    paraNames = paraNames + i;
+                }
+                string strurlAddress = HttpContext.Request[paraNames];
+                if (strurlAddress != null)
+                {
+
+                    strurlAddress = strurlAddress.Trim();
+                    if (strurlAddress == "&nbsp;")
+                    {
+                        strurlAddress = "";
+                    }
+                }
+                webSiteForUrlEntity.UrlAddress = strurlAddress;
+                webSiteForUrlEntitys.Add(webSiteForUrlEntity);
+            }
+            return webSiteForUrlEntitys;
         }
     }
 }

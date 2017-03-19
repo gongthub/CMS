@@ -30,7 +30,8 @@
             url: "/SystemManage/Organize/GetTreeSelectJson",
         });
         $("#RoleId").bindSelect({
-            url: "/SystemManage/Role/GetGridJson",
+            url: "/SystemManage/Role/GetGridJsons",
+            param: { keyValue: keyValue },
             id: "Id",
             text: "FullName"
         });
@@ -38,6 +39,10 @@
             url: "/SystemManage/Duty/GetGridJson",
             id: "Id",
             text: "FullName"
+        });
+        $("#UserLevel").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJsons",
+            param: { enCode: "UserLevel", keyValue: keyValue }
         });
     }
 </script>
@@ -124,9 +129,8 @@
                 <tr>
                     <th class="formTitle">类型</th>
                     <td class="formValue">
-                        <select id="IsAdministrator" name="IsAdministrator" class="form-control">
-                            <option value="false">普通用户</option>
-                            <option value="true">系统管理员</option>
+                        <select id="UserLevel" name="UserLevel" class="form-control">
+                            <option value="">==请选择==</option>
                         </select>
                     </td>
                     <th class="formTitle">允许登录</th>

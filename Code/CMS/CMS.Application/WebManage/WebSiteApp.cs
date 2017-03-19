@@ -15,6 +15,7 @@ namespace CMS.Application.WebManage
     public class WebSiteApp
     {
         private IWebSiteRepository service = new WebSiteRepository();
+        private IWebSiteForUrlRepository serviceWebSiteForUrl = new WebSiteForUrlRepository();
 
         public List<WebSiteEntity> GetList()
         {
@@ -88,7 +89,14 @@ namespace CMS.Application.WebManage
         }
         public WebSiteEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            WebSiteEntity webSiteEntity = service.FindEntity(keyValue);
+
+            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+            {
+                new WebSiteForUrlApp().InitWebSiteUrl(ref webSiteEntity);
+            }
+
+            return webSiteEntity;
         }
         public void DeleteForm(string keyValue)
         {
@@ -99,9 +107,10 @@ namespace CMS.Application.WebManage
             int iWebSiteNum = 0;
             if (IsOverNum(out iWebSiteNum))
             {
-
-                if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
+                moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
+                if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
                 {
+                    InitSpareUrl(ref moduleEntity);
                     if (!string.IsNullOrEmpty(keyValue))
                     {
                         moduleEntity.Modify(keyValue);
@@ -111,12 +120,12 @@ namespace CMS.Application.WebManage
                     {
                         moduleEntity.Create();
                         service.Insert(moduleEntity);
-                    }
 
-                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
-                    if (LoginInfo != null)
-                    {
-                        new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        if (LoginInfo != null)
+                        {
+                            new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                        }
                     }
                 }
                 else
@@ -129,13 +138,16 @@ namespace CMS.Application.WebManage
                 throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
             }
         }
-        public void SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
+        public void SubmitForm(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue, UpFileDTO upFileentity)
         {
             int iWebSiteNum = 0;
             if (IsOverNum(out iWebSiteNum))
             {
-                if (!IsExistUrl(keyValue, moduleEntity.UrlAddress))
+                moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
+                moduleEntity.Id = keyValue;
+                if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
                 {
+                    InitSpareUrl(ref moduleEntity);
                     if (!string.IsNullOrEmpty(keyValue))
                     {
                         moduleEntity.Modify(keyValue);
@@ -146,18 +158,19 @@ namespace CMS.Application.WebManage
                         moduleEntity.Create();
                         service.Insert(moduleEntity);
                         keyValue = moduleEntity.Id;
+
+                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        if (LoginInfo != null)
+                        {
+                            new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                        }
                     }
                     //更新上传文件表
                     UpFileApp upFileApp = new UpFileApp();
                     upFileentity.Sys_ParentId = keyValue;
                     upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
                     upFileApp.AddUpFileEntity(upFileentity);
-
-                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
-                    if (LoginInfo != null)
-                    {
-                        new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
-                    }
+                    SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
                 }
                 else
                 {
@@ -170,6 +183,44 @@ namespace CMS.Application.WebManage
             }
         }
 
+        /// <summary>
+        /// 保存备用域名
+        /// </summary>
+        /// <param name="moduleEntity"></param>
+        /// <param name="keyValue"></param>
+        private static void SaveWebSiteSpareUrl(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue)
+        {
+            if (webSiteForUrlEntitys != null && webSiteForUrlEntitys.Count() > 0)
+            {
+                webSiteForUrlEntitys.ForEach(m => m.WebSiteId = keyValue);
+
+                WebSiteForUrlEntity webSiteForUrlEntity = new WebSiteForUrlEntity();
+                webSiteForUrlEntity.SortCode = 0;
+                webSiteForUrlEntity.MainMark = true;
+                webSiteForUrlEntity.WebSiteId = keyValue;
+                webSiteForUrlEntity.UrlAddress = moduleEntity.UrlAddress;
+                webSiteForUrlEntitys.Add(webSiteForUrlEntity);
+                new WebSiteForUrlApp().Save(webSiteForUrlEntitys);
+            }
+
+        }
+
+
+        /// <summary>
+        /// 根据域名获取实体
+        /// </summary>
+        /// <returns></returns>
+        public WebSiteEntity GetModelByUrlHost(string urlHost)
+        {
+            WebSiteEntity webSiteEntity = new WebSiteEntity();
+            WebSiteForUrlEntity webSiteForUrlEntity = serviceWebSiteForUrl.IQueryable(m => m.UrlAddress == urlHost && m.DeleteMark != true).FirstOrDefault();
+            if (webSiteForUrlEntity != null && !string.IsNullOrEmpty(webSiteForUrlEntity.WebSiteId))
+            {
+                webSiteEntity = service.FindEntity(webSiteForUrlEntity.WebSiteId);
+            }
+
+            return webSiteEntity;
+        }
         /// <summary>
         /// 判断域名是否存在
         /// </summary>
@@ -228,6 +279,25 @@ namespace CMS.Application.WebManage
             }
 
             return retBool;
+        }
+        /// <summary>
+        /// 初始化备用域名字段为Null
+        /// </summary>
+        /// <param name="keyId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public void InitSpareUrl(ref WebSiteEntity moduleEntity)
+        {
+            moduleEntity.SpareUrlAddress01 = null;
+            moduleEntity.SpareUrlAddress02 = null;
+            moduleEntity.SpareUrlAddress03 = null;
+            moduleEntity.SpareUrlAddress04 = null;
+            moduleEntity.SpareUrlAddress05 = null;
+            moduleEntity.SpareUrlAddress06 = null;
+            moduleEntity.SpareUrlAddress07 = null;
+            moduleEntity.SpareUrlAddress08 = null;
+            moduleEntity.SpareUrlAddress09 = null;
+            moduleEntity.SpareUrlAddress10 = null;
         }
     }
 }

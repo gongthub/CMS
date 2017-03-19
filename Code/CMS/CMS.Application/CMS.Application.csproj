@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Comm\ConfigHelp.cs" />
     <Compile Include="Comm\RequestHelp.cs" />
+    <Compile Include="Comm\SysPageHelp.cs" />
     <Compile Include="Comm\TempHelp.cs" />
     <Compile Include="Infrastructure\DbLogType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="WebManage\ColumnsApp.cs" />
     <Compile Include="WebManage\TempletApp.cs" />
     <Compile Include="WebManage\WebSiteApp.cs" />
+    <Compile Include="WebManage\WebSiteForUrlApp.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMS.Code\CMS.Code.csproj">

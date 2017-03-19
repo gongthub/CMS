@@ -460,6 +460,8 @@
     <Content Include="Html\js\bootstrap.min.js" />
     <Content Include="Html\js\jquery-2.1.4.min.js" />
     <Content Include="Index.htm" />
+    <Content Include="SysPage\404\404.html" />
+    <Content Include="SysPage\404\404\Main.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

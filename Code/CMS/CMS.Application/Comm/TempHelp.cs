@@ -928,7 +928,7 @@ namespace CMS.Application.Comm
             //处理Url参数
             urlRaw = Common.HandleUrlRaw(urlRaw);
             WebSiteApp app = new WebSiteApp();
-            WebSiteEntity entity = app.GetFormByUrl(urlHost);
+            WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
             return GetHtmlStrsByWebSite(entity, urlRaw);
         }
 
@@ -975,6 +975,10 @@ namespace CMS.Application.Comm
                     }
 
                 }
+            }
+            else
+            {
+                htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
             }
             return htmls;
         }

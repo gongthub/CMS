@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Linq; 
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -59,7 +59,7 @@ namespace CMS.Application.Comm
             {
                 return;
             }
-            string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+            string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw); 
             context.Response.Write(htmls);
             context.Response.End();
         }
