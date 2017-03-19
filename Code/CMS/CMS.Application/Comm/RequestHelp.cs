@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq; 
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -54,14 +54,20 @@ namespace CMS.Application.Comm
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
 
-            //判断是否后台url 并且 扩展名是否需要处理
-            if (!TempHelp.tempHelp.IsWebSite(urlRaw) || Common.IsExistExtended(urlRaw) == false)
+            if (Common.IsExistExtended(urlRaw) == false && !Common.IsExistUrlGuid(urlRaw))
             {
-                return;
+                //判断是否后台url 并且 扩展名是否需要处理
+                if (!TempHelp.tempHelp.IsWebSite(urlRaw))
+                {
+                    return;
+                }
             }
-            string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw); 
-            context.Response.Write(htmls);
-            context.Response.End();
+            else
+            {
+                string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+                context.Response.Write(htmls);
+                context.Response.End();
+            }
         }
         #endregion
 

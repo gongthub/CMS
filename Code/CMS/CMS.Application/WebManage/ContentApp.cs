@@ -251,7 +251,7 @@ namespace CMS.Application.WebManage
         {
             bool isHave = false;
             htmls = string.Empty;
-            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && m.UrlAddress == url).FirstOrDefault();
+            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/",@"\"))).FirstOrDefault();
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
             {
                 string urlPath = contentEntity.UrlPath;

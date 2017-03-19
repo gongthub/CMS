@@ -237,11 +237,11 @@ namespace CMS.Application.Comm
 
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetForm(Id);
-                if (contentEntity != null && contentEntity.ColumnId != null && contentEntity.UrlPath != null)
+                if (contentEntity != null && contentEntity.ColumnId != null)
                 {
 
                     //已生成静态文件时
-                    if (FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlPath))
+                    if (contentEntity.UrlPath != null && FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlPath))
                     {
                         FileHelper.DeleteFile(contentEntity.UrlPath);
                         GenHtml(contentEntity.UrlPath, templets);
@@ -1003,7 +1003,7 @@ namespace CMS.Application.Comm
                 List<string> actionNames = models.Select(m => m.ActionName).ToList();
                 if (urlRaws.Count > 0)
                 {
-                    if (!actionNames.Contains(urlRaws.FirstOrDefault()))
+                    if (actionNames.Contains(urlRaws.FirstOrDefault()))
                     {
                         retBol = false;
                     }

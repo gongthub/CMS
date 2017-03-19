@@ -13,7 +13,7 @@ namespace CMS.Code
     {
         private static readonly string URLEXTENDED = Configs.GetValue("UrlExtended");
         private static readonly bool ISHANDLEURLPARA = Configs.GetValue("IsHandleUrlPara").IsEmpty() ? false : bool.Parse(Configs.GetValue("IsHandleUrlPara"));
-         
+
 
         #region Stopwatch计时器
         /// <summary>
@@ -162,6 +162,31 @@ namespace CMS.Code
         }
         #endregion
 
+
+        #region 判断url后缀为Guid
+        /// <summary>
+        /// 判断url后缀为Guid
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static bool IsExistUrlGuid(string urlRaw)
+        {
+            bool bretStatus = false;
+
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+            if (urlRaws != null && urlRaws.Count > 0)
+            {
+                string urlLasts = urlRaws[urlRaws.Count - 1];
+                Guid Id=Guid.Empty;
+                if (Guid.TryParse(urlLasts, out Id))
+                {
+                    bretStatus = true;
+                }
+            }
+            return bretStatus;
+        }
+        #endregion
+
         #region 处理Url参数
         /// <summary>
         /// 处理Url参数
@@ -173,8 +198,8 @@ namespace CMS.Code
             string urlraws = urlRaw;
             if (ISHANDLEURLPARA)
             {
-                urlRaw = urlRaw.Replace('？','?');
-                string[] urlStrs = urlRaw.Split('?'); 
+                urlRaw = urlRaw.Replace('？', '?');
+                string[] urlStrs = urlRaw.Split('?');
                 urlraws = urlStrs[0];
             }
 
