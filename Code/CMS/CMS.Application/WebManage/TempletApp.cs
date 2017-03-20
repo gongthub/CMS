@@ -144,6 +144,22 @@ namespace CMS.Application.WebManage
             return templet;
         }
 
+        /// <summary>
+        /// 根据名称获取内容模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetCModelByActionName(string actionName, string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
+            if (module != null)
+            {
+                templet = service.FindEntity(m => m.Id == module.CTempletId && m.WebSiteId == webSiteId);
+            }
+            return templet;
+        }
+
 
         /// <summary>
         /// 判断名称是否存在
