@@ -4,6 +4,7 @@ using CMS.Repository.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,10 @@ namespace CMS.Application.WebManage
         public List<ColumnsEntity> GetList()
         {
             return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+        }
+        public List<ColumnsEntity> GetList(Expression<Func<ColumnsEntity, bool>> predicate)
+        {
+            return service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
         }
         public List<ColumnsEntity> GetListByWebSiteId(string webSiteId)
         {

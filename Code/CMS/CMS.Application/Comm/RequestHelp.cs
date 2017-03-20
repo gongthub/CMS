@@ -53,20 +53,23 @@ namespace CMS.Application.Comm
             string urlPath = context.Request.Url.GetLeftPart(UriPartial.Authority);
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
-
-            if (Common.IsExistExtended(urlRaw) == false && !Common.IsExistUrlGuid(urlRaw))
+            if (!Common.IsBlackName(urlRaw))
             {
-                //判断是否后台url 并且 扩展名是否需要处理
-                if (!TempHelp.tempHelp.IsWebSite(urlRaw))
+                if (Common.IsExistExtended(urlRaw) == false && !Common.IsExistUrlGuid(urlRaw))
                 {
-                    return;
+                    //判断是否后台url 并且 扩展名是否需要处理
+                    if (!TempHelp.tempHelp.IsWebSite(urlHost, urlRaw))
+                    {
+                        return;
+                    }
                 }
-            }
-            else
-            {
-                string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
-                context.Response.Write(htmls);
-                context.Response.End();
+                else
+                {
+                    string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+                    context.Response.Write(htmls);
+                    context.Response.End();
+                }
+
             }
         }
         #endregion

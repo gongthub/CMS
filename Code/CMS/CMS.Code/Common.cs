@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace CMS.Code
 {
@@ -187,6 +188,29 @@ namespace CMS.Code
         }
         #endregion
 
+
+        #region 判断请求路径是否为黑名单 +bool IsBlackName(string urlRaw)
+        /// <summary>
+        /// 判断请求路径是否为黑名单
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public static bool IsBlackName(string urlRaw)
+        {
+            bool retBol = false;
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+            string strModules = Configs.GetValue("UrlBlackName");
+            if (!string.IsNullOrEmpty(strModules))
+            {
+                string[] strsModules = strModules.Split('|');
+                if (urlRaws != null && urlRaws.Count > 0)
+                {
+                    retBol = (from c in strsModules where c == urlRaws[0] select 1).ToList().Count > 0;
+                }
+            }
+            return retBol;
+        }
+        #endregion
         #region 处理Url参数
         /// <summary>
         /// 处理Url参数

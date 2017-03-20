@@ -1035,6 +1035,34 @@ namespace CMS.Application.Comm
             }
             return retBol;
         }
+        /// <summary>
+        /// 判断请求路径是否为网站前台地址
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public bool IsWebSite(string urlhost, string urlRaw)
+        {
+            bool retBol = true;
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+            WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByUrl(urlhost);
+            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+            {
+                ColumnsApp c_ModulesApp = new ColumnsApp();
+                List<ColumnsEntity> models = c_ModulesApp.GetList(m => m.DeleteMark != true && m.WebSiteId == webSiteEntity.Id);
+                if (models != null && models.Count > 0)
+                {
+                    List<string> actionNames = models.Select(m => m.ActionName).ToList();
+                    if (urlRaws.Count > 0)
+                    {
+                        if (actionNames.Contains(urlRaws.FirstOrDefault()))
+                        {
+                            retBol = false;
+                        }
+                    }
+                }
+            }
+            return retBol;
+        }
         #endregion
 
         #region 字段格式化处理 -InitFormat(string context, Dictionary<string, string> attrs)
