@@ -31,7 +31,7 @@ namespace CMS.Web.Controllers
             new LogApp().WriteDbLog(new LogEntity
             {
                 ModuleName = "系统登录",
-                Type = DbLogType.Exit.ToString(),
+                Type = Code.Enums.DbLogType.Exit.ToString(),
                 Account = OperatorProvider.Provider.GetCurrent().UserCode,
                 NickName = OperatorProvider.Provider.GetCurrent().UserName,
                 Result = true,
@@ -48,7 +48,7 @@ namespace CMS.Web.Controllers
         {
             LogEntity logEntity = new LogEntity();
             logEntity.ModuleName = "系统登录";
-            logEntity.Type = DbLogType.Login.ToString();
+            logEntity.Type = Code.Enums.DbLogType.Login.ToString();
             try
             {
                 if (Session["cms_session_verifycode"].IsEmpty() || Md5.md5(code.ToLower(), 16) != Session["cms_session_verifycode"].ToString())

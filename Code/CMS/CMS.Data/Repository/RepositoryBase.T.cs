@@ -27,7 +27,7 @@ namespace CMS.Data
             RemoveHoldingEntityInContext(entity);
             dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             return dbcontext.SaveChanges();
-        } 
+        }
         public int Insert(List<TEntity> entitys)
         {
             foreach (var entity in entitys)
@@ -211,7 +211,21 @@ namespace CMS.Data
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToList();
         }
-         
+
+
+        public bool IsExist(TEntity entity, string keyId, string name)
+        {
+            bool bResult = false;
+
+            return bResult;
+        }
+        public bool IsExist(TEntity entity, string keyId, string name, bool IsDeleteFlay)
+        {
+            bool bResult = false;
+
+            return bResult;
+        }
+
 
         //用于监测Context中的Entity是否存在，如果存在，将其Detach，防止出现问题。
         private Boolean RemoveHoldingEntityInContext(TEntity entity)

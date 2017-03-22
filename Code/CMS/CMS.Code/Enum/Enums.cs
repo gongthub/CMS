@@ -9,6 +9,34 @@ namespace CMS.Code
 {
     public class Enums
     {
+        /// <summary>
+        /// 日志类型
+        /// </summary>
+        public enum DbLogType
+        {
+            [Description("其他")]
+            Other = 0,
+            [Description("登录")]
+            Login = 1,
+            [Description("退出")]
+            Exit = 2,
+            [Description("访问")]
+            Visit = 3,
+            [Description("新增")]
+            Create = 4,
+            [Description("删除")]
+            Delete = 5,
+            [Description("修改")]
+            Update = 6,
+            [Description("提交")]
+            Submit = 7,
+            [Description("异常")]
+            Exception = 8,
+        }
+
+        /// <summary>
+        /// CMS模块类型
+        /// </summary>
         public enum ModuleType
         {
             [Description("导航")]
@@ -20,6 +48,9 @@ namespace CMS.Code
             [Description("连接")]
             Link = 3
         }
+        /// <summary>
+        /// 上传文件模块
+        /// </summary>
         public enum UpFileModule
         {
             [Description("C_Contents")]

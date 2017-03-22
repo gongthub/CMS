@@ -160,7 +160,6 @@ namespace CMS.Application.WebManage
                     retBool = true;
                 }
             }
-
             return retBool;
         }
     }

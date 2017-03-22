@@ -48,9 +48,9 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
-            string url = context.Request.Url.AbsolutePath;
+            //string url = context.Request.Url.AbsolutePath; 
+            //string urlPath = context.Request.Url.GetLeftPart(UriPartial.Authority);
 
-            string urlPath = context.Request.Url.GetLeftPart(UriPartial.Authority);
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
             if (!Common.IsBlackName(urlRaw))
@@ -69,11 +69,9 @@ namespace CMS.Application.Comm
                     context.Response.Write(htmls);
                     context.Response.End();
                 }
-
             }
         }
         #endregion
-
-
+         
     }
 }

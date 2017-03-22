@@ -84,17 +84,6 @@ namespace CMS.Application.Comm
             }
         }  
         #endregion 
-
-        /// <summary>
-        /// 系统请求URl模块黑名单
-        /// </summary>
-        public string URLBLACKNAME
-        {
-            get
-            {
-                return Code.Configs.GetValue("UrlBlackName").ToString();
-            }
-        }  
          
         #region 用户可添加站点数配置
 
@@ -164,5 +153,16 @@ namespace CMS.Application.Comm
             }
         }  
         #endregion
+
+        /// <summary>
+        /// 系统请求URl模块黑名单
+        /// </summary>
+        public string URLBLACKNAME
+        {
+            get
+            {
+                return Code.Configs.GetValue("UrlBlackName").ToString();
+            }
+        }  
     }
 }

@@ -95,13 +95,6 @@ namespace CMS.Application.Comm
         /// </summary>
         private static readonly string HTMLSAVEHTMLPATH = ConfigurationManager.AppSettings["htmlSrcPath"].ToString();
 
-        //private ContentEntity CONTENTENTITY = new ContentEntity();
-
-        //private void InitHtmlSavePath()
-        //{
-        //    //HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
-        //}
-
         /// <summary>
         /// 初始化
         /// </summary>
@@ -1239,18 +1232,4 @@ namespace CMS.Application.Comm
     }
         #endregion
 
-    public static class QueryableExtensions
-    {
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName)
-        {
-            return OrderBy(queryable, propertyName, false);
-        }
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> queryable, string propertyName, bool desc)
-        {
-            var param = Expression.Parameter(typeof(T));
-            var body = Expression.Property(param, propertyName);
-            dynamic keySelector = Expression.Lambda(body, param);
-            return desc ? Queryable.OrderByDescending(queryable, keySelector) : Queryable.OrderBy(queryable, keySelector);
-        }
-    }
 }
