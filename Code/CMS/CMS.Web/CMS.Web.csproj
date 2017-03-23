@@ -521,6 +521,7 @@
     <Compile Include="Areas\SystemSecurity\SystemSecurityAreaRegistration.cs" />
     <Compile Include="Areas\WebManage\Controllers\ContentController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ColumnsController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\ResourceController.cs" />
     <Compile Include="Areas\WebManage\Controllers\TempletController.cs" />
     <Compile Include="Areas\WebManage\Controllers\WebSiteMgrController.cs" />
     <Compile Include="Areas\WebManage\WebManageAreaRegistration.cs" />
@@ -665,6 +666,9 @@
     <Content Include="Html\fonts\fontawesome-webfont.ttf" />
     <Content Include="Html\fonts\fontawesome-webfont.woff" />
     <Content Include="Html\fonts\FontAwesome.otf" />
+    <Content Include="Areas\WebManage\Views\Resource\Details.cshtml" />
+    <Content Include="Areas\WebManage\Views\Resource\Form.cshtml" />
+    <Content Include="Areas\WebManage\Views\Resource\Index.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
