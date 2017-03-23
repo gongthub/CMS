@@ -44,7 +44,8 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
-            if (!IsExistActionName(keyValue, moduleEntity.ActionName))
+            //if (!IsExistActionName(keyValue, moduleEntity.ActionName))
+            if (!service.IsExist(keyValue, "ActionName", moduleEntity.ActionName, moduleEntity.WebSiteId, true))
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {

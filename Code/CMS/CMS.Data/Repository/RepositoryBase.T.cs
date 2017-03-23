@@ -212,20 +212,334 @@ namespace CMS.Data
             return tempData.ToList();
         }
 
-
-        public bool IsExist(TEntity entity, string keyId, string name)
+        public bool IsExist(string keyId, string name, string value)
+        {
+            bool bResult = false;
+            if (value != null && name != null)
+            {
+                name = name.Trim();
+                int flay = 0;   //标示位 判断是否需要查询
+                if (!string.IsNullOrEmpty(keyId))
+                {
+                    Guid id = Guid.Empty;
+                    TEntity entity = FindEntity(keyId);
+                    if (entity != null)
+                    {
+                        PropertyInfo[] props = entity.GetType().GetProperties();
+                        foreach (PropertyInfo prop in props)
+                        {
+                            if (prop.Name.ToLower() == name.ToLower())
+                            {
+                                if (prop.GetValue(entity) != null)
+                                {
+                                    if (prop.GetValue(entity).ToString().Trim().ToLower() != value.Trim().ToLower())
+                                    {
+                                        flay = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    flay = 1;
+                }
+                //需要判断
+                if (flay == 1)
+                {
+                    Guid id = Guid.Empty;
+                    List<TEntity> entitys = IQueryable().ToList();
+                    if (entitys != null && entitys.Count > 0)
+                    {
+                        foreach (var entity in entitys)
+                        {
+                            PropertyInfo[] props = entity.GetType().GetProperties();
+                            foreach (PropertyInfo prop in props)
+                            {
+                                if (prop.Name.ToLower() == name.ToLower())
+                                {
+                                    if (prop.GetValue(entity) != null)
+                                    {
+                                        if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                        {
+                                            bResult = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (bResult)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return bResult;
+        }
+        public bool IsExist(string keyId, string name, string value, bool IsDeleteFlay)
         {
             bool bResult = false;
 
+            if (value != null && name != null)
+            {
+                name = name.Trim();
+                int flay = 0;   //标示位 判断是否需要查询
+                if (!string.IsNullOrEmpty(keyId))
+                {
+                    Guid id = Guid.Empty;
+                    TEntity entity = FindEntity(keyId);
+                    if (entity != null)
+                    {
+                        PropertyInfo[] props = entity.GetType().GetProperties();
+                        foreach (PropertyInfo prop in props)
+                        {
+                            if (prop.Name.ToLower() == name.ToLower())
+                            {
+                                if (prop.GetValue(entity) != null)
+                                {
+                                    if (prop.GetValue(entity).ToString().Trim().ToLower() != value.Trim().ToLower())
+                                    {
+                                        flay = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    flay = 1;
+                }
+                //需要判断
+                if (flay == 1)
+                {
+                    Guid id = Guid.Empty;
+                    List<TEntity> entitys = IQueryable().ToList();
+                    if (entitys != null && entitys.Count > 0)
+                    {
+                        foreach (var entity in entitys)
+                        {
+                            PropertyInfo[] props = entity.GetType().GetProperties();
+                            foreach (PropertyInfo prop in props)
+                            {
+                                if (prop.Name.ToLower() == name.ToLower())
+                                {
+                                    if (IsDeleteFlay)
+                                    {
+                                        if (prop.GetValue(entity) != null)
+                                        {
+                                            object odeleteFlay = props.Where(m => m.Name.ToLower() == "DeleteMark".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
+                                            if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
+                                            {
+                                                bResult = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (prop.GetValue(entity) != null)
+                                        {
+                                            if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                            {
+                                                bResult = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (bResult)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             return bResult;
         }
-        public bool IsExist(TEntity entity, string keyId, string name, bool IsDeleteFlay)
+
+        public bool IsExist(string keyId, string name, string value, string webSiteId)
         {
             bool bResult = false;
 
+            if (value != null && name != null)
+            {
+                name = name.Trim();
+                int flay = 0;   //标示位 判断是否需要查询
+                if (!string.IsNullOrEmpty(keyId))
+                {
+                    Guid id = Guid.Empty;
+                    TEntity entity = FindEntity(keyId);
+                    if (entity != null)
+                    {
+                        PropertyInfo[] props = entity.GetType().GetProperties();
+                        foreach (PropertyInfo prop in props)
+                        {
+                            if (prop.Name.ToLower() == name.ToLower())
+                            {
+                                if (prop.GetValue(entity) != null)
+                                {
+                                    if (prop.GetValue(entity).ToString().Trim().ToLower() != value.Trim().ToLower())
+                                    {
+                                        flay = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    flay = 1;
+                }
+                //需要判断
+                if (flay == 1)
+                {
+                    Guid id = Guid.Empty;
+                    List<TEntity> entitys = IQueryable().ToList();
+                    if (entitys != null && entitys.Count > 0)
+                    {
+                        foreach (var entity in entitys)
+                        {
+                            PropertyInfo[] props = entity.GetType().GetProperties();
+                            foreach (PropertyInfo prop in props)
+                            {
+                                if (!string.IsNullOrEmpty(webSiteId))
+                                {
+                                    object oWebSiteId = props.Where(m => m.Name.ToLower() == "WebSiteId".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
+                                    if (oWebSiteId != null && oWebSiteId.ToString() == webSiteId)
+                                    {
+                                        if (prop.Name.ToLower() == name.ToLower())
+                                        {
+                                            if (prop.GetValue(entity) != null)
+                                            {
+                                                if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                                {
+                                                    bResult = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            if (bResult)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             return bResult;
         }
+        public bool IsExist(string keyId, string name, string value, string webSiteId, bool IsDeleteFlay)
+        {
+            bool bResult = false;
 
+            if (value != null && name != null)
+            {
+                name = name.Trim();
+                int flay = 0;   //标示位 判断是否需要查询
+                if (!string.IsNullOrEmpty(keyId))
+                {
+                    Guid id = Guid.Empty;
+                    TEntity entity = FindEntity(keyId);
+                    if (entity != null)
+                    {
+                        PropertyInfo[] props = entity.GetType().GetProperties();
+                        foreach (PropertyInfo prop in props)
+                        {
+                            if (prop.Name.ToLower() == name.ToLower())
+                            {
+                                if (prop.GetValue(entity) != null)
+                                {
+                                    if (prop.GetValue(entity).ToString().Trim().ToLower() != value.Trim().ToLower())
+                                    {
+                                        flay = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    flay = 1;
+                }
+                //需要判断
+                if (flay == 1)
+                {
+                    Guid id = Guid.Empty;
+                    List<TEntity> entitys = IQueryable().ToList();
+                    if (entitys != null && entitys.Count > 0)
+                    {
+                        foreach (var entity in entitys)
+                        {
+                            PropertyInfo[] props = entity.GetType().GetProperties();
+                            foreach (PropertyInfo prop in props)
+                            {
+                                if (!string.IsNullOrEmpty(webSiteId))
+                                {
+                                    object oWebSiteId = props.Where(m => m.Name.ToLower() == "WebSiteId".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
+                                    if (oWebSiteId != null && oWebSiteId.ToString() == webSiteId)
+                                    {
+                                        if (prop.Name.ToLower() == name.ToLower())
+                                        {
+                                            if (IsDeleteFlay)
+                                            {
+                                                if (prop.GetValue(entity) != null)
+                                                {
+                                                    object odeleteFlay = props.Where(m => m.Name.ToLower() == "DeleteMark".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
+                                                    if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
+                                                    {
+                                                        bResult = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (prop.GetValue(entity) != null)
+                                                {
+                                                    if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                                    {
+                                                        bResult = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+                            if (bResult)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return bResult;
+        }
 
         //用于监测Context中的Entity是否存在，如果存在，将其Detach，防止出现问题。
         private Boolean RemoveHoldingEntityInContext(TEntity entity)

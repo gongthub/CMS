@@ -32,7 +32,9 @@ namespace CMS.Data
         List<TEntity> FindList(Pagination pagination);
         List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate, Pagination pagination);
 
-        bool IsExist(TEntity entity, string keyId, string name);
-        bool IsExist(TEntity entity, string keyId, string name,bool IsDeleteFlay);
+        bool IsExist(string keyId, string name, string value);
+        bool IsExist(string keyId, string name, string value, bool IsDeleteFlay);
+        bool IsExist(string keyId, string name, string value, string webSiteId);
+        bool IsExist(string keyId, string name, string value, string webSiteId, bool IsDeleteFlay);
     }
 }
