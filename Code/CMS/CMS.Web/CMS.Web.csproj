@@ -119,7 +119,6 @@
     <Content Include="Content\css\framework-ui.css" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\img\alipay.jpg" />
-    <Content Include="Content\img\alipayimg.png" />
     <Content Include="Content\img\button_pm_close.png" />
     <Content Include="Content\img\cy-reward-title-bg.jpg" />
     <Content Include="Content\img\loading.gif" />
@@ -147,8 +146,6 @@
     <Content Include="Content\img\samples\scarlett-300.jpg" />
     <Content Include="Content\img\signet.gif" />
     <Content Include="Content\img\wechat.jpg" />
-    <Content Include="Content\img\weipayimg.png" />
-    <Content Include="Content\img\weixin_nfine.png" />
     <Content Include="Content\js\bootstrap\bootstrap.js" />
     <Content Include="Content\js\bootstrap\bootstrap.min.css" />
     <Content Include="Content\js\charts\Chart.js" />
@@ -419,46 +416,67 @@
     <Content Include="Content\js\zsign\jquery.zsign.js" />
     <Content Include="Content\js\zsign\signet.gif" />
     <Content Include="Global.asax" />
-    <Content Include="Html\css\bootstrap.min.css" />
-    <Content Include="Html\css\magnific-popup.css" />
+    <Content Include="Html\canlilong\About\20170313163218.html" />
+    <Content Include="Html\canlilong\About\20170313163655.html" />
+    <Content Include="Html\canlilong\About\20170314134116.html" />
+    <Content Include="Html\canlilong\About\20170319224335.html" />
+    <Content Include="Html\canlilong\About\20170319224836.html" />
+    <Content Include="Html\canlilong\About\20170319224888.html" />
+    <Content Include="Html\canlilong\About\20170320213031.html" />
+    <Content Include="Html\css\bootstrap.css" />
+    <Content Include="Html\css\chocolat.css" />
+    <Content Include="Html\css\component.css" />
+    <Content Include="Html\css\owl.carousel.css" />
     <Content Include="Html\css\style.css" />
-    <Content Include="Html\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Html\fonts\Nunito\OFL.txt" />
-    <Content Include="Html\fonts\Pacifico\OFL.txt" />
-    <Content Include="Html\images\ab1.jpg" />
-    <Content Include="Html\images\ab3.jpg" />
-    <Content Include="Html\images\ab4.jpg" />
-    <Content Include="Html\images\ab5.jpg" />
-    <Content Include="Html\images\bn1.jpg" />
+    <Content Include="Html\fonts\fontawesome-webfont.svg" />
+    <Content Include="Html\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Html\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Html\images\a1.jpg" />
+    <Content Include="Html\images\a10.jpg" />
+    <Content Include="Html\images\a11.jpg" />
+    <Content Include="Html\images\a12.jpg" />
+    <Content Include="Html\images\a2.jpg" />
+    <Content Include="Html\images\a3.jpg" />
+    <Content Include="Html\images\a4.jpg" />
+    <Content Include="Html\images\a5.jpg" />
+    <Content Include="Html\images\a6.jpg" />
+    <Content Include="Html\images\a7.jpg" />
+    <Content Include="Html\images\a8.jpg" />
+    <Content Include="Html\images\a9.jpg" />
+    <Content Include="Html\images\banner.jpg" />
+    <Content Include="Html\images\banner1.jpg" />
     <Content Include="Html\images\close.png" />
-    <Content Include="Html\images\g1.jpg" />
-    <Content Include="Html\images\g10.jpg" />
-    <Content Include="Html\images\g11.jpg" />
-    <Content Include="Html\images\g116.jpg" />
-    <Content Include="Html\images\g12.jpg" />
-    <Content Include="Html\images\g13.jpg" />
-    <Content Include="Html\images\g14.jpg" />
-    <Content Include="Html\images\g15.jpg" />
-    <Content Include="Html\images\g17.jpg" />
-    <Content Include="Html\images\g2.jpg" />
-    <Content Include="Html\images\g3.jpg" />
-    <Content Include="Html\images\g4.jpg" />
-    <Content Include="Html\images\g5.jpg" />
-    <Content Include="Html\images\g6.jpg" />
-    <Content Include="Html\images\g7.jpg" />
-    <Content Include="Html\images\g8.jpg" />
-    <Content Include="Html\images\g9.jpg" />
-    <Content Include="Html\images\is1.jpg" />
-    <Content Include="Html\images\is2.jpg" />
-    <Content Include="Html\images\is3.jpg" />
-    <Content Include="Html\images\next.png" />
-    <Content Include="Html\images\prev.png" />
-    <Content Include="Html\images\soc.png" />
-    <Content Include="Html\images\tb1.jpg" />
-    <Content Include="Html\images\tb2.jpg" />
-    <Content Include="Html\images\tb3.jpg" />
+    <Content Include="Html\images\img-sprite.png" />
+    <Content Include="Html\images\left.png" />
+    <Content Include="Html\images\p.jpg" />
+    <Content Include="Html\images\p1.jpg" />
+    <Content Include="Html\images\p2.jpg" />
+    <Content Include="Html\images\p3.jpg" />
+    <Content Include="Html\images\plus.png" />
+    <Content Include="Html\images\right.png" />
+    <Content Include="Html\images\s1.jpg" />
+    <Content Include="Html\images\s2.jpg" />
+    <Content Include="Html\images\s3.jpg" />
+    <Content Include="Html\images\t.jpg" />
+    <Content Include="Html\images\t1.jpg" />
+    <Content Include="Html\images\t1.png" />
+    <Content Include="Html\images\t2.jpg" />
+    <Content Include="Html\images\t3.jpg" />
+    <Content Include="Html\images\t4.jpg" />
+    <Content Include="Html\images\t5.jpg" />
+    <Content Include="Html\images\t6.jpg" />
+    <Content Include="Html\images\w.jpg" />
+    <Content Include="Html\images\w1.jpg" />
+    <Content Include="Html\images\w2.jpg" />
+    <Content Include="Html\images\w3.jpg" />
     <Content Include="Html\js\bootstrap.min.js" />
     <Content Include="Html\js\jquery-2.1.4.min.js" />
+    <Content Include="Html\js\jquery.chocolat.js" />
+    <Content Include="Html\js\jquery.devrama.slider-0.9.4.js" />
+    <Content Include="Html\js\jquery.hoverdir.js" />
+    <Content Include="Html\js\modernizr.custom.97074.js" />
+    <Content Include="Html\js\numscroller-1.0.js" />
+    <Content Include="Html\js\owl.carousel.js" />
     <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
@@ -618,12 +636,6 @@
     <Content Include="Areas\WebManage\Views\Templet\Details.cshtml" />
     <Content Include="Areas\WebManage\Views\Columns\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\Columns\Details.cshtml" />
-    <Content Include="Html\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Html\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Html\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Html\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Html\fonts\Nunito\Nunito-Regular.ttf" />
-    <Content Include="Html\fonts\Pacifico\Pacifico.ttf" />
     <Content Include="Areas\WebManage\Views\Content\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Content\Details.cshtml" />
     <Content Include="Areas\WebManage\Views\Content\Form.cshtml" />
@@ -649,6 +661,10 @@
     <Content Include="Areas\WebManage\Views\WebSiteMgr\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\WebSiteMgr\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\WebSiteMgr\Details.cshtml" />
+    <Content Include="Html\fonts\fontawesome-webfont.eot" />
+    <Content Include="Html\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Html\fonts\fontawesome-webfont.woff" />
+    <Content Include="Html\fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
@@ -677,7 +693,10 @@
       <Name>CMS.Mapping</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Html\fonts\Nunito\" />
+    <Folder Include="Html\fonts\Pacifico\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

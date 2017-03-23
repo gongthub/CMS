@@ -929,6 +929,7 @@ namespace CMS.Application.Comm
         {
             string htmls = string.Empty;
             int iFlay = 0;
+            bool isNoFind = false;
             if (entity != null && !string.IsNullOrEmpty(entity.Id))
             {
                 List<string> urlRaws = WebHelper.GetUrls(urlRaw);
@@ -962,38 +963,49 @@ namespace CMS.Application.Comm
                             iFlay = 1;
                         }
                     }
-                    htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
-                    if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Content))
+                    if (templetmodel == null)
                     {
-                        if (columnentity != null)
+                        isNoFind = true;
+                    }
+                    else
+                    {
+                        htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
+                        if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Content))
                         {
-                            if (iFlay == 1)
+                            if (columnentity != null)
                             {
-                                ContentEntity contentEntity = new ContentApp().GetForm(Ids);
-                                if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+                                if (iFlay == 1)
+                                {
+                                    ContentEntity contentEntity = new ContentApp().GetForm(Ids);
+                                    if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+                                    {
+                                        TempHelp temphelp = new TempHelp();
+                                        htmls = temphelp.GetHtmlPages(htmls, Ids);
+                                    }
+                                    else
+                                    {
+                                        isNoFind = true;
+                                    }
+                                }
+                                else
                                 {
                                     TempHelp temphelp = new TempHelp();
                                     htmls = temphelp.GetHtmlPages(htmls, Ids);
                                 }
-                                else
-                                {
-                                    htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
-                                }
-                            }
-                            else
-                            {
-                                TempHelp temphelp = new TempHelp();
-                                htmls = temphelp.GetHtmlPages(htmls, Ids);
                             }
                         }
-                    }
-                    else
-                    {
-                        htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
+                        else
+                        {
+                            isNoFind = true;
+                        }
                     }
                 }
             }
             else
+            {
+                isNoFind = true;
+            }
+            if (isNoFind)
             {
                 htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
             }
