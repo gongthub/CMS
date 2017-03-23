@@ -62,7 +62,7 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            if (!IsExistName(keyValue, moduleEntity.FullName))
+            if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
@@ -76,7 +76,7 @@ namespace CMS.Application.WebManage
                 }
             }
             else
-            { 
+            {
                 throw new Exception("名称已存在，请重新输入！");
             }
         }

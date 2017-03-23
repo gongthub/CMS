@@ -29,7 +29,8 @@ namespace CMS.Application.WebManage
                     {
                         TwebIds = TwebSiteForUrlEntity.Id;
                     }
-                    if (!IsExistUrl(TwebIds, webSiteForUrlEntity.UrlAddress))
+                    //if (!IsExistUrl(TwebIds, webSiteForUrlEntity.UrlAddress)) 
+                    if (!service.IsExist(TwebIds, "UrlAddress", webSiteForUrlEntity.UrlAddress, true))
                     {
                         if (TwebSiteForUrlEntity != null && !string.IsNullOrEmpty(TwebSiteForUrlEntity.Id))
                         {
@@ -142,10 +143,14 @@ namespace CMS.Application.WebManage
 
             WebSiteForUrlEntity TwebSiteForUrlEntity = service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == moduleEntity.Id && m.SortCode == 0).FirstOrDefault();
             if (TwebSiteForUrlEntity != null)
-                return IsExistUrl(TwebSiteForUrlEntity.Id, moduleEntity.UrlAddress);
+            {
+                //return IsExistUrl(TwebSiteForUrlEntity.Id, moduleEntity.UrlAddress); 
+                return service.IsExist(TwebSiteForUrlEntity.Id, "UrlAddress", moduleEntity.UrlAddress, true);
+            }
             else
             {
-                return IsExistUrl("", moduleEntity.UrlAddress);
+                //return IsExistUrl("", moduleEntity.UrlAddress);
+                return service.IsExist("", "UrlAddress", moduleEntity.UrlAddress, true);
             }
         }
     }
