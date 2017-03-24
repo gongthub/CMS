@@ -269,7 +269,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlPages(string codes, string Id)
         {
-            string strs = "";
+            string strs = string.Empty;
             try
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(codes);
@@ -302,7 +302,7 @@ namespace CMS.Application.Comm
             }
             catch (Exception ex)
             {
-                strs = "";
+                strs = string.Empty;
             }
             return strs;
 
@@ -340,7 +340,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlPage(string codes, ContentEntity model)
         {
-            string strs = "";
+            string strs = string.Empty;
             try
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(codes);
@@ -365,7 +365,7 @@ namespace CMS.Application.Comm
             }
             catch (Exception ex)
             {
-                strs = "";
+                strs = string.Empty;
             }
             return strs;
 
@@ -378,7 +378,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlPage(string codes, ContentEntity model, Dictionary<string, string> attrs)
         {
-            string strs = "";
+            string strs = string.Empty;
             try
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(codes);
@@ -403,7 +403,7 @@ namespace CMS.Application.Comm
             }
             catch (Exception ex)
             {
-                strs = "";
+                strs = string.Empty;
             }
             return strs;
 
@@ -444,6 +444,9 @@ namespace CMS.Application.Comm
                     case "templet":
                         htmls = GetHtmlsByTempletName(modelStr, Id);
                         break;
+                    case "syssite":
+                        htmls = GetWebSiteById(modelStr, Id);
+                        break;
                 }
 
             }
@@ -451,129 +454,7 @@ namespace CMS.Application.Comm
         }
         #endregion
 
-        #region 根据id获取内容 -string GetModelById(string name, string Ids)
-        /// <summary>
-        /// 根据id获取内容
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetModelById(string name, string Ids)
-        {
-            string strs = "";
-
-            //InitHtmlSavePath(Ids);
-
-            ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
-            if (contentEntity != null)
-            {
-                PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
-                if (propertys != null && propertys.Length > 0)
-                {
-                    foreach (PropertyInfo property in propertys)
-                    {
-                        strs = ProContent(name, strs, property, contentEntity);
-                    }
-                }
-            }
-
-            return strs;
-        }
-
-        /// <summary>
-        /// 根据id获取内容
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetModelById(string name, string Ids, Dictionary<string, string> attrs)
-        {
-            string strs = "";
-            ////数据源
-            //if (attrs.ContainsKey("sourcename"))
-            //{
-            //    string sourceName = "";
-            //    if (attrs.TryGetValue("sourcename", out sourceName))
-            //    {
-            //        ContentEntity contentEntityT = new ContentEntity();
-            //        ContentApp contentApp = new ContentApp();
-            //        contentEntityT = contentApp.GetContentByActionCode(sourceName);
-            //        if (contentEntityT != null && contentEntityT.Id != Guid.Empty.ToString())
-            //        {
-            //            Ids = contentEntityT.Id.ToString();
-            //        }
-            //    }
-
-            //}
-            ////InitHtmlSavePath(Ids);
-
-
-            //ContentApp c_ContentApp = new ContentApp();
-            //ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
-            ContentEntity contentEntity = InitModelAttr(Ids, attrs);
-            if (contentEntity != null)
-            {
-                PropertyInfo[] propertys = contentEntity.GetType().GetProperties();
-                if (propertys != null && propertys.Length > 0)
-                {
-                    foreach (PropertyInfo property in propertys)
-                    {
-                        strs = ProContent(name, strs, property, contentEntity, attrs);
-                    }
-                }
-            }
-
-            return strs;
-        }
-
-        /// <summary>
-        /// 处理内容
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="strs"></param>
-        /// <param name="property"></param>
-        /// <returns></returns>
-        private string ProContent(string name, string strs, PropertyInfo property, ContentEntity contentEntity)
-        {
-            if (property.Name == name)
-            {
-                object obj = property.GetValue(contentEntity, null);
-                if (obj != null)
-                {
-                    strs = obj.ToString();
-                    if (IsHtmlEnCode(strs))
-                    {
-                        strs = System.Web.HttpUtility.HtmlDecode(strs);
-                    }
-                }
-            }
-            return strs;
-        }
-
-        /// <summary>
-        /// 处理内容
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="strs"></param>
-        /// <param name="property"></param>
-        /// <returns></returns>
-        private string ProContent(string name, string strs, PropertyInfo property, ContentEntity contentEntity, Dictionary<string, string> attrs)
-        {
-            if (property.Name == name)
-            {
-                object obj = property.GetValue(contentEntity, null);
-                if (obj != null)
-                {
-                    strs = obj.ToString();
-                    if (IsHtmlEnCode(strs))
-                    {
-                        strs = System.Web.HttpUtility.HtmlDecode(strs);
-                    }
-                    strs = InitFormat(strs, attrs);
-                }
-            }
-            return strs;
-        }
-
+        #region 获取内容信息 -string GetModelById(string name, string Ids)
         /// <summary>
         /// 根据model获取内容
         /// </summary>
@@ -581,30 +462,10 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private string GetModelById(string name, ContentEntity model)
         {
-            string strs = "";
-
+            string strs = string.Empty;
             if (model != null)
             {
-                PropertyInfo[] propertys = model.GetType().GetProperties();
-                if (propertys != null && propertys.Length > 0)
-                {
-                    foreach (PropertyInfo property in propertys)
-                    {
-                        if (property.Name == name)
-                        {
-                            object obj = property.GetValue(model, null);
-                            if (obj != null)
-                            {
-                                strs = obj.ToString();
-                                if (IsHtmlEnCode(strs))
-                                {
-                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
-                                }
-
-                            }
-                        }
-                    }
-                }
+                strs = ProContent<ContentEntity>(name, model);
             }
 
             return strs;
@@ -617,30 +478,68 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private string GetModelById(string name, ContentEntity model, Dictionary<string, string> attrs)
         {
-            string strs = "";
+            string strs = string.Empty;
 
             if (model != null)
             {
-                PropertyInfo[] propertys = model.GetType().GetProperties();
-                if (propertys != null && propertys.Length > 0)
-                {
-                    foreach (PropertyInfo property in propertys)
-                    {
-                        if (property.Name == name)
-                        {
-                            object obj = property.GetValue(model, null);
-                            if (obj != null)
-                            {
-                                strs = obj.ToString();
-                                if (IsHtmlEnCode(strs))
-                                {
-                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
-                                }
+                strs = ProContent<ContentEntity>(name, model, attrs);
+            }
 
-                                strs = InitFormat(name, strs, attrs);
-                            }
-                        }
-                    }
+            return strs;
+        }
+        /// <summary>
+        /// 根据id获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById(string name, string Ids)
+        {
+            string strs = string.Empty;
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            if (contentEntity != null)
+            {
+                strs = ProContent<ContentEntity>(name, contentEntity);
+            }
+
+            return strs;
+        }
+
+        /// <summary>
+        /// 根据id获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById(string name, string Ids, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            ContentEntity contentEntity = InitModelAttr(Ids, attrs);
+            if (contentEntity != null)
+            {
+                strs = ProContent<ContentEntity>(name, contentEntity, attrs);
+            }
+
+            return strs;
+        }
+        #endregion
+
+        #region 根据id获取，站点信息 -string GetWebSiteById(string name, string Ids)
+        /// <summary>
+        /// 根据id获取，站点信息
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetWebSiteById(string name, string Ids)
+        {
+            string strs = string.Empty;
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
+            {
+                WebSiteEntity entity = new WebSiteApp().GetForm(contentEntity.WebSiteId);
+                if (entity != null && !string.IsNullOrEmpty(entity.Id))
+                {
+                    strs = ProContent<WebSiteEntity>(name, entity);
                 }
             }
 
@@ -656,7 +555,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
-            string strs = "";
+            string strs = string.Empty;
             List<ContentEntity> contententitys = new List<ContentEntity>();
             IQueryable<ContentEntity> contententitysT = null;
 
@@ -737,6 +636,101 @@ namespace CMS.Application.Comm
 
         #endregion
 
+        #region 根据模板名称获取模板信息 -string GetHtmlsByTempletName(string name, string Id)
+        /// <summary>
+        /// 根据模板名称获取模板信息
+        /// </summary>
+        /// <returns></returns>
+        private string GetHtmlsByTempletName(string name, string Id)
+        {
+            string strs = string.Empty;
+            TempletApp templetapp = new TempletApp();
+            TempletEntity templet = templetapp.GetFormByName(name);
+            if (templet != null)
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                TempHelp temphelp = new TempHelp();
+                strs = temphelp.GetHtmlPages(templets, Id);
+            }
+            return strs;
+        }
+
+        #endregion
+
+        #region 处理内容 - ProContent<T>(string name, string strs, T entity)
+        /// <summary>
+        /// 处理内容
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="strs"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        private string ProContent<T>(string name, T entity)
+        {
+            string strs = string.Empty;
+            if (entity != null && name != null)
+            {
+                PropertyInfo[] propertys = entity.GetType().GetProperties();
+                if (propertys != null && propertys.Length > 0)
+                {
+                    foreach (PropertyInfo property in propertys)
+                    {
+                        if (property.Name.ToLower() == name.ToLower())
+                        {
+                            object obj = property.GetValue(entity, null);
+                            if (obj != null)
+                            {
+                                strs = obj.ToString();
+                                if (IsHtmlEnCode(strs))
+                                {
+                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return strs;
+        }
+
+        /// <summary>
+        /// 处理内容
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="strs"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        private string ProContent<T>(string name, T entity, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            if (entity != null && name != null)
+            {
+                PropertyInfo[] propertys = entity.GetType().GetProperties();
+                if (propertys != null && propertys.Length > 0)
+                {
+                    foreach (PropertyInfo property in propertys)
+                    {
+                        if (property.Name.ToLower() == name.ToLower())
+                        {
+                            object obj = property.GetValue(entity, null);
+                            if (obj != null)
+                            {
+                                strs = obj.ToString();
+                                if (IsHtmlEnCode(strs))
+                                {
+                                    strs = System.Web.HttpUtility.HtmlDecode(strs);
+                                }
+                                strs = InitFormat(strs, attrs);
+                            }
+                        }
+                    }
+                }
+            }
+            return strs;
+        }
+
+        #endregion
+
         #region 根据id更新内容链接 -void UpdateContentById(string name, string urlAddress,string Ids)
         /// <summary>
         /// 根据id更新内容链接
@@ -754,27 +748,6 @@ namespace CMS.Application.Comm
                 c_ContentApp.SubmitForm(contentEntity, Ids);
             }
         }
-        #endregion
-
-        #region 根据模板名称获取模板信息 -string GetHtmlsByTempletName(string name, string Id)
-        /// <summary>
-        /// 根据模板名称获取模板信息
-        /// </summary>
-        /// <returns></returns>
-        private string GetHtmlsByTempletName(string name, string Id)
-        {
-            string strs = "";
-            TempletApp templetapp = new TempletApp();
-            TempletEntity templet = templetapp.GetFormByName(name);
-            if (templet != null)
-            {
-                string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
-                TempHelp temphelp = new TempHelp();
-                strs = temphelp.GetHtmlPages(templets, Id);
-            }
-            return strs;
-        }
-
         #endregion
 
         #region 获取属性集合 -Dictionary<string, string> GetAttrs(string attrs)
