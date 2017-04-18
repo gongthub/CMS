@@ -2,7 +2,7 @@
 using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.Entity.WebManage; 
+using CMS.Domain.Entity.WebManage;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
@@ -14,11 +14,20 @@ namespace CMS.Web.Controllers
     {
         public static readonly string WEBSITEID = "WEBSITEID";
         [HttpGet]
-        public ActionResult Index()
-        { 
+        public ActionResult Index(string strLoginMark)
+        {
+            if (!string.IsNullOrEmpty(strLoginMark))
+            {
+                UserApp userApp = new UserApp();
+                string strWebSiteIds = string.Empty;
+                if (userApp.IsExistDefaultWebSite(ref strWebSiteIds))
+                {
+                    return RedirectToAction("WebSite", "Home", new { key = strWebSiteIds });
+                }
+            }
             return View();
         }
-        [HttpGet] 
+        [HttpGet]
         public ActionResult WebSite(string key)
         {
             WebSiteApp app = new WebSiteApp();
@@ -28,14 +37,14 @@ namespace CMS.Web.Controllers
                 Session["WEBSITEID"] = entity.Id;
                 Session["WEBSITENAME"] = entity.FullName;
                 Session["WEBSITEENTITY"] = entity;
-            } 
+            }
 
             return RedirectToAction("WebSiteMgr");
         }
         [HttpGet]
         [HandlerWebSiteMgr]
         public ActionResult WebSiteMgr()
-        { 
+        {
             return View();
         }
         [HttpGet]

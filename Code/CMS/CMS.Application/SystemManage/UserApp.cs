@@ -1,5 +1,7 @@
-﻿using CMS.Code;
+﻿using CMS.Application.WebManage;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
 using System;
@@ -189,6 +191,42 @@ namespace CMS.Application.SystemManage
             }
 
             return retBool;
+        }
+
+        /// <summary>
+        /// 判断当前用户是否包含默认站点 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExistDefaultWebSite(ref string webSiteId)
+        {
+            bool bState = false;
+            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
+                {
+                    WebSiteApp webSiteApp=new WebSiteApp();
+                    List<WebSiteEntity> webSiteEntitys = webSiteApp.GetListForUserId();
+                    if (webSiteEntitys != null && webSiteEntitys.Count > 0)
+                    {
+                        if (webSiteEntitys.Count == 1)
+                        {
+                            bState = true;
+                            webSiteId = webSiteEntitys[0].Id;
+                        }
+                        else
+                        {
+                            WebSiteEntity webSiteEntity = webSiteEntitys.Find(m=>m.MainMark==true);
+                            if (webSiteEntity != null)
+                            {
+                                bState = true;
+                                webSiteId = webSiteEntity.Id;
+                            }
+                        }
+                    }
+                }
+            }
+            return bState;
         }
     }
 }

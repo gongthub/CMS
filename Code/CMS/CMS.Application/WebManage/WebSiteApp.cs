@@ -51,6 +51,7 @@ namespace CMS.Application.WebManage
             expression = expression.And(t => webSiteIds.Contains(t.Id));
             return service.IQueryable(expression).ToList();
         }
+
         public List<WebSiteEntity> GetListByCreatorId()
         {
             var expression = ExtLinq.True<WebSiteEntity>();
