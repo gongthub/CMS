@@ -19,6 +19,10 @@ namespace CMS.Application.SystemManage
         /// 上传图片保存路径
         /// </summary>
         private static readonly string UPLOADIMGPATH = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMG;
+        /// <summary>
+        /// 上传文件保存路径
+        /// </summary>
+        private static readonly string UPLOADFILEPATH = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILE;
 
         private IUpFileRepository service = new UpFileRepository();
 
@@ -37,6 +41,35 @@ namespace CMS.Application.SystemManage
         }
 
         /// <summary>
+        /// 根据时间获取图片保存路径 时间格式yyyyMMdd
+        /// </summary>
+        /// <returns></returns>
+        private string GetImgPathByDate()
+        {
+            string strPath = string.Empty;
+            string dates = DateTime.Now.ToString("yyyyMMdd");
+            strPath = UPLOADIMGPATH + dates + "/";
+            return strPath;
+        }
+        /// <summary>
+        /// 根据时间获取图片保存路径 时间格式yyyyMMdd
+        /// </summary>
+        /// <returns></returns>
+        private string GetImgPathByDate(string strWebSiteShotName)
+        {
+            string strPath = string.Empty;
+            string dates = DateTime.Now.ToString("yyyyMMdd");
+            if (!string.IsNullOrEmpty(strWebSiteShotName))
+            {
+                strPath = UPLOADIMGPATH + "/" + strWebSiteShotName + "/" + dates + "/";
+            }
+            else
+            {
+                strPath = UPLOADIMGPATH + dates + "/";
+            }
+            return strPath;
+        }
+        /// <summary>
         /// 根据时间获取文件保存路径 时间格式yyyyMMdd
         /// </summary>
         /// <returns></returns>
@@ -44,7 +77,25 @@ namespace CMS.Application.SystemManage
         {
             string strPath = string.Empty;
             string dates = DateTime.Now.ToString("yyyyMMdd");
-            strPath = UPLOADIMGPATH + dates + "/";
+            strPath = UPLOADFILEPATH + dates + "/";
+            return strPath;
+        }
+        /// <summary>
+        /// 根据时间获取文件保存路径 时间格式yyyyMMdd
+        /// </summary>
+        /// <returns></returns>
+        private string GetFilePathByDate(string strWebSiteShotName)
+        {
+            string strPath = string.Empty;
+            string dates = DateTime.Now.ToString("yyyyMMdd");
+            if (!string.IsNullOrEmpty(strWebSiteShotName))
+            {
+                strPath = UPLOADFILEPATH + "/" + strWebSiteShotName + "/" + dates + "/";
+            }
+            else
+            {
+                strPath = UPLOADFILEPATH + dates + "/";
+            }
             return strPath;
         }
 
@@ -76,7 +127,42 @@ namespace CMS.Application.SystemManage
         {
             UpFileDTO entity = new UpFileDTO();
             string filePaths = string.Empty;
-            string upPaths = GetFilePathByDate();
+            string upPaths = GetImgPathByDate();
+            string upPathsT = upPaths.Replace("~", "");
+            if (file != null)
+            {
+                //验证 
+                VerifyImg(file);
+
+                string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+                string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
+                string newFileName = GetFileNameByTime();
+
+                // 文件上传后的保存路径 
+                string filePath = InitSavePath(upPaths);
+                string saveName = newFileName + fileExtension; // 保存文件名称
+                filePaths = upPathsT + saveName;
+                file.SaveAs(filePath + saveName);
+
+                entity.Sys_FileName = saveName;
+                entity.Sys_FileOldName = fileName;
+                entity.Sys_ExtName = fileExtension;
+                entity.Sys_FilePath = filePaths;
+                entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+            }
+            return entity;
+        }
+        /// <summary>
+        /// 上传图片
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="strWebSiteShotName">站点简称</param>
+        /// <returns></returns>
+        public UpFileDTO UpLoadImg(HttpPostedFileBase file, string strWebSiteShotName)
+        {
+            UpFileDTO entity = new UpFileDTO();
+            string filePaths = string.Empty;
+            string upPaths = GetImgPathByDate(strWebSiteShotName);
             string upPathsT = upPaths.Replace("~", "");
             if (file != null)
             {
@@ -113,11 +199,6 @@ namespace CMS.Application.SystemManage
 
             //验证格式
             string formatImgs = string.Empty;
-            if (!VerifyImgFormat(fileExtension, out formatImgs))
-            {
-                throw new Exception("上传图片格式不符合要求，请重新上传！允许上传格式：" + formatImgs);
-            }
-
             if (!VerifyImgFormat(fileExtension, out formatImgs))
             {
                 throw new Exception("上传图片格式不符合要求，请重新上传！允许上传格式：" + formatImgs);
@@ -234,6 +315,204 @@ namespace CMS.Application.SystemManage
 
         #endregion
 
+        #region 上传文件
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public UpFileDTO UpLoadFile(HttpPostedFileBase file)
+        {
+            UpFileDTO entity = new UpFileDTO();
+            string filePaths = string.Empty;
+            string upPaths = GetFilePathByDate();
+            string upPathsT = upPaths.Replace("~", "");
+            if (file != null)
+            {
+                //验证 
+                VerifyFile(file);
+
+                string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+                string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
+                string newFileName = GetFileNameByTime();
+
+                // 文件上传后的保存路径 
+                string filePath = InitSavePath(upPaths);
+                string saveName = newFileName + fileExtension; // 保存文件名称
+                filePaths = upPathsT + saveName;
+                file.SaveAs(filePath + saveName);
+
+                entity.Sys_FileName = saveName;
+                entity.Sys_FileOldName = fileName;
+                entity.Sys_ExtName = fileExtension;
+                entity.Sys_FilePath = filePaths;
+                entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+            }
+            return entity;
+        }
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="strWebSiteShotName">站点简称</param>
+        /// <returns></returns>
+        public UpFileDTO UpLoadFile(HttpPostedFileBase file, string strWebSiteShotName)
+        {
+            UpFileDTO entity = new UpFileDTO();
+            string filePaths = string.Empty;
+            string upPaths = GetFilePathByDate(strWebSiteShotName);
+            string upPathsT = upPaths.Replace("~", "");
+            if (file != null)
+            {
+                //验证 
+                VerifyFile(file);
+
+                string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+                string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
+                string newFileName = GetFileNameByTime();
+
+                // 文件上传后的保存路径 
+                string filePath = InitSavePath(upPaths);
+                string saveName = newFileName + fileExtension; // 保存文件名称
+                filePaths = upPathsT + saveName;
+                file.SaveAs(filePath + saveName);
+
+                entity.Sys_FileName = saveName;
+                entity.Sys_FileOldName = fileName;
+                entity.Sys_ExtName = fileExtension;
+                entity.Sys_FilePath = filePaths;
+                entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+            }
+            return entity;
+        }
+
+        #region 上传文件验证
+        /// <summary>
+        /// 上传文件验证
+        /// </summary>
+        public void VerifyFile(HttpPostedFileBase file)
+        {
+            string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+            string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
+
+            //验证格式
+            string formatFiles = string.Empty;
+            if (!VerifyFileFormat(fileExtension, out formatFiles))
+            {
+                throw new Exception("上传文件格式不符合要求，请重新上传！允许上传格式：" + formatFiles);
+            }
+
+            //验证大小
+            int maxSize = 0;
+            if (!VerifyFileSize(file.ContentLength, out maxSize))
+            {
+                throw new Exception("上传文件大小不符合要求，请重新上传！最大上传：" + maxSize + "KB");
+            }
+        }
+
+        /// <summary>
+        /// 验证文件格式是否满足条件
+        /// </summary>
+        /// <param name="formats"></param>
+        /// <returns></returns>
+        public bool VerifyFileFormat(string formats)
+        {
+            bool bState = false;
+            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILEFORMAT;
+            if (!string.IsNullOrEmpty(formats))
+            {
+                if (formatImgs != "*")
+                {
+                    string[] imgs = formatImgs.Split('|');
+                    bState = imgs.Contains(formats);
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            return bState;
+        }
+
+        /// <summary>
+        /// 验证文件格式是否满足条件
+        /// </summary>
+        /// <param name="formats"></param>
+        /// <returns></returns>
+        public bool VerifyFileFormat(string formats, out string formatStr)
+        {
+            bool bState = false;
+            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILEFORMAT;
+            if (!string.IsNullOrEmpty(formats))
+            {
+                if (formatImgs != "*")
+                {
+                    string[] imgs = formatImgs.Split('|');
+                    bState = imgs.Contains(formats);
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            formatStr = formatImgs;
+            return bState;
+        }
+
+        /// <summary>
+        /// 验证文件大小是否满足条件
+        /// </summary>
+        /// <param name="formats"></param>
+        /// <returns></returns>
+        public bool VerifyFileSize(int size)
+        {
+            bool bState = false;
+            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILESIZE;
+            int sizeT = 0;
+            if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
+            {
+                if (sizeT != 0)
+                {
+                    if (size / 1024 <= sizeT)
+                        bState = true;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 验证文件大小是否满足条件
+        /// </summary>
+        /// <param name="formats"></param>
+        /// <returns></returns>
+        public bool VerifyFileSize(int size, out int maxSize)
+        {
+            bool bState = false;
+            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILESIZE;
+            int sizeT = 0;
+            if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
+            {
+                if (sizeT != 0)
+                {
+                    if (size / 1024 <= sizeT)
+                        bState = true;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            maxSize = sizeT;
+            return bState;
+        }
+
+        #endregion
+
+        #endregion
+
         /// <summary>
         /// 根据ParentId逻辑删除
         /// </summary>
@@ -244,6 +523,15 @@ namespace CMS.Application.SystemManage
         }
 
         /// <summary>
+        /// 根据WebSiteId逻辑删除
+        /// </summary>
+        /// <param name="keyValue"></param>
+        public void DeleteByWebSiteId(string keyValue)
+        {
+            service.DeleteById(t => t.WebSiteId == keyValue);
+        }
+
+        /// <summary>
         /// 保存上传文件信息
         /// </summary>
         /// <param name="upFileEntity"></param>
@@ -251,10 +539,11 @@ namespace CMS.Application.SystemManage
         public bool AddUpFileEntity(UpFileDTO upFileDtoEntity)
         {
             bool bState = false;
-            if (!string.IsNullOrEmpty(upFileDtoEntity.Sys_ParentId))
+            if (!string.IsNullOrEmpty(upFileDtoEntity.Sys_ParentId) && !string.IsNullOrEmpty(upFileDtoEntity.Sys_FileName))
             {
                 UpFileEntity upFileEntity = new UpFileEntity();
 
+                upFileEntity.WebSiteId = upFileDtoEntity.Sys_WebSiteId;
                 upFileEntity.ParentId = upFileDtoEntity.Sys_ParentId;
                 upFileEntity.SortCode = upFileDtoEntity.Sys_SortCode;
                 upFileEntity.ModuleName = upFileDtoEntity.Sys_ModuleName;

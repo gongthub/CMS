@@ -36,6 +36,7 @@ namespace CMS.Web.Controllers
             {
                 Session["WEBSITEID"] = entity.Id;
                 Session["WEBSITENAME"] = entity.FullName;
+                Session["WEBSITESHORTNAME"] = entity.ShortName;
                 Session["WEBSITEENTITY"] = entity;
             }
 

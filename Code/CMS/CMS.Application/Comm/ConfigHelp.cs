@@ -68,7 +68,40 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("UploadImgSize").ToString();
             }
-        } 
+        }
+        #endregion
+
+        #region 上传文件配置
+        /// <summary>
+        /// 上传文件文件夹
+        /// </summary>
+        public string UPLOADFILE
+        {
+            get
+            {
+                return Code.Configs.GetValue("UploadFile").ToString();
+            }
+        }
+        /// <summary>
+        /// 上传文件格式
+        /// </summary>
+        public string UPLOADFILEFORMAT
+        {
+            get
+            {
+                return Code.Configs.GetValue("UploadFileFormat").ToString();
+            }
+        }
+        /// <summary>
+        /// 上传文件大小
+        /// </summary>
+        public string UPLOADFILESIZE
+        {
+            get
+            {
+                return Code.Configs.GetValue("UploadFileSize").ToString();
+            }
+        }
         #endregion
 
         #region 系统错误页

@@ -136,7 +136,7 @@ namespace CMS.Application.WebManage
                 }
             }
         }
-        public void SubmitForm(ContentEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
+        public void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys)
         {
             if (!string.IsNullOrEmpty(keyValue))
             {
@@ -159,11 +159,19 @@ namespace CMS.Application.WebManage
                     SubmitForm(moduleEntity, moduleEntity.Id);
                 }
             }
-            //更新上传文件表
-            UpFileApp upFileApp = new UpFileApp();
-            upFileentity.Sys_ParentId = keyValue;
-            upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
-            upFileApp.AddUpFileEntity(upFileentity);
+            if (upFileentitys != null && upFileentitys.Count > 0)
+            {
+                foreach (UpFileDTO upFileentity in upFileentitys)
+                {
+                    //更新上传文件表
+                    UpFileApp upFileApp = new UpFileApp();
+
+                    upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
+                    upFileentity.Sys_ParentId = keyValue;
+                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
+                    upFileApp.AddUpFileEntity(upFileentity);
+                }
+            }
         }
 
 

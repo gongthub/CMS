@@ -77,6 +77,23 @@ namespace CMS.Web
             }
         }
         /// <summary>
+        /// 站点简称
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string Base_WebSiteShortName
+        {
+            get
+            {
+                string strShortName = string.Empty;
+                if (Session["WEBSITESHORTNAME"] != null)
+                {
+                    strShortName = Session["WEBSITESHORTNAME"].ToString();
+                }
+                return strShortName;
+            }
+        }
+        /// <summary>
         /// 站点信息
         /// </summary>
         /// <param name="name"></param>

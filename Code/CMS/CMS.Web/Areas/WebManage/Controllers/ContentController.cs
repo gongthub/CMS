@@ -2,6 +2,7 @@
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -34,12 +35,18 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [ValidateAntiForgeryToken]
-        public ActionResult SubmitForm(ContentEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
+        public ActionResult SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
             try
             {
+                List<UpFileDTO> upFileentitys = new List<UpFileDTO>();
+                if (HttpContext.Request["upFileentitys"] != null)
+                {
+                    string strupFiles = HttpContext.Request["upFileentitys"].ToString();
+                    upFileentitys = JsonConvert.DeserializeObject<List<UpFileDTO>>(strupFiles);
+                }
                 moduleEntity.WebSiteId = Base_WebSiteId;
-                c_contentApp.SubmitForm(moduleEntity, keyValue, upFileentity);
+                c_contentApp.SubmitForm(moduleEntity, keyValue, upFileentitys);
                 return Success("操作成功。");
 
             }

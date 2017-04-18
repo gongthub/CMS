@@ -148,30 +148,38 @@ namespace CMS.Application.WebManage
                 moduleEntity.Id = keyValue;
                 if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
                 {
-                    InitSpareUrl(ref moduleEntity);
-                    if (!string.IsNullOrEmpty(keyValue))
+                    if (!service.IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                     {
-                        moduleEntity.Modify(keyValue);
-                        service.Update(moduleEntity);
+                        InitSpareUrl(ref moduleEntity);
+                        if (!string.IsNullOrEmpty(keyValue))
+                        {
+                            moduleEntity.Modify(keyValue);
+                            service.Update(moduleEntity);
+                        }
+                        else
+                        {
+                            moduleEntity.Create();
+                            service.Insert(moduleEntity);
+                            keyValue = moduleEntity.Id;
+
+                            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                            if (LoginInfo != null)
+                            {
+                                new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
+                            }
+                        }
+                        //更新上传文件表
+                        UpFileApp upFileApp = new UpFileApp();
+                        upFileentity.Sys_WebSiteId = moduleEntity.Id;
+                        upFileentity.Sys_ParentId = keyValue;
+                        upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
+                        upFileApp.AddUpFileEntity(upFileentity);
+                        SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
                     }
                     else
                     {
-                        moduleEntity.Create();
-                        service.Insert(moduleEntity);
-                        keyValue = moduleEntity.Id;
-
-                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
-                        if (LoginInfo != null)
-                        {
-                            new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
-                        }
+                        throw new Exception("简称已存在，请重新输入！");
                     }
-                    //更新上传文件表
-                    UpFileApp upFileApp = new UpFileApp();
-                    upFileentity.Sys_ParentId = keyValue;
-                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
-                    upFileApp.AddUpFileEntity(upFileentity);
-                    SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
                 }
                 else
                 {

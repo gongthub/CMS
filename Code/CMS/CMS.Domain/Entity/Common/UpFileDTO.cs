@@ -11,6 +11,10 @@ namespace CMS.Domain.Entity.Common
 
 
         /// <summary>
+        /// Sys_WebSiteId
+        /// </summary>		
+        public string Sys_WebSiteId { get; set; }
+        /// <summary>
         /// Sys_ParentId
         /// </summary>		
         public string Sys_ParentId { get; set; }

@@ -27,7 +27,36 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                     if (upFiles != null)
                     {
                         CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
-                        entity = upfileApp.UpLoadImg(upFiles);
+                        entity = upfileApp.UpLoadImg(upFiles, Base_WebSiteShortName);
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entity);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadFile()
+        {
+            try
+            {
+                UpFileDTO entity = new UpFileDTO();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files[0];
+                    if (upFiles != null)
+                    {
+                        CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                        entity = upfileApp.UpLoadFile(upFiles, Base_WebSiteShortName);
                     }
                 }
                 else

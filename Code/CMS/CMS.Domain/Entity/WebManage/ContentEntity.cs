@@ -26,6 +26,7 @@ namespace CMS.Domain.Entity.WebManage
         public string Description { get; set; }
         public string UrlPath { get; set; }
         public string UrlAddress { get; set; }
+        public string FilePath { get; set; }
         public string Icon { get; set; }
         public string Content { get; set; }
         public string SEOTitle { get; set; }

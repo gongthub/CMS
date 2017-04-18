@@ -15,6 +15,11 @@ namespace CMS.Domain.Entity.SystemManage
         public string Id { get; set; }
 
         /// <summary>
+        /// WebSiteId
+        /// </summary>		
+        public string WebSiteId { get; set; }
+
+        /// <summary>
         /// ParentId
         /// </summary>		
         public string ParentId { get; set; }

@@ -32,25 +32,30 @@
             return false;
         }
 
-        var jsonData = uploadImg("IconUp"); 
-        var postData = $("#form1").formSerialize();
-        postData["Content"] = htmlEncode(postData["Content"]);
-        postData["ColumnId"] = columnId; 
-        postData["Icon"] = jsonData.Sys_FilePath;
-
-        postData["Sys_FileName"] = jsonData.Sys_FileName;
-        postData["Sys_FileOldName"] = jsonData.Sys_FileOldName;
-        postData["Sys_ExtName"] = jsonData.Sys_ExtName;
-        postData["Sys_FilePath"] = jsonData.Sys_FilePath;
-        postData["Sys_FileMd5"] = jsonData.Sys_FileMd5;
-        $.submitForm({
-            url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
-            param: postData,
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
+        var jsonDataIcon = uploadImg("IconUp");
+        if (jsonDataIcon.success == true) {
+            var iconData = jsonDataIcon.data;
+            var postData = $("#form1").formSerialize();
+            postData["Content"] = htmlEncode(postData["Content"]);
+            postData["ColumnId"] = columnId;
+            postData["Icon"] = jsonData.Sys_FilePath;
+            
+            if (iconData != null && iconData != undefined) {
+                postData["Sys_FileName"] = iconData.Sys_FileName;
+                postData["Sys_FileOldName"] = iconData.Sys_FileOldName;
+                postData["Sys_ExtName"] = iconData.Sys_ExtName;
+                postData["Sys_FilePath"] = iconData.Sys_FilePath;
+                postData["Sys_FileMd5"] = iconData.Sys_FileMd5;
             }
-        });
-    } 
+            $.submitForm({
+                url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
+                param: postData,
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+    }
 
 </script>
 <form id="form1" enctype="multipart/form-data">

@@ -2,7 +2,7 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script src="~/Content/js/Common.js"></script>
+<script src="~/Content/js/Common.js?v=20140418_06"></script>
 <link href="~/Content/js/simditor/css/simditor.css" rel="stylesheet" />
 <script src="~/Content/js/simditor/js/module.min.js"></script>
 <script src="~/Content/js/simditor/js/uploader.min.js"></script>
@@ -40,6 +40,7 @@
                     data.Content = htmlDecode(data.Content);
                     editor.setValue(data.Content)
                     $("#ImgPr").attr("src", data.Icon);
+                    $("#lbFilePath").text(data.FilePath);
                     $("#form1").formSerialize(data);
                 }
             });
@@ -67,7 +68,7 @@
                 $finish.hide();
                 $next.show();
             }
-        }); 
+        });
         toolbar = ['title', 'bold', 'italic', 'underline', 'fontScale', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'];
         editor = new Simditor({
             textarea: $('#Content'),
@@ -86,27 +87,49 @@
         if (!$('#form1').formValid()) {
             return false;
         }
+        var jsonDataIcon = uploadImg("IconUp");
+        var jsonDataFile = uploadFile("FileUp");
+        if (jsonDataIcon.success == true && jsonDataFile.success == true) {
+            var iconData = jsonDataIcon.data;
+            var fileData = jsonDataFile.data;
+            var postData = $("#form1").formSerialize();
+            //var postData = $("#form1").serialize();
+            postData["Content"] = htmlEncode(postData["Content"]);
+            postData["ColumnId"] = columnId;
+            postData["Icon"] = iconData.Sys_FilePath;
+            postData["FilePath"] = fileData.Sys_FilePath;
 
-        var jsonData = uploadImg("IconUp");
-        var postData = $("#form1").formSerialize();
-        //var postData = $("#form1").serialize();
-        postData["Content"] = htmlEncode(postData["Content"]);
-        postData["ColumnId"] = columnId;
-        postData["Icon"] = jsonData.Sys_FilePath;
-
-        postData["Sys_FileName"] = jsonData.Sys_FileName;
-        postData["Sys_FileOldName"] = jsonData.Sys_FileOldName;
-        postData["Sys_ExtName"] = jsonData.Sys_ExtName;
-        postData["Sys_FilePath"] = jsonData.Sys_FilePath;
-        postData["Sys_FileMd5"] = jsonData.Sys_FileMd5;
-        $.submitForm({
-            url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
-            param: postData,
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            var upfiles = [];
+            if (iconData != null && iconData != undefined) {
+                var upimg = {};
+                upimg.Sys_FileName = iconData.Sys_FileName;
+                upimg.Sys_FileOldName = iconData.Sys_FileOldName;
+                upimg.Sys_ExtName = iconData.Sys_ExtName;
+                upimg.Sys_FilePath = iconData.Sys_FilePath;
+                upimg.Sys_FileMd5 = iconData.Sys_FileMd5;
+                upfiles.push(upimg);
             }
-        });
-    } 
+            if (fileData != null && fileData != undefined) {
+                var upfile = {};
+                upfile.Sys_FileName = fileData.Sys_FileName;
+                upfile.Sys_FileOldName = fileData.Sys_FileOldName;
+                upfile.Sys_ExtName = fileData.Sys_ExtName;
+                upfile.Sys_FilePath = fileData.Sys_FilePath;
+                upfile.Sys_FileMd5 = fileData.Sys_FileMd5;
+                upfiles.push(upfile);
+            }
+
+            postData["upFileentitys"] = JSON.stringify(upfiles);
+
+            $.submitForm({
+                url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
+                param: postData,
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+    }
 </script>
 <form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
@@ -161,6 +184,19 @@
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
                                         <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked"><label for="EnabledMark">有效</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">附件</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="FileUp" type="file" />请选择文件
+                                            </div>
+                                            <span id="lbFilePath"></span>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
