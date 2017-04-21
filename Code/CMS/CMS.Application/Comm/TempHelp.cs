@@ -42,7 +42,7 @@ namespace CMS.Application.Comm
                 return _tempHelp;
             }
         }
-        #endregion
+        #endregion 
         /// <summary>
         /// 输出文件格式
         /// </summary>
@@ -1020,7 +1020,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public bool IsWebSite(string urlhost, string urlRaw)
         {
-            bool retBol = true;
+            bool retBol = false;
             List<string> urlRaws = WebHelper.GetUrls(urlRaw);
             WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByUrl(urlhost);
             if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
@@ -1029,12 +1029,15 @@ namespace CMS.Application.Comm
                 List<ColumnsEntity> models = c_ModulesApp.GetList(m => m.DeleteMark != true && m.WebSiteId == webSiteEntity.Id);
                 if (models != null && models.Count > 0)
                 {
-                    List<string> actionNames = models.Select(m => m.ActionName).ToList();
+                    List<string> actionNames = models.Select(m => m.ActionName.ToLower()).ToList();
                     if (urlRaws.Count > 0)
                     {
-                        if (actionNames.Contains(urlRaws.FirstOrDefault()))
+                        string strUrlRaws = urlRaws.FirstOrDefault();
+                        if (strUrlRaws != null)
+                            strUrlRaws = strUrlRaws.ToLower();
+                        if (actionNames.Contains(strUrlRaws))
                         {
-                            retBol = false;
+                            retBol = true;
                         }
                     }
                 }

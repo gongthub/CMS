@@ -3,19 +3,8 @@
     Layout = "~/Views/Shared/_Form.cshtml";
 }
 <script src="~/Content/js/Common.js?v=20140418_06"></script>
-<link href="~/Content/js/simditor/css/simditor.css" rel="stylesheet" />
-<script src="~/Content/js/simditor/js/module.min.js"></script>
-<script src="~/Content/js/simditor/js/uploader.min.js"></script>
-<script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
-<script src="~/Content/js/simditor/js/simditor.min.js"></script>
 <script src="~/Content/js/uploadPreview.js"></script>
 <style>
-    .simditor {
-        border-left: none;
-        border-right: none;
-        border-top: none;
-    }
-
     .Content_Form_divContents {
         position: fixed;
         width: 100%;
@@ -23,114 +12,6 @@
         overflow: auto;
     }
 </style>
-<script>
-
-    var keyValue = $.request("keyValue");
-    var columnId = $.request("columnId");
-    var editor;
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/Content/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    data.Content = htmlDecode(data.Content);
-                    editor.setValue(data.Content)
-                    $("#ImgPr").attr("src", data.Icon);
-                    $("#lbFilePath").text(data.FilePath);
-                    $("#form1").formSerialize(data);
-                }
-            });
-        }
-
-        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
-    })
-    function initControl() {
-        $('#wizard').wizard().on('change', function (e, data) {
-            var $finish = $("#btn_finish");
-            var $next = $("#btn_next");
-            if (data.direction == "next") {
-                switch (data.step) {
-                    case 2:
-                        if (!$('#form1').formValid()) {
-                            return false;
-                        }
-                        $finish.show();
-                        $next.hide();
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $finish.hide();
-                $next.show();
-            }
-        });
-        toolbar = ['title', 'bold', 'italic', 'underline', 'fontScale', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'];
-        editor = new Simditor({
-            textarea: $('#Content'),
-            toolbar: toolbar,
-            upload: {
-                url: '/SystemManage/UpFile/UploadImg', //文件上传的接口地址
-                params: null, //键值对,指定文件上传接口的额外参数,上传的时候随文件一起提交
-                fileKey: 'fileDataFileName', //服务器端获取文件数据的参数名
-                connectionCount: 3,
-                leaveConfirm: '正在上传文件'
-            }
-        });
-    }
-    function submitForm() {
-
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        var jsonDataIcon = uploadImg("IconUp");
-        var jsonDataFile = uploadFile("FileUp");
-        if (jsonDataIcon.success == true && jsonDataFile.success == true) {
-            var iconData = jsonDataIcon.data;
-            var fileData = jsonDataFile.data;
-            var postData = $("#form1").formSerialize();
-            //var postData = $("#form1").serialize();
-            postData["Content"] = htmlEncode(postData["Content"]);
-            postData["ColumnId"] = columnId;
-            postData["Icon"] = iconData.Sys_FilePath;
-            postData["FilePath"] = fileData.Sys_FilePath;
-
-            var upfiles = [];
-            if (iconData != null && iconData != undefined) {
-                var upimg = {};
-                upimg.Sys_FileName = iconData.Sys_FileName;
-                upimg.Sys_FileOldName = iconData.Sys_FileOldName;
-                upimg.Sys_ExtName = iconData.Sys_ExtName;
-                upimg.Sys_FilePath = iconData.Sys_FilePath;
-                upimg.Sys_FileMd5 = iconData.Sys_FileMd5;
-                upfiles.push(upimg);
-            }
-            if (fileData != null && fileData != undefined) {
-                var upfile = {};
-                upfile.Sys_FileName = fileData.Sys_FileName;
-                upfile.Sys_FileOldName = fileData.Sys_FileOldName;
-                upfile.Sys_ExtName = fileData.Sys_ExtName;
-                upfile.Sys_FilePath = fileData.Sys_FilePath;
-                upfile.Sys_FileMd5 = fileData.Sys_FileMd5;
-                upfiles.push(upfile);
-            }
-
-            postData["upFileentitys"] = JSON.stringify(upfiles);
-
-            $.submitForm({
-                url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
-                param: postData,
-                success: function () {
-                    $.currentWindow().$("#gridList").trigger("reloadGrid");
-                }
-            });
-        }
-    }
-</script>
 <form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
@@ -242,7 +123,9 @@
             </div>
             <div class="step-pane" id="step-3">
                 <div class="Content_Form_divContents">
-                    <textarea id="Content" name="Content"></textarea>
+                    @*<textarea id="Content" name="Content"></textarea>*@ 
+                    <script id="editorContent" type="text/plain" style="width:100%;height:500px;">
+                    </script>
                 </div>
             </div>
         </div>
@@ -253,3 +136,113 @@
         </div>
     </div>
 </form>
+<script>
+
+    var ue = UE.getEditor('editorContent');
+    var keyValue = $.request("keyValue");
+    var columnId = $.request("columnId");
+    var editor;
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/Content/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    data.Content = htmlDecode(data.Content);
+                    insertHtml(data.Content);
+                    //editor.setValue(data.Content)
+                    $("#ImgPr").attr("src", data.Icon);
+                    $("#lbFilePath").text(data.FilePath);
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+
+        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+    })
+    function initControl() {
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 2:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        $finish.show();
+                        $next.hide();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        });
+    }
+    function submitForm() {
+
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var jsonDataIcon = uploadImg("IconUp");
+        var jsonDataFile = uploadFile("FileUp");
+        if (jsonDataIcon.success == true && jsonDataFile.success == true) {
+            var iconData = jsonDataIcon.data;
+            var fileData = jsonDataFile.data;
+            var postData = $("#form1").formSerialize();
+            //var postData = $("#form1").serialize();
+            var contentstrs = getContent();
+            postData["Content"] = htmlEncode(contentstrs);
+            postData["ColumnId"] = columnId;
+            postData["Icon"] = iconData.Sys_FilePath;
+            postData["FilePath"] = fileData.Sys_FilePath;
+
+            var upfiles = [];
+            if (iconData != null && iconData != undefined) {
+                var upimg = {};
+                upimg.Sys_FileName = iconData.Sys_FileName;
+                upimg.Sys_FileOldName = iconData.Sys_FileOldName;
+                upimg.Sys_ExtName = iconData.Sys_ExtName;
+                upimg.Sys_FilePath = iconData.Sys_FilePath;
+                upimg.Sys_FileMd5 = iconData.Sys_FileMd5;
+                upfiles.push(upimg);
+            }
+            if (fileData != null && fileData != undefined) {
+                var upfile = {};
+                upfile.Sys_FileName = fileData.Sys_FileName;
+                upfile.Sys_FileOldName = fileData.Sys_FileOldName;
+                upfile.Sys_ExtName = fileData.Sys_ExtName;
+                upfile.Sys_FilePath = fileData.Sys_FilePath;
+                upfile.Sys_FileMd5 = fileData.Sys_FileMd5;
+                upfiles.push(upfile);
+            }
+
+            postData["upFileentitys"] = JSON.stringify(upfiles);
+
+            $.submitForm({
+                url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
+                param: postData,
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //写入html编辑器内容
+    function insertHtml(value) {
+        alert(value);
+        UE.getEditor('editorContent').setContent(value);
+        alert(value);
+    }
+    //获取html编辑器内容
+    function getContent() {
+        return ue.getContent()
+    }
+</script>
+ 

@@ -47,31 +47,50 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
-        {
-            //string url = context.Request.Url.AbsolutePath; 
-            //string urlPath = context.Request.Url.GetLeftPart(UriPartial.Authority);
-
+        { 
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
-            if (!Common.IsBlackName(urlRaw))
+            if (!Common.IsBlackName(urlRaw) && !Common.IsSystemHaveUrlName(urlRaw))
             {
-                if (Common.IsExistExtended(urlRaw) == false && !Common.IsExistUrlGuid(urlRaw))
-                {
-                    //判断是否后台url 并且 扩展名是否需要处理
-                    if (!TempHelp.tempHelp.IsWebSite(urlHost, urlRaw))
-                    {
-                        return;
-                    }
-                }
-                else
+                //判断是否前台url
+                if (IsWebSiteUrl(urlHost, urlRaw))
                 {
                     string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
                     context.Response.Write(htmls);
                     context.Response.End();
-                }
+                } 
             }
         }
         #endregion
+
+        /// <summary>
+        /// 判断是否为前台
+        /// </summary>
+        /// <returns></returns>
+        private bool IsWebSiteUrl(string urlhost, string urlRaw)
+        {
+            bool bState = false; 
+                //判断是否前台url
+            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw))
+            {
+                bState = true;
+            }
+            else
+            {
+                if (Common.IsExistExtended(urlRaw))
+                {
+                    bState = true;
+                }
+                else
+                {
+                    if (Common.IsExistUrlGuid(urlRaw))
+                    {
+                        bState = true;
+                    }
+                }
+            }
+            return bState;
+        }
          
     }
 }
