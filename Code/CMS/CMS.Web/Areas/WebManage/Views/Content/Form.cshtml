@@ -4,6 +4,9 @@
 }
 <script src="~/Content/js/Common.js?v=20140418_06"></script>
 <script src="~/Content/js/uploadPreview.js"></script>
+<script src="~/Content/js/ueditor/ueditor.config.js"></script>
+<script src="~/Content/js/ueditor/ueditor.all.min.js"></script>
+<script src="~/Content/js/ueditor/lang/zh-cn/zh-cn.js"></script>
 <style>
     .Content_Form_divContents {
         position: fixed;
@@ -138,31 +141,36 @@
 </form>
 <script>
 
-    var ue = UE.getEditor('editorContent');
     var keyValue = $.request("keyValue");
     var columnId = $.request("columnId");
-    var editor;
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/Content/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    data.Content = htmlDecode(data.Content);
-                    insertHtml(data.Content);
-                    //editor.setValue(data.Content)
-                    $("#ImgPr").attr("src", data.Icon);
-                    $("#lbFilePath").text(data.FilePath);
-                    $("#form1").formSerialize(data);
-                }
-            });
-        }
+    var ue = UE.getEditor('editorContent'); 
+    //对编辑器的操作最好在编辑器ready之后再做
+    ue.ready(function () {
 
-        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
-    })
+        //var editor;
+        $(function () {
+            initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/Content/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        data.Content = htmlDecode(data.Content);
+                        insertHtml(data.Content);
+                        //editor.setValue(data.Content)
+                        $("#ImgPr").attr("src", data.Icon);
+                        $("#lbFilePath").text(data.FilePath);
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+
+            $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        })
+    });
+
     function initControl() {
         $('#wizard').wizard().on('change', function (e, data) {
             var $finish = $("#btn_finish");
@@ -186,7 +194,6 @@
         });
     }
     function submitForm() {
-
         if (!$('#form1').formValid()) {
             return false;
         }
@@ -236,13 +243,11 @@
     }
     //写入html编辑器内容
     function insertHtml(value) {
-        alert(value);
         UE.getEditor('editorContent').setContent(value);
-        alert(value);
     }
     //获取html编辑器内容
     function getContent() {
-        return ue.getContent()
-    }
+        return UE.getEditor('editorContent').getContent()
+    } 
 </script>
  
