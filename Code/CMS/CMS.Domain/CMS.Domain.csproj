@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Common\UpFileDTO.cs" />
+    <Compile Include="Entity\SystemManage\AccessLogEntity.cs" />
     <Compile Include="Entity\SystemManage\AreaEntity.cs" />
     <Compile Include="Entity\SystemManage\ItemsDetailEntity.cs" />
     <Compile Include="Entity\SystemManage\ItemsEntity.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Infrastructure\IDeleteAudited.cs" />
     <Compile Include="Infrastructure\IEntity.cs" />
     <Compile Include="Infrastructure\IModificationAudited.cs" />
+    <Compile Include="IRepository\SystemManage\IAccessLogRepository.cs" />
     <Compile Include="IRepository\SystemManage\IAreaRepository.cs" />
     <Compile Include="IRepository\SystemManage\IItemsDetailRepository.cs" />
     <Compile Include="IRepository\SystemManage\IItemsRepository.cs" />

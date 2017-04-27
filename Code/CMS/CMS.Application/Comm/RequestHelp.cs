@@ -1,4 +1,5 @@
 ﻿using CMS.Code;
+using CMS.Domain.Entity.SystemManage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,13 +42,18 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        public Log FileLog
+        {
+            get { return LogFactory.GetLogger(this.GetType().ToString()); }
+        }
+
         #region 处理请求 +void InitRequest(System.Web.HttpContext context)
         /// <summary>
         /// 处理请求
         /// </summary>
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
-        { 
+        {
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
             if (!Common.IsBlackName(urlRaw) && !Common.IsSystemHaveUrlName(urlRaw))
@@ -57,21 +63,28 @@ namespace CMS.Application.Comm
                 {
                     string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
                     context.Response.Write(htmls);
+                    //插入访问日志
+                    SysPageHelp.sysPageHelp.CreateAccessLog(context,true);
+
                     context.Response.End();
-                } 
+
+
+
+                }
             }
         }
         #endregion
 
+        #region 判断是否为前台 -bool IsWebSiteUrl(string urlhost, string urlRaw)
         /// <summary>
         /// 判断是否为前台
         /// </summary>
         /// <returns></returns>
         private bool IsWebSiteUrl(string urlhost, string urlRaw)
         {
-            bool bState = false; 
-                //判断是否前台url
-            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw))
+            bool bState = false;
+            //判断是否前台url
+            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw) && Common.IsExistExtended(urlRaw))
             {
                 bState = true;
             }
@@ -91,6 +104,7 @@ namespace CMS.Application.Comm
             }
             return bState;
         }
-         
+
+        #endregion
     }
 }

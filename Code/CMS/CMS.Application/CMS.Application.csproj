@@ -51,6 +51,7 @@
     <Compile Include="Comm\SysPageHelp.cs" />
     <Compile Include="Comm\TempHelp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemManage\AccessLogApp.cs" />
     <Compile Include="SystemManage\AreaApp.cs" />
     <Compile Include="SystemManage\DutyApp.cs" />
     <Compile Include="SystemManage\ItemsApp.cs" />

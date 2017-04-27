@@ -152,13 +152,35 @@ namespace CMS.Code
         public static bool IsExistExtended(string urlRaw)
         {
             bool bretStatus = true;
-            if (urlRaw != "/")
+
+            if (!IsExistUrlRaw(urlRaw))
             {
                 Regex reg = new Regex("[\\w]+[\\.](" + URLEXTENDED + ")");
                 Match match = reg.Match(urlRaw);
                 bretStatus = match.Success;
             }
 
+            return bretStatus;
+        }
+        private static bool IsExistUrlRaw(string urlRaw)
+        {
+            bool bretStatus = false;
+            if (urlRaw == "/")
+            {
+                bretStatus = true;
+            }
+            else
+            {
+                string[] strUrlRaw = urlRaw.Split('/');
+                if (strUrlRaw.Length == 2)
+                {
+                    string[] strExs = strUrlRaw[1].Split('.');
+                    if (strExs.Length == 1)
+                    {
+                        bretStatus = true;
+                    }
+                }
+            }
             return bretStatus;
         }
         #endregion
@@ -178,7 +200,7 @@ namespace CMS.Code
             if (urlRaws != null && urlRaws.Count > 0)
             {
                 string urlLasts = urlRaws[urlRaws.Count - 1];
-                Guid Id=Guid.Empty;
+                Guid Id = Guid.Empty;
                 if (Guid.TryParse(urlLasts, out Id))
                 {
                     bretStatus = true;
