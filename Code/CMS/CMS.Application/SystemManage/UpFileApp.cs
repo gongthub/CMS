@@ -1,5 +1,7 @@
-﻿using CMS.Domain.Entity.Common;
+﻿using CMS.Application.WebManage;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
 using System;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -565,6 +568,55 @@ namespace CMS.Application.SystemManage
                 bState = true;
             }
             return bState;
+        }
+        /// <summary>
+        /// 保存上传文件信息
+        /// </summary>
+        /// <param name="upFileEntity"></param>
+        /// <returns></returns>
+        public bool AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5)
+        {
+            bool bState = false;
+            UpFileEntity upFileEntity = new UpFileEntity();
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                upFileEntity.FileName = fileName;
+                upFileEntity.FileOldName = fileOldName;
+                upFileEntity.ExtName = fileExtension;
+                upFileEntity.FilePath = filePath;
+                upFileEntity.FileMd5 = fileMd5;
+
+                if (!string.IsNullOrEmpty(webSiteId))
+                {
+                    upFileEntity.WebSiteId = webSiteId;
+                }
+                upFileEntity.Create();
+                if (service.Insert(upFileEntity) > 0)
+                {
+                    bState = true;
+                }
+            }
+            else
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 保存上传文件信息
+        /// </summary>
+        /// <param name="upFileEntity"></param>
+        /// <returns></returns>
+        public void AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5, bool isAsync)
+        {
+            if (isAsync)
+            {
+                Thread thread = new Thread(() =>
+                {
+                    AddUpFileEntity(webSiteId, filePath, fileName, fileOldName, fileExtension, fileMd5);
+                });
+                thread.Start();
+            }
         }
     }
 }

@@ -25,11 +25,22 @@ public class ListFileManager : Handler
     private String PathToList;
     private String[] FileList;
     private String[] SearchExtensions;
+    /// <summary>
+    /// 站点简称
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public string Base_WebSiteShortName = string.Empty;
 
     public ListFileManager(HttpContext context, string pathToList, string[] searchExtensions)
         : base(context)
     {
+        if (context.Session["WEBSITESHORTNAME"] != null)
+        {
+            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
+        }
         this.SearchExtensions = searchExtensions.Select(x => x.ToLower()).ToArray();
+        pathToList = pathToList.Replace("{websitename}", Base_WebSiteShortName);
         this.PathToList = pathToList;
     }
 

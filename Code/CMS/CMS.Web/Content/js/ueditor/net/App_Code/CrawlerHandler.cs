@@ -12,7 +12,22 @@ public class CrawlerHandler : Handler
 {
     private string[] Sources;
     private Crawler[] Crawlers;
-    public CrawlerHandler(HttpContext context) : base(context) { }
+
+    /// <summary>
+    /// 站点简称
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public string Base_WebSiteShortName = string.Empty;
+    public CrawlerHandler(HttpContext context)
+        : base(context)
+    {
+
+        if (context.Session["WEBSITESHORTNAME"] != null)
+        {
+            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
+        }
+    }
 
     public override void Process()
     {
@@ -25,7 +40,7 @@ public class CrawlerHandler : Handler
             });
             return;
         }
-        Crawlers = Sources.Select(x => new Crawler(x, Server).Fetch()).ToArray();
+        Crawlers = Sources.Select(x => new Crawler(x, Server, Base_WebSiteShortName).Fetch()).ToArray();
         WriteJson(new
         {
             state = "SUCCESS",
@@ -46,12 +61,19 @@ public class Crawler
     public string State { get; set; }
 
     private HttpServerUtility Server { get; set; }
+    /// <summary>
+    /// 站点简称
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public string Base_WebSiteShortName = string.Empty;
 
 
-    public Crawler(string sourceUrl, HttpServerUtility server)
+    public Crawler(string sourceUrl, HttpServerUtility server, string shortName)
     {
         this.SourceUrl = sourceUrl;
         this.Server = server;
+        Base_WebSiteShortName = shortName;
     }
 
     public Crawler Fetch()
@@ -74,7 +96,7 @@ public class Crawler
                 State = "Url is not an image";
                 return this;
             }
-            ServerUrl = PathFormatter.Format(Path.GetFileName(this.SourceUrl), Config.GetString("catcherPathFormat"));
+            ServerUrl = PathFormatter.Format(Path.GetFileName(this.SourceUrl), Config.GetString("catcherPathFormat"), Base_WebSiteShortName);
             var savePath = Server.MapPath(ServerUrl);
             if (!Directory.Exists(Path.GetDirectoryName(savePath)))
             {

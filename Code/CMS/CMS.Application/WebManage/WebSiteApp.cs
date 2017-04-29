@@ -231,6 +231,17 @@ namespace CMS.Application.WebManage
             return webSiteEntity;
         }
         /// <summary>
+        /// 根据域名获取实体
+        /// </summary>
+        /// <returns></returns>
+        public WebSiteEntity GetModelByShortName(string shortName)
+        {
+            WebSiteEntity webSiteEntity = new WebSiteEntity();
+
+            webSiteEntity = service.FindEntity(m => m.ShortName == shortName && m.DeleteMark != true);
+            return webSiteEntity;
+        }
+        /// <summary>
         /// 判断域名是否存在
         /// </summary>
         /// <param name="keyId"></param>

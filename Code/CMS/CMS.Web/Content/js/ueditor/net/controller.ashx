@@ -6,7 +6,7 @@ using System.IO;
 using System.Collections;
 using Newtonsoft.Json;
 
-public class UEditorHandler : IHttpHandler
+public class UEditorHandler : IHttpHandler, System.Web.SessionState.IRequiresSessionState
 {
     public void ProcessRequest(HttpContext context)
     {

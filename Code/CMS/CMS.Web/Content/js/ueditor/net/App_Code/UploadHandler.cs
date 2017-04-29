@@ -1,9 +1,11 @@
-﻿using System;
+﻿using CMS.Application.SystemManage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.SessionState;
 
 /// <summary>
 /// UploadHandler 的摘要说明
@@ -14,17 +16,41 @@ public class UploadHandler : Handler
     public UploadConfig UploadConfig { get; private set; }
     public UploadResult Result { get; private set; }
 
+    /// <summary>
+    /// 站点简称
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public string Base_WebSiteShortName = string.Empty;
+    /// <summary>
+    /// 站点ID
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public string Base_WebSiteId = string.Empty;
+
     public UploadHandler(HttpContext context, UploadConfig config)
         : base(context)
     {
         this.UploadConfig = config;
         this.Result = new UploadResult() { State = UploadState.Unknown };
+
+        if (context.Session["WEBSITESHORTNAME"] != null)
+        {
+            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
+        }
+        if (context.Session["WEBSITEID"] != null)
+        {
+            Base_WebSiteId = context.Session["WEBSITEID"].ToString();
+        }
     }
 
     public override void Process()
     {
         byte[] uploadFileBytes = null;
         string uploadFileName = null;
+        string newFileName = string.Empty;
+        string extension = string.Empty;
 
         if (UploadConfig.Base64)
         {
@@ -63,7 +89,7 @@ public class UploadHandler : Handler
 
         Result.OriginFileName = uploadFileName;
 
-        var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat);
+        var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat, Base_WebSiteShortName, out newFileName,out extension);
         var localPath = Server.MapPath(savePath);
         try
         {
@@ -82,6 +108,8 @@ public class UploadHandler : Handler
         }
         finally
         {
+            UpFileApp upFileApp = new UpFileApp();
+            upFileApp.AddUpFileEntity(Base_WebSiteId, savePath, newFileName, uploadFileName, extension, CMS.Code.Md5.MD5File(savePath));
             WriteResult();
         }
     }
@@ -111,7 +139,7 @@ public class UploadHandler : Handler
             case UploadState.TypeNotAllow:
                 return "不允许的文件格式";
             case UploadState.NetworkError:
-                return "网络错误"; 
+                return "网络错误";
         }
         return "未知错误";
     }
@@ -126,6 +154,7 @@ public class UploadHandler : Handler
     {
         return size < UploadConfig.SizeLimit;
     }
+
 }
 
 public class UploadConfig

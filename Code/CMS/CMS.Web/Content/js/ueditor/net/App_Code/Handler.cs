@@ -10,13 +10,13 @@ using Newtonsoft.Json;
 /// </summary>
 public abstract class Handler
 {
-	public Handler(HttpContext context)
-	{
+    public Handler(HttpContext context)
+    {
         this.Request = context.Request;
         this.Response = context.Response;
         this.Context = context;
         this.Server = context.Server;
-	}
+    }
 
     public abstract void Process();
 
@@ -29,7 +29,7 @@ public abstract class Handler
             Response.AddHeader("Content-Type", "text/plain");
             Response.Write(json);
         }
-        else 
+        else
         {
             Response.AddHeader("Content-Type", "application/javascript");
             Response.Write(String.Format("{0}({1});", jsonpCallback, json));
@@ -41,4 +41,5 @@ public abstract class Handler
     public HttpResponse Response { get; private set; }
     public HttpContext Context { get; private set; }
     public HttpServerUtility Server { get; private set; }
+
 }
