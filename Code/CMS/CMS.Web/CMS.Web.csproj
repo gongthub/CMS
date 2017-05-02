@@ -988,6 +988,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HtmlContent\" />
     <Folder Include="Html\fonts\Nunito\" />
     <Folder Include="Html\fonts\Pacifico\" />
   </ItemGroup>

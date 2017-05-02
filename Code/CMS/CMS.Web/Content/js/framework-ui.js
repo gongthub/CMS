@@ -475,3 +475,40 @@ $.fn.dataGrid = function (options) {
     };
     $element.jqGrid(options);
 };
+$.fn.dataGridGroup = function (options, groupname, grouporder) {
+    var defaults = {
+        treeGrid: true,
+        datatype: "json",
+        autowidth: true,
+        treeGridModel: "adjacency",
+        jsonReader: {
+            root: "dataRows",
+            repeatitems: true
+        },
+        treeReader: {
+            level_field: "level",
+            parent_id_field: "parent",
+            leaf_field: "isLeaf",
+            expanded_field: "expanded"
+        },
+        page: false,
+        height: "auto",
+        viewrecords: true,
+        caption: "树形表格实例"
+    };
+    var options = $.extend(defaults, options);
+    var $element = $(this);
+    options["onSelectRow"] = function (rowid) {
+        var length = $(this).jqGrid("getGridParam", "selrow").length;
+        var $operate = $(".operate");
+        if (length > 0) {
+            $operate.animate({ "left": 0 }, 200);
+        } else {
+            $operate.animate({ "left": '-100.1%' }, 200);
+        }
+        $operate.find('.close').click(function () {
+            $operate.animate({ "left": '-100.1%' }, 200);
+        })
+    };
+    $element.jqGrid(options);
+};

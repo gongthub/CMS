@@ -70,6 +70,7 @@
     <Compile Include="SystemSecurity\LogApp.cs" />
     <Compile Include="WebManage\ContentApp.cs" />
     <Compile Include="WebManage\ColumnsApp.cs" />
+    <Compile Include="WebManage\ResourceApp.cs" />
     <Compile Include="WebManage\TempletApp.cs" />
     <Compile Include="WebManage\WebSiteApp.cs" />
     <Compile Include="WebManage\WebSiteForUrlApp.cs" />

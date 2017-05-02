@@ -61,6 +61,7 @@
     <Compile Include="Entity\SystemSecurity\LogEntity.cs" />
     <Compile Include="Entity\WebManage\ContentEntity.cs" />
     <Compile Include="Entity\WebManage\ColumnsEntity.cs" />
+    <Compile Include="Entity\WebManage\ResourceEntity.cs" />
     <Compile Include="Entity\WebManage\TempletEntity.cs" />
     <Compile Include="Entity\WebManage\WebSiteEntity.cs" />
     <Compile Include="Entity\WebManage\WebSiteForUrlEntity.cs" />

@@ -923,7 +923,6 @@ namespace CMS.Code
         }
         #endregion
 
-
         #region 以只读方式读取文本文件
         /// <summary>
         /// 以只读方式读取文本文件
@@ -1000,6 +999,19 @@ namespace CMS.Code
             return content;
         }
 
+        #endregion
+
+        #region 获取文件夹名称
+        /// <summary>
+        /// 获取文件夹名称
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns></returns>
+        public static string GetDirectoryName(string filePath)
+        {
+            string directoryName = Path.GetFileName(Path.GetDirectoryName(filePath));
+            return directoryName;
+        } 
         #endregion
 
     }
