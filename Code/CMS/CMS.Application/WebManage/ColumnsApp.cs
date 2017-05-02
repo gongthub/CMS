@@ -1,4 +1,5 @@
-﻿using CMS.Domain.Entity.WebManage;
+﻿using CMS.Code;
+using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
 using System;
@@ -47,45 +48,52 @@ namespace CMS.Application.WebManage
             //if (!IsExistActionName(keyValue, moduleEntity.ActionName))
             if (!service.IsExist(keyValue, "ActionName", moduleEntity.ActionName, moduleEntity.WebSiteId, true))
             {
-                if (!string.IsNullOrEmpty(keyValue))
+                if (!Common.IsSystemHaveName(moduleEntity.ActionName))
                 {
-                    moduleEntity.Modify(keyValue);
-                    if (moduleEntity.MainMark == true)
+                    if (!string.IsNullOrEmpty(keyValue))
                     {
-                        List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
-                        if (models != null && models.Count > 0)
+                        moduleEntity.Modify(keyValue);
+                        if (moduleEntity.MainMark == true)
                         {
-                            models.ForEach(delegate(ColumnsEntity model)
+                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                            if (models != null && models.Count > 0)
                             {
-                                model.MainMark = false;
-                                service.Update(model);
-                            });
+                                models.ForEach(delegate(ColumnsEntity model)
+                                {
+                                    model.MainMark = false;
+                                    service.Update(model);
+                                });
+                            }
                         }
+                        service.Update(moduleEntity);
                     }
-                    service.Update(moduleEntity);
+                    else
+                    {
+                        moduleEntity.Create();
+
+                        if (moduleEntity.MainMark == true)
+                        {
+                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                            if (models != null && models.Count > 0)
+                            {
+                                models.ForEach(delegate(ColumnsEntity model)
+                                {
+                                    model.MainMark = false;
+                                    service.Update(model);
+                                });
+                            }
+                        }
+                        service.Insert(moduleEntity);
+                    }
                 }
                 else
                 {
-                    moduleEntity.Create();
-
-                    if (moduleEntity.MainMark == true)
-                    {
-                        List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
-                        if (models != null && models.Count > 0)
-                        {
-                            models.ForEach(delegate(ColumnsEntity model)
-                            {
-                                model.MainMark = false;
-                                service.Update(model);
-                            });
-                        }
-                    }
-                    service.Insert(moduleEntity);
+                    throw new Exception("简称已存在，请重新输入！");
                 }
             }
             else
             {
-                throw new Exception("简称已存在，请重新输入！");
+                throw new Exception("简称不能为系统保留名称，请重新输入！");
             }
         }
 

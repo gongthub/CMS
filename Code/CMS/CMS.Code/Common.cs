@@ -255,6 +255,27 @@ namespace CMS.Code
             }
             return retBol;
         }
+        /// <summary>
+        /// 判断请求路径是否系统保留Url
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public static bool IsSystemHaveName(string name)
+        {
+            bool retBol = false;
+            if (!string.IsNullOrEmpty(name))
+            {
+                name = name.Trim().ToLower();
+                string strModules = Configs.GetValue("SystemHaveUrlName");
+                if (!string.IsNullOrEmpty(strModules))
+                {
+                    strModules = strModules.ToLower();
+                    string[] strsModules = strModules.Split('|');
+                    retBol = strsModules.Contains(name);
+                }
+            }
+            return retBol;
+        }
         #endregion
 
         #region 处理Url参数
