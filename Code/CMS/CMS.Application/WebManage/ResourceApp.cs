@@ -10,6 +10,7 @@ namespace CMS.Application.WebManage
     public class ResourceApp
     {
         private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string WEBURLHTTP = Code.Configs.GetValue("WebUrlHttp");
 
         /// <summary>
         /// 根据站点id获取站点资源文件
@@ -25,7 +26,7 @@ namespace CMS.Application.WebManage
                 WebSiteEntity webSiteEntity = webSiteApp.GetForm(webSiteId);
                 if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.ShortName))
                 {
-                    models = GetFilesByWebSiteShortName(webSiteEntity.ShortName);
+                    models = GetFilesByWebSiteShortName(webSiteEntity.ShortName, webSiteEntity.UrlAddress);
                 }
             }
             return models;
@@ -36,7 +37,7 @@ namespace CMS.Application.WebManage
         /// </summary>
         /// <param name="webSiteShortName"></param>
         /// <returns></returns>
-        private List<ResourceEntity> GetFilesByWebSiteShortName(string webSiteShortName)
+        private List<ResourceEntity> GetFilesByWebSiteShortName(string webSiteShortName, string webSiteUrl)
         {
             List<ResourceEntity> models = new List<ResourceEntity>();
             string filePaths = HTMLCONTENTSRC + @"\" + webSiteShortName + @"\";
@@ -48,39 +49,58 @@ namespace CMS.Application.WebManage
             }
 
             InitFiles(filePaths, ref models, 0, false, "");
-
+            ReplaceUrl(ref models, webSiteUrl);
 
             return models;
         }
+        /// <summary>
+        /// 处理文件夹文件
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <param name="models"></param>
+        /// <param name="level"></param>
+        /// <param name="isLeaf"></param>
+        /// <param name="parents"></param>
         private void InitFiles(string filePaths, ref List<ResourceEntity> models, int level, bool isLeaf, string parents)
         {
             string[] files = Code.FileHelper.GetFileNames(filePaths);
             if (files != null && files.Length > 0)
             {
                 ResourceEntity modelD = new ResourceEntity();
+                modelD.id = Code.FileHelper.GetDirectoryName(files[0]);
                 modelD.DirName = Code.FileHelper.GetDirectoryName(files[0]);
                 modelD.Type = 0;
                 modelD.level = level;
                 modelD.expanded = false;
+                modelD.loaded = true;
                 modelD.parent = parents;
                 models.Add(modelD);
                 level++;
                 foreach (string file in files)
                 {
                     ResourceEntity model = new ResourceEntity();
+                    model.id = file;
                     model.DirName = file;
                     model.Type = 1;
                     model.UrlAddress = file;
                     model.level = level;
-                    model.isLeaf = isLeaf;
+                    model.isLeaf = true;
                     model.expanded = false;
-                    model.parent = parents;
+                    model.loaded = true;
+                    model.parent = Code.FileHelper.GetDirectoryName(file);
                     models.Add(model);
                 }
                 InitDir(filePaths, ref models, level, parents);
             }
         }
 
+        /// <summary>
+        /// 处理文件夹
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <param name="models"></param>
+        /// <param name="level"></param>
+        /// <param name="parents"></param>
         private void InitDir(string filePaths, ref List<ResourceEntity> models, int level, string parents)
         {
             string[] dirs = Code.FileHelper.GetDirectories(filePaths);
@@ -94,5 +114,31 @@ namespace CMS.Application.WebManage
             }
         }
 
+        /// <summary>
+        /// 替换全局路径为相对路径
+        /// </summary>
+        /// <returns></returns>
+        private void ReplaceUrl(ref List<ResourceEntity> models, string urlAddress)
+        {
+            if (models != null && models.Count > 0)
+            {
+                foreach (ResourceEntity model in models)
+                {
+                    if (!string.IsNullOrEmpty(model.UrlAddress))
+                    {
+                        string htmlcontents = HTMLCONTENTSRC.Replace(@"\\", "/");
+                        string webUrl = WEBURLHTTP + urlAddress;
+                        string webUrlContents = webUrl + HTMLCONTENTSRC;
+                        string urlConfigMath = Code.FileHelper.MapPath(HTMLCONTENTSRC);
+                        model.id = model.id.Replace(urlConfigMath, webUrlContents);
+                        model.id = model.id.Replace(@"\", @"/");
+                        model.DirName = model.DirName.Replace(urlConfigMath, webUrlContents);
+                        model.DirName = model.DirName.Replace(@"\", @"/");
+                        model.UrlAddress = model.UrlAddress.Replace(urlConfigMath, webUrlContents);
+                        model.UrlAddress = model.UrlAddress.Replace(@"\", @"/");
+                    }
+                }
+            }
+        }
     }
 }

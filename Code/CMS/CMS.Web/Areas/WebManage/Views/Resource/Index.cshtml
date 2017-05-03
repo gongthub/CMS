@@ -6,15 +6,15 @@
     $(function () {
         gridList();
     })
+
     function gridList() {
         var $gridList = $("#gridList");
-        $gridList.dataGridGroup({
-            ExpandColumn: "DirName",//展开的列
-            ExpandColClick: true,//树形表格是否展开
+        $gridList.dataTreeGrid({
+            ExpandColumn: "DirName",
             url: "/WebManage/Resource/GetGridJson",
             height: $(window).height() - 96,
             colModel: [
-                { label: '文件夹', name: 'DirName', width:700, align: 'left' },
+                { label: '文件夹', name: 'DirName', width: 700, align: 'left' },
                 {
                     label: '类型', name: 'Type', width: 80, align: 'center',
                     formatter: function (cellvalue) {
@@ -26,12 +26,18 @@
                     }
                 }
             ]
-        }, "DirName", "DirName"); 
+        });
     }
+
     function btn_add() {
+        var selType = $("#gridList").jqGridRowValue().Type;
+        var selDirName = $("#gridList").jqGridRowValue().DirName;
+        alert(selType);
+        alert(selDirName);
+        return;
         $.modalOpen({
             id: "Form",
-            title: "新增模块",
+            title: "新增文件夹",
             url: "/WebManage/Resource/Form",
             width: "700px",
             height: "440px",
@@ -63,7 +69,7 @@
             }
         })
     }
-    function btn_details() {
+    function btn_upload() {
         var keyValue = $("#gridList").jqGridRowValue().Id;
         $.modalOpen({
             id: "Details",
@@ -82,19 +88,19 @@
             <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
         </div>
         <div class="btn-group">
-            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建模块</a>
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建文件夹</a>
         </div>
         <div class="operate">
             <ul class="nav nav-pills">
                 <li class="first">已选中<span>1</span>项</li>
-                <li><a id="NF-edit" authorize="yes" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改模块</a></li>
-                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除模块</a></li>
+                <li><a id="NF-upload" authorize="yes" onclick="btn_upload()"><i class="fa fa-trash-o"></i>上传资源</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a></li>
             </ul>
             <a href="javascript:;" class="close"></a>
         </div>
         <script>$('.toolbar').authorizeButton()</script>
     </div>
-    <div class="search">
+    @*<div class="search">
         <table>
             <tr>
                 <td>
@@ -107,7 +113,7 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </div>*@
 </div>
 <div class="gridPanel">
     <table id="gridList"></table>

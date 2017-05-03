@@ -475,26 +475,14 @@ $.fn.dataGrid = function (options) {
     };
     $element.jqGrid(options);
 };
-$.fn.dataGridGroup = function (options, groupname, grouporder) {
+$.fn.dataTreeGrid = function (options) {
     var defaults = {
         treeGrid: true,
         datatype: "json",
         autowidth: true,
-        treeGridModel: "adjacency",
-        jsonReader: {
-            root: "dataRows",
-            repeatitems: true
-        },
-        treeReader: {
-            level_field: "level",
-            parent_id_field: "parent",
-            leaf_field: "isLeaf",
-            expanded_field: "expanded"
-        },
-        page: false,
-        height: "auto",
-        viewrecords: true,
-        caption: "树形表格实例"
+        shrinkToFit: false,
+        gridview: true,
+        treeGridModel: "adjacency"
     };
     var options = $.extend(defaults, options);
     var $element = $(this);
