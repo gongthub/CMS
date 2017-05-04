@@ -34,7 +34,7 @@ namespace CMS.Code
         /// </summary>
         /// <param name="filePath">文件的绝对路径</param>    
         /// <param name="Isrelative">是否相对路径</param>       
-        public static bool IsExistFile(string filePath,bool Isrelative)
+        public static bool IsExistFile(string filePath, bool Isrelative)
         {
             if (Isrelative)
             {
@@ -250,6 +250,21 @@ namespace CMS.Code
             if (File.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file))
             {
                 File.Delete(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file);
+            }
+        }
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="file">要删除的文件路径和名称</param>
+        public static void DeleteFile(string file, bool IsMapPath)
+        {
+            if (!IsMapPath)
+            {
+                file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;
+            }
+            if (File.Exists(file))
+            {
+                File.Delete(file);
             }
         }
         #endregion
@@ -874,6 +889,21 @@ namespace CMS.Code
                 Directory.Delete(directoryPath, true);
             }
         }
+        /// <summary>
+        /// 删除指定目录及其所有子目录
+        /// </summary>
+        /// <param name="directoryPath">指定目录的绝对路径</param>
+        public static void DeleteDirectory(string directoryPath, bool IsMapPath)
+        {
+            if (!IsMapPath)
+            {
+                directoryPath = HttpContext.Current.Server.MapPath(directoryPath);
+            }
+            if (IsExistDirectory(directoryPath))
+            {
+                Directory.Delete(directoryPath, true);
+            }
+        }
         #endregion
 
         #region 本地路径
@@ -1007,11 +1037,21 @@ namespace CMS.Code
         /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <returns></returns>
-        public static string GetDirectoryName(string filePath)
+        public static string GetDirName(string filePath)
         {
             string directoryName = Path.GetFileName(Path.GetDirectoryName(filePath));
             return directoryName;
-        } 
+        }
+        /// <summary>
+        /// 获取文件夹路径
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns></returns>
+        public static string GetDirPath(string filePath)
+        {
+            string directoryName = Path.GetDirectoryName(filePath);
+            return directoryName;
+        }
         #endregion
 
     }

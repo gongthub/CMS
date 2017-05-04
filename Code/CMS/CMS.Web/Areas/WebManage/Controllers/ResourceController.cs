@@ -1,5 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
+using CMS.Domain.Entity.WebManage;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -32,5 +33,42 @@ namespace CMS.Web.Areas.WebManage.Controllers
             var data = resourceApp.GetList(Base_WebSiteId);
             return Content(data.ToJson());
         }
+
+
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetFormJson(string keyValue)
+        {
+            var data = resourceApp.GetForm(Base_WebSiteId, keyValue);
+            return Content(data.ToJson());
+        }
+         
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [ValidateAntiForgeryToken]
+        public ActionResult SubmitFormAdd(string DirName, string keyValue)
+        {
+            try
+            {
+                resourceApp.CreateDirById(Base_WebSiteId, keyValue, DirName);
+
+                return Success("操作成功。");
+
+            }
+            catch (Exception ex)
+            {
+                return Error("操作失败。" + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteForm(string keyValue)
+        {
+            resourceApp.DeleteForm(Base_WebSiteId, keyValue);
+            return Success("删除成功。");
+        } 
     }
 }

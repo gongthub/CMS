@@ -388,6 +388,46 @@ namespace CMS.Application.SystemManage
             }
             return entity;
         }
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="strWebSiteShotName">站点简称</param>
+        /// <returns></returns>
+        public UpFileDTO UpLoadFile(HttpPostedFileBase file, string savePath, bool IsSave)
+        {
+            UpFileDTO entity = new UpFileDTO();
+            string filePaths = string.Empty;
+            string upPaths = savePath;
+            string upPathsT = upPaths.Replace("~", "");
+            if (file != null)
+            {
+                //验证 
+                VerifyFile(file);
+
+                string fileName = Path.GetFileName(file.FileName);// 原始文件名称
+                string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
+                string newFileName = GetFileNameByTime();
+
+                // 文件上传后的保存路径 
+                string filePath = InitSavePath(upPaths);
+                string saveName = newFileName + fileExtension; // 保存文件名称
+                filePaths = upPathsT + saveName;
+                file.SaveAs(filePath + saveName);
+
+                entity.Sys_FileName = saveName;
+                entity.Sys_FileOldName = fileName;
+                entity.Sys_ExtName = fileExtension;
+                entity.Sys_FilePath = filePaths;
+                entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                if (IsSave)
+                {
+                    UpFileApp upFileApp = new UpFileApp();
+                    upFileApp.AddUpFileEntity(entity);
+                }
+            }
+            return entity;
+        }
 
         #region 上传文件验证
         /// <summary>

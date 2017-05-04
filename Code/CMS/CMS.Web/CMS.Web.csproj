@@ -879,7 +879,9 @@
     <Content Include="Areas\SystemSecurity\Views\Web.config" />
     <Content Include="Configs\database.config" />
     <Content Include="Configs\log4net.config" />
-    <Content Include="Configs\system.config" />
+    <Content Include="Configs\system.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Content\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\fontawesome-webfont.ttf" />
@@ -919,7 +921,6 @@
     <Content Include="Areas\WebManage\Views\Columns\Details.cshtml" />
     <Content Include="Areas\WebManage\Views\Content\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Content\Details.cshtml" />
-    <Content Include="Areas\WebManage\Views\Content\Form_back.cshtml" />
     <Content Include="Content\js\umeditor\net\getContent.ashx" />
     <Content Include="Content\js\umeditor\net\imageUp.ashx" />
     <Content Include="Content\js\umeditor\third-party\mathquill\font\stixgeneral-bundle\stixgeneral-webfont.eot" />

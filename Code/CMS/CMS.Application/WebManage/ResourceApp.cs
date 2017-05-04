@@ -33,6 +33,23 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
+        /// 根据站点id获取站点资源文件
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public ResourceEntity GetForm(string webSiteId, string keyValue)
+        {
+            ResourceEntity model = new ResourceEntity();
+            List<ResourceEntity> models = GetList(webSiteId);
+
+            if (models != null && models.Count > 0)
+            {
+                model = models.Find(m => m.id == keyValue);
+            }
+            return model;
+        }
+
+        /// <summary>
         /// 根据网站简称获取所有资源文件
         /// </summary>
         /// <param name="webSiteShortName"></param>
@@ -63,32 +80,46 @@ namespace CMS.Application.WebManage
         /// <param name="parents"></param>
         private void InitFiles(string filePaths, ref List<ResourceEntity> models, int level, bool isLeaf, string parents)
         {
-            string[] files = Code.FileHelper.GetFileNames(filePaths);
-            if (files != null && files.Length > 0)
+            if (!string.IsNullOrEmpty(filePaths))
             {
+                string filePathsD = filePaths + @"\\";
+                string dirName = Code.FileHelper.GetDirName(filePathsD);
                 ResourceEntity modelD = new ResourceEntity();
-                modelD.id = Code.FileHelper.GetDirectoryName(files[0]);
-                modelD.DirName = Code.FileHelper.GetDirectoryName(files[0]);
+                modelD.id = filePaths;
+                modelD.DirName = dirName;
                 modelD.Type = 0;
                 modelD.level = level;
-                modelD.expanded = false;
+                if (level == 0)
+                {
+                    modelD.expanded = true;
+                }
+                else
+                {
+                    modelD.expanded = false;
+                }
                 modelD.loaded = true;
                 modelD.parent = parents;
+                modelD.UrlAddress = filePaths;
                 models.Add(modelD);
                 level++;
-                foreach (string file in files)
+                string[] files = Code.FileHelper.GetFileNames(filePaths);
+                if (files != null && files.Length > 0)
                 {
-                    ResourceEntity model = new ResourceEntity();
-                    model.id = file;
-                    model.DirName = file;
-                    model.Type = 1;
-                    model.UrlAddress = file;
-                    model.level = level;
-                    model.isLeaf = true;
-                    model.expanded = false;
-                    model.loaded = true;
-                    model.parent = Code.FileHelper.GetDirectoryName(file);
-                    models.Add(model);
+                    foreach (string file in files)
+                    {
+                        ResourceEntity model = new ResourceEntity();
+                        model.id = file;
+                        model.DirName = file;
+                        model.Type = 1;
+                        model.UrlAddress = file;
+                        model.level = level;
+                        model.isLeaf = true;
+                        model.expanded = false;
+                        model.loaded = true;
+                        model.parent = filePathsD;
+                        //model.parent = Code.FileHelper.GetDirName(file);
+                        models.Add(model);
+                    }
                 }
                 InitDir(filePaths, ref models, level, parents);
             }
@@ -108,7 +139,7 @@ namespace CMS.Application.WebManage
             {
                 foreach (string dir in dirs)
                 {
-                    parents = Code.FileHelper.GetDirectoryName(dir);
+                    parents = filePaths;
                     InitFiles(dir, ref models, level, true, parents);
                 }
             }
@@ -134,10 +165,78 @@ namespace CMS.Application.WebManage
                         model.id = model.id.Replace(@"\", @"/");
                         model.DirName = model.DirName.Replace(urlConfigMath, webUrlContents);
                         model.DirName = model.DirName.Replace(@"\", @"/");
-                        model.UrlAddress = model.UrlAddress.Replace(urlConfigMath, webUrlContents);
+                        model.UrlAddress = model.UrlAddress.Replace(urlConfigMath, "");
                         model.UrlAddress = model.UrlAddress.Replace(@"\", @"/");
+                        model.parent = model.parent.Replace(urlConfigMath, webUrlContents);
+                        model.parent = model.parent.Replace(@"\", @"/");
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// 根据id创建文件夹
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="dirName"></param>
+        /// <returns></returns>
+        public void CreateDirById(string webSiteId, string Id, string dirName)
+        {
+            ResourceEntity model = GetForm(webSiteId, Id);
+            if (model != null)
+            {
+                string strPaths = model.UrlAddress;
+                strPaths = HTMLCONTENTSRC + strPaths;
+                strPaths = Code.FileHelper.MapPath(strPaths);
+                strPaths = strPaths + @"\" + dirName;
+                model.UrlAddress = strPaths;
+
+                CreateDirVerify(model);
+
+                Code.FileHelper.CreateDirectory(model.UrlAddress);
+            }
+        }
+
+        /// <summary>
+        /// 根据id删除资源
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="dirName"></param>
+        /// <returns></returns>
+        public void DeleteForm(string webSiteId, string Id)
+        {
+            ResourceEntity model = GetForm(webSiteId, Id);
+            if (model != null)
+            {
+                string strPaths = model.UrlAddress;
+                strPaths = HTMLCONTENTSRC + strPaths;
+                strPaths = Code.FileHelper.MapPath(strPaths);
+                model.UrlAddress = strPaths;
+                if (model.Type == 0)
+                {
+                    Code.FileHelper.DeleteDirectory(model.UrlAddress, true);
+                }
+                else
+                    if (model.Type == 1)
+                    {
+                        Code.FileHelper.DeleteFile(model.UrlAddress, true);
+                    }
+            }
+        }
+
+        private void CreateDirVerify(ResourceEntity model)
+        {
+            if (string.IsNullOrEmpty(model.UrlAddress))
+            {
+                throw new Exception("路径不能为空！");
+            }
+            if (model.Type != 0)
+            {
+                throw new Exception("只能在文件夹下创建文件夹！");
+            }
+            if (Code.FileHelper.IsExistDirectory(model.UrlAddress))
+            {
+                throw new Exception("文件夹已存在！");
             }
         }
     }
