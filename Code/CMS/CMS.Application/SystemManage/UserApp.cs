@@ -11,6 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class UserApp
     {
+        private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
         private IUserRepository service = new UserRepository();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
@@ -23,7 +24,7 @@ namespace CMS.Application.SystemManage
                 expression = expression.Or(t => t.RealName.Contains(keyword));
                 expression = expression.Or(t => t.MobilePhone.Contains(keyword));
             }
-            expression = expression.And(t => t.Account != "admin");
+            expression = expression.And(t => t.Account != SYSTEMADMINUSERNAME);
             expression = expression.And(t => t.DeleteMark != true);
 
             var LoginInfo = OperatorProvider.Provider.GetCurrent();
@@ -51,7 +52,7 @@ namespace CMS.Application.SystemManage
         public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string[] webSiteIds)
         {
             userEntity.Account = userEntity.Account.Trim();
-            if (!IsExistAccountName(keyValue, userEntity.Account))
+            if (!service.IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
@@ -153,43 +154,21 @@ namespace CMS.Application.SystemManage
 
 
         /// <summary>
-        /// 判断用户名是否存在
+        /// 判断是否为系统管理员用户
         /// </summary>
         /// <param name="keyId"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool IsExistAccountName(string keyId, string name)
+        public bool IsSystemUserName(string name)
         {
-            name = name.Trim();
             bool retBool = false;
-            int flay = 0;   //标示位 判断是否需要查询
-            if (!string.IsNullOrEmpty(keyId))
+            if (name != null && SYSTEMADMINUSERNAME != null)
             {
-                Guid id = Guid.Empty;
-                UserEntity userEntity = service.FindEntity(m => m.Id == keyId);
-                if (userEntity != null && Guid.TryParse(userEntity.Id, out id))
-                {
-                    if (userEntity.Account != name)
-                    {
-                        flay = 1;
-                    }
-                }
-            }
-            else
-            {
-                flay = 1;
-            }
-            //需要判断
-            if (flay == 1)
-            {
-                Guid id = Guid.Empty;
-                UserEntity userEntity = service.FindEntity(m => m.Account == name && m.DeleteMark != true);
-                if (userEntity != null && Guid.TryParse(userEntity.Id, out id))
+                if (name.ToLower() == SYSTEMADMINUSERNAME.ToLower())
                 {
                     retBool = true;
                 }
             }
-
             return retBool;
         }
 
@@ -205,7 +184,7 @@ namespace CMS.Application.SystemManage
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
                 {
-                    WebSiteApp webSiteApp=new WebSiteApp();
+                    WebSiteApp webSiteApp = new WebSiteApp();
                     List<WebSiteEntity> webSiteEntitys = webSiteApp.GetListForUserId();
                     if (webSiteEntitys != null && webSiteEntitys.Count > 0)
                     {
@@ -216,7 +195,7 @@ namespace CMS.Application.SystemManage
                         }
                         else
                         {
-                            WebSiteEntity webSiteEntity = webSiteEntitys.Find(m=>m.MainMark==true);
+                            WebSiteEntity webSiteEntity = webSiteEntitys.Find(m => m.MainMark == true);
                             if (webSiteEntity != null)
                             {
                                 bState = true;

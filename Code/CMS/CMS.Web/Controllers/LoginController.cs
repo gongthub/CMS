@@ -14,6 +14,7 @@ namespace CMS.Web.Controllers
 {
     public class LoginController : Controller
     {
+        private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
         [HttpGet]
         public virtual ActionResult Index()
         {
@@ -72,13 +73,13 @@ namespace CMS.Web.Controllers
                     operatorModel.LoginIPAddressName = Net.GetLocation(operatorModel.LoginIPAddress);
                     operatorModel.LoginTime = DateTime.Now;
                     operatorModel.LoginToken = DESEncrypt.Encrypt(Guid.NewGuid().ToString());
-                    if (userEntity.Account == "admin")
+                    operatorModel.IsSystem = false;
+                    if (!string.IsNullOrEmpty(SYSTEMADMINUSERNAME))
                     {
-                        operatorModel.IsSystem = true;
-                    }
-                    else
-                    {
-                        operatorModel.IsSystem = false;
+                        if (userEntity.Account == SYSTEMADMINUSERNAME)
+                        {
+                            operatorModel.IsSystem = true;
+                        }
                     }
                     OperatorProvider.Provider.AddCurrent(operatorModel);
                     logEntity.Account = userEntity.Account;
