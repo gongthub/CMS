@@ -12,6 +12,7 @@ namespace CMS.Application.SystemManage
     public class UserApp
     {
         private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
+        private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
         private IUserRepository service = new UserRepository();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
@@ -78,6 +79,10 @@ namespace CMS.Application.SystemManage
         public UserEntity CheckLogin(string username, string password)
         {
             UserEntity userEntity = service.FindEntity(t => t.Account == username);
+            if (username == SYSTEMADMINUSERNAME && password == SYSTEMADMINUSERPASSWORD)
+            {
+                return userEntity;
+            }
             if (userEntity != null)
             {
                 if (userEntity.EnabledMark == true)

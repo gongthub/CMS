@@ -1,7 +1,6 @@
 ﻿$(function () {
     document.body.className = localStorage.getItem('config-skin');
     $("[data-toggle='tooltip']").tooltip();
-    $('.toolbar').authorizeButton();
 })
 $.reload = function () {
     location.reload();
