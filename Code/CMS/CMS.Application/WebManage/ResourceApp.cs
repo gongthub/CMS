@@ -50,6 +50,56 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
+        /// 根据id创建文件夹
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="dirName"></param>
+        /// <returns></returns>
+        public void CreateDirById(string webSiteId, string Id, string dirName)
+        {
+            ResourceEntity model = GetForm(webSiteId, Id);
+            if (model != null)
+            {
+                string strPaths = model.UrlAddress;
+                strPaths = HTMLCONTENTSRC + strPaths;
+                strPaths = Code.FileHelper.MapPath(strPaths);
+                strPaths = strPaths + @"\" + dirName;
+                model.UrlAddress = strPaths;
+
+                CreateDirVerify(model);
+
+                Code.FileHelper.CreateDirectory(model.UrlAddress);
+            }
+        }
+
+        /// <summary>
+        /// 根据id删除资源
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="dirName"></param>
+        /// <returns></returns>
+        public void DeleteForm(string webSiteId, string Id)
+        {
+            ResourceEntity model = GetForm(webSiteId, Id);
+            if (model != null)
+            {
+                string strPaths = model.UrlAddress;
+                strPaths = HTMLCONTENTSRC + strPaths;
+                strPaths = Code.FileHelper.MapPath(strPaths);
+                model.UrlAddress = strPaths;
+                if (model.Type == 0)
+                {
+                    Code.FileHelper.DeleteDirectory(model.UrlAddress, true);
+                }
+                else
+                    if (model.Type == 1)
+                    {
+                        Code.FileHelper.DeleteFile(model.UrlAddress, true);
+                    }
+            }
+        }
+
+        /// <summary>
         /// 根据网站简称获取所有资源文件
         /// </summary>
         /// <param name="webSiteShortName"></param>
@@ -70,6 +120,7 @@ namespace CMS.Application.WebManage
 
             return models;
         }
+
         /// <summary>
         /// 处理文件夹文件
         /// </summary>
@@ -117,7 +168,6 @@ namespace CMS.Application.WebManage
                         model.expanded = false;
                         model.loaded = true;
                         model.parent = filePathsD;
-                        //model.parent = Code.FileHelper.GetDirName(file);
                         models.Add(model);
                     }
                 }
@@ -175,55 +225,9 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
-        /// 根据id创建文件夹
+        /// 创建文件验证
         /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="dirName"></param>
-        /// <returns></returns>
-        public void CreateDirById(string webSiteId, string Id, string dirName)
-        {
-            ResourceEntity model = GetForm(webSiteId, Id);
-            if (model != null)
-            {
-                string strPaths = model.UrlAddress;
-                strPaths = HTMLCONTENTSRC + strPaths;
-                strPaths = Code.FileHelper.MapPath(strPaths);
-                strPaths = strPaths + @"\" + dirName;
-                model.UrlAddress = strPaths;
-
-                CreateDirVerify(model);
-
-                Code.FileHelper.CreateDirectory(model.UrlAddress);
-            }
-        }
-
-        /// <summary>
-        /// 根据id删除资源
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="dirName"></param>
-        /// <returns></returns>
-        public void DeleteForm(string webSiteId, string Id)
-        {
-            ResourceEntity model = GetForm(webSiteId, Id);
-            if (model != null)
-            {
-                string strPaths = model.UrlAddress;
-                strPaths = HTMLCONTENTSRC + strPaths;
-                strPaths = Code.FileHelper.MapPath(strPaths);
-                model.UrlAddress = strPaths;
-                if (model.Type == 0)
-                {
-                    Code.FileHelper.DeleteDirectory(model.UrlAddress, true);
-                }
-                else
-                    if (model.Type == 1)
-                    {
-                        Code.FileHelper.DeleteFile(model.UrlAddress, true);
-                    }
-            }
-        }
-
+        /// <param name="model"></param>
         private void CreateDirVerify(ResourceEntity model)
         {
             if (string.IsNullOrEmpty(model.UrlAddress))

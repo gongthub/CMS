@@ -34,7 +34,6 @@ namespace CMS.Web.Areas.WebManage.Controllers
             return Content(data.ToJson());
         }
 
-
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)

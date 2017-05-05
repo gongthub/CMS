@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web; 
+using System.Web;
 using System.Web.Mvc;
 
 namespace CMS.Web
@@ -17,6 +17,10 @@ namespace CMS.Web
         {
             Ignore = ignore;
             WEBURL = Configs.GetValue("WebUrl");
+            if (!string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority))
+            {
+                WEBURL = string.Format(WEBURL, HttpContext.Current.Request.Url.Authority);
+            }
         }
         public override void OnAuthorization(AuthorizationContext filterContext)
         {

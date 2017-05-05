@@ -40,7 +40,8 @@ namespace CMS.Web.Controllers
             Session.Abandon();
             Session.Clear();
             OperatorProvider.Provider.RemoveCurrent();
-            return RedirectToAction("Index", "Login");
+            //RedirectToAction("Index", "Login");
+            return Redirect("Index");
         }
         [HttpPost]
         [HandlerAjaxOnly]
