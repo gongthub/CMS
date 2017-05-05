@@ -2,29 +2,6 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    $(function () {
-        initControl();
-    });
-    function initControl() {
-        $("#DbName").bindSelect()
-        $("#BackupType").bindSelect()
-    }
-    function submitForm() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        $.submitForm({
-            loading: "正在备份数据...",
-            url: "/SystemSecurity/DbBackup/SubmitForm",
-            param: $("#form1").formSerialize(),
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
-            }
-        })
-    }
-</script>
-
 <form id="form1">
     <div style="margin-bottom: 0px; border-radius: 0px;" class="alert alert-warning alert-dismissable">
         <strong>注意：</strong>&nbsp;备份成功后，请将备份文件下载到本地保存！
@@ -64,3 +41,27 @@
         </table>
     </div>
 </form>
+@section scripts {
+    <script>
+        $(function () {
+            initControl();
+        });
+        function initControl() {
+            $("#DbName").bindSelect()
+            $("#BackupType").bindSelect()
+        }
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            $.submitForm({
+                loading: "正在备份数据...",
+                url: "/SystemSecurity/DbBackup/SubmitForm",
+                param: $("#form1").formSerialize(),
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+    </script>
+}

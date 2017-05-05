@@ -2,21 +2,6 @@
     ViewBag.Title = "RemoveLog";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    function submitForm() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        $.submitForm({
-            loading: "正在备份数据...",
-            url: "/SystemSecurity/Log/SubmitRemoveLog",
-            param: $("#form1").formSerialize(),
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
-            }
-        })
-    }
-</script>
 <form id="form1">
     <div style="margin: 25px; margin-left: 40px; margin-right: 40px;">
         <select id="keepTime" name="keepTime" class="form-control required">
@@ -28,3 +13,20 @@
         </select>
     </div>
 </form>
+@section scripts {
+    <script>
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            $.submitForm({
+                loading: "正在备份数据...",
+                url: "/SystemSecurity/Log/SubmitRemoveLog",
+                param: $("#form1").formSerialize(),
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+    </script>
+}

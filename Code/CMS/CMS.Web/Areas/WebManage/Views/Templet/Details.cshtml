@@ -2,62 +2,6 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script src="~/Content/js/Common.js"></script>
-<script>
-
-    var keyValue = $.request("keyValue");
-
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/Templet/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    data.Content = htmlDecode(data.Content);
-                    $("#form1").formSerialize(data);
-                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
-                    $("#form1").find('div.ckbox label').attr('for', '');
-                }
-            });
-        }
-    })
-    function initControl() {
-        $('#wizard').wizard().on('change', function (e, data) {
-            var $finish = $("#btn_finish");
-            var $next = $("#btn_next");
-            if (data.direction == "next") {
-                switch (data.step) {
-                    case 1:
-                        if (!$('#form1').formValid()) {
-                            return false;
-                        }
-                        $finish.show();
-                        $next.hide();
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $finish.hide();
-                $next.show();
-            }
-        });
-    }
-    function submitForm() {
-        var postData = $("#form1").formSerialize();
-        postData["Content"] = htmlEncode(postData["Content"]);
-        $.submitForm({
-            url: "/WebManage/Templet/SubmitForm?keyValue=" + keyValue,
-            param: postData,
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
-            }
-        });
-    }
-</script>
 <form id="form1">
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
@@ -113,7 +57,64 @@
         </div>
         <div class="form-button" id="wizard-actions">
             <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
-            <a id="btn_next" class="btn btn-default btn-next">下一步</a> 
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
         </div>
     </div>
 </form>
+@section scripts {
+<script>
+
+    var keyValue = $.request("keyValue");
+
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/Templet/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    data.Content = htmlDecode(data.Content);
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                }
+            });
+        }
+    })
+    function initControl() {
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        $finish.show();
+                        $next.hide();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        });
+    }
+    function submitForm() {
+        var postData = $("#form1").formSerialize();
+        postData["Content"] = htmlEncode(postData["Content"]);
+        $.submitForm({
+            url: "/WebManage/Templet/SubmitForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        });
+    }
+</script>
+}

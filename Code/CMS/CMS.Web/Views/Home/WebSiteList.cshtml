@@ -20,7 +20,6 @@
             </ul>
             <a href="javascript:;" class="close"></a>
         </div>
-        <script>$('.toolbar').authorizeButton()</script>
     </div>
     <div class="search">
         <table>
@@ -41,7 +40,7 @@
     <table id="gridList"></table>
     <div id="gridPager"></div>
 </div>
-
+@section scripts {
 <script>
     $(function () {
         gridList();
@@ -121,3 +120,4 @@
         top.location.href = "/Home/WebSite?name=" + keyValue;
     }
 </script>
+}

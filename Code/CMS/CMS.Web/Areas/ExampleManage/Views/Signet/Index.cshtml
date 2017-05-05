@@ -3,16 +3,9 @@
     Layout = "~/Views/Shared/_Form.cshtml";
 }
 <link href="~/Content/js/zsign/jquery.zsign.css" rel="stylesheet" />
-<script src="~/Content/js/zsign/jquery.zsign.js"></script>
-<script>
-    $(function () {
-        top.$(".content-iframe").css("background-color", "#f9f9f9");
-        $(".price-box").zSign({ img: '/Content/js/zsign/signet.gif' });
-    })
-</script>
 <div class="price-box">
     <div class="price-title">
-        上海东鞋贸易有限公司	
+        上海东鞋贸易有限公司
     </div>
     <div class="price-subtitle">
         <p>上海市浦东新区世纪大道100号</p>
@@ -60,7 +53,7 @@
                 </td>
                 <th class="formTitle">日&nbsp;&nbsp;&nbsp;&nbsp;期：</th>
                 <td class="formValue">
-                    <input type="text" class="form-control "  value="@CMS.Code.Ext.ToDateString()"/>
+                    <input type="text" class="form-control " value="@CMS.Code.Ext.ToDateString()" />
                 </td>
             </tr>
         </table>
@@ -161,7 +154,8 @@
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td colspan="7" style="text-align: right; border-right: none;">币种：人民币&nbsp;&nbsp;&nbsp;&nbsp;总计：959990.00
+                    <td colspan="7" style="text-align: right; border-right: none;">
+                        币种：人民币&nbsp;&nbsp;&nbsp;&nbsp;总计：959990.00
                     </td>
                     <td>&nbsp;</td>
                 </tr>
@@ -191,4 +185,12 @@
         </table>
     </div>
 </div>
-
+@section scripts {
+<script src="~/Content/js/zsign/jquery.zsign.js"></script>
+<script>
+    $(function () {
+        top.$(".content-iframe").css("background-color", "#f9f9f9");
+        $(".price-box").zSign({ img: '/Content/js/zsign/signet.gif' });
+    })
+</script>
+}

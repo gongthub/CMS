@@ -2,50 +2,6 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        $.ajax({
-            url: "/SystemManage/User/GetFormJson",
-            data: { keyValue: keyValue },
-            dataType: "json",
-            async: false,
-            success: function (data) {
-                $("#form1").formSerialize(data);
-                $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
-                $("#form1").find('div.ckbox label').attr('for', '');
-                $("#UserPassword").val("******");
-            }
-        });
-    });
-    function initControl() {
-        $("#Gender").bindSelect()
-        $("#IsAdministrator").bindSelect()
-        $("#EnabledMark").bindSelect()
-        $("#OrganizeId").bindSelect({
-            url: "/SystemManage/Organize/GetTreeSelectJson"
-        });
-        $("#DepartmentId").bindSelect({
-            url: "/SystemManage/Organize/GetTreeSelectJson",
-        });
-        $("#RoleId").bindSelect({
-            url: "/SystemManage/Role/GetGridJsons",
-            param: { keyValue: keyValue },
-            id: "Id",
-            text: "FullName"
-        });
-        $("#DutyId").bindSelect({
-            url: "/SystemManage/Duty/GetGridJson",
-            id: "Id",
-            text: "FullName"
-        });
-        $("#UserLevel").bindSelect({
-            url: "/SystemManage/ItemsData/GetSelectJsons",
-            param: { enCode: "UserLevel", keyValue: keyValue }
-        });
-    }
-</script>
 <form id="form1">
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
         <ul class="nav nav-tabs">
@@ -172,3 +128,49 @@
         </div>
     </div>
 </form>
+@section scripts {
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            $.ajax({
+                url: "/SystemManage/User/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                    $("#UserPassword").val("******");
+                }
+            });
+        });
+        function initControl() {
+            $("#Gender").bindSelect()
+            $("#IsAdministrator").bindSelect()
+            $("#EnabledMark").bindSelect()
+            $("#OrganizeId").bindSelect({
+                url: "/SystemManage/Organize/GetTreeSelectJson"
+            });
+            $("#DepartmentId").bindSelect({
+                url: "/SystemManage/Organize/GetTreeSelectJson",
+            });
+            $("#RoleId").bindSelect({
+                url: "/SystemManage/Role/GetGridJsons",
+                param: { keyValue: keyValue },
+                id: "Id",
+                text: "FullName"
+            });
+            $("#DutyId").bindSelect({
+                url: "/SystemManage/Duty/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#UserLevel").bindSelect({
+                url: "/SystemManage/ItemsData/GetSelectJsons",
+                param: { enCode: "UserLevel", keyValue: keyValue }
+            });
+        }
+    </script>
+}

@@ -2,30 +2,6 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script src="~/Content/js/qrcode/jquery.qrcode.js"></script>
-<script src="~/Content/js/qrcode/qrcode.js"></script>
-<script>
-    $(function () {
-        $('#qrcodeTable').qrcode({
-            render: "table",
-            text: "http://www.xxx.cn",
-            width: "265",
-            height: "265"
-        });
-    });
-    function createqrcode() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        $("#qrcodeTable").html("");
-        $('#qrcodeTable').qrcode({
-            render: "table",
-            text: $("#txt_barcod").val(),
-            width: "265",
-            height: "265"
-        });
-    }
-</script>
 <form id="form1">
     <div class="mail-box">
         <div class="mail-header">生成二维码</div>
@@ -53,3 +29,29 @@
         </div>
     </div>
 </form>
+@section scripts {
+<script src="~/Content/js/qrcode/jquery.qrcode.js"></script>
+<script src="~/Content/js/qrcode/qrcode.js"></script>
+<script>
+    $(function () {
+        $('#qrcodeTable').qrcode({
+            render: "table",
+            text: "http://www.xxx.cn",
+            width: "265",
+            height: "265"
+        });
+    });
+    function createqrcode() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $("#qrcodeTable").html("");
+        $('#qrcodeTable').qrcode({
+            render: "table",
+            text: $("#txt_barcod").val(),
+            width: "265",
+            height: "265"
+        });
+    }
+</script>
+}

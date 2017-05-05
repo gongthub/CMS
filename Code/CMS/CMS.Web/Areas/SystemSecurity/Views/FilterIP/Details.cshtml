@@ -2,25 +2,6 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        $("#Type").bindSelect()
-        $.ajax({
-            url: "/SystemSecurity/FilterIP/GetFormJson",
-            data: { keyValue: keyValue },
-            dataType: "json",
-            async: false,
-            success: function (data) {
-                $("#form1").formSerialize(data);
-                $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
-                $("#form1").find('div.ckbox label').attr('for', '');
-            }
-        });
-    });
-
-</script>
-
 <form id="form1">
     <div style="margin-bottom: 0px; border-radius: 0px;" class="alert alert-warning alert-dismissable">
         <strong>注意：</strong>&nbsp;IP地址格式：192.168.0.1；192.168.0.*
@@ -93,3 +74,23 @@
         </table>
     </div>
 </form>
+@section scripts {
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            $("#Type").bindSelect()
+            $.ajax({
+                url: "/SystemSecurity/FilterIP/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                }
+            });
+        });
+
+    </script>
+}

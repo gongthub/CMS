@@ -2,28 +2,7 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script src="~/Content/js/Common.js"></script> 
 
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/WebSiteMgr/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    $("#ImgPr").attr("src", data.Icon);
-                    $("#form1").formSerialize(data);
-                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
-                    $("#form1").find('div.ckbox label').attr('for', '');
-                }
-            });
-        }
-    }); 
-</script>
- 
 <form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
@@ -66,9 +45,9 @@
                                     <input id="Record" name="Record" type="text" class="form-control" placeholder="请输入备案" />
                                 </td>
                                 @*<th class="formTitle">端口</th>
-                                <td class="formValue">
-                                    <input id="Point" name="Point" type="text" class="form-control required" placeholder="请输入端口" value="80" />
-                                </td>*@
+                                    <td class="formValue">
+                                        <input id="Point" name="Point" type="text" class="form-control required" placeholder="请输入端口" value="80" />
+                                    </td>*@
                             </tr>
                             <tr>
                                 <th class="formTitle">手机号</th>
@@ -85,7 +64,7 @@
                                 <td class="formValue">
                                     <div>
                                         <div class="sys-div-imgupload">
-                                            <div class="sys-div-upload" style="visibility:hidden"> 
+                                            <div class="sys-div-upload" style="visibility:hidden">
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>
@@ -110,6 +89,28 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </form>
+
+@section scripts {
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        if (!!keyValue) {
+            $.ajax({
+                url: "/WebManage/WebSiteMgr/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#ImgPr").attr("src", data.Icon);
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                }
+            });
+        }
+    });
+</script>
+}

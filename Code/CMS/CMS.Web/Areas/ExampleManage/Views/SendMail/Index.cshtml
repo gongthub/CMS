@@ -4,9 +4,6 @@
 }
 
 <link href="~/Content/js/simditor/css/simditor.css" rel="stylesheet" />
-<script src="~/Content/js/simditor/js/module.min.js"></script>
-<script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
-<script src="~/Content/js/simditor/js/simditor.min.js"></script>
 <style>
     .simditor {
         border-left: none;
@@ -14,30 +11,6 @@
         border-top: none;
     }
 </style>
-<script>
-    var editor;
-    $(function () {
-        editor = new Simditor({
-            textarea: $('#content'),
-            toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
-        });
-    });
-    function submitForm() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        var postData = $("#form1").formSerialize();
-        postData["content"] = editor.getValue();
-        $.submitForm({
-            loading: "正在发送邮件...",
-            url: "/ExampleManage/SendMail/SendMail",
-            param: $("#form1").formSerialize(),
-            success: function () {
-                $.reload();
-            }
-        })
-    }
-</script>
 <form id="form1">
     <div class="mail-box">
         <div class="mail-header">写邮件</div>
@@ -66,3 +39,32 @@
         </div>
     </div>
 </form>
+@section scripts {
+<script src="~/Content/js/simditor/js/module.min.js"></script>
+<script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
+<script src="~/Content/js/simditor/js/simditor.min.js"></script>
+<script>
+    var editor;
+    $(function () {
+        editor = new Simditor({
+            textarea: $('#content'),
+            toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
+        });
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        postData["content"] = editor.getValue();
+        $.submitForm({
+            loading: "正在发送邮件...",
+            url: "/ExampleManage/SendMail/SendMail",
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.reload();
+            }
+        })
+    }
+</script>
+}

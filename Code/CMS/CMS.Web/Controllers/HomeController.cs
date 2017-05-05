@@ -37,6 +37,11 @@ namespace CMS.Web.Controllers
                 Session["WEBSITEID"] = entity.Id;
                 Session["WEBSITENAME"] = entity.FullName;
                 Session["WEBSITESHORTNAME"] = entity.ShortName;
+                if(!string.IsNullOrEmpty(entity.UrlAddress))
+                {
+                    string strUrlAddress=entity.UrlAddress.ToLower().Replace("http://","");
+                    Session["WEBSITEURLADDRESS"] = strUrlAddress;
+                }
                 Session["WEBSITEENTITY"] = entity;
             }
 

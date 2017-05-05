@@ -2,41 +2,6 @@
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/SystemManage/Area/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    $("#form1").formSerialize(data);
-                }
-            });
-        }
-    });
-    function initControl() {
-        $("#ParentId").bindSelect({
-            url: "/SystemManage/Area/GetTreeSelectJson"
-        });
-    }
-    function submitForm() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        $.submitForm({
-            url: "/SystemManage/Area/SubmitForm?keyValue=" + keyValue,
-            param: $("#form1").formSerialize(),
-            success: function () {
-                $.currentWindow().$("#gridList").resetSelection();
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
-            }
-        })
-    }
-</script>
 
 <form id="form1">
     <div style="padding-top: 20px; margin-right: 20px;">
@@ -79,3 +44,40 @@
         </table>
     </div>
 </form>
+@section scripts {
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/SystemManage/Area/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+        });
+        function initControl() {
+            $("#ParentId").bindSelect({
+                url: "/SystemManage/Area/GetTreeSelectJson"
+            });
+        }
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            $.submitForm({
+                url: "/SystemManage/Area/SubmitForm?keyValue=" + keyValue,
+                param: $("#form1").formSerialize(),
+                success: function () {
+                    $.currentWindow().$("#gridList").resetSelection();
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+    </script>
+}

@@ -2,92 +2,6 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
-<script>
-    $(function () {
-        gridList();
-    })
-    function gridList() {
-        var $gridList = $("#gridList");
-        $gridList.dataGrid({
-            url: "/SystemManage/Role/GetGridJson",
-            height: $(window).height() - 96,
-            colModel: [
-                { label: "主键", name: "Id", hidden: true, key: true },
-                { label: '角色名称', name: 'FullName', width: 150, align: 'left' },
-                { label: '角色编号', name: 'EnCode', width: 150, align: 'left' },
-                {
-                    label: '角色类型', name: 'Type', width: 80, align: 'left',
-                    formatter: function (cellvalue) {
-                        return top.clients.dataItems["RoleType"][cellvalue] == undefined ? "" : top.clients.dataItems["RoleType"][cellvalue]
-                    }
-                },
-                {
-                    label: '归属机构', name: 'OrganizeId', width: 150, align: 'left',
-                    formatter: function (cellvalue, options, rowObject) {
-                        return top.clients.organize[cellvalue] == null ? "" : top.clients.organize[cellvalue].fullname;
-                    }
-                },
-                {
-                    label: '创建时间', name: 'CreatorTime', width: 80, align: 'left',
-                    formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
-                },
-                {
-                    label: "有效", name: "EnabledMark", width: 60, align: "center",
-                    formatter: function (cellvalue) {
-                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
-                    }
-                },
-                { label: '备注', name: 'Description', width: 300, align: 'left' }
-            ]
-        });
-        $("#btn_search").click(function () {
-            $gridList.jqGrid('setGridParam', {
-                postData: { keyword: $("#txt_keyword").val() },
-            }).trigger('reloadGrid');
-        });
-    }
-    function btn_add() {
-        $.modalOpen({
-            id: "Form",
-            title: "新增角色",
-            url: "/SystemManage/Role/Form",
-            width: "550px",
-            height: "570px",
-            btn: null
-        });
-    }
-    function btn_edit() {
-        var keyValue = $("#gridList").jqGridRowValue().Id;
-        $.modalOpen({
-            id: "Form",
-            title: "修改角色",
-            url: "/SystemManage/Role/Form?keyValue=" + keyValue,
-            width: "550px",
-            height: "570px",
-            btn: null
-        });
-    }
-    function btn_delete() {
-        $.deleteForm({
-            url: "/SystemManage/Role/DeleteForm",
-            param: { keyValue: $("#gridList").jqGridRowValue().Id },
-            success: function () {
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
-            }
-        })
-    }
-    function btn_details() {
-        var keyValue = $("#gridList").jqGridRowValue().Id;
-        $.modalOpen({
-            id: "Details",
-            title: "查看角色",
-            url: "/SystemManage/Role/Details?keyValue=" + keyValue,
-            width: "550px",
-            height: "620px",
-            btn: null,
-        });
-    }
-</script>
 
 <div class="topPanel">
     <div class="toolbar">
@@ -106,7 +20,6 @@
             </ul>
             <a href="javascript:;" class="close"></a>
         </div>
-        <script>$('.toolbar').authorizeButton()</script>
     </div>
     <div class="search">
         <table>
@@ -126,3 +39,91 @@
 <div class="gridPanel">
     <table id="gridList"></table>
 </div>
+@section scripts {
+    <script>
+        $(function () {
+            gridList();
+        })
+        function gridList() {
+            var $gridList = $("#gridList");
+            $gridList.dataGrid({
+                url: "/SystemManage/Role/GetGridJson",
+                height: $(window).height() - 96,
+                colModel: [
+                    { label: "主键", name: "Id", hidden: true, key: true },
+                    { label: '角色名称', name: 'FullName', width: 150, align: 'left' },
+                    { label: '角色编号', name: 'EnCode', width: 150, align: 'left' },
+                    {
+                        label: '角色类型', name: 'Type', width: 80, align: 'left',
+                        formatter: function (cellvalue) {
+                            return top.clients.dataItems["RoleType"][cellvalue] == undefined ? "" : top.clients.dataItems["RoleType"][cellvalue]
+                        }
+                    },
+                    {
+                        label: '归属机构', name: 'OrganizeId', width: 150, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            return top.clients.organize[cellvalue] == null ? "" : top.clients.organize[cellvalue].fullname;
+                        }
+                    },
+                    {
+                        label: '创建时间', name: 'CreatorTime', width: 80, align: 'left',
+                        formatter: "date", formatoptions: { srcformat: 'Y-m-d', newformat: 'Y-m-d' }
+                    },
+                    {
+                        label: "有效", name: "EnabledMark", width: 60, align: "center",
+                        formatter: function (cellvalue) {
+                            return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                        }
+                    },
+                    { label: '备注', name: 'Description', width: 300, align: 'left' }
+                ]
+            });
+            $("#btn_search").click(function () {
+                $gridList.jqGrid('setGridParam', {
+                    postData: { keyword: $("#txt_keyword").val() },
+                }).trigger('reloadGrid');
+            });
+        }
+        function btn_add() {
+            $.modalOpen({
+                id: "Form",
+                title: "新增角色",
+                url: "/SystemManage/Role/Form",
+                width: "550px",
+                height: "570px",
+                btn: null
+            });
+        }
+        function btn_edit() {
+            var keyValue = $("#gridList").jqGridRowValue().Id;
+            $.modalOpen({
+                id: "Form",
+                title: "修改角色",
+                url: "/SystemManage/Role/Form?keyValue=" + keyValue,
+                width: "550px",
+                height: "570px",
+                btn: null
+            });
+        }
+        function btn_delete() {
+            $.deleteForm({
+                url: "/SystemManage/Role/DeleteForm",
+                param: { keyValue: $("#gridList").jqGridRowValue().Id },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+        function btn_details() {
+            var keyValue = $("#gridList").jqGridRowValue().Id;
+            $.modalOpen({
+                id: "Details",
+                title: "查看角色",
+                url: "/SystemManage/Role/Details?keyValue=" + keyValue,
+                width: "550px",
+                height: "620px",
+                btn: null,
+            });
+        }
+    </script>
+}

@@ -2,31 +2,6 @@
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        $.ajax({
-            url: "/SystemManage/Module/GetFormJson",
-            data: { keyValue: keyValue },
-            dataType: "json",
-            async: false,
-            success: function (data) {
-                $("#form1").formSerialize(data);
-                $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
-                $("#form1").find('div.ckbox label').attr('for', '');
-            }
-        });
-    });
-    function initControl() {
-        $("#Target").select2({
-            minimumResultsForSearch: -1
-        });
-        $("#ParentId").bindSelect({
-            url: "/SystemManage/Module/GetTreeSelectJson",
-        });
-    }
-</script>
 <form id="form1">
     <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
         <ul class="nav nav-tabs">
@@ -133,3 +108,30 @@
         </div>
     </div>
 </form>
+@section scripts {
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            $.ajax({
+                url: "/SystemManage/Module/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                }
+            });
+        });
+        function initControl() {
+            $("#Target").select2({
+                minimumResultsForSearch: -1
+            });
+            $("#ParentId").bindSelect({
+                url: "/SystemManage/Module/GetTreeSelectJson",
+            });
+        }
+    </script>
+}
