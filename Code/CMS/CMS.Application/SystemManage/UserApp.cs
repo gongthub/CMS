@@ -81,6 +81,7 @@ namespace CMS.Application.SystemManage
             UserEntity userEntity = service.FindEntity(t => t.Account == username);
             if (username == SYSTEMADMINUSERNAME && password == SYSTEMADMINUSERPASSWORD)
             {
+                //userEntity = service.FindEntity(t => t.DeleteMark != true);
                 return userEntity;
             }
             if (userEntity != null)

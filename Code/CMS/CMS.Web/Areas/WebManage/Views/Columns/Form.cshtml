@@ -94,54 +94,67 @@
     </div>
 </form>
 @section scripts {
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/Columns/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    $("#form1").formSerialize(data);
-                }
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/Columns/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+        });
+        function initControl() {
+            $("#TempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#CTempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#Type").bindSelect({
+                url: "/WebManage/Columns/GetTypeSelectJson",
+                id: "Value",
+                text: "Desc"
+            });
+            $("#ParentId").bindSelect({
+                url: "/WebManage/Columns/GetTreeSelectJson",
+            });
+            $("#Type").change(function () {
+                selType();
             });
         }
-    });
-    function initControl() {
-        $("#TempletId").bindSelect({
-            url: "/WebManage/Templet/GetGridJson",
-            id: "Id",
-            text: "FullName"
-        });
-        $("#CTempletId").bindSelect({
-            url: "/WebManage/Templet/GetGridJson",
-            id: "Id",
-            text: "FullName"
-        });
-        $("#Type").bindSelect({
-            url: "/WebManage/Columns/GetTypeSelectJson",
-            id: "Value",
-            text: "Desc"
-        });
-        $("#ParentId").bindSelect({
-            url: "/WebManage/Columns/GetTreeSelectJson",
-        });
-    }
-    function submitForm() {
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-        $.submitForm({
-            url: "/WebManage/Columns/SubmitForm?keyValue=" + keyValue,
-            param: $("#form1").formSerialize(),
-            success: function () {
-                $.currentWindow().$("#gridList").resetSelection();
-                $.currentWindow().$("#gridList").trigger("reloadGrid");
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
             }
-        })
-    }
-</script>
+            $.submitForm({
+                url: "/WebManage/Columns/SubmitForm?keyValue=" + keyValue,
+                param: $("#form1").formSerialize(),
+                success: function () {
+                    $.currentWindow().$("#gridList").resetSelection();
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+
+        //类别选择事件
+        function selType() {
+            var typeval = $("#Type").val();
+            if (typeval == 2) {
+                $("#CTempletId").addClass("required");
+            } else {
+                $("#CTempletId").removeClass("required");
+            }
+        }
+    </script>
 }

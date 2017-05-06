@@ -925,7 +925,7 @@ namespace CMS.Application.Comm
                     {
                         if (urlRaws.Count > 0)
                         {
-                            templetmodel = templetApp.GetCModelByActionName(urlRaws.FirstOrDefault(), entity.Id);
+                            templetmodel = templetApp.GetModelByUrlRaws(urlRaws, entity.Id);
                             columnentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
                         }
                         if (columnentity != null)

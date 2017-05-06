@@ -129,6 +129,27 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
+        /// 根据路径获取模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            if (urlRaws != null)
+            {
+                if (urlRaws.Count == 1)
+                {
+                    templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                }
+                else
+                {
+                    templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                }
+            }
+            return templet;
+        }
+
+        /// <summary>
         /// 根据名称获取模板
         /// </summary>
         /// <returns></returns>
