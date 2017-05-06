@@ -76,7 +76,7 @@ namespace CMS.Web.Controllers
                     operatorModel.IsSystem = false;
                     if (!string.IsNullOrEmpty(SYSTEMADMINUSERNAME))
                     {
-                        if (userEntity.Account == SYSTEMADMINUSERNAME)
+                        if (username == SYSTEMADMINUSERNAME)
                         {
                             operatorModel.IsSystem = true;
                         }
