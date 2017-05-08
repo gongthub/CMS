@@ -167,7 +167,7 @@ namespace CMS.Application.WebManage
                         model.isLeaf = true;
                         model.expanded = false;
                         model.loaded = true;
-                        model.parent = filePathsD;
+                        model.parent = filePaths;
                         models.Add(model);
                     }
                 }

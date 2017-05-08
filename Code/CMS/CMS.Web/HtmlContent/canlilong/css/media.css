@@ -1,0 +1,26 @@
+@media (max-width: 1100px) and (min-width: 768px){
+    .w-navwrap .container{
+        width: 95%!important;
+    }
+    .w-navwrap .navbar-nav{
+        float: left;
+    }
+}
+@media (max-width: 768px) {
+    .w-navwrap .navbar-nav{
+        float: none!important;
+    }
+    .w-secmenu{
+        display: none;
+    }
+    .w-news-href{
+        display: block;
+    }
+}
+@media (max-width: 990px) {
+    .w-footer-top-dl:last-child{
+        float: none;
+    }
+}
+
+

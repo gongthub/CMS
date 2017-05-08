@@ -17,7 +17,7 @@ truncate table Sys_Log
 truncate table Sys_RoleAuthorize
 truncate table Sys_UpFiles
 --truncate table Sys_User
-truncate table Sys_UserLogOn
+--truncate table Sys_UserLogOn
 truncate table Sys_UserWebSites
 truncate table Sys_WebSiteForUrls
 truncate table Sys_WebSites

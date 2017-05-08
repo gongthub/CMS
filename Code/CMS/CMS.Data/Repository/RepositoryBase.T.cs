@@ -334,7 +334,7 @@ namespace CMS.Data
                                         if (prop.GetValue(entity) != null)
                                         {
                                             object odeleteFlay = props.Where(m => m.Name.ToLower() == "DeleteMark".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
-                                            if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
+                                            if (!string.IsNullOrEmpty(prop.GetValue(entity).ToString()) && prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
                                             {
                                                 bResult = true;
                                                 break;
@@ -345,7 +345,7 @@ namespace CMS.Data
                                     {
                                         if (prop.GetValue(entity) != null)
                                         {
-                                            if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                            if (!string.IsNullOrEmpty(prop.GetValue(entity).ToString()) && prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
                                             {
                                                 bResult = true;
                                                 break;
@@ -421,7 +421,7 @@ namespace CMS.Data
                                         {
                                             if (prop.GetValue(entity) != null)
                                             {
-                                                if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                                if (!string.IsNullOrEmpty(prop.GetValue(entity).ToString()) && prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
                                                 {
                                                     bResult = true;
                                                     break;
@@ -504,7 +504,7 @@ namespace CMS.Data
                                                 if (prop.GetValue(entity) != null)
                                                 {
                                                     object odeleteFlay = props.Where(m => m.Name.ToLower() == "DeleteMark".ToLower()).Select(m => m.GetValue(entity)).FirstOrDefault();
-                                                    if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
+                                                    if (!string.IsNullOrEmpty(prop.GetValue(entity).ToString()) && prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower() && (odeleteFlay == null || (bool)odeleteFlay == false))
                                                     {
                                                         bResult = true;
                                                         break;
@@ -515,7 +515,7 @@ namespace CMS.Data
                                             {
                                                 if (prop.GetValue(entity) != null)
                                                 {
-                                                    if (prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
+                                                    if (!string.IsNullOrEmpty(prop.GetValue(entity).ToString()) && prop.GetValue(entity).ToString().Trim().ToLower() == value.Trim().ToLower())
                                                     {
                                                         bResult = true;
                                                         break;

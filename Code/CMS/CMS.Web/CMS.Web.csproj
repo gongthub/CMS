@@ -749,7 +749,6 @@
     <Content Include="Html\js\modernizr.custom.97074.js" />
     <Content Include="Html\js\numscroller-1.0.js" />
     <Content Include="Html\js\owl.carousel.js" />
-    <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
     <Content Include="Web.config">

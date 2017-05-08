@@ -129,8 +129,8 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                             for (int i = 0; i < upFiles.Count; i++)
                             {
                                 CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
-                                string savePaths = HTMLCONTENTSRC + resourceEntity.UrlAddress+@"\\";
-                                upfileApp.UpLoadFile(upFiles[i], savePaths, true);
+                                string savePaths = HTMLCONTENTSRC + resourceEntity.UrlAddress + @"\\";
+                                upfileApp.UpLoadFile(upFiles[i], savePaths, true, false);
                             }
                         }
                         else

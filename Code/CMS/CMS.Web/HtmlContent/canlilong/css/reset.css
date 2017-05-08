@@ -1,0 +1,26 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,hr,p,blockquote,pre,a,abbr,acronym,del,cite,address,small,sub,sup,b,u,i,center,font,em,strong,dl,dt,dd,ul,ol,li,form,fieldset,legend,table,caption,thead,tbody,tfoot,tr,th,td{margin:0;padding:0;outline:none;}
+body{font-weight:normal;font-family:'Microsoft YaHei','微软雅黑','Arial', 'Tahoma','simsun','sans-serif';  font-size: 16px; line-height: 28px;background-color:#f2f2f2; color:#000}
+ul,ol{list-style-type:none}
+a{text-decoration:none;blr:expression(this.onFocus=this.blur()); color:#000;}
+a:visited{text-decoration:none;blr:expression(this.onFocus=this.blur());}
+a:hover{text-decoration:none;color:#32ccfe;} a:focus{outline:none;}li:focus{outline:none;}fieldset,img{border:0}q,blockquote{quotes:"" ""}q:before,q:after,blockquote:before,blockquote:after{content:""}
+del{text-decoration:line-through}ins{text-decoration:underline}sup{vertical-align:super;}sub{vertical-align:sub;}cite,em,dfn{font-style:normal;}
+table{border-collapse:collapse;border-spacing:0;empty-cells:show;}
+caption,th,td{font-weight:normal;text-align:left;}
+input,textarea,select,button{font-size:100%;margin:0;padding:0;font-family:'Microsoft YaHei','微软雅黑','Arial','sans-serif';}
+label,button{cursor:pointer}
+textarea{white-space:pre;resize:none;border:1px solid #ececec;}button,input,select,textarea{font-size:100%;}
+article,aside,canvas,details,figcaption,figure,footer,header,menu,nav,section,summary{margin:0;padding:0;display:block;border:0;font-size:100%;}
+.fr{float:right;}
+.fl{float:left;}
+.show { display:block;}
+.hidden{display:none;}
+input[type=text],input[type=password]{border:1px solid #dfdfdf;outline:none;}
+h1,h2,h3,h4,h5,h6{font-weight: normal;color:#000}
+.clear{clear: both;width: 100%;font-size:0px;height:0px;background:none;border:none;_zoom:1;}
+.padding0{padding:0px;}
+.shadow{box-shadow: 1px 1.732px 2px 0 rgba(4, 0, 0, 0.3);}
+.blue{ color:#32ccfe; }
+.clearfix:before,.clearfix:after{ content:""; display:table; }
+.clearfix:after{clear:both;}
+.clearfix{ *zoom:1;/*IE/7/6*/ }
