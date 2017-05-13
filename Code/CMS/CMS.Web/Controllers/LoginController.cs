@@ -79,6 +79,7 @@ namespace CMS.Web.Controllers
                         if (username == SYSTEMADMINUSERNAME)
                         {
                             operatorModel.IsSystem = true;
+                            operatorModel.UserLevel = (int)Code.Enums.UserLevel.SystemUser;
                         }
                     }
                     OperatorProvider.Provider.AddCurrent(operatorModel);

@@ -429,9 +429,6 @@
     <Content Include="Content\js\ueditor\lang\zh-cn\images\music.png" />
     <Content Include="Content\js\ueditor\lang\zh-cn\images\upload.png" />
     <Content Include="Content\js\ueditor\lang\zh-cn\zh-cn.js" />
-    <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.dll" />
-    <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.pdb" />
-    <Content Include="Content\js\ueditor\net\Bin\Newtonsoft.Json.xml" />
     <Content Include="Content\js\ueditor\net\net.sln" />
     <Content Include="Content\js\ueditor\themes\default\css\ueditor.css" />
     <Content Include="Content\js\ueditor\themes\default\css\ueditor.min.css" />
