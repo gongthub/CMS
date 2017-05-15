@@ -57,7 +57,8 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<WebSiteEntity>();
             expression = expression.And(t => t.DeleteMark != true);
 
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
@@ -69,7 +70,8 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<WebSiteEntity>();
             expression = expression.And(t => t.DeleteMark != true);
 
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
@@ -122,7 +124,8 @@ namespace CMS.Application.WebManage
                         moduleEntity.Create();
                         service.Insert(moduleEntity);
 
-                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                         if (LoginInfo != null)
                         {
                             new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
@@ -162,7 +165,8 @@ namespace CMS.Application.WebManage
                             service.Insert(moduleEntity);
                             keyValue = moduleEntity.Id;
 
-                            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                             if (LoginInfo != null)
                             {
                                 new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);

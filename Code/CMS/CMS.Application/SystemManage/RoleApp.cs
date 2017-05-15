@@ -24,7 +24,8 @@ namespace CMS.Application.SystemManage
             expression = expression.And(t => t.Category == 1);
             expression = expression.And(t => t.DeleteMark != true);
 
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
@@ -57,7 +58,8 @@ namespace CMS.Application.SystemManage
             }
             else
             {
-                var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                 if (LoginInfo != null && LoginInfo.UserLevel != null)
                     strUserLevel = LoginInfo.UserLevel.ToString();
             }

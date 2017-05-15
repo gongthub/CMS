@@ -88,8 +88,10 @@ namespace CMS.Application.SystemSecurity
             LogEntity logEntity = new LogEntity();
             logEntity.Id = Common.GuId();
             logEntity.Date = DateTime.Now;
-            logEntity.Account = OperatorProvider.Provider.GetCurrent().UserCode;
-            logEntity.NickName = OperatorProvider.Provider.GetCurrent().UserName;
+            //logEntity.Account = OperatorProvider.Provider.GetCurrent().UserCode;
+            //logEntity.NickName = OperatorProvider.Provider.GetCurrent().UserName;
+            logEntity.Account = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserCode;
+            logEntity.NickName = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserName;
             logEntity.IPAddress = Net.Ip;
             logEntity.IPAddressName = Net.GetLocation(logEntity.IPAddress);
             logEntity.Result = result;

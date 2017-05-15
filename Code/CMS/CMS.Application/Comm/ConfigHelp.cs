@@ -187,6 +187,7 @@ namespace CMS.Application.Comm
         }  
         #endregion
 
+        #region 系统请求URl模块黑名单
         /// <summary>
         /// 系统请求URl模块黑名单
         /// </summary>
@@ -196,6 +197,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("UrlBlackName").ToString();
             }
-        }  
+        }   
+        #endregion
     }
 }

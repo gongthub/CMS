@@ -90,5 +90,15 @@ namespace CMS.Code
             [Description("Redis")]
             Redis = 2
         }
+        /// <summary>
+        /// 系统缓存类型
+        /// </summary>
+        public enum SysCacheType
+        {
+            [Description("Cache")]
+            Cache = 0,
+            [Description("Redis")]
+            Redis = 1
+        }
     }
 }

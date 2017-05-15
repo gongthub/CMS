@@ -81,7 +81,8 @@ namespace CMS.Data
                 }
                 if (prop.Name.ToLower() == "DeleteUserId".ToLower())
                 {
-                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                     if (LoginInfo != null)
                     {
                         dbcontext.Entry(entity).Property(prop.Name).CurrentValue = LoginInfo.UserId;
@@ -114,7 +115,8 @@ namespace CMS.Data
                     }
                     if (prop.Name.ToLower() == "DeleteUserId".ToLower())
                     {
-                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                         if (LoginInfo != null)
                         {
                             dbcontext.Entry(entitys[i]).Property(prop.Name).CurrentValue = LoginInfo.UserId;

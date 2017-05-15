@@ -43,7 +43,7 @@ namespace CMS.Web
             return Content(new AjaxResult { state = ResultType.error.ToString(), message = message }.ToJson());
         }
 
-        public static readonly string WEBSITEID = "WEBSITEID";
+        //public static readonly string WEBSITEID = "WEBSITEID";
 
         /// <summary>
         /// 根据Session名称获取值
@@ -69,10 +69,11 @@ namespace CMS.Web
             get
             {
                 string Ids = Guid.Empty.ToString();
-                if (Session["WEBSITEID"] != null)
-                {
-                    Ids = Session["WEBSITEID"].ToString();
-                }
+                //if (Session["WEBSITEID"] != null)
+                //{
+                //    Ids = Session["WEBSITEID"].ToString();
+                //}
+                Ids = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId();
                 return Ids;
             }
         }
@@ -86,10 +87,11 @@ namespace CMS.Web
             get
             {
                 string strShortName = string.Empty;
-                if (Session["WEBSITESHORTNAME"] != null)
-                {
-                    strShortName = Session["WEBSITESHORTNAME"].ToString();
-                }
+                //if (Session["WEBSITESHORTNAME"] != null)
+                //{
+                //    strShortName = Session["WEBSITESHORTNAME"].ToString();
+                //}
+                strShortName = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteShortName();
                 return strShortName;
             }
         }
@@ -103,10 +105,11 @@ namespace CMS.Web
             get
             {
                 WebSiteEntity entity = new WebSiteEntity();
-                if (Session["WEBSITEENTITY"] != null)
-                {
-                    entity = Session["WEBSITEENTITY"] as WebSiteEntity;
-                }
+                //if (Session["WEBSITEENTITY"] != null)
+                //{
+                //    entity = Session["WEBSITEENTITY"] as WebSiteEntity;
+                //}
+                entity = SysLoginObjHelp.sysLoginObjHelp.GetWebSit<WebSiteEntity>();
                 return entity;
             }
         }

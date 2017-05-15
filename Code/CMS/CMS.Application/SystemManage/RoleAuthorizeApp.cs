@@ -22,7 +22,8 @@ namespace CMS.Application.SystemManage
         public List<ModuleEntity> GetMenuList(string roleId)
         {
             var data = new List<ModuleEntity>();
-            if (OperatorProvider.Provider.GetCurrent().IsSystem)
+            //if (OperatorProvider.Provider.GetCurrent().IsSystem)
+            if (SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
             {
                 data = moduleApp.GetList();
             }
@@ -44,7 +45,8 @@ namespace CMS.Application.SystemManage
         public List<ModuleButtonEntity> GetButtonList(string roleId)
         {
             var data = new List<ModuleButtonEntity>();
-            if (OperatorProvider.Provider.GetCurrent().IsSystem)
+            //if (OperatorProvider.Provider.GetCurrent().IsSystem)
+                if (SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
             {
                 data = moduleButtonApp.GetList();
             }
@@ -66,7 +68,7 @@ namespace CMS.Application.SystemManage
         public bool ActionValidate(string roleId, string moduleId, string action)
         {
             var authorizeurldata = new List<AuthorizeActionModel>();
-            var cachedata = CacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
+            var cachedata = CacheFactory.cacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
             if (cachedata == null)
             {
                 var moduledata = moduleApp.GetList();
@@ -87,7 +89,7 @@ namespace CMS.Application.SystemManage
                             authorizeurldata.Add(new AuthorizeActionModel { Id = moduleButtonEntity.ModuleId, UrlAddress = moduleButtonEntity.UrlAddress });
                     }
                 }
-                CacheFactory.Cache().WriteCache(authorizeurldata, "authorizeurldata_" + roleId, DateTime.Now.AddMinutes(5));
+                CacheFactory.cacheFactory.Cache().WriteCache(authorizeurldata, "authorizeurldata_" + roleId, DateTime.Now.AddMinutes(5));
             }
             else
             {

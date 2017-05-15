@@ -40,7 +40,8 @@ namespace CMS.Application.SystemManage
         public List<string> GetWebSiteIds()
         {
             List<string> lstrids = new List<string>();
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 if (LoginInfo.IsSystem)

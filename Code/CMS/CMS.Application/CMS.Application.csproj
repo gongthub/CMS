@@ -48,7 +48,6 @@
     <Compile Include="Comm\ConfigHelp.cs" />
     <Compile Include="Comm\QueryableHelp.cs" />
     <Compile Include="Comm\RequestHelp.cs" />
-    <Compile Include="Comm\SysLoginObjHelp.cs" />
     <Compile Include="Comm\SysPageHelp.cs" />
     <Compile Include="Comm\TempHelp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

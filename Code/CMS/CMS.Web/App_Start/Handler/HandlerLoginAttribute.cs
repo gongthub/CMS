@@ -25,7 +25,8 @@ namespace CMS.Web
             {
                 return;
             }
-            if (OperatorProvider.Provider.GetCurrent() == null)
+            //if (OperatorProvider.Provider.GetCurrent() == null)
+            if (SysLoginObjHelp.sysLoginObjHelp.GetOperator() == null || SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserId == null)
             {
                 WebHelper.WriteCookie("cms_login_error", "overdue");
                 filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Login/Index';</script>");

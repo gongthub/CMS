@@ -15,7 +15,8 @@ namespace CMS.Web
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (OperatorProvider.Provider.GetCurrent() != null && OperatorProvider.Provider.GetCurrent().IsSystem)
+            //if (OperatorProvider.Provider.GetCurrent() != null && OperatorProvider.Provider.GetCurrent().IsSystem)
+            if (SysLoginObjHelp.sysLoginObjHelp.GetOperator() != null && SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
             {
                 return;
             }
@@ -33,7 +34,8 @@ namespace CMS.Web
         }
         private bool ActionAuthorize(ActionExecutingContext filterContext)
         {
-            var operatorProvider = OperatorProvider.Provider.GetCurrent();
+            //var operatorProvider = OperatorProvider.Provider.GetCurrent();
+            var operatorProvider = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             var roleId = operatorProvider.RoleId;
             var moduleId = WebHelper.GetCookie("cms_currentmoduleid");
             var action = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();

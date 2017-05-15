@@ -30,7 +30,8 @@ namespace CMS.Code
                 chkCode += character[rnd.Next(character.Length)];
             }
             //写入Session、验证码加密
-            WebHelper.WriteSession("cms_session_verifycode", Md5.md5(chkCode.ToLower(), 16));
+            //WebHelper.WriteSession("CMS_VERIFYCODE", Md5.md5(chkCode.ToLower(), 16));
+            SysLoginObjHelp.sysLoginObjHelp.AddVerifyCode(Md5.md5(chkCode.ToLower(), 16));
             //创建画布
             Bitmap bmp = new Bitmap(codeW, codeH);
             Graphics g = Graphics.FromImage(bmp);

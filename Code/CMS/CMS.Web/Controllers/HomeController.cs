@@ -12,11 +12,11 @@ namespace CMS.Web.Controllers
     [HandlerLogin]
     public class HomeController : Controller
     {
-        public static readonly string WEBSITEID = "WEBSITEID";
-        public static readonly string WEBSITENAME = "WEBSITENAME";
-        public static readonly string WEBSITESHORTNAME = "WEBSITESHORTNAME";
-        public static readonly string WEBSITEURLADDRESS = "WEBSITEURLADDRESS";
-        public static readonly string WEBSITEENTITY = "WEBSITEENTITY";
+        //public static readonly string WEBSITEID = "WEBSITEID";
+        //public static readonly string WEBSITENAME = "WEBSITENAME";
+        //public static readonly string WEBSITESHORTNAME = "WEBSITESHORTNAME";
+        //public static readonly string WEBSITEURLADDRESS = "WEBSITEURLADDRESS";
+        //public static readonly string WEBSITEENTITY = "WEBSITEENTITY";
         [HttpGet]
         public ActionResult Index(string strLoginMark)
         {
@@ -38,15 +38,20 @@ namespace CMS.Web.Controllers
             WebSiteEntity entity = app.GetForm(key);
             if (entity != null && !string.IsNullOrEmpty(entity.Id))
             {
-                Session["WEBSITEID"] = entity.Id;
-                Session["WEBSITENAME"] = entity.FullName;
-                Session["WEBSITESHORTNAME"] = entity.ShortName;
-                if(!string.IsNullOrEmpty(entity.UrlAddress))
+                SysLoginObjHelp.sysLoginObjHelp.AddWebSiteId(entity.Id);
+                SysLoginObjHelp.sysLoginObjHelp.AddWebSiteName(entity.FullName);
+                SysLoginObjHelp.sysLoginObjHelp.AddWebSiteShortName(entity.ShortName);
+                //Session["WEBSITEID"] = entity.Id;
+                //Session["WEBSITENAME"] = entity.FullName;
+                //Session["WEBSITESHORTNAME"] = entity.ShortName;
+                if (!string.IsNullOrEmpty(entity.UrlAddress))
                 {
-                    string strUrlAddress=entity.UrlAddress.ToLower().Replace("http://","");
-                    Session["WEBSITEURLADDRESS"] = strUrlAddress;
+                    string strUrlAddress = entity.UrlAddress.ToLower().Replace("http://", "");
+                    //Session["WEBSITEURLADDRESS"] = strUrlAddress;
+                    SysLoginObjHelp.sysLoginObjHelp.AddWebSiteAddress(strUrlAddress);
                 }
-                Session["WEBSITEENTITY"] = entity;
+                //Session["WEBSITEENTITY"] = entity;
+                SysLoginObjHelp.sysLoginObjHelp.AddWebSite<WebSiteEntity>(entity);
             }
 
             return RedirectToAction("WebSiteMgr");

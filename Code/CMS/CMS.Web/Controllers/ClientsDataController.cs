@@ -98,12 +98,14 @@ namespace CMS.Web.Controllers
         }
         private object GetMenuList()
         {
-            var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic != true && m.EnabledMark != false), "0");
         }
         private object GetMenuListIndex()
         {
-            var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic == true && m.EnabledMark != false), "0");
         }
         private string ToMenuJson(List<ModuleEntity> data, string parentId)
@@ -126,7 +128,8 @@ namespace CMS.Web.Controllers
         }
         private object GetMenuButtonList()
         {
-            var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
+            var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             var data = new RoleAuthorizeApp().GetButtonList(roleId);
             var dataModuleId = data.Distinct(new ExtList<ModuleButtonEntity>("ModuleId"));
             Dictionary<string, object> dictionary = new Dictionary<string, object>();

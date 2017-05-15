@@ -9,7 +9,8 @@ namespace CMS.Domain
         {
             var entity = this as ICreationAudited;
             entity.Id = Common.GuId();
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 entity.CreatorUserId = LoginInfo.UserId;
@@ -21,7 +22,8 @@ namespace CMS.Domain
         {
             var entity = this as IModificationAudited;
             entity.Id = keyValue;
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 entity.LastModifyUserId = LoginInfo.UserId;
@@ -31,7 +33,8 @@ namespace CMS.Domain
         public void Remove()
         {
             var entity = this as IDeleteAudited;
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 entity.DeleteUserId = LoginInfo.UserId;

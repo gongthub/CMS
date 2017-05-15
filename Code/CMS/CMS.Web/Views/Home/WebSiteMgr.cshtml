@@ -14,7 +14,7 @@
     <div id="theme-wrapper">
         <header class="navbar" id="header-navbar">
             <div class="container" style="padding-right: 0px;">
-                <a href="#" id="logo" class="navbar-brand">@Session["WEBSITENAME"]</a>
+                <a href="#" id="logo" class="navbar-brand">@CMS.Code.SysLoginObjHelp.sysLoginObjHelp.GetWebSiteName()</a>
                 <div class="clearfix">
                     <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
                         <ul class="nav navbar-nav pull-left">
@@ -61,14 +61,14 @@
                                 <a href="#" class="dropdown" data-toggle="dropdown">
                                     <img src="~/Content/img/samples/scarlet-159.png" alt="" />
                                     <span class="hidden-xs">
-                                        @if (CMS.Code.OperatorProvider.Provider.GetCurrent() != null)
+                                        @if (CMS.Code.SysLoginObjHelp.sysLoginObjHelp.GetOperator() != null)
                                         {
-                                            <text>@CMS.Code.OperatorProvider.Provider.GetCurrent().UserCode</text>
+                                            <text>@CMS.Code.SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserCode</text>
                                         }
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="http://@Session["WEBSITEURLADDRESS"]" target="_blank"><i class="fa fa-inbox"></i>网站预览</a></li>
+                                    <li><a href="http://@CMS.Code.SysLoginObjHelp.sysLoginObjHelp.GetWebSiteAddress()" target="_blank"><i class="fa fa-inbox"></i>网站预览</a></li>
                                     <li class="divider"></li>
                                     <li><a href="~/Login/OutLogin"><i class="ace-icon fa fa-power-off"></i>安全退出</a></li>
                                 </ul>

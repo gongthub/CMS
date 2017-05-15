@@ -28,7 +28,8 @@ namespace CMS.Application.SystemManage
             expression = expression.And(t => t.Account != SYSTEMADMINUSERNAME);
             expression = expression.And(t => t.DeleteMark != true);
 
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
             {
                 expression = expression.And(t => t.UserLevel == LoginInfo.UserLevel && t.Id == LoginInfo.UserId);
@@ -127,7 +128,8 @@ namespace CMS.Application.SystemManage
         {
             int iWebSiteNum = 0;
 
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.SystemUser)
@@ -185,7 +187,8 @@ namespace CMS.Application.SystemManage
         public bool IsExistDefaultWebSite(ref string webSiteId)
         {
             bool bState = false;
-            var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)

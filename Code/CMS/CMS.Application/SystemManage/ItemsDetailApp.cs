@@ -67,7 +67,8 @@ namespace CMS.Application.SystemManage
             switch (enCode)
             {
                 case "UserLevel":
-                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                     if (LoginInfo != null)
                     {
                         if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
@@ -102,8 +103,9 @@ namespace CMS.Application.SystemManage
                     }
                     else
                     {
-                        var LoginInfo = OperatorProvider.Provider.GetCurrent();
-                        if (LoginInfo != null && LoginInfo.UserLevel != null)
+                        //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+                        if (LoginInfo != null && LoginInfo.UserLevel >=0)
                             strUserLevel = LoginInfo.UserLevel.ToString();
                     }
                     if (!string.IsNullOrEmpty(strUserLevel))

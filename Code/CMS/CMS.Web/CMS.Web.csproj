@@ -873,7 +873,9 @@
     <Content Include="Areas\SystemSecurity\Views\Log\RemoveLog.cshtml" />
     <Content Include="Areas\SystemSecurity\Views\ServerMonitoring\Index.cshtml" />
     <Content Include="Areas\SystemSecurity\Views\Web.config" />
-    <Content Include="Configs\database.config" />
+    <Content Include="Configs\database.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configs\log4net.config" />
     <Content Include="Configs\system.config">
       <SubType>Designer</SubType>

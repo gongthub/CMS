@@ -29,7 +29,8 @@ namespace CMS.Web
                 return;
             }
             Guid Ids = Guid.Empty;
-            if (filterContext.HttpContext.Session["WEBSITEID"] == null || !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
+            //if (filterContext.HttpContext.Session["WEBSITEID"] == null || !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
+            if (SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId() == null || !Guid.TryParse(SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId(), out Ids))
             {
 
                 StringBuilder sbScript = new StringBuilder();
