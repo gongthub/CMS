@@ -13,6 +13,10 @@ namespace CMS.Web.Controllers
     public class HomeController : Controller
     {
         public static readonly string WEBSITEID = "WEBSITEID";
+        public static readonly string WEBSITENAME = "WEBSITENAME";
+        public static readonly string WEBSITESHORTNAME = "WEBSITESHORTNAME";
+        public static readonly string WEBSITEURLADDRESS = "WEBSITEURLADDRESS";
+        public static readonly string WEBSITEENTITY = "WEBSITEENTITY";
         [HttpGet]
         public ActionResult Index(string strLoginMark)
         {

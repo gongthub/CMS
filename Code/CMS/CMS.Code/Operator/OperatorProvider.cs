@@ -12,41 +12,71 @@
         public OperatorModel GetCurrent()
         {
             OperatorModel operatorModel = new OperatorModel();
-            if (LoginProvider == "Cookie")
+            int iloginProvider = 0;
+            if (int.TryParse(LoginProvider, out iloginProvider))
             {
-                operatorModel = DESEncrypt.Decrypt(WebHelper.GetCookie(LoginUserKey).ToString()).ToObject<OperatorModel>();
-            }
-            else
-            {
-                if (WebHelper.GetSession(LoginUserKey) != null)
-                    operatorModel = DESEncrypt.Decrypt(WebHelper.GetSession(LoginUserKey).ToString()).ToObject<OperatorModel>();
-                else
-                    operatorModel = null;
+                operatorModel = GetCurrent((CMS.Code.Enums.LoginProvider)iloginProvider);
             }
             return operatorModel;
         }
         public void AddCurrent(OperatorModel operatorModel)
         {
-            if (LoginProvider == "Cookie")
+            int iloginProvider = 0;
+            if (int.TryParse(LoginProvider, out iloginProvider))
             {
-                WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()), 30);
+                AddCurrent(operatorModel, (CMS.Code.Enums.LoginProvider)iloginProvider);
             }
-            else
-            {
-                WebHelper.WriteSession(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()));
-            }
-            //WebHelper.WriteCookie("cms_mac", Md5.md5(Net.GetMacByNetworkInterface().ToJson(), 32));
-            //WebHelper.WriteCookie("cms_licence", Licence.GetLicence());
         }
         public void RemoveCurrent()
         {
-            if (LoginProvider == "Cookie")
+            int iloginProvider = 0;
+            if (int.TryParse(LoginProvider, out iloginProvider))
             {
-                WebHelper.RemoveCookie(LoginUserKey.Trim());
+                RemoveCurrent((CMS.Code.Enums.LoginProvider)iloginProvider);
             }
-            else
+        }
+
+        private OperatorModel GetCurrent(CMS.Code.Enums.LoginProvider LoginProvider)
+        {
+            OperatorModel operatorModel = new OperatorModel();
+            switch (LoginProvider)
             {
-                WebHelper.RemoveSession(LoginUserKey.Trim());
+                case CMS.Code.Enums.LoginProvider.Cookie:
+                    operatorModel = DESEncrypt.Decrypt(WebHelper.GetCookie(LoginUserKey).ToString()).ToObject<OperatorModel>();
+                    break;
+                case CMS.Code.Enums.LoginProvider.Session:
+                    if (WebHelper.GetSession(LoginUserKey) != null)
+                        operatorModel = DESEncrypt.Decrypt(WebHelper.GetSession(LoginUserKey).ToString()).ToObject<OperatorModel>();
+                    else
+                        operatorModel = null;
+                    break;
+            }
+            return operatorModel;
+        }
+
+        private void AddCurrent(OperatorModel operatorModel, CMS.Code.Enums.LoginProvider LoginProvider)
+        {
+            switch (LoginProvider)
+            {
+                case CMS.Code.Enums.LoginProvider.Cookie:
+                    WebHelper.WriteCookie(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()), 30);
+                    break;
+                case CMS.Code.Enums.LoginProvider.Session:
+                    WebHelper.WriteSession(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()));
+                    break;
+            }
+        }
+
+        private void RemoveCurrent(CMS.Code.Enums.LoginProvider LoginProvider)
+        {
+            switch (LoginProvider)
+            {
+                case CMS.Code.Enums.LoginProvider.Cookie:
+                    WebHelper.RemoveCookie(LoginUserKey.Trim());
+                    break;
+                case CMS.Code.Enums.LoginProvider.Session:
+                    WebHelper.RemoveSession(LoginUserKey.Trim());
+                    break;
             }
         }
     }

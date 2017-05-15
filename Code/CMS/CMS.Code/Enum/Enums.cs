@@ -77,5 +77,18 @@ namespace CMS.Code
             [Description("钻石会员")]
             DiamondUser = 5,
         }
+
+        /// <summary>
+        /// 登陆提供者模式
+        /// </summary>
+        public enum LoginProvider
+        {
+            [Description("Session")]
+            Session = 0,
+            [Description("Cookie")]
+            Cookie = 1,
+            [Description("Redis")]
+            Redis = 2
+        }
     }
 }
