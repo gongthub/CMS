@@ -916,6 +916,15 @@ namespace CMS.Code
         {
             return HttpContext.Current.Server.MapPath(path);
         }
+        /// <summary>
+        /// 本地路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetFullPath(string path)
+        {
+            return System.IO.Path.GetFullPath(path);
+        }
         #endregion
 
         #region 将内容写入文本文件(如果文件path存在就打开，不存在就新建)

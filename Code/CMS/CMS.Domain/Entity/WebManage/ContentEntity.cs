@@ -13,6 +13,7 @@ namespace CMS.Domain.Entity.WebManage
         public string WebSiteId { get; set; }
         public string ColumnId { get; set; }
         public int SortCode { get; set; }
+        public string ShortName { get; set; }
         public string FullName { get; set; }
         public string Author { get; set; }
 

@@ -8,6 +8,7 @@ using CMS.Repository.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,22 @@ namespace CMS.Application.WebManage
     {
         private IContentRepository service = new ContentRepository();
 
+        public List<ContentEntity> GetLists(Expression<Func<ContentEntity, bool>> predicate)
+        {
+            List<ContentEntity> models = new List<ContentEntity>();
+            models = service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
+            models.ForEach(delegate(ContentEntity model)
+            {
+
+                if (model != null && model.UrlAddress != null)
+                {
+                    model.UrlPage = model.UrlAddress;
+                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
+        }
         public List<ContentEntity> GetList(string itemId = "", string keyword = "")
         {
             List<ContentEntity> models = new List<ContentEntity>();
@@ -89,6 +106,24 @@ namespace CMS.Application.WebManage
             }
             expression = expression.And(m => m.DeleteMark != true);
             models = service.FindList(expression, pagination);
+            models.ForEach(delegate(ContentEntity model)
+            {
+
+                if (model != null && model.UrlAddress != null)
+                {
+                    model.UrlPage = model.UrlAddress;
+                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
+        }
+
+
+        public List<ContentEntity> GetListByWebSiteId(string webSiteIds)
+        {
+            List<ContentEntity> models = new List<ContentEntity>();
+            models = service.IQueryable(t => t.DeleteMark != true && t.WebSiteId == webSiteIds).OrderBy(t => t.SortCode).ToList();
             models.ForEach(delegate(ContentEntity model)
             {
 
