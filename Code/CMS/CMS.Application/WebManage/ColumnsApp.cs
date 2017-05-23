@@ -55,7 +55,7 @@ namespace CMS.Application.WebManage
                         moduleEntity.Modify(keyValue);
                         if (moduleEntity.MainMark == true)
                         {
-                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id && m.WebSiteId == moduleEntity.WebSiteId).ToList();
                             if (models != null && models.Count > 0)
                             {
                                 models.ForEach(delegate(ColumnsEntity model)
@@ -73,7 +73,7 @@ namespace CMS.Application.WebManage
 
                         if (moduleEntity.MainMark == true)
                         {
-                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id).ToList();
+                            List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id && m.WebSiteId == moduleEntity.WebSiteId).ToList();
                             if (models != null && models.Count > 0)
                             {
                                 models.ForEach(delegate(ColumnsEntity model)

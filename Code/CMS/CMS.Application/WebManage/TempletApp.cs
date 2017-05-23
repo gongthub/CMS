@@ -105,7 +105,7 @@ namespace CMS.Application.WebManage
         {
             TempletEntity templet = new TempletEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            ColumnsEntity module = c_ModulesApp.GetMain();
+            ColumnsEntity module = c_ModulesApp.GetMain(webSiteId);
             if (module != null)
             {
                 templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);

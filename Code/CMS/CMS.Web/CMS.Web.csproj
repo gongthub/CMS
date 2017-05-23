@@ -803,6 +803,7 @@
     <Compile Include="Areas\WebManage\Controllers\ColumnsController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ResourceController.cs" />
     <Compile Include="Areas\WebManage\Controllers\TempletController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\WebSiteConfigController.cs" />
     <Compile Include="Areas\WebManage\Controllers\WebSiteMgrController.cs" />
     <Compile Include="Areas\WebManage\WebManageAreaRegistration.cs" />
     <Compile Include="Content\js\ueditor\net\App_Code\Config.cs" />
@@ -970,6 +971,7 @@
     <Content Include="Content\js\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="Areas\WebManage\Views\Content\Form.cshtml" />
     <Content Include="Content\js\jquery\jquery-1.10.2.min.map" />
+    <Content Include="Areas\WebManage\Views\WebSiteConfig\Index.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
