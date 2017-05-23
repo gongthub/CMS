@@ -27,9 +27,9 @@ namespace CMS.Application.Comm
 
         static LucenceHelp()
         {
-            PANGUXML = FileHelper.GetFullPath(PANGUXML);
-            PANGUDICPATH = FileHelper.GetFullPath(PANGUDICPATH);
-            LUCENCEINDEXPATH = FileHelper.GetFullPath(LUCENCEINDEXPATH);
+            PANGUXML = FileHelper.MapPath(PANGUXML);
+            PANGUDICPATH = FileHelper.MapPath(PANGUDICPATH);
+            LUCENCEINDEXPATH = FileHelper.MapPath(LUCENCEINDEXPATH);
             //定义盘古分词的xml引用路径
             PanGu.Segment.Init(PANGUXML);
 
@@ -75,6 +75,41 @@ namespace CMS.Application.Comm
             }
         }
 
+
+        /// <summary>
+        /// 根据网站id创建内容索引
+        /// </summary>
+        public static void CreateIndex(string wenSiteIds, string wenSiteShortName)
+        {
+            if (!string.IsNullOrEmpty(wenSiteShortName))
+            {
+                ContentApp contentApp = new ContentApp();
+                LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);
+                INDEX_DIR = new DirectoryInfo(LUCENCEINDEXPATH);
+                List<ContentEntity> contents = contentApp.GetListByWebSiteId(wenSiteIds);
+
+                IndexWriter iw = new IndexWriter(Lucene.Net.Store.FSDirectory.Open(INDEX_DIR), analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
+                int i = 0;
+                foreach (ContentEntity content in contents)
+                {
+                    Document doc = new Document();
+                    if (content.Id != null)
+                    {
+                        doc.Add(new Field("Id", content.Id, Field.Store.YES, Field.Index.ANALYZED));
+                        if (content.FullName != null)
+                            doc.Add(new Field("FullName", content.FullName, Field.Store.YES, Field.Index.ANALYZED));
+                        if (content.Author != null)
+                            doc.Add(new Field("Author", content.Author, Field.Store.YES, Field.Index.ANALYZED));
+                        if (content.Content != null)
+                            doc.Add(new Field("Content", content.Content, Field.Store.YES, Field.Index.ANALYZED));
+                    }
+                    iw.AddDocument(doc);
+                }
+                iw.Commit();
+                iw.Optimize();
+                iw.Dispose();
+            }
+        }
         /// <summary>
         /// 根据网站ID和关键字查询结果
         /// </summary>
@@ -127,5 +162,97 @@ namespace CMS.Application.Comm
             return mdoels;
         }
 
+        /// <summary>
+        /// 根据网站ID和关键字查询结果
+        /// </summary>
+        /// <param name="wenSiteIds"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static List<ContentEntity> SearchByShortName(string wenSiteShortName, string keyword)
+        {
+            List<ContentEntity> mdoels = new List<ContentEntity>();
+            if (!string.IsNullOrEmpty(wenSiteShortName))
+            {
+                LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);
+                INDEX_DIR = new DirectoryInfo(LUCENCEINDEXPATH);
+                BooleanQuery bQuery = new BooleanQuery();
+
+                using (IndexSearcher searcher = new IndexSearcher(FSDirectory.Open(INDEX_DIR), true))
+                {
+                    QueryParser parseFullName = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "FullName", analyzer);
+                    Query query = parseFullName.Parse(keyword);
+                    bQuery.Add(query, Occur.SHOULD);
+
+                    QueryParser parseAuthor = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Author", analyzer);
+                    Query queryAuthor = parseAuthor.Parse(keyword);
+                    bQuery.Add(queryAuthor, Occur.SHOULD);
+
+                    QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", analyzer);
+                    Query queryContent = parseContent.Parse(keyword);
+                    bQuery.Add(queryContent, Occur.SHOULD);
+
+                    TopDocs tds = searcher.Search(bQuery, Int32.MaxValue);
+                    List<string> ids = new List<string>();
+                    foreach (ScoreDoc sd in tds.ScoreDocs)
+                    {
+                        Document doc = searcher.Doc(sd.Doc);
+                        ids.Add(doc.Get("Id"));
+                    }
+                    if (ids != null && ids.Count > 0)
+                    {
+                        ContentApp contentApp = new ContentApp();
+                        mdoels = contentApp.GetLists(m => ids.Contains(m.Id));
+                    }
+                    searcher.Dispose();
+                }
+            }
+            return mdoels;
+        }
+        /// <summary>
+        /// 根据网站ID和关键字查询结果
+        /// </summary>
+        /// <param name="wenSiteIds"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static IQueryable<ContentEntity> SearchByShortNameIq(string wenSiteShortName, string keyword)
+        {
+            IQueryable<ContentEntity> mdoels=null;
+            if (!string.IsNullOrEmpty(wenSiteShortName))
+            {
+                LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);
+                INDEX_DIR = new DirectoryInfo(LUCENCEINDEXPATH);
+                BooleanQuery bQuery = new BooleanQuery();
+
+                using (IndexSearcher searcher = new IndexSearcher(FSDirectory.Open(INDEX_DIR), true))
+                {
+                    QueryParser parseFullName = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "FullName", analyzer);
+                    Query query = parseFullName.Parse(keyword);
+                    bQuery.Add(query, Occur.SHOULD);
+
+                    QueryParser parseAuthor = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Author", analyzer);
+                    Query queryAuthor = parseAuthor.Parse(keyword);
+                    bQuery.Add(queryAuthor, Occur.SHOULD);
+
+                    QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", analyzer);
+                    Query queryContent = parseContent.Parse(keyword);
+                    bQuery.Add(queryContent, Occur.SHOULD);
+
+                    TopDocs tds = searcher.Search(bQuery, Int32.MaxValue);
+                    List<string> ids = new List<string>();
+                    foreach (ScoreDoc sd in tds.ScoreDocs)
+                    {
+                        Document doc = searcher.Doc(sd.Doc);
+                        ids.Add(doc.Get("Id"));
+                    }
+                    if (ids != null && ids.Count > 0)
+                    {
+                        ContentApp contentApp = new ContentApp();
+                        mdoels = contentApp.GetListsIq(m => ids.Contains(m.Id));
+                    }
+                    searcher.Dispose();
+                }
+            }
+            return mdoels;
+        }
     }
 }

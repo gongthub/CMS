@@ -42,7 +42,7 @@ namespace CMS.Application.Comm
                 return _tempHelp;
             }
         }
-        #endregion 
+        #endregion
         /// <summary>
         /// 输出文件格式
         /// </summary>
@@ -308,6 +308,51 @@ namespace CMS.Application.Comm
 
         }
         /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType)
+        {
+            string strs = string.Empty;
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTCHAR);
+                int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strAttr = "";
+                    //获取属性
+                    Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
+                    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
+                    if (!string.IsNullOrEmpty(strAttr))
+                        strt = strt.Replace(strAttr, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string templetstm = ProModels(ref strt, strts);
+                        string htmlt = GetTModel(webSiteShortName, strt.Trim(), templetstm, Id, attrs, irequestType);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTCHAR);
+                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
+                }
+                strs = templets;
+                //格式化
+                //strs = HtmlCodeFormat.Format(strs);
+            }
+            catch (Exception ex)
+            {
+                strs = string.Empty;
+            }
+            return strs;
+
+        }
+        /// <summary>
         /// 处理存在内容时
         /// </summary>
         /// <param name="strt"></param>
@@ -438,6 +483,44 @@ namespace CMS.Application.Comm
                         {
                             case "contents":
                                 htmls = GetContentsById(Id, mcodes, attrs);
+                                break;
+                        }
+                        break;
+                    case "templet":
+                        htmls = GetHtmlsByTempletName(modelStr, Id);
+                        break;
+                    case "syssite":
+                        htmls = GetWebSiteById(modelStr, Id);
+                        break;
+                }
+
+            }
+            return htmls;
+        }
+        /// <summary>
+        /// 获取html静态页面
+        /// </summary>
+        /// <returns></returns>
+        private string GetTModel(string webSiteShortName, string codes, string mcodes, string Id, Dictionary<string, string> attrs, int irequestType)
+        {
+            string htmls = codes;
+            string[] strs = codes.Split('.');
+            if (strs != null && strs.Length == 2)
+            {
+                //获取名称
+                string modelName = strs[0];
+                //获取指定内容
+                string modelStr = strs[1];
+                switch (modelName.Trim().ToLower())
+                {
+                    case "model":
+                        htmls = GetModelById(modelStr, Id, attrs);
+                        break;
+                    case "models":
+                        switch (modelStr.Trim().ToLower())
+                        {
+                            case "contents":
+                                htmls = GetContentsById(webSiteShortName, Id, mcodes, attrs, irequestType);
                                 break;
                         }
                         break;
@@ -608,10 +691,11 @@ namespace CMS.Application.Comm
                     int tatolnum = 0;
                     if (int.TryParse(val, out tatolnum))
                     {
-                        contententitys = contententitysT.Take(tatolnum).ToList();
+                        contententitysT = contententitysT.Take(tatolnum);
                     }
 
                 }
+                contententitys = contententitysT.ToList();
                 //处理连接地址
                 contententitys.ForEach(delegate(ContentEntity model)
                 {
@@ -631,6 +715,87 @@ namespace CMS.Application.Comm
                     }
                 }
             }
+            return strs;
+        }
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType)
+        {
+            string strs = string.Empty;
+
+            switch (irequestType)
+            {
+                case (int)Enums.TempletType.Common:
+                    strs = GetContentsById(Ids, mcodes, attrs);
+                    break;
+                case (int)Enums.TempletType.Search:
+                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs);
+                    break;
+            }
+            return strs;
+        }
+
+        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids);
+            if (contententitys != null)
+            {
+                if (contententitys != null)
+                {
+                    //排序
+                    if (attrs.ContainsKey("sort"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("sort", out val);
+                        string sortName = val;
+                        contententitys = contententitys.OrderBy(sortName);
+                    }
+                    //排序
+                    if (attrs.ContainsKey("sortdesc"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("sortdesc", out val);
+
+                        string sortName = val;
+                        contententitys = contententitys.OrderBy(sortName, true);
+                    }
+                    //行数
+                    if (attrs.ContainsKey("tatol"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("tatol", out val);
+                        int tatolnum = 0;
+                        if (int.TryParse(val, out tatolnum))
+                        {
+                            contententitys = contententitys.Take(tatolnum);
+                        }
+                    }
+                    List<ContentEntity> contententitysT = contententitys.ToList();
+                    //处理连接地址
+                    contententitysT.ForEach(delegate(ContentEntity model)
+                    {
+
+                        if (model != null && model.UrlAddress != null)
+                        {
+                            model.UrlPage = model.UrlAddress;
+                            model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                        }
+
+                    });
+                    if (contententitysT != null && contententitysT.Count > 0)
+                    {
+                        foreach (ContentEntity contententity in contententitys)
+                        {
+                            strs += GetHtmlPage(mcodes, contententity, attrs);
+                        }
+                    }
+                }
+            }
+
             return strs;
         }
 
@@ -880,7 +1045,6 @@ namespace CMS.Application.Comm
                 TempHelp temphelp = new TempHelp();
                 htmls = temphelp.GetHtmlPages(htmls, Ids);
             }
-
             return htmls;
         }
 
@@ -897,12 +1061,12 @@ namespace CMS.Application.Comm
             WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
             return GetHtmlStrsByWebSite(entity, urlRaw);
         }
-
         public string GetHtmlStrsByWebSite(WebSiteEntity entity, string urlRaw)
         {
             string htmls = string.Empty;
             int iFlay = 0;
-            bool isNoFind = false;
+            bool isNoFind = true;
+            int irequestType = (int)Enums.TempletType.Common;
             if (entity != null && !string.IsNullOrEmpty(entity.Id))
             {
                 List<string> urlRaws = WebHelper.GetUrls(urlRaw);
@@ -925,7 +1089,7 @@ namespace CMS.Application.Comm
                     {
                         if (urlRaws.Count > 0)
                         {
-                            templetmodel = templetApp.GetModelByUrlRaws(urlRaws, entity.Id);
+                            templetmodel = templetApp.GetModelByUrlRaws(urlRaws, entity.Id, ref irequestType);
                             columnentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
                         }
                         if (columnentity != null)
@@ -936,47 +1100,26 @@ namespace CMS.Application.Comm
                             iFlay = 1;
                         }
                     }
-                    if (templetmodel == null)
-                    {
-                        isNoFind = true;
-                    }
-                    else
+                    if (templetmodel != null)
                     {
                         htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
                         if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Content))
                         {
-                            if (columnentity != null)
+                            if (iFlay == 1)
                             {
-                                if (iFlay == 1)
-                                {
-                                    ContentEntity contentEntity = new ContentApp().GetForm(Ids);
-                                    if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
-                                    {
-                                        TempHelp temphelp = new TempHelp();
-                                        htmls = temphelp.GetHtmlPages(htmls, Ids);
-                                    }
-                                    else
-                                    {
-                                        isNoFind = true;
-                                    }
-                                }
-                                else
-                                {
-                                    TempHelp temphelp = new TempHelp();
-                                    htmls = temphelp.GetHtmlPages(htmls, Ids);
-                                }
+                                TempHelp temphelp = new TempHelp();
+                                htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
+                                isNoFind = false;
                             }
-                        }
-                        else
-                        {
-                            isNoFind = true;
+                            else
+                            {
+                                TempHelp temphelp = new TempHelp();
+                                htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
+                                isNoFind = false;
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                isNoFind = true;
             }
             if (isNoFind)
             {

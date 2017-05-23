@@ -48,7 +48,7 @@ namespace CMS.Application.WebManage
             //if (!IsExistActionName(keyValue, moduleEntity.ActionName))
             if (!service.IsExist(keyValue, "ActionName", moduleEntity.ActionName, moduleEntity.WebSiteId, true))
             {
-                if (!Common.IsSystemHaveName(moduleEntity.ActionName))
+                if (!Common.IsSystemHaveName(moduleEntity.ActionName) && !Common.IsSearch(moduleEntity.ActionName))
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {

@@ -51,7 +51,8 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                moduleEntity.WebSiteId = Base_WebSiteId; 
+                moduleEntity.WebSiteId = Base_WebSiteId;
+                moduleEntity.TempletType = (int)Code.Enums.TempletType.Common;
                 templetApp.SubmitForm(moduleEntity, keyValue);
                 return Success("操作成功。");
             }

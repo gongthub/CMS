@@ -100,5 +100,15 @@ namespace CMS.Code
             [Description("Redis")]
             Redis = 1
         }
+        /// <summary>
+        /// 模板类型
+        /// </summary>
+        public enum TempletType
+        {
+            [Description("Common")]
+            Common = 0,
+            [Description("Search")]
+            Search = 1
+        }
     }
 }

@@ -162,7 +162,7 @@ namespace CMS.Code
 
             return bretStatus;
         }
-        private static bool IsExistUrlRaw(string urlRaw)
+        public static bool IsExistUrlRaw(string urlRaw)
         {
             bool bretStatus = false;
             if (urlRaw == "/")
@@ -183,8 +183,18 @@ namespace CMS.Code
             }
             return bretStatus;
         }
+        public static bool IsExistUrlRawExt(string urlRaw)
+        {
+            bool bretStatus = false;
+            string[] strUrlRaw = urlRaw.Split('/');
+            string[] strExs = strUrlRaw.LastOrDefault().Split('.');
+            if (strExs.Length == 2)
+            {
+                bretStatus = true;
+            }
+            return bretStatus;
+        }
         #endregion
-
 
         #region 判断url后缀为Guid
         /// <summary>
@@ -209,7 +219,6 @@ namespace CMS.Code
             return bretStatus;
         }
         #endregion
-
 
         #region 判断请求路径是否为黑名单 +bool IsBlackName(string urlRaw)
         /// <summary>
@@ -276,6 +285,61 @@ namespace CMS.Code
             }
             return retBol;
         }
+        #endregion
+
+        #region 判断是否为全站搜索
+
+        /// <summary>
+        /// 判断是否为全站搜索
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsSearch(string strName)
+        {
+            string WebSiteSearchPath = Configs.GetValue("WebSiteSearchPath");
+            bool bState = false;
+            if (!string.IsNullOrEmpty(strName))
+            {
+                if (strName.ToLower().Trim() == WebSiteSearchPath.ToLower())
+                {
+                    bState = true;
+                }
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 判断是否为全站搜索
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsSearchForUrl(string urlRaw)
+        {
+            string WebSiteSearchPath = Configs.GetValue("WebSiteSearchPath");
+            bool bState = false;
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+            if (!Common.IsExistUrlRawExt(urlRaw))
+            {
+                bState = IsSearchForUrl(urlRaws);
+            }
+            return bState;
+        }
+
+        /// <summary>
+        /// 判断是否为全站搜索
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsSearchForUrl(List<string> urlRaws)
+        {
+            string WebSiteSearchPath = Configs.GetValue("WebSiteSearchPath");
+            bool bState = false;
+            if (urlRaws != null && urlRaws.Count == 2)
+            {
+                if (urlRaws.FirstOrDefault().ToLower() == WebSiteSearchPath.ToLower())
+                {
+                    bState = true;
+                }
+            }
+            return bState;
+        }
+
         #endregion
 
         #region 处理Url参数

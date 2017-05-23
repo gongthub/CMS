@@ -34,6 +34,12 @@ namespace CMS.Application.WebManage
             });
             return models;
         }
+        public IQueryable<ContentEntity> GetListsIq(Expression<Func<ContentEntity, bool>> predicate)
+        {
+            IQueryable<ContentEntity> models;
+            models = service.IQueryable(predicate).OrderBy(t => t.SortCode);
+            return models;
+        }
         public List<ContentEntity> GetList(string itemId = "", string keyword = "")
         {
             List<ContentEntity> models = new List<ContentEntity>();
@@ -294,7 +300,7 @@ namespace CMS.Application.WebManage
         {
             bool isHave = false;
             htmls = string.Empty;
-            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/",@"\"))).FirstOrDefault();
+            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/", @"\"))).FirstOrDefault();
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
             {
                 string urlPath = contentEntity.UrlPath;
@@ -309,5 +315,20 @@ namespace CMS.Application.WebManage
             return isHave;
         }
 
+        /// <summary>
+        /// 判断id是否为内容表
+        /// </summary>
+        /// <param name="keyValue"></param>
+        /// <returns></returns>
+        public bool IsContentIds(string Ids)
+        {
+            bool bState = false;
+            ContentEntity contentEntity = GetForm(Ids);
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+            {
+                bState = true;
+            }
+            return bState;
+        }
     }
 }

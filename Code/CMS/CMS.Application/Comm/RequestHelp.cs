@@ -56,24 +56,33 @@ namespace CMS.Application.Comm
         {
             string urlHost = context.Request.Url.Host;
             string urlRaw = context.Request.RawUrl.ToString();
-            if (!Common.IsBlackName(urlRaw) && !Common.IsSystemHaveUrlName(urlRaw))
+            urlRaw = context.Server.UrlDecode(urlRaw);
+            if (IsProcess(urlHost, urlRaw))
             {
-                //判断是否前台url
-                if (IsWebSiteUrl(urlHost, urlRaw))
-                {
-                    string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
-                    context.Response.Write(htmls);
-                    //插入访问日志
-                    SysPageHelp.sysPageHelp.CreateAccessLog(context,true);
-
-                    context.Response.End();
-
-                }
+                string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+                context.Response.Write(htmls);
+                //插入访问日志
+                SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
+                context.Response.End();
             }
         }
         #endregion
 
-        #region 判断是否为前台 -bool IsWebSiteUrl(string urlhost, string urlRaw)
+        #region 判断是否需要处理
+
+        /// <summary>
+        /// 是否需要处理
+        /// </summary>
+        /// <returns></returns>
+        private bool IsProcess(string urlHost, string urlRaw)
+        {
+            bool bState = false;
+            if (!Common.IsBlackName(urlRaw) && !Common.IsSystemHaveUrlName(urlRaw) && IsWebSiteUrl(urlHost, urlRaw))
+            {
+                bState = true;
+            }
+            return bState;
+        }
         /// <summary>
         /// 判断是否为前台
         /// </summary>
@@ -100,9 +109,10 @@ namespace CMS.Application.Comm
                     }
                 }
             }
+            if (!bState)
+                bState = Common.IsSearchForUrl(urlRaw);
             return bState;
         }
-
         #endregion
     }
 }

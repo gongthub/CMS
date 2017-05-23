@@ -14,6 +14,7 @@ namespace CMS.Domain.Entity.WebManage
         public string FullName { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }
+        public int TempletType { get; set; }
         public bool EnabledMark { get; set; }
         public bool? DeleteMark { get; set; }
         public string CreatorUserId { get; set; }

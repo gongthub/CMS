@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -129,6 +130,21 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
+        /// 获取全站搜索模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetSearchModel(string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            var expression = ExtLinq.True<TempletEntity>();
+            if (!string.IsNullOrEmpty(webSiteId))
+            {
+                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.TempletType == (int)Enums.TempletType.Search);
+            }
+            templet = service.FindEntity(expression);
+            return templet;
+        }
+        /// <summary>
         /// 根据路径获取模板
         /// </summary>
         /// <returns></returns>
@@ -137,13 +153,48 @@ namespace CMS.Application.WebManage
             TempletEntity templet = new TempletEntity();
             if (urlRaws != null)
             {
-                if (urlRaws.Count == 1)
+                if (Common.IsSearchForUrl(urlRaws))
                 {
-                    templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    templet = GetSearchModel(webSiteId);
                 }
                 else
                 {
-                    templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    if (urlRaws.Count == 1)
+                    {
+                        templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    }
+                    else
+                    {
+                        templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    }
+                }
+            }
+            return templet;
+        }
+        /// <summary>
+        /// 根据路径获取模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId,ref int irequestType)
+        {
+            TempletEntity templet = new TempletEntity();
+            if (urlRaws != null)
+            {
+                if (Common.IsSearchForUrl(urlRaws))
+                {
+                    templet = GetSearchModel(webSiteId);
+                    irequestType = (int)Enums.TempletType.Search;
+                }
+                else
+                {
+                    if (urlRaws.Count == 1)
+                    {
+                        templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    }
+                    else
+                    {
+                        templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                    }
                 }
             }
             return templet;
