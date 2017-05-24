@@ -1,6 +1,7 @@
 ﻿$(function () {
     document.body.className = localStorage.getItem('config-skin');
     $("[data-toggle='tooltip']").tooltip();
+    $("input[type=\"checkbox\"], input[type=\"radio\"]").not("[data-switch-no-init]").bootstrapSwitch();
 })
 $.reload = function () {
     location.reload();
@@ -500,3 +501,93 @@ $.fn.dataTreeGrid = function (options) {
     };
     $element.jqGrid(options);
 };
+
+$.getPost = function (options) {
+    var defaults = {
+        prompt: "注：您确定要操作？",
+        url: "",
+        param: [],
+        loading: "正在请求...",
+        success: null,
+        close: true
+    };
+    var options = $.extend(defaults, options);
+    if ($('[name=__RequestVerificationToken]').length > 0) {
+        options.param["__RequestVerificationToken"] = $('[name=__RequestVerificationToken]').val();
+    }
+    $.modalConfirm(options.prompt, function (r) {
+        if (r) {
+            $.loading(true, options.loading);
+            window.setTimeout(function () {
+                $.ajax({
+                    url: options.url,
+                    data: options.param,
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.state == "success") {
+                            options.success(data);
+                            $.modalMsg(data.message, data.state);
+                        } else {
+                            $.modalAlert(data.message, data.state);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        $.loading(false);
+                        $.modalMsg(errorThrown, "error");
+                    },
+                    beforeSend: function () {
+                        $.loading(true, options.loading);
+                    },
+                    complete: function () {
+                        $.loading(false);
+                    }
+                });
+            }, 500);
+        }
+    });
+
+}
+
+$.getPostNoConfirm = function (options) {
+    var defaults = {
+        prompt: "注：您确定要操作？",
+        url: "",
+        param: [],
+        loading: "正在请求...",
+        success: null,
+        close: true
+    };
+    var options = $.extend(defaults, options);
+    if ($('[name=__RequestVerificationToken]').length > 0) {
+        options.param["__RequestVerificationToken"] = $('[name=__RequestVerificationToken]').val();
+    }
+    $.loading(true, options.loading);
+    window.setTimeout(function () {
+        $.ajax({
+            url: options.url,
+            data: options.param,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.state == "success") {
+                    options.success(data);
+                    $.modalMsg(data.message, data.state);
+                } else {
+                    $.modalAlert(data.message, data.state);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.loading(false);
+                $.modalMsg(errorThrown, "error");
+            },
+            beforeSend: function () {
+                $.loading(true, options.loading);
+            },
+            complete: function () {
+                $.loading(false);
+            }
+        });
+    }, 500);
+
+}

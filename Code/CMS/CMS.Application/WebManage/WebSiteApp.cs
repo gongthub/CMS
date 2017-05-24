@@ -130,6 +130,8 @@ namespace CMS.Application.WebManage
                         {
                             new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
                         }
+                        //添加配置表
+                        new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
                     }
                 }
                 else
@@ -179,6 +181,8 @@ namespace CMS.Application.WebManage
                         upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
                         upFileApp.AddUpFileEntity(upFileentity);
                         SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
+                        //添加配置表
+                        new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
                     }
                     else
                     {

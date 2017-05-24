@@ -81,35 +81,49 @@ namespace CMS.Application.Comm
         /// </summary>
         public static void CreateIndex(string wenSiteIds, string wenSiteShortName)
         {
-            if (!string.IsNullOrEmpty(wenSiteShortName))
+            try
             {
-                ContentApp contentApp = new ContentApp();
-                LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);
-                INDEX_DIR = new DirectoryInfo(LUCENCEINDEXPATH);
-                List<ContentEntity> contents = contentApp.GetListByWebSiteId(wenSiteIds);
-
-                IndexWriter iw = new IndexWriter(Lucene.Net.Store.FSDirectory.Open(INDEX_DIR), analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
-                int i = 0;
-                foreach (ContentEntity content in contents)
+                if (!new WebSiteConfigApp().IsSearch(wenSiteIds))
                 {
-                    Document doc = new Document();
-                    if (content.Id != null)
-                    {
-                        doc.Add(new Field("Id", content.Id, Field.Store.YES, Field.Index.ANALYZED));
-                        if (content.FullName != null)
-                            doc.Add(new Field("FullName", content.FullName, Field.Store.YES, Field.Index.ANALYZED));
-                        if (content.Author != null)
-                            doc.Add(new Field("Author", content.Author, Field.Store.YES, Field.Index.ANALYZED));
-                        if (content.Content != null)
-                            doc.Add(new Field("Content", content.Content, Field.Store.YES, Field.Index.ANALYZED));
-                    }
-                    iw.AddDocument(doc);
+                    throw new Exception("该站点未启用全站搜索功能！");
                 }
-                iw.Commit();
-                iw.Optimize();
-                iw.Dispose();
+                if (!string.IsNullOrEmpty(wenSiteShortName))
+                {
+                    ContentApp contentApp = new ContentApp();
+                    LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);
+                    INDEX_DIR = new DirectoryInfo(LUCENCEINDEXPATH);
+                    List<ContentEntity> contents = contentApp.GetListByWebSiteId(wenSiteIds);
+
+                    using (IndexWriter iw = new IndexWriter(Lucene.Net.Store.FSDirectory.Open(INDEX_DIR), analyzer, true, IndexWriter.MaxFieldLength.LIMITED))
+                    {
+                        int i = 0;
+                        foreach (ContentEntity content in contents)
+                        {
+                            Document doc = new Document();
+                            if (content.Id != null)
+                            {
+                                doc.Add(new Field("Id", content.Id, Field.Store.YES, Field.Index.ANALYZED));
+                                if (content.FullName != null)
+                                    doc.Add(new Field("FullName", content.FullName, Field.Store.YES, Field.Index.ANALYZED));
+                                if (content.Author != null)
+                                    doc.Add(new Field("Author", content.Author, Field.Store.YES, Field.Index.ANALYZED));
+                                if (content.Content != null)
+                                    doc.Add(new Field("Content", content.Content, Field.Store.YES, Field.Index.ANALYZED));
+                            }
+                            iw.AddDocument(doc);
+                        }
+                        iw.Commit();
+                        iw.Optimize();
+                        iw.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
+
         /// <summary>
         /// 根据网站ID和关键字查询结果
         /// </summary>
@@ -216,7 +230,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public static IQueryable<ContentEntity> SearchByShortNameIq(string wenSiteShortName, string keyword)
         {
-            IQueryable<ContentEntity> mdoels=null;
+            IQueryable<ContentEntity> mdoels = null;
             if (!string.IsNullOrEmpty(wenSiteShortName))
             {
                 LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, wenSiteShortName);

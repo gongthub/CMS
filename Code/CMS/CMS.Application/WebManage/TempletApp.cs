@@ -155,7 +155,10 @@ namespace CMS.Application.WebManage
             {
                 if (Common.IsSearchForUrl(urlRaws))
                 {
-                    templet = GetSearchModel(webSiteId);
+                    if (new WebSiteConfigApp().IsSearch(webSiteId))
+                    {
+                        templet = GetSearchModel(webSiteId);
+                    }
                 }
                 else
                 {
@@ -182,8 +185,11 @@ namespace CMS.Application.WebManage
             {
                 if (Common.IsSearchForUrl(urlRaws))
                 {
-                    templet = GetSearchModel(webSiteId);
-                    irequestType = (int)Enums.TempletType.Search;
+                    if (new WebSiteConfigApp().IsSearch(webSiteId))
+                    {
+                        templet = GetSearchModel(webSiteId);
+                        irequestType = (int)Enums.TempletType.Search;
+                    }
                 }
                 else
                 {

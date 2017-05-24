@@ -95,6 +95,7 @@ namespace CMS.Application.Comm
         /// </summary>
         private static readonly string HTMLSAVEHTMLPATH = ConfigurationManager.AppSettings["htmlSrcPath"].ToString();
 
+        #region 初始化静态页面保持路径
         /// <summary>
         /// 初始化
         /// </summary>
@@ -120,6 +121,8 @@ namespace CMS.Application.Comm
                 }
             }
         }
+        
+        #endregion
 
         #region 生成文件名称 -string GenUrlName()
         /// <summary>

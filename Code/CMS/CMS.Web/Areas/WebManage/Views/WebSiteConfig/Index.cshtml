@@ -1,36 +1,63 @@
 ﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Index.cshtml";
-    }
-
+}
+@model CMS.Domain.Entity.WebManage.WebSiteConfigEntity
 <form id="form1">
     <div class="mail-box">
         <div class="mail-header">全站搜索配置</div>
         <div class="mail-body">
             <table class="form">
                 <tr>
-                    <th class="formTitle">开关</th>
+                    <th class="formTitle">是否启用</th>
                     <td class="formValue">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <a onclick="createqrcode()" class="btn  btn-primary" style="padding-left:10px;padding-right:10px;font-size:12px;line-height: 20px;">开启</a>
-                            </span>
-                        </div>
+                        @if (Model.SearchEnabledMark)
+                        {
+                            <input id="ckIsEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
                     </td>
-                    <th class="formTitle">索引</th>
+                    <th class="formTitle">生成索引</th>
                     <td class="formValue">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <a onclick="createqrcode()" class="btn  btn-primary" style="padding-left:10px;padding-right:10px;font-size:12px;line-height: 20px;">生成</a>
-                            </span>
-                        </div>
+                        <a onclick="createIndex()" class="btn  btn-primary">立即生成</a>
                     </td>
                 </tr>
-                <tr>
-                </tr>
+                <tr></tr>
             </table>
         </div>
     </div>
 </form>
 @section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#ckIsEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setSearchEnabled(state);
+            });
+        });
+
+        //设置全站搜索开关
+        function setSearchEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateSearchEnabled",
+                param: { searchEnabled: state },
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+
+        //立即生成索引
+        function createIndex() {
+            $.getPost({
+                url: "/WebManage/WebSiteConfig/CreateSearchIndex",
+                param: {},
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+    </script>
 }

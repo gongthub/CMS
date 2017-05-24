@@ -41,12 +41,7 @@ namespace CMS.Application.Comm
             }
         }
         #endregion
-
-        public Log FileLog
-        {
-            get { return LogFactory.GetLogger(this.GetType().ToString()); }
-        }
-
+        
         #region 处理请求 +void InitRequest(System.Web.HttpContext context)
         /// <summary>
         /// 处理请求
