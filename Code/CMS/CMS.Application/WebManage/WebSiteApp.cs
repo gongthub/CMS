@@ -31,7 +31,7 @@ namespace CMS.Application.WebManage
 
         public WebSiteEntity GetFormNoDel(string keyValue)
         {
-            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true);
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.Id == keyValue);
         }
         public WebSiteEntity GetFormByName(string Name)
         {

@@ -85,6 +85,11 @@ namespace CMS.Application.Comm
                 thread.Start();
 
             }
+            else
+            {
+                AccessLogEntity entity = InitAccessLog(context);
+                InsertAccessLog(entity);
+            }
         }
 
         /// <summary>

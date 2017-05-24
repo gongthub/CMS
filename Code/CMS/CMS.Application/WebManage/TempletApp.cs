@@ -21,7 +21,7 @@ namespace CMS.Application.WebManage
         }
         public TempletEntity GetFormNoDel(string keyValue)
         {
-            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true);
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.Id == keyValue);
         }
         public TempletEntity GetFormByName(string Name)
         {

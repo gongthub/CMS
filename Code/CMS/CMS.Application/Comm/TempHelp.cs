@@ -87,6 +87,10 @@ namespace CMS.Application.Comm
         /// </summary>
         private static readonly string ATTRS = "@attrs=";
         /// <summary>
+        /// 生成静态页面中内容浏览数特殊标识
+        /// </summary>
+        public static readonly string STATICHTMLCONTENTNUM = "@viewnum@";
+        /// <summary>
         /// 静态页面缓存路径
         /// </summary>
         private static readonly string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
@@ -225,17 +229,14 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public bool GenHtmlPage(string codes, string Id)
         {
-            //InitHtmlSavePath();
             bool b = true;
             try
             {
                 string templets = GetHtmlPages(codes, Id);
-
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Id);
                 if (contentEntity != null && contentEntity.ColumnId != null)
                 {
-
                     //已生成静态文件时
                     if (contentEntity.UrlPath != null && FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlPath))
                     {
@@ -244,7 +245,6 @@ namespace CMS.Application.Comm
                     }
                     else
                     {
-
                         string filePaths = "";
                         string urlAddress = "";
                         InitHtmlSavePath(Id, out filePaths, out urlAddress);
@@ -495,6 +495,14 @@ namespace CMS.Application.Comm
                     case "syssite":
                         htmls = GetWebSiteById(modelStr, Id);
                         break;
+                    case "content":
+                        switch (modelStr.Trim().ToLower())
+                        {
+                            case "viewnum":
+                                htmls = STATICHTMLCONTENTNUM;
+                                break;
+                        }
+                        break;
                 }
 
             }
@@ -532,6 +540,14 @@ namespace CMS.Application.Comm
                         break;
                     case "syssite":
                         htmls = GetWebSiteById(modelStr, Id);
+                        break;
+                    case "content":
+                        switch (modelStr.Trim().ToLower())
+                        {
+                            case "viewnum":
+                                htmls = new ContentApp().GetViewNum(Id).ToString();
+                                break;
+                        }
                         break;
                 }
 
@@ -607,6 +623,7 @@ namespace CMS.Application.Comm
 
             return strs;
         }
+
         #endregion
 
         #region 根据id获取，站点信息 -string GetWebSiteById(string name, string Ids)
@@ -1120,8 +1137,14 @@ namespace CMS.Application.Comm
                                 htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
                                 isNoFind = false;
                             }
+                            //更新浏览数
+                            new ContentApp().UpdateViewNum(Ids, true);
                         }
                     }
+                }
+                else
+                {
+                    isNoFind = false;
                 }
             }
             if (isNoFind)

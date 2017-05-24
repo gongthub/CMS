@@ -33,6 +33,7 @@ namespace CMS.Domain.Entity.WebManage
         public string SEOTitle { get; set; }
         public string SEOKeyWords { get; set; }
         public string SEODesc { get; set; }
+        public long ViewNum { get; set; }
         public bool EnabledMark { get; set; }
         public bool? DeleteMark { get; set; } 
         public string CreatorUserId { get; set; }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CMS.Application.WebManage
@@ -247,6 +248,33 @@ namespace CMS.Application.WebManage
             }
         }
 
+        public void UpdateViewNum(string keyValue)
+        {
+            ContentEntity moduleEntity = GetForm(keyValue);
+            if (moduleEntity != null && !string.IsNullOrEmpty(moduleEntity.Id))
+            {
+                moduleEntity.ViewNum++;
+                service.Update(moduleEntity);
+            }
+        }
+        public void UpdateViewNum(string keyValue,bool IsAsync)
+        {
+            if (IsAsync)
+            {
+                Thread thread = new Thread(new ThreadStart(() =>
+                {
+                    UpdateViewNum(keyValue);
+                }));
+                thread.Start();
+
+            }
+            else
+            {
+                    UpdateViewNum(keyValue);
+            }
+
+        }
+
         public void GenStaticPage(string keyValue)
         {
             ColumnsEntity module = GetModuleByContentID(keyValue);
@@ -289,6 +317,22 @@ namespace CMS.Application.WebManage
         }
 
         /// <summary>
+        /// 根据id获取浏览数
+        /// </summary>
+        /// <param name="actionCode"></param>
+        /// <returns></returns>
+        public long GetViewNum(string ids)
+        {
+            long num = 0;
+            ContentEntity moduleEntity = GetForm(ids);
+            if (moduleEntity != null&&moduleEntity.ViewNum!=null)
+            {
+                num = moduleEntity.ViewNum;
+            }
+            return num;
+        }
+
+        /// <summary>
         /// 根据站点ID和虚拟路径获取html
         /// </summary>
         /// <param name="webSiteId"></param>
@@ -306,10 +350,16 @@ namespace CMS.Application.WebManage
                 if (Code.FileHelper.IsExistFile(urlPath, true))
                 {
                     htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
+                    if (contentEntity.ViewNum == null)
+                    {
+                        contentEntity.ViewNum = 0;
+                    }
+                    //处理页面浏览数
+                    htmls = htmls.Replace(TempHelp.STATICHTMLCONTENTNUM, contentEntity.ViewNum.ToString());
+                    UpdateViewNum(contentEntity.Id,true);
                     isHave = true;
                 }
             }
-
             return isHave;
         }
     }

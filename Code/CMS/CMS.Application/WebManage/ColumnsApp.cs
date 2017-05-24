@@ -21,7 +21,7 @@ namespace CMS.Application.WebManage
         }
         public ColumnsEntity GetFormNoDel(string keyValue)
         {
-            return service.FindEntity(m=>m.DeleteMark!=true &&m.EnabledMark==true);
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.Id == keyValue);
         }
         public ColumnsEntity GetFormByActionName(string actionName)
         {
