@@ -1,0 +1,19 @@
+﻿
+.div-cmspage-pagetab {
+    /*background-color:red;*/
+}
+
+    .div-cmspage-pagetab span {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+.div-cmspage-pagetab-ctl {
+    color: black;
+    cursor: pointer;
+}
+
+.div-cmspage-pagetab-ctl-active {
+    color: red;
+    cursor: pointer;
+}

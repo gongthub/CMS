@@ -216,6 +216,7 @@ function initPageCtlLength(pageobj) {
                 if (ntext == endIndex) {
                     var pagectld = document.createElement("span");
                     pagectld.innerText = "…";
+                    pagectld.className = "div-cmspage-pagetab-omit";
                     $(pagectl).before(pagectld);
                 }
             });
