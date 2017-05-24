@@ -44,7 +44,7 @@ namespace CMS.Application.Comm
             {
                 WebSiteApp webSiteApp = new WebSiteApp();
                 ContentApp contentApp = new ContentApp();
-                WebSiteEntity webSite = webSiteApp.GetForm(wenSiteIds);
+                WebSiteEntity webSite = webSiteApp.GetFormNoDel(wenSiteIds);
                 if (webSite != null)
                 {
                     LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, webSite.ShortName);
@@ -136,7 +136,7 @@ namespace CMS.Application.Comm
             if (!string.IsNullOrEmpty(wenSiteIds))
             {
                 WebSiteApp webSiteApp = new WebSiteApp();
-                WebSiteEntity webSite = webSiteApp.GetForm(wenSiteIds);
+                WebSiteEntity webSite = webSiteApp.GetFormNoDel(wenSiteIds);
                 if (webSite != null)
                 {
                     LUCENCEINDEXPATH = string.Format(LUCENCEINDEXPATH, webSite.ShortName);

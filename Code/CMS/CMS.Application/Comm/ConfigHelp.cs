@@ -199,5 +199,18 @@ namespace CMS.Application.Comm
             }
         }   
         #endregion
+
+        #region 全站搜索相关配置
+        /// <summary>
+        /// 全站搜索地址
+        /// </summary>
+        public string WEBSITESEARCHPATH
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebSiteSearchPath").ToString();
+            }
+        }   
+        #endregion
     }
 }

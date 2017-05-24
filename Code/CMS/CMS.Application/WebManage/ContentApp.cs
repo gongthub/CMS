@@ -18,10 +18,49 @@ namespace CMS.Application.WebManage
     {
         private IContentRepository service = new ContentRepository();
 
-        public List<ContentEntity> GetLists(Expression<Func<ContentEntity, bool>> predicate)
+        public ContentEntity GetForm(string keyValue)
+        {
+            return service.FindEntity(keyValue);
+        }
+        public ContentEntity GetFormNoDel(string keyValue)
+        {
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.Id == keyValue);
+        }
+
+        public ColumnsEntity GetModuleByContentID(string keyValue)
+        {
+            ColumnsEntity moduleEntity = new ColumnsEntity();
+            ContentEntity contentEntity = GetFormNoDel(keyValue);
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            if (JudgmentHelp.judgmentHelp.IsNullEntity<ContentEntity>(contentEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(contentEntity.ColumnId))
+            {
+                moduleEntity = c_ModulesApp.GetFormNoDel(contentEntity.ColumnId);
+            }
+            return moduleEntity;
+        }
+
+        /// <summary>
+        /// 根据模块名称获取一个内容
+        /// </summary>
+        /// <param name="actionCode"></param>
+        /// <returns></returns>
+        public ContentEntity GetContentByActionCode(string actionCode)
+        {
+            ColumnsEntity moduleEntity = new ColumnsEntity();
+            ColumnsApp c_ModulesApp = new ColumnsApp();
+            ContentEntity contentEntity = new ContentEntity();
+            moduleEntity = c_ModulesApp.GetFormByActionName(actionCode);
+            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
+            {
+                contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id && m.EnabledMark == true && m.DeleteMark != true).FirstOrDefault();
+
+            }
+            return contentEntity;
+        }
+        public List<ContentEntity> GetList()
         {
             List<ContentEntity> models = new List<ContentEntity>();
-            models = service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
+            models = service.IQueryable(t => t.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
             models.ForEach(delegate(ContentEntity model)
             {
 
@@ -34,10 +73,26 @@ namespace CMS.Application.WebManage
             });
             return models;
         }
-        public IQueryable<ContentEntity> GetListsIq(Expression<Func<ContentEntity, bool>> predicate)
+        public List<ContentEntity> GetList(Pagination pagination, string keyword)
         {
-            IQueryable<ContentEntity> models;
-            models = service.IQueryable(predicate).OrderBy(t => t.SortCode);
+            List<ContentEntity> models = new List<ContentEntity>();
+            var expression = ExtLinq.True<ContentEntity>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            expression = expression.And(m => m.DeleteMark != true);
+            models = service.FindList(expression, pagination);
+            models.ForEach(delegate(ContentEntity model)
+            {
+
+                if (model != null && model.UrlAddress != null)
+                {
+                    model.UrlPage = model.UrlAddress;
+                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                }
+
+            });
             return models;
         }
         public List<ContentEntity> GetList(string itemId = "", string keyword = "")
@@ -66,6 +121,28 @@ namespace CMS.Application.WebManage
             });
             return models;
         }
+        public List<ContentEntity> GetLists(Expression<Func<ContentEntity, bool>> predicate)
+        {
+            List<ContentEntity> models = new List<ContentEntity>();
+            models = service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
+            models.ForEach(delegate(ContentEntity model)
+            {
+
+                if (model != null && model.UrlAddress != null)
+                {
+                    model.UrlPage = model.UrlAddress;
+                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
+        }
+        public IQueryable<ContentEntity> GetListsIq(Expression<Func<ContentEntity, bool>> predicate)
+        {
+            IQueryable<ContentEntity> models;
+            models = service.IQueryable(predicate).OrderBy(t => t.SortCode);
+            return models;
+        }
 
         public IQueryable<ContentEntity> GetListIq(string itemId = "", string keyword = "")
         {
@@ -84,48 +161,6 @@ namespace CMS.Application.WebManage
 
             return models;
         }
-
-        public List<ContentEntity> GetList()
-        {
-            List<ContentEntity> models = new List<ContentEntity>();
-            models = service.IQueryable(t => t.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
-            models.ForEach(delegate(ContentEntity model)
-            {
-
-                if (model != null && model.UrlAddress != null)
-                {
-                    model.UrlPage = model.UrlAddress;
-                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
-                }
-
-            });
-            return models;
-        }
-
-        public List<ContentEntity> GetList(Pagination pagination, string keyword)
-        {
-            List<ContentEntity> models = new List<ContentEntity>();
-            var expression = ExtLinq.True<ContentEntity>();
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                expression = expression.And(t => t.FullName.Contains(keyword));
-            }
-            expression = expression.And(m => m.DeleteMark != true);
-            models = service.FindList(expression, pagination);
-            models.ForEach(delegate(ContentEntity model)
-            {
-
-                if (model != null && model.UrlAddress != null)
-                {
-                    model.UrlPage = model.UrlAddress;
-                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
-                }
-
-            });
-            return models;
-        }
-
-
         public List<ContentEntity> GetListByWebSiteId(string webSiteIds)
         {
             List<ContentEntity> models = new List<ContentEntity>();
@@ -142,10 +177,7 @@ namespace CMS.Application.WebManage
             });
             return models;
         }
-        public ContentEntity GetForm(string keyValue)
-        {
-            return service.FindEntity(keyValue);
-        }
+
         public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.Id == keyValue);
@@ -168,7 +200,7 @@ namespace CMS.Application.WebManage
 
                 string mIds = moduleEntity.ColumnId;
                 ColumnsApp c_ModulesApp = new ColumnsApp();
-                ColumnsEntity cmModel = c_ModulesApp.GetForm(mIds);
+                ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
                 if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
                 {
                     string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
@@ -192,7 +224,7 @@ namespace CMS.Application.WebManage
 
                 string mIds = moduleEntity.ColumnId;
                 ColumnsApp c_ModulesApp = new ColumnsApp();
-                ColumnsEntity cmModel = c_ModulesApp.GetForm(mIds);
+                ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
                 if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
                 {
                     string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
@@ -215,46 +247,13 @@ namespace CMS.Application.WebManage
             }
         }
 
-
-        public ColumnsEntity GetModuleByContentID(string keyValue)
-        {
-            ColumnsEntity moduleEntity = new ColumnsEntity();
-            ContentEntity contentEntity = GetForm(keyValue);
-            ColumnsApp c_ModulesApp = new ColumnsApp();
-            if (JudgmentHelp.judgmentHelp.IsNullEntity<ContentEntity>(contentEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(contentEntity.ColumnId))
-            {
-                moduleEntity = c_ModulesApp.GetForm(contentEntity.ColumnId);
-            }
-            return moduleEntity;
-        }
-
-        /// <summary>
-        /// 根据模块名称获取一个内容
-        /// </summary>
-        /// <param name="actionCode"></param>
-        /// <returns></returns>
-        public ContentEntity GetContentByActionCode(string actionCode)
-        {
-            ColumnsEntity moduleEntity = new ColumnsEntity();
-            ColumnsApp c_ModulesApp = new ColumnsApp();
-            ContentEntity contentEntity = new ContentEntity();
-            moduleEntity = c_ModulesApp.GetFormByActionName(actionCode);
-            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
-            {
-                contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id).FirstOrDefault();
-
-            }
-            return contentEntity;
-        }
-
-        public void GetStaticPage(string keyValue)
+        public void GenStaticPage(string keyValue)
         {
             ColumnsEntity module = GetModuleByContentID(keyValue);
-            //ContentEntity content = GetForm(keyValue);
             if (module != null)
             {
                 TempletApp templetapp = new TempletApp();
-                TempletEntity templet = templetapp.GetForm(module.CTempletId);
+                TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
                 if (templet != null)
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
@@ -273,11 +272,10 @@ namespace CMS.Application.WebManage
         {
             string htmls = "";
             ColumnsEntity module = GetModuleByContentID(keyValue);
-            //ContentEntity content = GetForm(keyValue);
             if (module != null)
             {
                 TempletApp templetapp = new TempletApp();
-                TempletEntity templet = templetapp.GetForm(module.CTempletId);
+                TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
                 if (templet != null)
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
@@ -313,22 +311,6 @@ namespace CMS.Application.WebManage
             }
 
             return isHave;
-        }
-
-        /// <summary>
-        /// 判断id是否为内容表
-        /// </summary>
-        /// <param name="keyValue"></param>
-        /// <returns></returns>
-        public bool IsContentIds(string Ids)
-        {
-            bool bState = false;
-            ContentEntity contentEntity = GetForm(Ids);
-            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
-            {
-                bState = true;
-            }
-            return bState;
         }
     }
 }

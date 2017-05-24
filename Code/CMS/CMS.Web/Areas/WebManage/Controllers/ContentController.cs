@@ -71,7 +71,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GetStaticPage(string keyValue)
         {
-            c_contentApp.GetStaticPage(keyValue);
+            c_contentApp.GenStaticPage(keyValue);
             return Success("生成成功。");
         }
 

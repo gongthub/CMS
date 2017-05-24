@@ -112,7 +112,7 @@ namespace CMS.Application.Comm
                 if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleentity))
                 {
                     WebSiteApp webSiteApp = new WebSiteApp();
-                    WebSiteEntity webSiteentity = webSiteApp.GetForm(moduleentity.WebSiteId);
+                    WebSiteEntity webSiteentity = webSiteApp.GetFormNoDel(moduleentity.WebSiteId);
                     if (JudgmentHelp.judgmentHelp.IsNullEntity<WebSiteEntity>(webSiteentity))
                     {
                         filePath = HTMLSAVEPATH + webSiteentity.ShortName + @"\" + moduleentity.ActionName + @"\";
@@ -121,7 +121,7 @@ namespace CMS.Application.Comm
                 }
             }
         }
-        
+
         #endregion
 
         #region 生成文件名称 -string GenUrlName()
@@ -232,7 +232,7 @@ namespace CMS.Application.Comm
                 string templets = GetHtmlPages(codes, Id);
 
                 ContentApp c_ContentApp = new ContentApp();
-                ContentEntity contentEntity = c_ContentApp.GetForm(Id);
+                ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Id);
                 if (contentEntity != null && contentEntity.ColumnId != null)
                 {
 
@@ -582,7 +582,7 @@ namespace CMS.Application.Comm
         {
             string strs = string.Empty;
             ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
             if (contentEntity != null)
             {
                 strs = ProContent<ContentEntity>(name, contentEntity);
@@ -619,10 +619,10 @@ namespace CMS.Application.Comm
         {
             string strs = string.Empty;
             ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
             {
-                WebSiteEntity entity = new WebSiteApp().GetForm(contentEntity.WebSiteId);
+                WebSiteEntity entity = new WebSiteApp().GetFormNoDel(contentEntity.WebSiteId);
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
                 {
                     strs = ProContent<WebSiteEntity>(name, entity);
@@ -907,7 +907,7 @@ namespace CMS.Application.Comm
         private void UpdateContentById(string url, string urlAddress, string Ids)
         {
             ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
             if (contentEntity != null)
             {
                 urlAddress = Code.Common.ReplaceStr(urlAddress, @"\", @"/");
@@ -1106,7 +1106,7 @@ namespace CMS.Application.Comm
                     if (templetmodel != null)
                     {
                         htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
-                        if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Content))
+                        if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Id))
                         {
                             if (iFlay == 1)
                             {
@@ -1145,7 +1145,7 @@ namespace CMS.Application.Comm
             List<string> urlRaws = WebHelper.GetUrls(urlRaw);
 
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            List<ColumnsEntity> models = c_ModulesApp.GetList();
+            List<ColumnsEntity> models = c_ModulesApp.GetListNoDel();
             if (models != null && models.Count > 0)
             {
                 List<string> actionNames = models.Select(m => m.ActionName).ToList();
@@ -1172,7 +1172,7 @@ namespace CMS.Application.Comm
             if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
             {
                 ColumnsApp c_ModulesApp = new ColumnsApp();
-                List<ColumnsEntity> models = c_ModulesApp.GetList(m => m.DeleteMark != true && m.WebSiteId == webSiteEntity.Id);
+                List<ColumnsEntity> models = c_ModulesApp.GetListNoDel(m => m.DeleteMark != true && m.WebSiteId == webSiteEntity.Id);
                 if (models != null && models.Count > 0)
                 {
                     List<string> actionNames = models.Select(m => m.ActionName.ToLower()).ToList();
@@ -1262,7 +1262,7 @@ namespace CMS.Application.Comm
         private ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
         {
             ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetForm(Ids);
+            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
             //数据源
             if (attrs.ContainsKey("sourcename"))
             {
@@ -1360,7 +1360,7 @@ namespace CMS.Application.Comm
                 }
             }
 
-            contentEntity = c_ContentApp.GetForm(Ids);
+            contentEntity = c_ContentApp.GetFormNoDel(Ids);
             return contentEntity;
         }
     }

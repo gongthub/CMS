@@ -144,7 +144,7 @@ namespace CMS.Web.Controllers
         private object GetModulesList()
         {
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            var data = c_ModulesApp.GetList();
+            var data = c_ModulesApp.GetListNoDel();
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (ColumnsEntity item in data)
             {

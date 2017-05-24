@@ -17,11 +17,22 @@ namespace CMS.Application.WebManage
         private IWebSiteRepository service = new WebSiteRepository();
         private IWebSiteForUrlRepository serviceWebSiteForUrl = new WebSiteForUrlRepository();
 
-        public List<WebSiteEntity> GetList()
+        public WebSiteEntity GetForm(string keyValue)
         {
-            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+            WebSiteEntity webSiteEntity = service.FindEntity(keyValue);
+
+            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+            {
+                new WebSiteForUrlApp().InitWebSiteUrl(ref webSiteEntity);
+            }
+
+            return webSiteEntity;
         }
 
+        public WebSiteEntity GetFormNoDel(string keyValue)
+        {
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true);
+        }
         public WebSiteEntity GetFormByName(string Name)
         {
             WebSiteEntity model = new WebSiteEntity();
@@ -31,8 +42,52 @@ namespace CMS.Application.WebManage
         public WebSiteEntity GetFormByUrl(string url)
         {
             WebSiteEntity model = new WebSiteEntity();
-            model = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true);
+            model = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true && m.EnabledMark == true);
             return model;
+        }
+        /// <summary>
+        /// 根据域名获取实体
+        /// </summary>
+        /// <returns></returns>
+        public WebSiteEntity GetModelByUrlHost(string urlHost)
+        {
+            WebSiteEntity webSiteEntity = new WebSiteEntity();
+            WebSiteForUrlEntity webSiteForUrlEntity = serviceWebSiteForUrl.IQueryable(m => m.UrlAddress == urlHost && m.DeleteMark != true).FirstOrDefault();
+            if (webSiteForUrlEntity != null && !string.IsNullOrEmpty(webSiteForUrlEntity.WebSiteId))
+            {
+                webSiteEntity = service.FindEntity(webSiteForUrlEntity.WebSiteId);
+            }
+
+            return webSiteEntity;
+        }
+        /// <summary>
+        /// 根据域名获取实体
+        /// </summary>
+        /// <returns></returns>
+        public WebSiteEntity GetModelByShortName(string shortName)
+        {
+            WebSiteEntity webSiteEntity = new WebSiteEntity();
+
+            webSiteEntity = service.FindEntity(m => m.ShortName == shortName && m.DeleteMark != true);
+            return webSiteEntity;
+        }
+
+        public int GetCountByCreatorId()
+        {
+            var expression = ExtLinq.True<WebSiteEntity>();
+            expression = expression.And(t => t.DeleteMark != true);
+
+            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (LoginInfo != null)
+            {
+                expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
+            }
+            return service.IQueryable(expression).Count();
+        }
+        public List<WebSiteEntity> GetList()
+        {
+            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
         }
         public List<WebSiteEntity> GetList(Pagination pagination, string keyword)
         {
@@ -65,19 +120,6 @@ namespace CMS.Application.WebManage
             }
             return service.IQueryable(expression).ToList();
         }
-        public int GetCountByCreatorId()
-        {
-            var expression = ExtLinq.True<WebSiteEntity>();
-            expression = expression.And(t => t.DeleteMark != true);
-
-            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
-            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-            if (LoginInfo != null)
-            {
-                expression = expression.And(t => t.CreatorUserId == LoginInfo.UserId);
-            }
-            return service.IQueryable(expression).Count();
-        }
         public List<WebSiteEntity> GetListForUserId(Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<WebSiteEntity>();
@@ -89,17 +131,6 @@ namespace CMS.Application.WebManage
                 expression = expression.And(t => t.FullName.Contains(keyword));
             }
             return service.FindList(expression, pagination);
-        }
-        public WebSiteEntity GetForm(string keyValue)
-        {
-            WebSiteEntity webSiteEntity = service.FindEntity(keyValue);
-
-            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
-            {
-                new WebSiteForUrlApp().InitWebSiteUrl(ref webSiteEntity);
-            }
-
-            return webSiteEntity;
         }
         public void DeleteForm(string keyValue)
         {
@@ -132,6 +163,8 @@ namespace CMS.Application.WebManage
                         }
                         //添加配置表
                         new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
+                        //添加站点搜索模板
+                        new TempletApp().AddSearchModel(moduleEntity.Id);
                     }
                 }
                 else
@@ -183,6 +216,8 @@ namespace CMS.Application.WebManage
                         SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
                         //添加配置表
                         new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
+                        //添加站点搜索模板
+                        new TempletApp().AddSearchModel(moduleEntity.Id);
                     }
                     else
                     {
@@ -222,73 +257,6 @@ namespace CMS.Application.WebManage
 
         }
 
-
-        /// <summary>
-        /// 根据域名获取实体
-        /// </summary>
-        /// <returns></returns>
-        public WebSiteEntity GetModelByUrlHost(string urlHost)
-        {
-            WebSiteEntity webSiteEntity = new WebSiteEntity();
-            WebSiteForUrlEntity webSiteForUrlEntity = serviceWebSiteForUrl.IQueryable(m => m.UrlAddress == urlHost && m.DeleteMark != true).FirstOrDefault();
-            if (webSiteForUrlEntity != null && !string.IsNullOrEmpty(webSiteForUrlEntity.WebSiteId))
-            {
-                webSiteEntity = service.FindEntity(webSiteForUrlEntity.WebSiteId);
-            }
-
-            return webSiteEntity;
-        }
-        /// <summary>
-        /// 根据域名获取实体
-        /// </summary>
-        /// <returns></returns>
-        public WebSiteEntity GetModelByShortName(string shortName)
-        {
-            WebSiteEntity webSiteEntity = new WebSiteEntity();
-
-            webSiteEntity = service.FindEntity(m => m.ShortName == shortName && m.DeleteMark != true);
-            return webSiteEntity;
-        }
-        /// <summary>
-        /// 判断域名是否存在
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsExistUrl(string keyId, string url)
-        {
-            url = url.Trim();
-            bool retBool = false;
-            int flay = 0;   //标示位 判断是否需要查询
-            if (!string.IsNullOrEmpty(keyId))
-            {
-                Guid id = Guid.Empty;
-                WebSiteEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    if (moduleEntity.UrlAddress != url)
-                    {
-                        flay = 1;
-                    }
-                }
-            }
-            else
-            {
-                flay = 1;
-            }
-            //需要判断
-            if (flay == 1)
-            {
-                Guid id = Guid.Empty;
-                WebSiteEntity moduleEntity = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    retBool = true;
-                }
-            }
-
-            return retBool;
-        }
         /// <summary>
         /// 判断当前用户添加网站数量
         /// </summary>

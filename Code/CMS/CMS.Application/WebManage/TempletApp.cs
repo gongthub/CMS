@@ -15,71 +15,19 @@ namespace CMS.Application.WebManage
     {
         private ITempletRepository service = new TempletRepository();
 
-        public List<TempletEntity> GetList()
+        public TempletEntity GetForm(string keyValue)
         {
-            return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+            return service.FindEntity(keyValue);
         }
-
+        public TempletEntity GetFormNoDel(string keyValue)
+        {
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true);
+        }
         public TempletEntity GetFormByName(string Name)
         {
             TempletEntity model = new TempletEntity();
             model = service.FindEntity(m => m.FullName == Name && m.DeleteMark != true);
             return model;
-        }
-        public List<TempletEntity> GetList(Pagination pagination, string keyword)
-        {
-            var expression = ExtLinq.True<TempletEntity>();
-            expression = expression.And(m => m.DeleteMark != true);
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                expression = expression.And(t => t.FullName.Contains(keyword));
-            }
-            return service.FindList(expression, pagination);
-        }
-        public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
-        {
-            return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
-        }
-        public List<TempletEntity> GetListByWebSiteId(Pagination pagination, string keyword, string WebSiteId)
-        {
-            var expression = ExtLinq.True<TempletEntity>();
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                expression = expression.And(t => t.FullName.Contains(keyword));
-            }
-            if (!string.IsNullOrEmpty(WebSiteId))
-            {
-                expression = expression.And(t => t.WebSiteId == WebSiteId);
-            }
-            return service.FindList(expression, pagination);
-        }
-        public TempletEntity GetForm(string keyValue)
-        {
-            return service.FindEntity(keyValue);
-        }
-        public void DeleteForm(string keyValue)
-        {
-            service.DeleteById(t => t.Id == keyValue);
-        }
-        public void SubmitForm(TempletEntity moduleEntity, string keyValue)
-        {
-            if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
-            {
-                if (!string.IsNullOrEmpty(keyValue))
-                {
-                    moduleEntity.Modify(keyValue);
-                    service.Update(moduleEntity);
-                }
-                else
-                {
-                    moduleEntity.Create();
-                    service.Insert(moduleEntity);
-                }
-            }
-            else
-            {
-                throw new Exception("名称已存在，请重新输入！");
-            }
         }
 
         /// <summary>
@@ -93,7 +41,7 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetMain();
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId);
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark ==true && m.DeleteMark !=true);
             }
             return templet;
         }
@@ -108,7 +56,7 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetMain(webSiteId);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
             }
             return templet;
         }
@@ -124,7 +72,7 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId);
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark == true && m.DeleteMark != true);
             }
             return templet;
         }
@@ -139,7 +87,7 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<TempletEntity>();
             if (!string.IsNullOrEmpty(webSiteId))
             {
-                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.TempletType == (int)Enums.TempletType.Search);
+                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.EnabledMark==true && t.TempletType == (int)Enums.TempletType.Search);
             }
             templet = service.FindEntity(expression);
             return templet;
@@ -178,7 +126,7 @@ namespace CMS.Application.WebManage
         /// 根据路径获取模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId,ref int irequestType)
+        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId, ref int irequestType)
         {
             TempletEntity templet = new TempletEntity();
             if (urlRaws != null)
@@ -217,7 +165,7 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId);
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
             }
             return templet;
         }
@@ -233,51 +181,112 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.CTempletId && m.WebSiteId == webSiteId);
+                templet = service.FindEntity(m => m.Id == module.CTempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
             }
             return templet;
         }
-
-
-        /// <summary>
-        /// 判断名称是否存在
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsExistName(string keyId, string name)
+        public List<TempletEntity> GetList()
         {
-            name = name.Trim();
-            bool retBool = false;
-            int flay = 0;   //标示位 判断是否需要查询
-            if (!string.IsNullOrEmpty(keyId))
+            return service.IQueryable().OrderBy(t => t.SortCode).ToList();
+        }
+        public List<TempletEntity> GetList(Pagination pagination, string keyword)
+        {
+            var expression = ExtLinq.True<TempletEntity>();
+            expression = expression.And(m => m.DeleteMark != true);
+            if (!string.IsNullOrEmpty(keyword))
             {
-                Guid id = Guid.Empty;
-                TempletEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            return service.FindList(expression, pagination);
+        }
+        public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
+        {
+            if (new WebSiteConfigApp().IsSearch(WebSiteId))
+            {
+                return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+            }
+            else
+            {
+                return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true && m.TempletType == (int)Code.Enums.TempletType.Common).OrderBy(t => t.SortCode).ToList();
+            }
+        }
+        public List<TempletEntity> GetListByWebSiteId(Pagination pagination, string keyword, string WebSiteId)
+        {
+            var expression = ExtLinq.True<TempletEntity>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            if (!string.IsNullOrEmpty(WebSiteId))
+            {
+                expression = expression.And(t => t.WebSiteId == WebSiteId);
+            }
+            if (!new WebSiteConfigApp().IsSearch(WebSiteId))
+            {
+                expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common);
+            }
+            expression = expression.And(t => t.DeleteMark != true);
+            return service.FindList(expression, pagination);
+        }
+        /// <summary>
+        /// 添加全站搜索模板
+        /// </summary>
+        public void AddSearchModel(string WebSiteId)
+        {
+            if (!IsExistSearchModel(WebSiteId))
+            {
+                TempletEntity moduleEntity = new TempletEntity();
+                moduleEntity.WebSiteId = WebSiteId;
+                moduleEntity.SortCode = 0;
+                moduleEntity.FullName = ConfigHelp.configHelp.WEBSITESEARCHPATH;
+                moduleEntity.Description = "全站搜索模板";
+                moduleEntity.TempletType = (int)Code.Enums.TempletType.Search;
+                moduleEntity.EnabledMark = true;
+                moduleEntity.Create();
+                service.Insert(moduleEntity);
+            }
+        }
+        public void SubmitForm(TempletEntity moduleEntity, string keyValue)
+        {
+            if (moduleEntity.FullName.ToLower() != ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
+            {
+                if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
                 {
-                    if (moduleEntity.FullName != name)
+                    if (!string.IsNullOrEmpty(keyValue))
                     {
-                        flay = 1;
+                        moduleEntity.Modify(keyValue);
+                        service.Update(moduleEntity);
                     }
+                    else
+                    {
+                        moduleEntity.Create();
+                        service.Insert(moduleEntity);
+                    }
+                }
+                else
+                {
+                    throw new Exception("名称已存在，请重新输入！");
                 }
             }
             else
             {
-                flay = 1;
+                throw new Exception("名称不能为系统保留名称，请重新输入！");
             }
-            //需要判断
-            if (flay == 1)
-            {
-                Guid id = Guid.Empty;
-                TempletEntity moduleEntity = service.FindEntity(m => m.FullName == name && m.DeleteMark != true);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    retBool = true;
-                }
-            }
+        }
+        public void DeleteForm(string keyValue)
+        {
+            service.DeleteById(t => t.Id == keyValue);
+        }
 
-            return retBool;
+        public bool IsExistSearchModel(string WebSiteId)
+        {
+            bool bState = false;
+            TempletEntity model = GetSearchModel(WebSiteId);
+            if (model != null && !string.IsNullOrEmpty(model.Id))
+            {
+                bState = true;
+            }
+            return bState;
         }
     }
 }

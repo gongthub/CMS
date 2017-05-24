@@ -15,6 +15,56 @@ namespace CMS.Application.WebManage
     {
         private IColumnsRepository service = new ColumnsRepository();
 
+        public ColumnsEntity GetForm(string keyValue)
+        {
+            return service.FindEntity(keyValue);
+        }
+        public ColumnsEntity GetFormNoDel(string keyValue)
+        {
+            return service.FindEntity(m=>m.DeleteMark!=true &&m.EnabledMark==true);
+        }
+        public ColumnsEntity GetFormByActionName(string actionName)
+        {
+            return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true && m.EnabledMark == true).FirstOrDefault();
+        }
+        public ColumnsEntity GetFormByActionName(string actionName, string webSiteId)
+        {
+            return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true && m.EnabledMark == true && m.WebSiteId == webSiteId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetMain()
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true && m.EnabledMark == true).FirstOrDefault();
+        }
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetMain(string webSiteId)
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true && m.EnabledMark == true && m.WebSiteId == webSiteId).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetModelByActionName(string actionName)
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.EnabledMark == true && m.ActionName == actionName).FirstOrDefault();
+        }
+        /// <summary>
+        /// 获取主页模块数据
+        /// </summary>
+        /// <returns></returns> 
+        public ColumnsEntity GetModelByActionName(string actionName, string webSiteId)
+        {
+            return service.IQueryable().Where(m => m.DeleteMark != true && m.EnabledMark == true && m.ActionName == actionName && m.WebSiteId == webSiteId).FirstOrDefault();
+        }
         public List<ColumnsEntity> GetList()
         {
             return service.IQueryable().OrderBy(t => t.SortCode).ToList();
@@ -23,21 +73,18 @@ namespace CMS.Application.WebManage
         {
             return service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
         }
+        public List<ColumnsEntity> GetListNoDel()
+        {
+            return service.IQueryable(m => m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+        }
+        public List<ColumnsEntity> GetListNoDel(Expression<Func<ColumnsEntity, bool>> predicate)
+        {
+            predicate.And(m => m.DeleteMark != true);
+            return service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
+        }
         public List<ColumnsEntity> GetListByWebSiteId(string webSiteId)
         {
             return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
-        }
-        public ColumnsEntity GetFormByActionName(string actionName)
-        {
-            return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true).FirstOrDefault();
-        }
-        public ColumnsEntity GetFormByActionName(string actionName, string webSiteId)
-        {
-            return service.IQueryable(m => m.ActionName.ToLower() == actionName.ToLower() && m.DeleteMark != true && m.WebSiteId == webSiteId).FirstOrDefault();
-        }
-        public ColumnsEntity GetForm(string keyValue)
-        {
-            return service.FindEntity(keyValue);
         }
         public void DeleteForm(string keyValue)
         {
@@ -97,79 +144,5 @@ namespace CMS.Application.WebManage
             }
         }
 
-        /// <summary>
-        /// 获取主页模块数据
-        /// </summary>
-        /// <returns></returns> 
-        public ColumnsEntity GetMain()
-        {
-            return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true).FirstOrDefault();
-        }
-        /// <summary>
-        /// 获取主页模块数据
-        /// </summary>
-        /// <returns></returns> 
-        public ColumnsEntity GetMain(string webSiteId)
-        {
-            return service.IQueryable().Where(m => m.DeleteMark != true && m.MainMark == true && m.WebSiteId == webSiteId).FirstOrDefault();
-        }
-
-        /// <summary>
-        /// 获取主页模块数据
-        /// </summary>
-        /// <returns></returns> 
-        public ColumnsEntity GetModelByActionName(string actionName)
-        {
-            return service.IQueryable().Where(m => m.DeleteMark != true && m.ActionName == actionName).FirstOrDefault();
-        }
-        /// <summary>
-        /// 获取主页模块数据
-        /// </summary>
-        /// <returns></returns> 
-        public ColumnsEntity GetModelByActionName(string actionName, string webSiteId)
-        {
-            return service.IQueryable().Where(m => m.DeleteMark != true && m.ActionName == actionName && m.WebSiteId == webSiteId).FirstOrDefault();
-        }
-
-
-        /// <summary>
-        /// 判断简称是否存在
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsExistActionName(string keyId, string name)
-        {
-            name = name.Trim();
-            bool retBool = false;
-            int flay = 0;   //标示位 判断是否需要查询
-            if (!string.IsNullOrEmpty(keyId))
-            {
-                Guid id = Guid.Empty;
-                ColumnsEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    if (moduleEntity.ActionName != name)
-                    {
-                        flay = 1;
-                    }
-                }
-            }
-            else
-            {
-                flay = 1;
-            }
-            //需要判断
-            if (flay == 1)
-            {
-                Guid id = Guid.Empty;
-                ColumnsEntity moduleEntity = service.FindEntity(m => m.ActionName == name && m.DeleteMark != true);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    retBool = true;
-                }
-            }
-            return retBool;
-        }
     }
 }
