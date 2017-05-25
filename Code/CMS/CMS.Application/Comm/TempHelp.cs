@@ -350,7 +350,7 @@ namespace CMS.Application.Comm
             }
             catch (Exception ex)
             {
-                strs = string.Empty;
+                throw;
             }
             return strs;
 
@@ -1075,81 +1075,105 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public string GetHtmlByUrl(string urlHost, string urlRaw)
         {
-            //处理Url参数
-            urlRaw = Common.HandleUrlRaw(urlRaw);
-            WebSiteApp app = new WebSiteApp();
-            WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
-            return GetHtmlStrsByWebSite(entity, urlRaw);
+            string htmls = string.Empty;
+            try
+            {
+                //处理Url参数
+                urlRaw = Common.HandleUrlRaw(urlRaw);
+                WebSiteApp app = new WebSiteApp();
+                WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
+                htmls= GetHtmlStrsByWebSite(entity, urlRaw);
+            }
+            catch
+            {
+                throw;
+            }
+            return htmls;
         }
         public string GetHtmlStrsByWebSite(WebSiteEntity entity, string urlRaw)
         {
             string htmls = string.Empty;
-            int iFlay = 0;
-            bool isNoFind = true;
-            int irequestType = (int)Enums.TempletType.Common;
-            if (entity != null && !string.IsNullOrEmpty(entity.Id))
+            try
             {
-                List<string> urlRaws = WebHelper.GetUrls(urlRaw);
-                ContentApp contentApp = new ContentApp();
-                if (!contentApp.GetHtmlStrs(entity.Id, urlRaw, out htmls))
+                int iFlay = 0;
+                bool isNoFind = true;
+                int irequestType = (int)Enums.TempletType.Common;
+                if (entity != null && !string.IsNullOrEmpty(entity.Id))
                 {
-                    TempletApp templetApp = new TempletApp();
-                    TempletEntity templetmodel = new TempletEntity();
-                    ColumnsEntity columnentity = new ColumnsEntity();
-                    ColumnsApp c_ModulesApp = new ColumnsApp();
-                    string Ids = "";
-                    if (urlRaws == null || urlRaws.Count == 0)
+                    if (!new WebSiteConfigApp().IsService(entity.Id))
                     {
-                        templetmodel = templetApp.GetMain(entity.Id);
-                        columnentity = c_ModulesApp.GetMain(entity.Id);
-                        if (columnentity != null)
-                            Ids = columnentity.Id;
-                    }
-                    else
-                    {
-                        if (urlRaws.Count > 0)
+                        List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+                        ContentApp contentApp = new ContentApp();
+                        if (!contentApp.GetHtmlStrs(entity.Id, urlRaw, out htmls))
                         {
-                            templetmodel = templetApp.GetModelByUrlRaws(urlRaws, entity.Id, ref irequestType);
-                            columnentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
-                        }
-                        if (columnentity != null)
-                            Ids = columnentity.Id;
-                        if (urlRaws.Count == 2)
-                        {
-                            Ids = urlRaws.LastOrDefault();
-                            iFlay = 1;
-                        }
-                    }
-                    if (templetmodel != null)
-                    {
-                        htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
-                        if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Id))
-                        {
-                            if (iFlay == 1)
+                            TempletApp templetApp = new TempletApp();
+                            TempletEntity templetmodel = new TempletEntity();
+                            ColumnsEntity columnentity = new ColumnsEntity();
+                            ColumnsApp c_ModulesApp = new ColumnsApp();
+                            string Ids = "";
+                            if (urlRaws == null || urlRaws.Count == 0)
                             {
-                                TempHelp temphelp = new TempHelp();
-                                htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                isNoFind = false;
+                                templetmodel = templetApp.GetMain(entity.Id);
+                                columnentity = c_ModulesApp.GetMain(entity.Id);
+                                if (columnentity != null)
+                                    Ids = columnentity.Id;
                             }
                             else
                             {
-                                TempHelp temphelp = new TempHelp();
-                                htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                isNoFind = false;
+                                if (urlRaws.Count > 0)
+                                {
+                                    templetmodel = templetApp.GetModelByUrlRaws(urlRaws, entity.Id, ref irequestType);
+                                    columnentity = c_ModulesApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
+                                }
+                                if (columnentity != null)
+                                    Ids = columnentity.Id;
+                                if (urlRaws.Count == 2)
+                                {
+                                    Ids = urlRaws.LastOrDefault();
+                                    iFlay = 1;
+                                }
                             }
-                            //更新浏览数
-                            new ContentApp().UpdateViewNum(Ids, true);
+                            if (templetmodel != null)
+                            {
+                                htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
+                                if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Id))
+                                {
+                                    if (iFlay == 1)
+                                    {
+                                        TempHelp temphelp = new TempHelp();
+                                        htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
+                                        isNoFind = false;
+                                    }
+                                    else
+                                    {
+                                        TempHelp temphelp = new TempHelp();
+                                        htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
+                                        isNoFind = false;
+                                    }
+                                    //更新浏览数
+                                    new ContentApp().UpdateViewNum(Ids, true);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isNoFind = false;
                         }
                     }
+                    else
+                    {
+                        htmls = Comm.SysPageHelp.sysPageHelp.GetServicePage();
+                        isNoFind = false;
+                    }
                 }
-                else
+                if (isNoFind)
                 {
-                    isNoFind = false;
+                    htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
                 }
             }
-            if (isNoFind)
+            catch
             {
-                htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
+                throw;
             }
             return htmls;
         }

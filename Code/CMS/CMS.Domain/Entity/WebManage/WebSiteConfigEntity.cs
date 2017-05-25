@@ -18,9 +18,13 @@ namespace CMS.Domain.Entity.WebManage
         public string WebSiteId { get; set; }
 
         /// <summary>
-        /// SearchEnabledMark
+        /// 全站搜索标识
         /// </summary>		
         public bool SearchEnabledMark { get; set; }
+        /// <summary>
+        /// 网站维护中标识
+        /// </summary>		
+        public bool ServiceEnabledMark { get; set; }
 
         /// <summary>
         /// EnabledMark

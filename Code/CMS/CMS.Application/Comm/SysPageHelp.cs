@@ -58,6 +58,38 @@ namespace CMS.Application.Comm
 
         #endregion
 
+        #region 获取500错误页 +string GetErrorPage()
+        /// <summary>
+        /// 获取500错误页
+        /// </summary>
+        /// <returns></returns>
+        public string GetErrorPage()
+        {
+            string strHtmls = string.Empty;
+
+            strHtmls = Code.FileHelper.ReadTxtFile(ConfigHelp.configHelp.SYSPAGE_ERROR, true);
+
+            return strHtmls;
+        }
+
+        #endregion
+
+        #region 获取维护页 +string GetServicePage()
+        /// <summary>
+        /// 获取维护页
+        /// </summary>
+        /// <returns></returns>
+        public string GetServicePage()
+        {
+            string strHtmls = string.Empty;
+
+            strHtmls = Code.FileHelper.ReadTxtFile(ConfigHelp.configHelp.SYSPAGE_SERVICE, true);
+
+            return strHtmls;
+        }
+
+        #endregion
+
         #region 创建前台页面访问日志
         /// <summary>
         /// 创建前台页面访问日志

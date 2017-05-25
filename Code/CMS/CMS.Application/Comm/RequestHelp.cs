@@ -41,7 +41,7 @@ namespace CMS.Application.Comm
             }
         }
         #endregion
-        
+
         #region 处理请求 +void InitRequest(System.Web.HttpContext context)
         /// <summary>
         /// 处理请求
@@ -49,16 +49,32 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
-            string urlHost = context.Request.Url.Host;
-            string urlRaw = context.Request.RawUrl.ToString();
-            urlRaw = context.Server.UrlDecode(urlRaw);
-            if (IsProcess(urlHost, urlRaw))
+            string htmls = string.Empty;
+            try
             {
-                string htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+                string urlHost = context.Request.Url.Host;
+                string urlRaw = context.Request.RawUrl.ToString();
+                urlRaw = context.Server.UrlDecode(urlRaw);
+                if (IsProcess(urlHost, urlRaw))
+                {
+                    htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw);
+                    context.Response.Clear();
+                    context.Response.Write(htmls);
+                    //插入访问日志
+                    SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
+                    //context.Response.End();
+                    context.ApplicationInstance.CompleteRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                htmls = Comm.SysPageHelp.sysPageHelp.GetErrorPage();
+                context.Response.Clear();
                 context.Response.Write(htmls);
                 //插入访问日志
                 SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
-                context.Response.End();
+                //context.Response.End();
+                context.ApplicationInstance.CompleteRequest();
             }
         }
         #endregion

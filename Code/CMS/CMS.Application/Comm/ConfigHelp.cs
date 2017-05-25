@@ -116,6 +116,26 @@ namespace CMS.Application.Comm
                 return Code.Configs.GetValue("SysPage_NoFind").ToString();
             }
         }  
+        /// <summary>
+        /// 系统 500 错误页
+        /// </summary>
+        public string SYSPAGE_ERROR
+        {
+            get
+            {
+                return Code.Configs.GetValue("SysPage_Error").ToString();
+            }
+        }  
+        /// <summary>
+        /// 系统 维护页
+        /// </summary>
+        public string SYSPAGE_SERVICE
+        {
+            get
+            {
+                return Code.Configs.GetValue("SysPage_Service").ToString();
+            }
+        }  
         #endregion 
          
         #region 用户可添加站点数配置

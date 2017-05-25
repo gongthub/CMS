@@ -764,6 +764,8 @@
     <Content Include="Html\js\owl.carousel.js" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
+    <Content Include="SysPage\500\500.html" />
+    <Content Include="SysPage\Service\Service.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

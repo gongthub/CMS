@@ -45,6 +45,22 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 return Error(e.Message);
             }
         }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateServiceEnabled(bool serviceEnabled)
+        {
+            try
+            {
+                webSiteConfigApp.UpdateServiceEnableByWebSiteId(Base_WebSiteId, serviceEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
 
 
         [HttpPost]

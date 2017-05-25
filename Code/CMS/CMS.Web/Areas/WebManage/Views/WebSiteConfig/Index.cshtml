@@ -5,6 +5,27 @@
 @model CMS.Domain.Entity.WebManage.WebSiteConfigEntity
 <form id="form1">
     <div class="mail-box">
+        <div class="mail-header">通用配置</div>
+        <div class="mail-body">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">暂停维护</th>
+                    <td class="formValue">
+                        @if (Model.ServiceEnabledMark)
+                        {
+                            <input id="ckIsServiceEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsServiceEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
+                    </td>
+                </tr>
+                <tr></tr>
+            </table>
+        </div>
+    </div>
+    <div class="mail-box">
         <div class="mail-header">全站搜索配置</div>
         <div class="mail-body">
             <table class="form">
@@ -13,11 +34,11 @@
                     <td class="formValue">
                         @if (Model.SearchEnabledMark)
                         {
-                            <input id="ckIsEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                            <input id="ckIsSearchEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
                         }
                         else
                         {
-                            <input id="ckIsEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                            <input id="ckIsSearchEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
                         }
                     </td>
                     <th class="formTitle">生成索引</th>
@@ -33,8 +54,11 @@
 @section scripts {
     <script type="text/javascript">
         $(function () {
-            $("#ckIsEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+            $("#ckIsSearchEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setSearchEnabled(state);
+            });
+            $("#ckIsServiceEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setServiceEnabled(state);
             });
         });
 
@@ -43,6 +67,16 @@
             $.getPostNoConfirm({
                 url: "/WebManage/WebSiteConfig/UpdateSearchEnabled",
                 param: { searchEnabled: state },
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+        //设置站点维护
+        function setServiceEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateServiceEnabled",
+                param: { serviceEnabled: state },
                 success: function (data) {
                     $.modalAlert(data.message);
                 }

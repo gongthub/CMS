@@ -59,6 +59,29 @@ namespace CMS.Application.WebManage
             return bState;
         }
 
+        public bool UpdateServiceEnableByWebSiteId(string webSiteId, bool serviceEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.ServiceEnabledMark = serviceEnabled;
+                    service.Update(webSiteConfigEntity);
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
         public bool IsSearch(string webSiteId)
         {
             bool bState = false;
@@ -77,6 +100,27 @@ namespace CMS.Application.WebManage
             catch
             {
                 bState = false;
+            }
+            return bState;
+        }
+        public bool IsService(string webSiteId)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.ServiceEnabledMark;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            catch
+            {
+                bState = true;
             }
             return bState;
         }
