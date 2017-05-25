@@ -81,6 +81,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             return View();
         }
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult LinkDetails()
+        {
+            return View();
+        }
          
     }
 }

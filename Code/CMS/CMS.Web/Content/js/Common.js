@@ -9,6 +9,12 @@ function htmlDecode(str) {
     ele.innerHTML = str;
     return ele.textContent;
 }
+
+function actionIndex() {
+    parent.window.location.href = "/Home/Index";
+}
+
+
 //复制文本
 function copyToClipboard(txt) { 
     if (window.clipboardData) {

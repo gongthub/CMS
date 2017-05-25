@@ -154,7 +154,7 @@ namespace CMS.Code
                     t = DESEncrypt.Decrypt(WebHelper.GetCookie(key).ToString()).ToObject<T>();
                     break;
                 case CMS.Code.Enums.LoginProvider.Session:
-                    if (WebHelper.GetSession(LOGINUSERKEY) != null)
+                    if (WebHelper.GetSession(key) != null)
                         t = DESEncrypt.Decrypt(WebHelper.GetSession(key).ToString()).ToObject<T>();
                     else
                         t = default(T);

@@ -3,9 +3,10 @@
 <html style="overflow: hidden;">
 <head>
     <title>CMS快速开发平台</title>
-    <link href="~/Content/css/framework-font.css" rel="stylesheet" />
-    <link href="~/Content/js/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+    <link href="~/Content/css/framework-font.css?v=100000000009" rel="stylesheet" />
+    <link href="~/Content/js/bootstrap/bootstrap.min.css?v=100000000009" rel="stylesheet" />
+    <link href="~/Content/css/framework-theme.css?v=100000000009" rel="stylesheet" />
+    <link href="~/Content/js/bootstrap/bootstrap-switch.css?v=100000000009" rel="stylesheet" />
 </head>
 <body style="overflow: hidden;">
     <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
@@ -132,26 +133,14 @@
 </body>
 </html>
 
-<script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
-<script src="~/Content/js/bootstrap/bootstrap.js"></script>
-<script src="~/Content/js/bootstrap/bootstrap-switch.js?v=100000000005"></script>
-<script src="~/Content/js/dialog/dialog.js"></script>
-<script src="~/Content/js/cookie/jquery.cookie.js"></script>
-<script src="~/Content/js/framework-ui.js"></script>
-<script src="~/Content/js/framework-clientdata.js"></script>
-<script src="~/Content/js/index.js?v=1"></script>
-<script src="~/Content/js/indextab.js"></script>
-<script src="~/Content/js/loading/pace.min.js"></script>
-<script type="text/javascript">
-
-    $(document).ajaxComplete(function (event, request, settings) {
-        if (request.responseText == "WebSiteLogout") {
-            alert("站点信息丢失！请重新选择站点！");
-            location.href = '/Home/Index';
-        }
-    });
-    function actionIndex() {
-        top.location.href = "/Home/Index";
-    }
-
-</script>
+<script src="~/Content/js/jquery/jquery-2.1.1.min.js?v=100000000009"></script>
+<script src="~/Content/js/bootstrap/bootstrap.js?v=100000000009"></script>
+<script src="~/Content/js/bootstrap/bootstrap-switch.js?v=100000000009"></script>
+<script src="~/Content/js/dialog/dialog.js?v=100000000009"></script>
+<script src="~/Content/js/cookie/jquery.cookie.js?v=100000000009"></script>
+<script src="~/Content/js/framework-ui.js?v=100000000009"></script>
+<script src="~/Content/js/framework-clientdata.js?v=100000000009"></script>
+<script src="~/Content/js/index.js?v=100000000009"></script>
+<script src="~/Content/js/indextab.js?v=100000000009"></script>
+<script src="~/Content/js/loading/pace.min.js?v=100000000009"></script>
+<script src="~/Content/js/Common.js?v=100000000009"></script>

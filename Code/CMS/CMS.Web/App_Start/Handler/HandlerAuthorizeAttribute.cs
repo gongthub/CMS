@@ -27,8 +27,17 @@ namespace CMS.Web
             if (!this.ActionAuthorize(filterContext))
             {
                 StringBuilder sbScript = new StringBuilder();
-                sbScript.Append("<script type='text/javascript'>alert('很抱歉！您的权限不足，访问被拒绝！');</script>");
-                filterContext.Result = new ContentResult() { Content = sbScript.ToString() };
+                //判断是否ajax请求
+                if (filterContext.HttpContext.Request.IsAjaxRequest())
+                {
+                    sbScript.Append("NoAuthorize");
+                    filterContext.Result = new JavaScriptResult() { Script = sbScript.ToString() };
+                }
+                else
+                {
+                    sbScript.Append("<script type='text/javascript'>alert('很抱歉！您的权限不足，访问被拒绝！');</script>");
+                    filterContext.Result = new ContentResult() { Content = sbScript.ToString() };
+                }
                 return;
             }
         }

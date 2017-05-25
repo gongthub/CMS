@@ -138,19 +138,19 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(WebSiteEntity moduleEntity, string keyValue)
         {
-            int iWebSiteNum = 0;
-            if (IsOverNum(out iWebSiteNum))
+            moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
+            if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
             {
-                moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
-                if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
+                InitSpareUrl(ref moduleEntity);
+                if (!string.IsNullOrEmpty(keyValue))
                 {
-                    InitSpareUrl(ref moduleEntity);
-                    if (!string.IsNullOrEmpty(keyValue))
-                    {
-                        moduleEntity.Modify(keyValue);
-                        service.Update(moduleEntity);
-                    }
-                    else
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    int iWebSiteNum = 0;
+                    if (IsOverNum(out iWebSiteNum))
                     {
                         moduleEntity.Create();
                         service.Insert(moduleEntity);
@@ -166,35 +166,35 @@ namespace CMS.Application.WebManage
                         //添加站点搜索模板
                         new TempletApp().AddSearchModel(moduleEntity.Id);
                     }
-                }
-                else
-                {
-                    throw new Exception("域名已存在，请重新输入！");
+                    else
+                    {
+                        throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
+                    }
                 }
             }
             else
             {
-                throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
+                throw new Exception("域名已存在，请重新输入！");
             }
         }
         public void SubmitForm(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue, UpFileDTO upFileentity)
         {
-            int iWebSiteNum = 0;
-            if (IsOverNum(out iWebSiteNum))
+            moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
+            moduleEntity.Id = keyValue;
+            if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
             {
-                moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
-                moduleEntity.Id = keyValue;
-                if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
+                if (!service.IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
-                    if (!service.IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
+                    InitSpareUrl(ref moduleEntity);
+                    if (!string.IsNullOrEmpty(keyValue))
                     {
-                        InitSpareUrl(ref moduleEntity);
-                        if (!string.IsNullOrEmpty(keyValue))
-                        {
-                            moduleEntity.Modify(keyValue);
-                            service.Update(moduleEntity);
-                        }
-                        else
+                        moduleEntity.Modify(keyValue);
+                        service.Update(moduleEntity);
+                    }
+                    else
+                    {
+                        int iWebSiteNum = 0;
+                        if (IsOverNum(out iWebSiteNum))
                         {
                             moduleEntity.Create();
                             service.Insert(moduleEntity);
@@ -207,31 +207,31 @@ namespace CMS.Application.WebManage
                                 new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
                             }
                         }
-                        //更新上传文件表
-                        UpFileApp upFileApp = new UpFileApp();
-                        upFileentity.Sys_WebSiteId = moduleEntity.Id;
-                        upFileentity.Sys_ParentId = keyValue;
-                        upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
-                        upFileApp.AddUpFileEntity(upFileentity);
-                        SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
-                        //添加配置表
-                        new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
-                        //添加站点搜索模板
-                        new TempletApp().AddSearchModel(moduleEntity.Id);
+                        else
+                        {
+                            throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
+                        }
                     }
-                    else
-                    {
-                        throw new Exception("简称已存在，请重新输入！");
-                    }
+                    //更新上传文件表
+                    UpFileApp upFileApp = new UpFileApp();
+                    upFileentity.Sys_WebSiteId = moduleEntity.Id;
+                    upFileentity.Sys_ParentId = keyValue;
+                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
+                    upFileApp.AddUpFileEntity(upFileentity);
+                    SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
+                    //添加配置表
+                    new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
+                    //添加站点搜索模板
+                    new TempletApp().AddSearchModel(moduleEntity.Id);
                 }
                 else
                 {
-                    throw new Exception("域名已存在，请重新输入！");
+                    throw new Exception("简称已存在，请重新输入！");
                 }
             }
             else
             {
-                throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
+                throw new Exception("域名已存在，请重新输入！");
             }
         }
 

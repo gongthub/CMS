@@ -2,7 +2,22 @@
     document.body.className = localStorage.getItem('config-skin');
     $("[data-toggle='tooltip']").tooltip();
     $("input[type=\"checkbox\"], input[type=\"radio\"]").not("[data-switch-no-init]").bootstrapSwitch();
-})
+});
+
+$(document).ajaxComplete(function (event, request, settings) {
+    processResposeText(request);
+});
+
+function processResposeText(request)
+{
+    if (request.responseText == "WebSiteLogout") {
+        alert("站点信息丢失！请重新选择站点！");
+        parent.window.location.href = '/Home/Index';
+    }
+    if (request.responseText == "NoAuthorize") {
+        alert('很抱歉！您的权限不足，访问被拒绝！');
+    }
+}
 $.reload = function () {
     location.reload();
     return false;
@@ -202,6 +217,7 @@ $.submitForm = function (options) {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                processResposeText(XMLHttpRequest);
                 $.loading(false);
                 $.modalMsg(errorThrown, "error");
             },
@@ -237,6 +253,7 @@ $.deleteForm = function (options) {
                     type: "post",
                     dataType: "json",
                     success: function (data) {
+                        //alert(data);
                         if (data.state == "success") {
                             options.success(data);
                             $.modalMsg(data.message, data.state);
@@ -245,13 +262,14 @@ $.deleteForm = function (options) {
                         }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        processResposeText(XMLHttpRequest);
                         $.loading(false);
                         $.modalMsg(errorThrown, "error");
                     },
                     beforeSend: function () {
                         $.loading(true, options.loading);
                     },
-                    complete: function () {
+                    complete: function (data) {
                         $.loading(false);
                     }
                 });
@@ -292,6 +310,7 @@ $.getStaticPage = function (options) {
                         }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        processResposeText(XMLHttpRequest);
                         $.loading(false);
                         $.modalMsg(errorThrown, "error");
                     },
@@ -533,6 +552,7 @@ $.getPost = function (options) {
                         }
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        processResposeText(XMLHttpRequest);
                         $.loading(false);
                         $.modalMsg(errorThrown, "error");
                     },
@@ -578,6 +598,7 @@ $.getPostNoConfirm = function (options) {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                processResposeText(XMLHttpRequest);
                 $.loading(false);
                 $.modalMsg(errorThrown, "error");
             },

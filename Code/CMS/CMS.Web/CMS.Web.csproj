@@ -978,6 +978,7 @@
     <Content Include="Areas\WebManage\Views\Content\Form.cshtml" />
     <Content Include="Content\js\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\WebManage\Views\WebSiteConfig\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\LinkDetails.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

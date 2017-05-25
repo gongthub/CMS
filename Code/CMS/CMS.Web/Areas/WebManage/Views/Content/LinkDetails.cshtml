@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<form id="form1" enctype="multipart/form-data">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>链接信息<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="width: 98%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">排序</th>
+                                <td class="formValue">
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                                </td>
+                                <th class="formTitle">名称</th>
+                                <td class="formValue">
+                                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">地址</th>
+                                <td class="formValue" colspan="3">
+                                    <input id="UrlAddress" name="UrlAddress" type="text" class="form-control required" placeholder="请输入地址" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">图标</th>
+                                <td class="formValue">
+                                    <div>
+                                        <img id="ImgPr" width="30" height="30" />
+                                    </div>
+                                </td>
+                                <th class="formTitle" style="height: 35px;">是否有效</th>
+                                <td class="formValue" style="padding-top: 1px;">
+                                    <div class="ckbox">
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">有效</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                    备注
+                                </th>
+                                <td class="formValue" colspan="3">
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+        </div>
+    </div>
+</form>
+@section scripts {
+    <script type="text/javascript">
+        var keyValue = $.request("keyValue");
+        var columnId = $.request("columnId");
+        $(function () {
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/Content/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        data.Content = htmlDecode(data.Content);
+                        $("#ImgPr").attr("src", data.Icon);
+                        $("#form1").formSerialize(data);
+                        $("#form1").find('.form-control,select,input').attr('disabled', 'disabled');
+                        $("#form1").find('div.ckbox label').attr('for', '');
+                    }
+                });
+            }
+        })
+
+    </script>
+}
