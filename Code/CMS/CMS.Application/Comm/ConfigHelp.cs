@@ -38,6 +38,19 @@ namespace CMS.Application.Comm
         }
         #endregion
 
+        #region 系统相关
+        /// <summary>
+        /// 可登录后台域名控制
+        /// </summary>
+        public string LOGINHOST
+        {
+            get
+            {
+                return Code.Configs.GetValue("LoginHost").ToString();
+            }
+        }  
+        #endregion
+ 
         #region 上传图片配置
         /// <summary>
         /// 上传图片文件夹

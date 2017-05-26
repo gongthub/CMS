@@ -8,6 +8,8 @@ namespace CMS.Code
 {
     public class FileHelper
     {
+        private static object OBJLOCK = new object();
+
         #region 检测指定目录是否存在
         /// <summary>
         /// 检测指定目录是否存在
@@ -970,20 +972,23 @@ namespace CMS.Code
         /// <returns></returns>
         public static string ReadTxtFile(string FilePath)
         {
-            string content = "";//返回的字符串
-            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+            lock (OBJLOCK)
             {
-                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                string content = "";//返回的字符串
+                using (FileStream fs = new FileStream(FilePath, FileMode.Open))
                 {
-                    string text = string.Empty;
-                    while (!reader.EndOfStream)
+                    using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
                     {
-                        text += reader.ReadLine() + "\r\n";
-                        content = text;
+                        string text = string.Empty;
+                        while (!reader.EndOfStream)
+                        {
+                            text += reader.ReadLine() + "\r\n";
+                            content = text;
+                        }
                     }
                 }
+                return content;
             }
-            return content;
         }
         /// <summary>
         /// 以只读方式读取文本文件
@@ -993,24 +998,27 @@ namespace CMS.Code
         /// <returns></returns>
         public static string ReadTxtFile(string FilePath, bool Isrelative)
         {
-            if (Isrelative)
+            lock (OBJLOCK)
             {
-                FilePath = MapPath(FilePath);
-            }
-            string content = "";//返回的字符串
-            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
-            {
-                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                if (Isrelative)
                 {
-                    string text = string.Empty;
-                    while (!reader.EndOfStream)
+                    FilePath = MapPath(FilePath);
+                }
+                string content = "";//返回的字符串
+                using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+                {
+                    using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
                     {
-                        text += reader.ReadLine() + "\r\n";
-                        content = text;
+                        string text = string.Empty;
+                        while (!reader.EndOfStream)
+                        {
+                            text += reader.ReadLine() + "\r\n";
+                            content = text;
+                        }
                     }
                 }
+                return content;
             }
-            return content;
         }
         /// <summary>
         /// 以只读方式读取文本文件前N条数据
@@ -1019,25 +1027,27 @@ namespace CMS.Code
         /// <returns></returns>
         public static string ReadTxtFileNum(string FilePath, int num)
         {
-            string content = "";//返回的字符串
-            using (FileStream fs = new FileStream(FilePath, FileMode.Open))
+            lock (OBJLOCK)
             {
-                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
+                string content = "";//返回的字符串
+                using (FileStream fs = new FileStream(FilePath, FileMode.Open))
                 {
-                    string text = string.Empty;
-                    for (int i = 0; i < num; i++)
+                    using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
                     {
-                        if (!reader.EndOfStream)
+                        string text = string.Empty;
+                        for (int i = 0; i < num; i++)
                         {
-                            text += reader.ReadLine() + "\r\n";
-                            content = text;
+                            if (!reader.EndOfStream)
+                            {
+                                text += reader.ReadLine() + "\r\n";
+                                content = text;
+                            }
                         }
                     }
                 }
+                return content;
             }
-            return content;
         }
-
         #endregion
 
         #region 获取文件夹名称

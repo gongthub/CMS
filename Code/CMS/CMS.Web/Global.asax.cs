@@ -30,6 +30,11 @@ namespace CMS.Web
             HttpContext context = HttpContext.Current; 
             RequestHelp.requestHelp.InitRequest(context);
         }
+        protected void Application_EndRequest(object sender, EventArgs e)
+        { 
+            HttpContext context = HttpContext.Current;
+            RequestHelp.requestHelp.EndRequest(context);
+        }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
