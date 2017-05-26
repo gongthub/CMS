@@ -64,6 +64,7 @@
     <Compile Include="SystemSecurity\LogMap.cs" />
     <Compile Include="WebManage\ContentMap.cs" />
     <Compile Include="WebManage\ColumnsMap.cs" />
+    <Compile Include="WebManage\KeyWordsMap.cs" />
     <Compile Include="WebManage\TempletMap.cs" />
     <Compile Include="WebManage\WebSiteConfigMap.cs" />
     <Compile Include="WebManage\WebSiteForUrlMap.cs" />

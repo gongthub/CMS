@@ -61,6 +61,7 @@
     <Compile Include="Entity\SystemSecurity\LogEntity.cs" />
     <Compile Include="Entity\WebManage\ContentEntity.cs" />
     <Compile Include="Entity\WebManage\ColumnsEntity.cs" />
+    <Compile Include="Entity\WebManage\KeyWordsEntity.cs" />
     <Compile Include="Entity\WebManage\ResourceEntity.cs" />
     <Compile Include="Entity\WebManage\TempletEntity.cs" />
     <Compile Include="Entity\WebManage\WebSiteConfigEntity.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\ILogRepository.cs" />
     <Compile Include="IRepository\WebManage\IContentRepository.cs" />
+    <Compile Include="IRepository\WebManage\IKeyWordsRespository.cs" />
     <Compile Include="IRepository\WebManage\ITempletRepository.cs" />
     <Compile Include="IRepository\WebManage\IColumnsRepository.cs" />
     <Compile Include="IRepository\WebManage\IWebSiteConfigRepository.cs" />

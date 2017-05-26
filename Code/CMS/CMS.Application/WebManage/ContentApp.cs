@@ -189,62 +189,78 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
-            if (!string.IsNullOrEmpty(keyValue))
+            string strKeyWords = string.Empty;
+            if (!new KeyWordsApp().IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                moduleEntity.Modify(keyValue);
-                service.Update(moduleEntity);
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity);
+
+                    string mIds = moduleEntity.ColumnId;
+                    ColumnsApp c_ModulesApp = new ColumnsApp();
+                    ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
+                    if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                    {
+                        string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                        moduleEntity.UrlAddress = urlAddress;
+                        SubmitForm(moduleEntity, moduleEntity.Id);
+                    }
+                }
             }
             else
             {
-                moduleEntity.Create();
-                service.Insert(moduleEntity);
-
-                string mIds = moduleEntity.ColumnId;
-                ColumnsApp c_ModulesApp = new ColumnsApp();
-                ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
-                if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
-                {
-                    string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
-                    moduleEntity.UrlAddress = urlAddress;
-                    SubmitForm(moduleEntity, moduleEntity.Id);
-                }
+                throw new Exception("存在非法关键词，请检查！关键字：" + strKeyWords);
             }
         }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys)
         {
-            if (!string.IsNullOrEmpty(keyValue))
+            string strKeyWords = string.Empty;
+            if (!new KeyWordsApp().IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                moduleEntity.Modify(keyValue);
-                service.Update(moduleEntity);
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity);
+                    keyValue = moduleEntity.Id;
+
+                    string mIds = moduleEntity.ColumnId;
+                    ColumnsApp c_ModulesApp = new ColumnsApp();
+                    ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
+                    if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                    {
+                        string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                        moduleEntity.UrlAddress = urlAddress;
+                        SubmitForm(moduleEntity, moduleEntity.Id);
+                    }
+                }
+                if (upFileentitys != null && upFileentitys.Count > 0)
+                {
+                    foreach (UpFileDTO upFileentity in upFileentitys)
+                    {
+                        //更新上传文件表
+                        UpFileApp upFileApp = new UpFileApp();
+
+                        upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
+                        upFileentity.Sys_ParentId = keyValue;
+                        upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
+                        upFileApp.AddUpFileEntity(upFileentity);
+                    }
+                }
             }
             else
             {
-                moduleEntity.Create();
-                service.Insert(moduleEntity);
-                keyValue = moduleEntity.Id;
-
-                string mIds = moduleEntity.ColumnId;
-                ColumnsApp c_ModulesApp = new ColumnsApp();
-                ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
-                if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
-                {
-                    string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
-                    moduleEntity.UrlAddress = urlAddress;
-                    SubmitForm(moduleEntity, moduleEntity.Id);
-                }
-            }
-            if (upFileentitys != null && upFileentitys.Count > 0)
-            {
-                foreach (UpFileDTO upFileentity in upFileentitys)
-                {
-                    //更新上传文件表
-                    UpFileApp upFileApp = new UpFileApp();
-
-                    upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
-                    upFileentity.Sys_ParentId = keyValue;
-                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
-                    upFileApp.AddUpFileEntity(upFileentity);
-                }
+                throw new Exception("存在非法关键词，请检查！关键字：" + strKeyWords);
             }
         }
 
@@ -257,7 +273,7 @@ namespace CMS.Application.WebManage
                 service.Update(moduleEntity);
             }
         }
-        public void UpdateViewNum(string keyValue,bool IsAsync)
+        public void UpdateViewNum(string keyValue, bool IsAsync)
         {
             if (IsAsync)
             {
@@ -270,7 +286,7 @@ namespace CMS.Application.WebManage
             }
             else
             {
-                    UpdateViewNum(keyValue);
+                UpdateViewNum(keyValue);
             }
 
         }
@@ -325,7 +341,7 @@ namespace CMS.Application.WebManage
         {
             long num = 0;
             ContentEntity moduleEntity = GetForm(ids);
-            if (moduleEntity != null&&moduleEntity.ViewNum!=null)
+            if (moduleEntity != null && moduleEntity.ViewNum != null)
             {
                 num = moduleEntity.ViewNum;
             }
@@ -356,7 +372,7 @@ namespace CMS.Application.WebManage
                     }
                     //处理页面浏览数
                     htmls = htmls.Replace(TempHelp.STATICHTMLCONTENTNUM, contentEntity.ViewNum.ToString());
-                    UpdateViewNum(contentEntity.Id,true);
+                    UpdateViewNum(contentEntity.Id, true);
                     isHave = true;
                 }
             }

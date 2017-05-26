@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace CMS.Web.Areas.WebManage.Controllers
 {
+    [HandlerWebSiteMgr]
     public class WebSiteConfigController : ControllerBase
     {
         private WebSiteConfigApp webSiteConfigApp = new WebSiteConfigApp();
