@@ -55,6 +55,10 @@ namespace CMS.Application.Comm
             try
             {
                 string urlHost = context.Request.Url.Host;
+                if (!context.Request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
+                {
+                    urlHost = context.Request.Url.Authority;
+                }
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
                 if (!IsLoginHost(context))
@@ -164,7 +168,7 @@ namespace CMS.Application.Comm
             context.Response.Write(htmls);
             context.ApplicationInstance.CompleteRequest();
         }
-        
+
         #endregion
 
         #region 判断是否需要处理

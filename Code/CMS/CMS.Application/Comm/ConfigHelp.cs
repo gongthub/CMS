@@ -48,9 +48,21 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("LoginHost").ToString();
             }
-        }  
+        }
+        /// <summary>
+        /// 是否启用端口
+        /// </summary>
+        public bool ISOPENPORT
+        {
+            get
+            {
+                bool bIsOpenPort = false;
+                bool.TryParse(Code.Configs.GetValue("IsOpenPort").ToString(), out bIsOpenPort);
+                return bIsOpenPort;
+            }
+        }
         #endregion
- 
+
         #region 上传图片配置
         /// <summary>
         /// 上传图片文件夹
@@ -128,7 +140,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("SysPage_NoFind").ToString();
             }
-        }  
+        }
         /// <summary>
         /// 系统 500 错误页
         /// </summary>
@@ -138,7 +150,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("SysPage_Error").ToString();
             }
-        }  
+        }
         /// <summary>
         /// 系统 维护页
         /// </summary>
@@ -148,9 +160,9 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("SysPage_Service").ToString();
             }
-        }  
-        #endregion 
-         
+        }
+        #endregion
+
         #region 用户可添加站点数配置
 
         /// <summary>
@@ -162,7 +174,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_SystemUser").ToString();
             }
-        }  
+        }
 
         /// <summary>
         /// 站点用户可添加网站数
@@ -173,7 +185,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_WebSiteUser").ToString();
             }
-        }  
+        }
 
         /// <summary>
         /// 注册用户可添加网站数
@@ -184,7 +196,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_RegisterUser").ToString();
             }
-        }  
+        }
 
         /// <summary>
         /// 普通会员可添加网站数
@@ -195,7 +207,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_OrdinaryUser").ToString();
             }
-        }  
+        }
 
         /// <summary>
         /// 金牌会员可添加网站数
@@ -206,7 +218,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_GoldUser").ToString();
             }
-        }  
+        }
 
         /// <summary>
         /// 钻石会员可添加网站数
@@ -217,7 +229,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteNum_DiamondUser").ToString();
             }
-        }  
+        }
         #endregion
 
         #region 系统请求URl模块黑名单
@@ -230,7 +242,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("UrlBlackName").ToString();
             }
-        }   
+        }
         #endregion
 
         #region 全站搜索相关配置
@@ -243,7 +255,7 @@ namespace CMS.Application.Comm
             {
                 return Code.Configs.GetValue("WebSiteSearchPath").ToString();
             }
-        }   
+        }
         #endregion
     }
 }
