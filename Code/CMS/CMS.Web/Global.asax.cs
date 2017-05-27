@@ -26,7 +26,10 @@ namespace CMS.Web
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
-        { 
+        {
+        }
+        protected void Application_AcquireRequestState(object sender, EventArgs e)
+        {
             HttpContext context = HttpContext.Current; 
             RequestHelp.requestHelp.InitRequest(context);
         }

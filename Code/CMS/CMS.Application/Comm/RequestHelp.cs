@@ -54,11 +54,7 @@ namespace CMS.Application.Comm
             string htmls = string.Empty;
             try
             {
-                string urlHost = context.Request.Url.Host;
-                if (!context.Request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
-                {
-                    urlHost = context.Request.Url.Authority;
-                }
+                string urlHost = GetHost(context);
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
                 if (!IsLoginHost(context))
@@ -264,5 +260,20 @@ namespace CMS.Application.Comm
             return bState;
         }
         #endregion
+
+        /// <summary>
+        /// 获取请求urlHost
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public string GetHost(System.Web.HttpContext context)
+        {
+            string urlHost = context.Request.Url.Host;
+            if (!context.Request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
+            {
+                urlHost = context.Request.Url.Authority;
+            }
+            return urlHost;
+        }
     }
 }
