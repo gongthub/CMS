@@ -54,6 +54,7 @@
     <Compile Include="Repository\IRepositoryBase.T.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
     <Compile Include="Repository\RepositoryBase.T.cs" />
+    <Compile Include="Repository\VerifyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMS.Code\CMS.Code.csproj">

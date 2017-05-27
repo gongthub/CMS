@@ -2,7 +2,7 @@
 
 namespace CMS.Domain
 {
-    public interface IModificationAudited
+    public interface IModificationAudited 
     {
         string Id { get; set; }
         string LastModifyUserId { get; set; }

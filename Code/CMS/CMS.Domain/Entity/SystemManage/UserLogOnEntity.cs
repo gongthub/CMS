@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
+using System.ComponentModel;
 
 namespace CMS.Domain.Entity.SystemManage
 {
@@ -6,6 +8,8 @@ namespace CMS.Domain.Entity.SystemManage
     {
         public string Id { get; set; }
         public string UserId { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("密码")]
         public string UserPassword { get; set; }
         public string UserSecretkey { get; set; }
         public DateTime? AllowStartTime { get; set; }

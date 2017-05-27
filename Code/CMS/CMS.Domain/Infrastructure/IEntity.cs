@@ -1,5 +1,9 @@
 ﻿using CMS.Code;
+using CMS.Domain.Entity.Common;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace CMS.Domain
 {
@@ -16,7 +20,7 @@ namespace CMS.Domain
                 entity.CreatorUserId = LoginInfo.UserId;
             }
             entity.DeleteMark = false;
-            entity.CreatorTime = DateTime.Now; 
+            entity.CreatorTime = DateTime.Now;
         }
         public void Modify(string keyValue)
         {
@@ -42,5 +46,6 @@ namespace CMS.Domain
             entity.DeleteTime = DateTime.Now;
             entity.DeleteMark = true;
         }
+
     }
 }

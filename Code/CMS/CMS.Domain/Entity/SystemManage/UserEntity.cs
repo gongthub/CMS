@@ -1,14 +1,22 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
+using System.ComponentModel;
 
 namespace CMS.Domain.Entity.SystemManage
 {
     public class UserEntity : IEntity<UserEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
-        public string Id { get; set; } 
+        public string Id { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("账户")]
         public string Account { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("姓名")]
         public string RealName { get; set; }
         public string NickName { get; set; }
         public string HeadIcon { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("性别")]
         public bool? Gender { get; set; }
         public DateTime? Birthday { get; set; }
         public string MobilePhone { get; set; }
@@ -18,9 +26,17 @@ namespace CMS.Domain.Entity.SystemManage
         public int? UserLevel { get; set; }
         public int? SecurityLevel { get; set; }
         public string Signature { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("公司")]
         public string OrganizeId { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("部门")]
         public string DepartmentId { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("角色")]
         public string RoleId { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("岗位")]
         public string DutyId { get; set; }
         public bool? IsAdministrator { get; set; }
         public int? SortCode { get; set; }

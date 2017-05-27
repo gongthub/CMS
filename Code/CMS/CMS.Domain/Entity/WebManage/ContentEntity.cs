@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,10 +12,19 @@ namespace CMS.Domain.Entity.WebManage
    public class ContentEntity : IEntity<ContentEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("站点")]
         public string WebSiteId { get; set; }
         public string ColumnId { get; set; }
+
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsInt)]
+        [Description("排序")]
         public int SortCode { get; set; }
         public string ShortName { get; set; }
+
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("名称")]
         public string FullName { get; set; }
         public string Author { get; set; }
 

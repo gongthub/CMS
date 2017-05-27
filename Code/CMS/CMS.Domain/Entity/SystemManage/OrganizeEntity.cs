@@ -1,15 +1,25 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
+using System.ComponentModel;
 
 namespace CMS.Domain.Entity.SystemManage
 {
     public class OrganizeEntity : IEntity<OrganizeEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("父级")]
         public string ParentId { get; set; }
         public int? Layers { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("编号")]
         public string EnCode { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("名称")]
         public string FullName { get; set; }
         public string ShortName { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("类型")]
         public string CategoryId { get; set; }
         public string ManagerId { get; set; }
         public string TelePhone { get; set; }

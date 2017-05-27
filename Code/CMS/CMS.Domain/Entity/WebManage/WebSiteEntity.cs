@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -21,11 +23,15 @@ namespace CMS.Domain.Entity.WebManage
         /// <summary>
         /// FullName
         /// </summary>		
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("名称")]
         public string FullName { get; set; }
 
         /// <summary>
         /// UrlAddress
         /// </summary>		
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomain)]
+        [Description("域名")]
         public string UrlAddress { get; set; }
 
         /// <summary>
@@ -34,12 +40,16 @@ namespace CMS.Domain.Entity.WebManage
         public string Point { get; set; }
         /// <summary>
         /// SortCode
-        /// </summary>		
+        /// </summary>	
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsInt)]
+        [Description("排序")]	
         public int SortCode { get; set; }
 
         /// <summary>
         /// ShortName
         /// </summary>		
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("简称")]
         public string ShortName { get; set; }
 
         /// <summary>
@@ -146,51 +156,71 @@ namespace CMS.Domain.Entity.WebManage
         /// SpareUrlAddress01
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress01 { get; set; }
         /// <summary>
         /// SpareUrlAddress02
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress02 { get; set; }
         /// <summary>
         /// SpareUrlAddress03
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress03 { get; set; }
         /// <summary>
         /// SpareUrlAddress04
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress04 { get; set; }
         /// <summary>
         /// SpareUrlAddress05
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress05 { get; set; }
         /// <summary>
         /// SpareUrlAddress06
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress06 { get; set; }
         /// <summary>
         /// SpareUrlAddress07
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress07 { get; set; }
         /// <summary>
         /// SpareUrlAddress08
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress08 { get; set; }
         /// <summary>
         /// SpareUrlAddress09
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress09 { get; set; }
         /// <summary>
         /// SpareUrlAddress10
         /// </summary>	
         [NotMapped]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrEmpty)]
+        [Description("域名")]
         public string SpareUrlAddress10 { get; set; }
         
         #endregion

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +17,8 @@ namespace CMS.Domain.Entity.WebManage
         /// <summary>
         /// WebSiteId
         /// </summary>		
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("站点")]
         public string WebSiteId { get; set; }
 
         /// <summary>

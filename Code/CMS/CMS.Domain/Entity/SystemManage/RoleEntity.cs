@@ -1,17 +1,27 @@
-﻿using System;
+﻿using CMS.Data;
+using System;
+using System.ComponentModel;
 
 namespace CMS.Domain.Entity.SystemManage
 {
     public class RoleEntity : IEntity<RoleEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Description("组织")]
         public string OrganizeId { get; set; }
         public int? Category { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("编号")]
         public string EnCode { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("名称")]
         public string FullName { get; set; }
         public string Type { get; set; }
         public bool? AllowEdit { get; set; }
         public bool? AllowDelete { get; set; }
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsInt)]
+        [Description("排序")]
         public int? SortCode { get; set; }
         public bool? DeleteMark { get; set; }
         public bool? EnabledMark { get; set; }

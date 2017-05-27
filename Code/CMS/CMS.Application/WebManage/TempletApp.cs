@@ -41,7 +41,7 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = c_ModulesApp.GetMain();
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark ==true && m.DeleteMark !=true);
+                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark == true && m.DeleteMark != true);
             }
             return templet;
         }
@@ -87,7 +87,7 @@ namespace CMS.Application.WebManage
             var expression = ExtLinq.True<TempletEntity>();
             if (!string.IsNullOrEmpty(webSiteId))
             {
-                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.EnabledMark==true && t.TempletType == (int)Enums.TempletType.Search);
+                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.EnabledMark == true && t.TempletType == (int)Enums.TempletType.Search);
             }
             templet = service.FindEntity(expression);
             return templet;
@@ -248,6 +248,9 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
+            //数据验证
+            VerifyEntity(moduleEntity);
+
             if (moduleEntity.FullName.ToLower() != ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
             {
                 if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
@@ -287,6 +290,22 @@ namespace CMS.Application.WebManage
                 bState = true;
             }
             return bState;
+        }
+
+        /// <summary>
+        /// 数据格式验证
+        /// </summary>
+        /// <param name="moduleEntity"></param>
+        private void VerifyEntity(TempletEntity moduleEntity)
+        {
+            if (string.IsNullOrEmpty(moduleEntity.FullName))
+            {
+                throw new Exception("模板名称不能为空！");
+            }
+            if (moduleEntity.SortCode==null)
+            {
+                throw new Exception("显示顺序不能为空！");
+            }
         }
     }
 }
