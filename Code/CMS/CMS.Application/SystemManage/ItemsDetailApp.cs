@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
@@ -47,6 +48,8 @@ namespace CMS.Application.SystemManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除字典内容信息=>" + keyValue, Enums.DbLogType.Delete, "字典内容管理");
         }
         public void SubmitForm(ItemsDetailEntity itemsDetailEntity, string keyValue)
         {
@@ -54,11 +57,15 @@ namespace CMS.Application.SystemManage
             {
                 itemsDetailEntity.Modify(keyValue);
                 service.Update(itemsDetailEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改字典内容信息=>" + itemsDetailEntity.ItemName, Enums.DbLogType.Update, "字典内容管理");
             }
             else
             {
                 itemsDetailEntity.Create();
                 service.Insert(itemsDetailEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加字典内容信息=>" + itemsDetailEntity.ItemName, Enums.DbLogType.Create, "字典内容管理");
             }
         }
 

@@ -109,11 +109,12 @@
         addTab: function () {
             $(".open>.dropdown-menu").hide();
             var dataId = $(this).attr('data-id');
+            var menuName = $.trim($(this).text());
             if (dataId != "") {
                 top.$.cookie('cms_currentmoduleid', dataId, { path: "/" });
+                top.$.cookie('cms_currentmodulename', menuName, { path: "/" });
             }
             var dataUrl = $(this).attr('href');
-            var menuName = $.trim($(this).text());
             var flag = true;
             if (dataUrl == undefined || $.trim(dataUrl).length == 0) {
                 return false;

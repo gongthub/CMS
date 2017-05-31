@@ -1,4 +1,5 @@
-﻿using CMS.Application.SystemManage;
+﻿using CMS.Application.Comm;
+using CMS.Application.SystemManage;
 using CMS.Code;
 using System.Text;
 using System.Web;
@@ -15,7 +16,6 @@ namespace CMS.Web
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            //if (OperatorProvider.Provider.GetCurrent() != null && OperatorProvider.Provider.GetCurrent().IsSystem)
             if (SysLoginObjHelp.sysLoginObjHelp.GetOperator() != null && SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
             {
                 return;
@@ -43,12 +43,16 @@ namespace CMS.Web
         }
         private bool ActionAuthorize(ActionExecutingContext filterContext)
         {
-            //var operatorProvider = OperatorProvider.Provider.GetCurrent();
             var operatorProvider = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             var roleId = operatorProvider.RoleId;
             var moduleId = WebHelper.GetCookie("cms_currentmoduleid");
+            var moduleName = WebHelper.GetCookie("cms_currentmodulename");
+            moduleName = HttpUtility.UrlDecode(moduleName);
             var action = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-            return new RoleAuthorizeApp().ActionValidate(roleId, moduleId, action);
+            bool bStatus = new RoleAuthorizeApp().ActionValidate(roleId, moduleId, action);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(bStatus, "访问菜单=>" + moduleName + "=>路径：" + action, Enums.DbLogType.Visit, moduleName);
+            return bStatus;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Domain.IRepository.WebManage;
@@ -78,14 +79,8 @@ namespace CMS.Application.SystemManage
                 List<UserWebSiteEntity> entitys = new List<UserWebSiteEntity>();
                 foreach (var webSiteId in webSiteIds)
                 {
-                    UserWebSiteEntity entity = new UserWebSiteEntity();
-                    entity.Create();
-                    entity.UserId = UserId;
-                    entity.WebSiteId = webSiteId;
-                    entity.EnabledMark = true;
-                    entitys.Add(entity);
+                    AddUserWebSite(UserId, webSiteId);
                 }
-                service.Insert(entitys);
             }
         }
 
@@ -104,6 +99,8 @@ namespace CMS.Application.SystemManage
                 entity.WebSiteId = webSiteIds;
                 entity.EnabledMark = true;
                 service.Insert(entity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加用户站点信息=>用户：" + UserId + "=>站点：" + webSiteIds, Enums.DbLogType.Create, "用户站点管理");
             }
         }
         /// <summary>
@@ -113,6 +110,8 @@ namespace CMS.Application.SystemManage
         public void DeleteForm(string userId)
         {
             service.DeleteById(m => m.UserId == userId);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除用户站点信息=>" + userId, Enums.DbLogType.Delete, "用户站点管理");
         }
     }
 }

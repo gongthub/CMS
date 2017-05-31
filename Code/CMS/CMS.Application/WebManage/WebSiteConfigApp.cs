@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -33,6 +34,8 @@ namespace CMS.Application.WebManage
                 webSiteConfigEntity.SearchEnabledMark = false;
                 webSiteConfigEntity.Create();
                 service.Insert(webSiteConfigEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加站点配置信息=>" + webSiteConfigEntity.WebSiteId, Enums.DbLogType.Create, "站点配置");
             }
         }
         public bool UpdateSearchEnableByWebSiteId(string webSiteId, bool searchEnabled)
@@ -46,6 +49,8 @@ namespace CMS.Application.WebManage
                     webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
                     webSiteConfigEntity.SearchEnabledMark = searchEnabled;
                     service.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置全站搜索=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + searchEnabled, Enums.DbLogType.Create, "站点配置=>全站搜索");
                 }
                 else
                 {
@@ -70,6 +75,8 @@ namespace CMS.Application.WebManage
                     webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
                     webSiteConfigEntity.ServiceEnabledMark = serviceEnabled;
                     service.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置站点维护=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + serviceEnabled, Enums.DbLogType.Create, "站点配置=>站点维护");
                 }
                 else
                 {

@@ -1,4 +1,6 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.Comm;
+using CMS.Application.WebManage;
+using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
@@ -661,6 +663,8 @@ namespace CMS.Application.SystemManage
                 {
                     bState = true;
                 }
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "上传文件=>" + upFileEntity.FileName, Enums.DbLogType.Create, "文件管理");
             }
             else
             {
@@ -694,6 +698,8 @@ namespace CMS.Application.SystemManage
                 {
                     bState = true;
                 }
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "上传文件=>" + upFileEntity.FileName, Enums.DbLogType.Create, "文件管理");
             }
             else
             {

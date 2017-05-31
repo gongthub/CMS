@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemSecurity;
 using CMS.Domain.IRepository.SystemSecurity;
 using CMS.Repository.SystemSecurity;
@@ -40,6 +41,8 @@ namespace CMS.Application.SystemSecurity
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(m => m.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除数据库备份信息=>" + keyValue, Enums.DbLogType.Delete, "数据库备份管理");
         }
         public void SubmitForm(DbBackupEntity dbBackupEntity)
         {
@@ -55,6 +58,8 @@ namespace CMS.Application.SystemSecurity
             }
             dbBackupEntity.CreatorTime = DateTime.Now;
             service.ExecuteDbBackup(dbBackupEntity);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "添加数据库备份信息", Enums.DbLogType.Create, "数据库备份管理");
         }
     }
 }

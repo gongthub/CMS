@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -89,10 +90,11 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除栏目信息=>" + keyValue, Enums.DbLogType.Delete, "栏目管理");
         }
         public void SubmitForm(ColumnsEntity moduleEntity, string keyValue)
         {
-            //if (!IsExistActionName(keyValue, moduleEntity.ActionName))
             if (!service.IsExist(keyValue, "ActionName", moduleEntity.ActionName, moduleEntity.WebSiteId, true))
             {
                 if (!Common.IsSystemHaveName(moduleEntity.ActionName) && !Common.IsSearch(moduleEntity.ActionName))
@@ -112,7 +114,10 @@ namespace CMS.Application.WebManage
                                 });
                             }
                         }
+
                         service.Update(moduleEntity);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "修改栏目信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "栏目管理");
                     }
                     else
                     {
@@ -131,6 +136,8 @@ namespace CMS.Application.WebManage
                             }
                         }
                         service.Insert(moduleEntity);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "添加栏目信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "栏目管理");
                     }
                 }
                 else

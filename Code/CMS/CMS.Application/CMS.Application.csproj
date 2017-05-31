@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comm\ConfigHelp.cs" />
+    <Compile Include="Comm\LogHelp.cs" />
     <Compile Include="Comm\LucenceHelp.cs" />
     <Compile Include="Comm\QueryableHelp.cs" />
     <Compile Include="Comm\RequestHelp.cs" />

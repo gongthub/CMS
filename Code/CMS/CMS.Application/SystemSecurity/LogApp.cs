@@ -83,23 +83,7 @@ namespace CMS.Application.SystemSecurity
             expression = expression.And(t => t.Date <= operateTime);
             service.DeleteById(expression);
         }
-        public void WriteDbLog(bool result, string resultLog)
-        {
-            LogEntity logEntity = new LogEntity();
-            logEntity.Id = Common.GuId();
-            logEntity.Date = DateTime.Now;
-            //logEntity.Account = OperatorProvider.Provider.GetCurrent().UserCode;
-            //logEntity.NickName = OperatorProvider.Provider.GetCurrent().UserName;
-            logEntity.Account = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserCode;
-            logEntity.NickName = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserName;
-            logEntity.IPAddress = Net.Ip;
-            logEntity.IPAddressName = Net.GetLocation(logEntity.IPAddress);
-            logEntity.Result = result;
-            logEntity.Description = resultLog;
-            logEntity.Create();
-            service.Insert(logEntity);
-        }
-        public void WriteDbLog(LogEntity logEntity)
+        public void AddDbLog(LogEntity logEntity)
         {
             logEntity.Id = Common.GuId();
             logEntity.Date = DateTime.Now;

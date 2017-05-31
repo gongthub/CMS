@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.WebManage;
@@ -87,11 +88,15 @@ namespace CMS.Application.WebManage
                 {
                     moduleEntity.Modify(keyValue);
                     service.Update(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改关键词信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "关键词管理");
                 }
                 else
                 {
                     moduleEntity.Create();
                     service.Insert(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加关键词信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "关键词管理");
                 }
             }
             else
@@ -102,6 +107,8 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除关键词信息=>" + keyValue, Enums.DbLogType.Delete, "关键词管理");
         }
 
         /// <summary>

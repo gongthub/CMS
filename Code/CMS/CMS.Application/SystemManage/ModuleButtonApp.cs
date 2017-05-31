@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
@@ -36,6 +37,8 @@ namespace CMS.Application.SystemManage
             {
                 service.DeleteById(t => t.Id == keyValue);
             }
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除按钮信息=>" + keyValue, Enums.DbLogType.Delete, "按钮管理");
         }
         public void SubmitForm(ModuleButtonEntity moduleButtonEntity, string keyValue)
         {
@@ -43,11 +46,15 @@ namespace CMS.Application.SystemManage
             {
                 moduleButtonEntity.Modify(keyValue);
                 service.Update(moduleButtonEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改按钮信息=>" + moduleButtonEntity.FullName, Enums.DbLogType.Update, "按钮管理");
             }
             else
             {
                 moduleButtonEntity.Create();
                 service.Insert(moduleButtonEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加按钮信息=>" + moduleButtonEntity.FullName, Enums.DbLogType.Create, "按钮管理");
             }
         }
         public void SubmitCloneButton(string moduleId, string Ids)
@@ -63,6 +70,8 @@ namespace CMS.Application.SystemManage
                 entitys.Add(moduleButtonEntity);
             }
             service.SubmitCloneButton(entitys);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "克隆按钮信息=>" + ArrayId.ToString(), Enums.DbLogType.Create, "按钮管理");
         }
     }
 }

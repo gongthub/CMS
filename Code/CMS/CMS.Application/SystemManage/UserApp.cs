@@ -1,4 +1,5 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.Comm;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
@@ -50,15 +51,19 @@ namespace CMS.Application.SystemManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(m => m.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除用户信息=>" + keyValue, Enums.DbLogType.Delete, "用户管理");
         }
         public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string[] webSiteIds)
         {
+            bool IsAdd = true;
             userEntity.Account = userEntity.Account.Trim();
             if (!service.IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
                     userEntity.Modify(keyValue);
+                    IsAdd = false;
                 }
                 else
                 {
@@ -67,6 +72,17 @@ namespace CMS.Application.SystemManage
                 service.SubmitForm(userEntity, userLogOnEntity, keyValue);
                 UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
                 userWebSiteApp.SaveUserWebSite(userEntity.Id, webSiteIds);
+
+                if (IsAdd)
+                {
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加用户信息=>" + userEntity.Account, Enums.DbLogType.Create, "用户管理");
+                }
+                else
+                {
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改用户信息=>" + userEntity.Account, Enums.DbLogType.Update, "用户管理");
+                }
             }
             else
             {
@@ -76,6 +92,8 @@ namespace CMS.Application.SystemManage
         public void UpdateForm(UserEntity userEntity)
         {
             service.Update(userEntity);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "修改用户信息=>" + userEntity.Account, Enums.DbLogType.Update, "用户管理");
         }
         public UserEntity CheckLogin(string username, string password)
         {

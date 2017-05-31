@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
@@ -32,6 +33,8 @@ namespace CMS.Application.SystemManage
             userLogOnEntity.UserSecretkey = Md5.md5(Common.CreateNo(), 16).ToLower();
             userLogOnEntity.UserPassword = Md5.md5(DESEncrypt.Encrypt(Md5.md5(userPassword, 32).ToLower(), userLogOnEntity.UserSecretkey).ToLower(), 32).ToLower();
             service.Update(userLogOnEntity);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "重置用户密码=>" + userLogOnEntity.UserId, Enums.DbLogType.Update, "用户管理");
         }
     }
 }

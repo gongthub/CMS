@@ -248,9 +248,6 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            //数据验证
-            VerifyEntity(moduleEntity);
-
             if (moduleEntity.FullName.ToLower() != ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
             {
                 if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
@@ -259,11 +256,15 @@ namespace CMS.Application.WebManage
                     {
                         moduleEntity.Modify(keyValue);
                         service.Update(moduleEntity);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "修改模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "模板管理");
                     }
                     else
                     {
                         moduleEntity.Create();
                         service.Insert(moduleEntity);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "添加模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "模板管理");
                     }
                 }
                 else
@@ -279,6 +280,8 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除模板信息=>" + keyValue, Enums.DbLogType.Delete, "模板管理");
         }
 
         public bool IsExistSearchModel(string WebSiteId)
@@ -290,22 +293,6 @@ namespace CMS.Application.WebManage
                 bState = true;
             }
             return bState;
-        }
-
-        /// <summary>
-        /// 数据格式验证
-        /// </summary>
-        /// <param name="moduleEntity"></param>
-        private void VerifyEntity(TempletEntity moduleEntity)
-        {
-            if (string.IsNullOrEmpty(moduleEntity.FullName))
-            {
-                throw new Exception("模板名称不能为空！");
-            }
-            if (moduleEntity.SortCode==null)
-            {
-                throw new Exception("显示顺序不能为空！");
-            }
         }
     }
 }

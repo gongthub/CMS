@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemSecurity;
 using CMS.Domain.IRepository.SystemSecurity;
 using CMS.Repository.SystemSecurity;
@@ -28,6 +29,8 @@ namespace CMS.Application.SystemSecurity
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除IP限制信息=>" + keyValue, Enums.DbLogType.Delete, "IP限制管理");
         }
         public void SubmitForm(FilterIPEntity filterIPEntity, string keyValue)
         {
@@ -35,11 +38,15 @@ namespace CMS.Application.SystemSecurity
             {
                 filterIPEntity.Modify(keyValue);
                 service.Update(filterIPEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改IP限制信息=>" + filterIPEntity.StartIP + "-" + filterIPEntity.EndIP, Enums.DbLogType.Update, "IP限制管理");
             }
             else
             {
                 filterIPEntity.Create();
                 service.Insert(filterIPEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加IP限制信息=>" + filterIPEntity.StartIP + "-" + filterIPEntity.EndIP, Enums.DbLogType.Create, "IP限制管理");
             }
         }
     }

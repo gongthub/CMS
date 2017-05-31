@@ -30,31 +30,18 @@ namespace CMS.Web.Controllers
         [HttpGet]
         public ActionResult OutLogin()
         {
-            new LogApp().WriteDbLog(new LogEntity
-            {
-                ModuleName = "系统登录",
-                Type = Code.Enums.DbLogType.Exit.ToString(),
-                //Account = OperatorProvider.Provider.GetCurrent().UserCode,
-                //NickName = OperatorProvider.Provider.GetCurrent().UserName,
-                Account = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserCode,
-                NickName = SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserName,
-                Result = true,
-                Description = "安全退出系统",
-            });
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "安全退出系统", Code.Enums.DbLogType.Exit, "系统登录");
+
             Session.Abandon();
             Session.Clear();
-            //OperatorProvider.Provider.RemoveCurrent();
             SysLoginObjHelp.sysLoginObjHelp.RemoveOperator();
-            //RedirectToAction("Index", "Login");
             return Redirect("Index");
         }
         [HttpPost]
         [HandlerAjaxOnly]
         public ActionResult CheckLogin(string username, string password, string code)
         {
-            LogEntity logEntity = new LogEntity();
-            logEntity.ModuleName = "系统登录";
-            logEntity.Type = Code.Enums.DbLogType.Login.ToString();
             try
             {
                 if (SysLoginObjHelp.sysLoginObjHelp.GetVerifyCode().IsEmpty() || Md5.md5(code.ToLower(), 16) != SysLoginObjHelp.sysLoginObjHelp.GetVerifyCode())
@@ -86,23 +73,17 @@ namespace CMS.Web.Controllers
                             operatorModel.UserLevel = (int)Code.Enums.UserLevel.SystemUser;
                         }
                     }
-                    //OperatorProvider.Provider.AddCurrent(operatorModel);
                     SysLoginObjHelp.sysLoginObjHelp.AddOperator(operatorModel);
-                    logEntity.Account = userEntity.Account;
-                    logEntity.NickName = userEntity.RealName;
-                    logEntity.Result = true;
-                    logEntity.Description = "登录成功";
-                    new LogApp().WriteDbLog(logEntity);
                 }
+
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "登录成功", Code.Enums.DbLogType.Login, "系统登录");
                 return Content(new AjaxResult { state = ResultType.success.ToString(), message = "登录成功。" }.ToJson());
             }
             catch (Exception ex)
             {
-                logEntity.Account = username;
-                logEntity.NickName = username;
-                logEntity.Result = false;
-                logEntity.Description = "登录失败，" + ex.Message;
-                new LogApp().WriteDbLog(logEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "登录失败" + ex.Message, Code.Enums.DbLogType.Login, "系统登录", username, username);
                 return Content(new AjaxResult { state = ResultType.error.ToString(), message = ex.Message }.ToJson());
             }
         }

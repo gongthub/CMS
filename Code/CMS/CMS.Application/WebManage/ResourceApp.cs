@@ -1,4 +1,6 @@
-﻿using CMS.Domain.Entity.WebManage;
+﻿using CMS.Application.Comm;
+using CMS.Code;
+using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +71,8 @@ namespace CMS.Application.WebManage
                 CreateDirVerify(model);
 
                 Code.FileHelper.CreateDirectory(model.UrlAddress);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加资源管理文件夹=>" + model.UrlAddress, Enums.DbLogType.Create, "资源管理");
             }
         }
 
@@ -97,6 +101,8 @@ namespace CMS.Application.WebManage
                         Code.FileHelper.DeleteFile(model.UrlAddress, true);
                     }
             }
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除资源管理文件夹=>" + model.UrlAddress, Enums.DbLogType.Delete, "资源管理");
         }
 
         /// <summary>

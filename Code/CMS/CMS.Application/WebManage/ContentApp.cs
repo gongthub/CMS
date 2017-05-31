@@ -182,10 +182,14 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.Delete(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除内容信息=>" + keyValue, Enums.DbLogType.Delete, "内容管理");
         }
         public void DeleteFormById(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除内容信息=>" + keyValue, Enums.DbLogType.Delete, "内容管理");
         }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
@@ -196,6 +200,8 @@ namespace CMS.Application.WebManage
                 {
                     moduleEntity.Modify(keyValue);
                     service.Update(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "内容管理");
                 }
                 else
                 {
@@ -211,6 +217,8 @@ namespace CMS.Application.WebManage
                         moduleEntity.UrlAddress = urlAddress;
                         SubmitForm(moduleEntity, moduleEntity.Id);
                     }
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "内容管理");
                 }
             }
             else
@@ -227,6 +235,8 @@ namespace CMS.Application.WebManage
                 {
                     moduleEntity.Modify(keyValue);
                     service.Update(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "内容管理");
                 }
                 else
                 {
@@ -243,6 +253,8 @@ namespace CMS.Application.WebManage
                         moduleEntity.UrlAddress = urlAddress;
                         SubmitForm(moduleEntity, moduleEntity.Id);
                     }
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "内容管理");
                 }
                 if (upFileentitys != null && upFileentitys.Count > 0)
                 {
@@ -305,6 +317,8 @@ namespace CMS.Application.WebManage
                     TempHelp.tempHelp.GenHtmlPage(templets, keyValue);
                 }
             }
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
         }
 
         /// <summary>

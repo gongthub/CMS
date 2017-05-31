@@ -1,4 +1,5 @@
-﻿using CMS.Application.SystemManage;
+﻿using CMS.Application.Comm;
+using CMS.Application.SystemManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
@@ -135,6 +136,8 @@ namespace CMS.Application.WebManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除站点信息=>" + keyValue, Enums.DbLogType.Delete, "站点管理");
         }
         public void SubmitForm(WebSiteEntity moduleEntity, string keyValue)
         {
@@ -146,6 +149,8 @@ namespace CMS.Application.WebManage
                 {
                     moduleEntity.Modify(keyValue);
                     service.Update(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "站点管理");
                 }
                 else
                 {
@@ -165,6 +170,8 @@ namespace CMS.Application.WebManage
                         new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
                         //添加站点搜索模板
                         new TempletApp().AddSearchModel(moduleEntity.Id);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                     }
                     else
                     {
@@ -190,6 +197,8 @@ namespace CMS.Application.WebManage
                     {
                         moduleEntity.Modify(keyValue);
                         service.Update(moduleEntity);
+                        //添加日志
+                        LogHelp.logHelp.WriteDbLog(true, "修改站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "站点管理");
                     }
                     else
                     {
@@ -206,6 +215,8 @@ namespace CMS.Application.WebManage
                             {
                                 new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
                             }
+                            //添加日志
+                            LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                         }
                         else
                         {

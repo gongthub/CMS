@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
@@ -80,7 +81,7 @@ namespace CMS.Application.SystemManage
                         else
                         {
                             expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
-                        } 
+                        }
                     }
                 }
             }
@@ -93,13 +94,17 @@ namespace CMS.Application.SystemManage
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(m => m.Id == keyValue);
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除角色信息=>" + keyValue, Enums.DbLogType.Delete, "角色管理");
         }
         public void SubmitForm(RoleEntity roleEntity, string[] permissionIds, string keyValue)
         {
+            bool IsAdd = true;
             if (!string.IsNullOrEmpty(keyValue))
             {
                 roleEntity.Modify(keyValue);
                 roleEntity.Id = keyValue;
+                IsAdd = false;
             }
             else
             {
@@ -127,6 +132,16 @@ namespace CMS.Application.SystemManage
                 roleAuthorizeEntitys.Add(roleAuthorizeEntity);
             }
             service.SubmitForm(roleEntity, roleAuthorizeEntitys, keyValue);
+            if (IsAdd)
+            {
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加角色信息=>" + roleEntity.FullName, Enums.DbLogType.Create, "角色管理");
+            }
+            else
+            {
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改角色信息=>" + roleEntity.FullName, Enums.DbLogType.Update, "角色管理");
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using CMS.Domain.Entity.SystemManage;
+﻿using CMS.Application.Comm;
+using CMS.Code;
+using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
 using System;
@@ -29,6 +31,8 @@ namespace CMS.Application.SystemManage
             {
                 service.DeleteById(t => t.Id == keyValue);
             }
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除机构信息=>" + keyValue, Enums.DbLogType.Delete, "机构管理");
         }
         public void SubmitForm(OrganizeEntity organizeEntity, string keyValue)
         {
@@ -36,11 +40,15 @@ namespace CMS.Application.SystemManage
             {
                 organizeEntity.Modify(keyValue);
                 service.Update(organizeEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改机构信息=>" + organizeEntity.FullName, Enums.DbLogType.Update, "机构管理");
             }
             else
             {
                 organizeEntity.Create();
                 service.Insert(organizeEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加机构信息=>" + organizeEntity.FullName, Enums.DbLogType.Create, "机构管理");
             }
         }
     }

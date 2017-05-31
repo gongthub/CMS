@@ -1,4 +1,6 @@
-﻿using CMS.Domain.Entity.SystemManage;
+﻿using CMS.Application.Comm;
+using CMS.Code;
+using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Repository.SystemManage;
 using System;
@@ -29,6 +31,8 @@ namespace CMS.Application.SystemManage
             {
                 service.DeleteById(t => t.Id == keyValue);
             }
+            //添加日志
+            LogHelp.logHelp.WriteDbLog(true, "删除区域信息=>" + keyValue, Enums.DbLogType.Delete, "区域管理");
         }
         public void SubmitForm(AreaEntity areaEntity, string keyValue)
         {
@@ -36,11 +40,15 @@ namespace CMS.Application.SystemManage
             {
                 areaEntity.Modify(keyValue);
                 service.Update(areaEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "修改区域信息=>" + areaEntity.FullName, Enums.DbLogType.Update, "区域管理");
             }
             else
             {
                 areaEntity.Create();
                 service.Insert(areaEntity);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "添加区域信息=>" + areaEntity.FullName, Enums.DbLogType.Create, "区域管理");
             }
         }
     }
