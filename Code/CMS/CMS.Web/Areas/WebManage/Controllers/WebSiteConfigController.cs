@@ -30,6 +30,31 @@ namespace CMS.Web.Areas.WebManage.Controllers
             return Content(data.ToJson());
         }
 
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult MessageConfig()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult IsMessage()
+        {
+            try
+            {
+                bool bState = webSiteConfigApp.IsMessage(Base_WebSiteId);
+                return Success(bState.ToString().ToLower());
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
@@ -39,6 +64,23 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 webSiteConfigApp.UpdateSearchEnableByWebSiteId(Base_WebSiteId, searchEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateMessageEnabled(bool messageEnabled)
+        {
+            try
+            {
+                webSiteConfigApp.UpdateMessageEnableByWebSiteId(Base_WebSiteId, messageEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)

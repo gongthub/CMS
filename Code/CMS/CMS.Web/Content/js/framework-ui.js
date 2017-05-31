@@ -546,7 +546,7 @@ $.getPost = function (options) {
                     success: function (data) {
                         if (data.state == "success") {
                             options.success(data);
-                            $.modalMsg(data.message, data.state);
+                            //$.modalMsg(data.message, data.state);
                         } else {
                             $.modalAlert(data.message, data.state);
                         }
@@ -592,7 +592,7 @@ $.getPostNoConfirm = function (options) {
             success: function (data) {
                 if (data.state == "success") {
                     options.success(data);
-                    $.modalMsg(data.message, data.state);
+                    //$.modalMsg(data.message, data.state);
                 } else {
                     $.modalAlert(data.message, data.state);
                 }

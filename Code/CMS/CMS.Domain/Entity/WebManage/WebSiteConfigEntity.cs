@@ -29,6 +29,10 @@ namespace CMS.Domain.Entity.WebManage
         /// 网站维护中标识
         /// </summary>		
         public bool ServiceEnabledMark { get; set; }
+        /// <summary>
+        /// 网站留言板标识
+        /// </summary>		
+        public bool MessageEnabledMark { get; set; }
 
         /// <summary>
         /// EnabledMark

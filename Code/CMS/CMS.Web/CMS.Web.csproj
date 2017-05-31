@@ -983,6 +983,7 @@
     <Content Include="Areas\WebManage\Views\KeyWordConfig\Details.cshtml" />
     <Content Include="Areas\WebManage\Views\KeyWordConfig\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\KeyWordConfig\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteConfig\MessageConfig.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

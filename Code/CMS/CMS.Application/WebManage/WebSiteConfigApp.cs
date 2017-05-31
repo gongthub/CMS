@@ -63,6 +63,31 @@ namespace CMS.Application.WebManage
             }
             return bState;
         }
+        public bool UpdateMessageEnableByWebSiteId(string webSiteId, bool messageEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.MessageEnabledMark = messageEnabled;
+                    service.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置留言板=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + messageEnabled, Enums.DbLogType.Create, "站点配置=>留言板");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
 
         public bool UpdateServiceEnableByWebSiteId(string webSiteId, bool serviceEnabled)
         {
@@ -119,6 +144,27 @@ namespace CMS.Application.WebManage
                 if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
                 {
                     bState = webSiteConfigEntity.ServiceEnabledMark;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            catch
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        public bool IsMessage(string webSiteId)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.MessageEnabledMark;
                 }
                 else
                 {

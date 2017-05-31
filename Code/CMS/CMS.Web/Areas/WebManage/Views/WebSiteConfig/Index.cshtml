@@ -20,8 +20,25 @@
                             <input id="ckIsServiceEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
                         }
                     </td>
+
                 </tr>
-                <tr></tr>
+                <tr>
+                    <th class="formTitle">留言板</th>
+                    <td class="formValue">
+                        @if (Model.MessageEnabledMark)
+                        {
+                            <input id="ckIsMessageEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsMessageEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
+                    </td>
+                    <th class="formTitle">留言板配置</th>
+                    <td class="formValue">
+                        <a onclick="setMessageConfig()" class="btn  btn-primary">留言板配置</a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -60,6 +77,9 @@
             $("#ckIsServiceEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setServiceEnabled(state);
             });
+            $("#ckIsMessageEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setMessageEnabled(state);
+            });
         });
 
         //设置全站搜索开关
@@ -72,6 +92,17 @@
                 }
             })
         }
+        //设置留言板标识
+        function setMessageEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateMessageEnabled",
+                param: { messageEnabled: state },
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+
         //设置站点维护
         function setServiceEnabled(state) {
             $.getPostNoConfirm({
@@ -79,6 +110,28 @@
                 param: { serviceEnabled: state },
                 success: function (data) {
                     $.modalAlert(data.message);
+                }
+            })
+        }
+
+        //留言板配置
+        function setMessageConfig() {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/IsMessage",
+                param: {},
+                success: function (data) {
+                    if (data.message == 'true') {
+                        $.modalOpen({
+                            id: "MessageConfig",
+                            title: "留言板配置",
+                            url: "/WebManage/WebSiteConfig/MessageConfig",
+                            width: "800px",
+                            height: "550px",
+                            btn: null
+                        });
+                    } else {
+                        $.modalAlert('请先开启留言板功能！');
+                    }
                 }
             })
         }
