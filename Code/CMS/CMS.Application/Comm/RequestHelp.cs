@@ -275,5 +275,21 @@ namespace CMS.Application.Comm
             }
             return urlHost;
         }
+
+
+        /// <summary>
+        /// 获取请求urlHost
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public string GetHostRequest(System.Web.HttpRequestBase request)
+        {
+            string urlHost = request.Url.Host;
+            if (!request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
+            {
+                urlHost = request.Url.Authority;
+            }
+            return urlHost;
+        }
     }
 }

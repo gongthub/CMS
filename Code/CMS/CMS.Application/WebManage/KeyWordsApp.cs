@@ -43,7 +43,7 @@ namespace CMS.Application.WebManage
             return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderByDescending(t => t.CreatorTime).ToList();
 
         }
-        public List<KeyWordsEntity> GetListByWebSiteId(Pagination pagination, string keyword, string WebSiteId)
+        public List<KeyWordsEntity> GetListByWebSiteId(string WebSiteId,Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<KeyWordsEntity>();
             if (!string.IsNullOrEmpty(keyword))

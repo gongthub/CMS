@@ -7,8 +7,7 @@ namespace CMS.Domain.Entity.SystemManage
     public class ModuleEntity : IEntity<ModuleEntity>, ICreationAudited, IModificationAudited, IDeleteAudited
     {
         public string Id { get; set; }
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
-        [Description("父级")]
+
         public string ParentId { get; set; }
         public int? Layers { get; set; }
         public string EnCode { get; set; }

@@ -65,6 +65,21 @@ namespace CMS.Application.WebManage
         /// 根据域名获取实体
         /// </summary>
         /// <returns></returns>
+        public string GetWebSiteId(System.Web.HttpRequestBase request)
+        {
+            string webSiteIds = string.Empty;
+            string hosturl = Comm.RequestHelp.requestHelp.GetHostRequest(request);
+            WebSiteEntity webSiteEntity = GetModelByUrlHost(hosturl);
+            if (webSiteEntity != null)
+            {
+                webSiteIds = webSiteEntity.Id;
+            }
+            return webSiteIds;
+        }
+        /// <summary>
+        /// 根据域名获取实体
+        /// </summary>
+        /// <returns></returns>
         public WebSiteEntity GetModelByShortName(string shortName)
         {
             WebSiteEntity webSiteEntity = new WebSiteEntity();

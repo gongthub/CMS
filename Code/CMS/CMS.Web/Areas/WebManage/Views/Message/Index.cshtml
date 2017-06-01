@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除留言</a></li>
+                <li><a id="NF-Details" authorize="yes" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看详情</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+</div>
+@section scripts {
+    <script>
+        $(function () {
+            gridList();
+        })
+        function gridList() {
+
+            $.ajax({
+                url: "/WebManage/Message/GetListTitle",
+                data: {},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    var dataT = eval('(' + data + ')');
+                    var $gridList = $("#gridList");
+                    $gridList.dataGrid({
+                        url: "/WebManage/Message/GetGridJson",
+                        height: $(window).height() - 96,
+                        colModel: dataT
+                    });
+                }
+            });
+            $("#btn_search").click(function () {
+                $gridList.jqGrid('setGridParam', {
+                    postData: { keyword: $("#txt_keyword").val() },
+                }).trigger('reloadGrid');
+            });
+        }
+
+        function btn_delete() {
+            var keyValue = $("#gridList").jqGridRowValue().Id;
+            if (keyValue != null && keyValue != undefined) {
+                $.deleteForm({
+                    url: "/WebManage/Message/DeleteForm",
+                    param: { keyValue: keyValue },
+                    success: function () {
+                        $.currentWindow().$("#gridList").resetSelection();
+                        $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
+                })
+            }
+            else {
+                alert("请选择一条数据！");
+            }
+        }
+
+        function btn_details() {
+            var keyValue = $("#gridList").jqGridRowValue().Id;
+            if (keyValue != null && keyValue != undefined) {
+                $.modalOpen({
+                    id: "MessageDetails",
+                    title: "查看详情",
+                    url: "/WebManage/Message/MessageDetails?keyValue=" + keyValue,
+                    width: "800px",
+                    height: "550px",
+                    btn: null,
+                });
+            }
+            else {
+                alert("请选择一条数据！");
+            }
+        }
+    </script>
+}

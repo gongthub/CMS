@@ -1324,7 +1324,7 @@ namespace CMS.Application.Comm
         {
             bool retBol = false;
             List<string> urlRaws = WebHelper.GetUrls(urlRaw);
-            WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByUrl(urlhost);
+            WebSiteEntity webSiteEntity = new WebSiteApp().GetModelByUrlHost(urlhost);
             if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
             {
                 ColumnsApp c_ModulesApp = new ColumnsApp();

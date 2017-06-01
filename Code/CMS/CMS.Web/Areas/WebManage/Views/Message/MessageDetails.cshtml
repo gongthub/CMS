@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@model List<CMS.Domain.Entity.WebManage.MessageConfigEntity>
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <div style="padding-top: 10px; margin-right: 10px;">
+            <table class="form">
+                @if (Model != null && Model.Count > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                @item.ColumnShowName：
+                            </th>
+                            <td class="formValue" colspan="3">
+                                @item.MessageValue
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</form>
+@section scripts {
+}

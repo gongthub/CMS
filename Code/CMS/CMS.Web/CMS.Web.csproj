@@ -695,6 +695,7 @@
     <Content Include="Content\js\wdtree\images\tree\loading.gif" />
     <Content Include="Content\js\wdtree\tree.css" />
     <Content Include="Content\js\wdtree\tree.js" />
+    <Content Include="Content\js\website\webSiteCommon.js" />
     <Content Include="Content\js\wizard\wizard.css" />
     <Content Include="Content\js\wizard\wizard.js" />
     <Content Include="Content\js\zsign\jquery.zsign.css" />
@@ -762,6 +763,7 @@
     <Content Include="Html\js\modernizr.custom.97074.js" />
     <Content Include="Html\js\numscroller-1.0.js" />
     <Content Include="Html\js\owl.carousel.js" />
+    <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
     <Content Include="SysPage\500\500.html" />
@@ -808,6 +810,7 @@
     <Compile Include="Areas\WebManage\Controllers\ContentController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ColumnsController.cs" />
     <Compile Include="Areas\WebManage\Controllers\KeyWordConfigController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\MessageController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ResourceController.cs" />
     <Compile Include="Areas\WebManage\Controllers\TempletController.cs" />
     <Compile Include="Areas\WebManage\Controllers\WebSiteConfigController.cs" />
@@ -825,6 +828,7 @@
     <Compile Include="Controllers\ClientsDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\WebSiteCommonController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -984,6 +988,8 @@
     <Content Include="Areas\WebManage\Views\KeyWordConfig\Form.cshtml" />
     <Content Include="Areas\WebManage\Views\KeyWordConfig\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\WebSiteConfig\MessageConfig.cshtml" />
+    <Content Include="Areas\WebManage\Views\Message\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Message\MessageDetails.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

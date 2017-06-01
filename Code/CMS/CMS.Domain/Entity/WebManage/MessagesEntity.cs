@@ -15,7 +15,6 @@ namespace CMS.Domain.Entity.WebManage
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
         [Description("站点")]
         public string WebSiteId { get; set; }
-        public string ColumnId { get; set; }
 
         public int SortCode { get; set; }
         public string UserName { get; set; }

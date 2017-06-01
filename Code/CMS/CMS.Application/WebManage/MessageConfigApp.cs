@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,6 @@ namespace CMS.Application.WebManage
     public class MessageConfigApp
     {
         private IMessageConfigRepository service = new MessageConfigRepository();
-
 
         public string GetFormJsonStr(string webSiteId)
         {
@@ -46,12 +46,71 @@ namespace CMS.Application.WebManage
 
             return JsonStr.ToString();
         }
+        public string GetListTitleJsonStr(string webSiteId)
+        {
+            StringBuilder JsonStr = new StringBuilder();
+            List<MessageConfigEntity> models = GetFormsListShow(webSiteId);
+            if (models != null && models.Count > 0)
+            {
+                JsonStr.Append("[");
+
+                JsonStr.Append("{ label: '主键', name: 'Id', hidden: true, key: true },");
+                foreach (MessageConfigEntity model in models)
+                {
+                    JsonStr.Append("{ label: '" + model.ColumnShowName + "', name: '" + model.ColumnName + "', width: 200, align: 'left' },");
+                }
+                JsonStr.Append("{ label: '时间', name: 'CreatorTime', width: 200, align: 'left' }");
+                JsonStr.Append("]");
+            }
+
+            return JsonStr.ToString();
+        }
+
+
+        public List<MessageConfigEntity> GetViewShow(string webSiteId, string keyValue)
+        {
+            List<MessageConfigEntity> models = GetFormsViewShow(webSiteId);
+            MessagesEntity messageEntity = new MessagesApp().GetFormNoDel(keyValue);
+            if (messageEntity != null && !string.IsNullOrEmpty(messageEntity.Id))
+            {
+                if (models != null && models.Count > 0)
+                {
+                    PropertyInfo[] infos = messageEntity.GetType().GetProperties();
+                    if (infos != null && infos.Count() > 0)
+                    {
+                        foreach (MessageConfigEntity model in models)
+                        {
+                            PropertyInfo info = infos.FirstOrDefault(m => m.Name == model.ColumnName);
+                            if (info != null)
+                            {
+                                object val = messageEntity.GetType().GetProperty(info.Name).GetValue(messageEntity, null);
+                                if (val != null)
+                                    model.MessageValue = val.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("选择数据不存在！");
+            }
+
+            return models;
+        }
 
         public List<MessageConfigEntity> GetForms(string webSiteId)
         {
-            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).ToList();
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).OrderBy(m => m.CreatorTime).ToList();
         }
-
+        public List<MessageConfigEntity> GetFormsListShow(string webSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true && m.EnabledMark == true && m.ListShowMark == true).OrderBy(m => m.CreatorTime).ToList();
+        }
+        public List<MessageConfigEntity> GetFormsViewShow(string webSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true && m.EnabledMark == true && m.ViewShowMark == true).OrderBy(m => m.CreatorTime).ToList();
+        }
 
         public void DeleteForm(string webSiteId)
         {
