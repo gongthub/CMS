@@ -61,6 +61,18 @@ namespace CMS.Application.Comm
                 return bIsOpenPort;
             }
         }
+        /// <summary>
+        /// 设置留言间隔时长 单位：秒
+        /// </summary>
+        public int MESSAGETIME
+        {
+            get
+            {
+                int timenum = 0;
+                int.TryParse(Code.Configs.GetValue("MessageTime").ToString(), out timenum);
+                return timenum;
+            }
+        }
         #endregion
 
         #region 上传图片配置

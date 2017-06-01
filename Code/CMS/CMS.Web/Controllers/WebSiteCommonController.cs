@@ -18,13 +18,14 @@ namespace CMS.Web.Controllers
             try
             {
                 string webSiteIds = new WebSiteApp().GetWebSiteId(HttpContext.Request);
+                moduleEntity.SessionId = HttpContext.Session.SessionID;
                 moduleEntity.WebSiteId = webSiteIds;
                 messagesApp.AddForm(moduleEntity);
                 return Json(new { state = true, message = "提交成功。" });
             }
             catch (Exception e)
             {
-                return Json(new { state = false, message = "提交失败。" });
+                return Json(new { state = false, message = "提交失败。" + e.Message });
             }
         }
     }

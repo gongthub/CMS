@@ -12,6 +12,10 @@ namespace CMS.Domain.Entity.WebManage
     {
         public string Id { get; set; }
 
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
+        [Description("SessionId")]
+        public string SessionId { get; set; }
+
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
         [Description("站点")]
         public string WebSiteId { get; set; }

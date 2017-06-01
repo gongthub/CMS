@@ -70,6 +70,7 @@ namespace CMS.Application.WebManage
         }
         public void AddForm(MessagesEntity moduleEntity)
         {
+            VerityTime(moduleEntity);
             moduleEntity.EnabledMark = true;
             moduleEntity.Create();
             service.Insert(moduleEntity);
@@ -98,6 +99,29 @@ namespace CMS.Application.WebManage
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除留言信息=>" + keyValue, Enums.DbLogType.Delete, "留言管理");
+        }
+
+        /// <summary>
+        /// 验证留言间隔时间
+        /// </summary>
+        /// <param name="moduleEntity"></param>
+        public void VerityTime(MessagesEntity moduleEntity)
+        {
+            MessagesEntity model = service.IQueryable(m => m.SessionId == moduleEntity.SessionId).OrderByDescending(m => m.CreatorTime).FirstOrDefault();
+            if (model != null && !string.IsNullOrEmpty(model.Id) && model.CreatorTime!=null)
+            {
+                int timtNum = ConfigHelp.configHelp.MESSAGETIME;
+                DateTime NowTime = DateTime.Now;
+                TimeSpan tNow = new System.TimeSpan(NowTime.Ticks);
+
+                TimeSpan tCreateTime = new System.TimeSpan(Convert.ToDateTime(model.CreatorTime).Ticks);
+                 
+                TimeSpan tsSub = tNow.Subtract(tCreateTime).Duration();
+                if (tsSub.TotalSeconds < timtNum)
+                {
+                    throw new Exception("请稍等一会再提交！");
+                }
+            }
         }
     }
 }
