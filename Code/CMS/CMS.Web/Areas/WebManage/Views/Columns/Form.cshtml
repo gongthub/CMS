@@ -105,6 +105,7 @@
                     dataType: "json",
                     async: false,
                     success: function (data) {
+                        alert(data.FullName);
                         $("#form1").formSerialize(data);
                     }
                 });

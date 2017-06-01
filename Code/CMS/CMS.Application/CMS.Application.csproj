@@ -85,6 +85,8 @@
     <Compile Include="WebManage\ContentApp.cs" />
     <Compile Include="WebManage\ColumnsApp.cs" />
     <Compile Include="WebManage\KeyWordsApp.cs" />
+    <Compile Include="WebManage\MessageConfigApp.cs" />
+    <Compile Include="WebManage\MessagesApp.cs" />
     <Compile Include="WebManage\ResourceApp.cs" />
     <Compile Include="WebManage\TempletApp.cs" />
     <Compile Include="WebManage\WebSiteApp.cs" />

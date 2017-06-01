@@ -29,12 +29,6 @@ namespace CMS.Domain.Entity.WebManage
         public string Author { get; set; }
 
         public DateTime? EditTime { get; set; }
-        //private DateTime f_EditTime;
-        //public DateTime EditTime
-        //{
-        //    get { return DateTime.Now; }
-        //    set { value = f_EditTime; }
-        //}
         public string Description { get; set; }
         public string UrlPath { get; set; }
         public string UrlAddress { get; set; }
