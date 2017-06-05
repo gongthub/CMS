@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Specialized;
+using System.Configuration;
 using System.Web;
 namespace CMS.Code
 {
@@ -36,6 +37,16 @@ namespace CMS.Code
                 xNode.AppendChild(xElem2);
             }
             xDoc.Save(HttpContext.Current.Server.MapPath("~/Configs/system.config"));
+        }
+
+
+        /// <summary>
+        /// 根据Key取Value值
+        /// </summary>
+        /// <param name="key"></param>
+        public static NameValueCollection GetSection(string key)
+        {
+            return ConfigurationManager.GetSection(key) as NameValueCollection;
         }
     }
 }

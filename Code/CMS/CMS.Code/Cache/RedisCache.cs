@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMS.Code.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,29 +9,32 @@ namespace CMS.Code
 {
     public class RedisCache : ICache
     {
+
         public T GetCache<T>(string cacheKey) where T : class
         {
-            throw new NotImplementedException();
+            return RedisHelp.redisHelp.GetCache<T>(cacheKey);
         }
 
         public void WriteCache<T>(T value, string cacheKey) where T : class
         {
-            throw new NotImplementedException();
+            RedisHelp.redisHelp.SetCache<T>(cacheKey, value);
         }
 
         public void WriteCache<T>(T value, string cacheKey, DateTime expireTime) where T : class
         {
-            throw new NotImplementedException();
+            RedisHelp.redisHelp.SetCacheExp<T>(cacheKey, value, expireTime);
         }
 
         public void RemoveCache(string cacheKey)
         {
-            throw new NotImplementedException();
+            RedisHelp.redisHelp.RemoveCache(cacheKey);
         }
 
         public void RemoveCache()
         {
-            throw new NotImplementedException();
+            List<string> allKeys = RedisHelp.redisHelp.GetAllKey();
+            RedisHelp.redisHelp.RemoveAll(allKeys);
         }
+
     }
 }
