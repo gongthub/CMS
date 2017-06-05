@@ -1082,7 +1082,7 @@ namespace CMS.Application.Comm
                 urlRaw = Common.HandleUrlRaw(urlRaw);
                 WebSiteApp app = new WebSiteApp();
                 WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
-                htmls= GetHtmlStrsByWebSite(entity, urlRaw);
+                htmls = GetHtmlStrsByWebSite(entity, urlRaw);
             }
             catch
             {
@@ -1098,13 +1098,19 @@ namespace CMS.Application.Comm
         public string GetHtmlByUrl(string urlHost, string urlRaw, out bool isNoFind)
         {
             string htmls = string.Empty;
+            isNoFind = false;
             try
             {
-                //处理Url参数
-                urlRaw = Common.HandleUrlRaw(urlRaw);
-                WebSiteApp app = new WebSiteApp();
-                WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
-                htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
+                //htmls = Comm.CacheHelp.cacheHelp.GetOutPutHtmls(urlHost);
+                //if (string.IsNullOrEmpty(htmls))
+                //{
+                    //处理Url参数
+                    urlRaw = Common.HandleUrlRaw(urlRaw);
+                    WebSiteApp app = new WebSiteApp();
+                    WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
+                    htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
+                    Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
+                //}
             }
             catch
             {
@@ -1199,7 +1205,7 @@ namespace CMS.Application.Comm
             }
             return htmls;
         }
-        public string GetHtmlStrsByWebSite(WebSiteEntity entity, string urlRaw,out bool isNoFind)
+        public string GetHtmlStrsByWebSite(WebSiteEntity entity, string urlRaw, out bool isNoFind)
         {
             string htmls = string.Empty;
             try

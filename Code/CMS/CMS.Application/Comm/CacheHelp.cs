@@ -10,6 +10,8 @@ namespace CMS.Application.Comm
 {
     public class CacheHelp
     {
+        private static ICache icache = CacheFactory.cacheFactory.Cache();
+
         #region 单例模式创建对象
         //单例模式创建对象
         private static CacheHelp _cacheHelp = null;
@@ -39,12 +41,15 @@ namespace CMS.Application.Comm
         }
         #endregion
 
-        private static ICache icache = CacheFactory.cacheFactory.Cache();
-
         /// <summary>
         /// 菜单对象权限
         /// </summary>
         private static string AUTHORIZEURLDATA = "AUTHORIZEURLDATA_";
+
+        /// <summary>
+        /// 输出Html缓存
+        /// </summary>
+        private static string OUTPUTHTML = "OUTPUTHTML_";
 
         #region 菜单对象权限
 
@@ -77,7 +82,43 @@ namespace CMS.Application.Comm
             List<AuthorizeActionModel> datas = icache.GetCache<List<AuthorizeActionModel>>(AUTHORIZEURLDATA + roleId);
             return datas;
         }
-        
+
+        #endregion
+
+        #region 输出Html缓存
+
+        /// <summary>
+        /// 获取输出Html缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public void WriteOutPutHtmls(string htmls, string hosts)
+        {
+            icache.WriteCache(htmls, OUTPUTHTML + hosts, DateTime.Now.AddMinutes(5));
+        }
+        /// <summary>
+        /// 移除输出Html缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public void RemoveOutPutHtmls(string hosts)
+        {
+            icache.RemoveCache(OUTPUTHTML + hosts);
+        }
+
+        /// <summary>
+        /// 获取输出Html缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public string GetOutPutHtmls(string url)
+        {
+            string htmls = string.Empty;
+            //if (!string.IsNullOrEmpty(Configs.GetValue("HtmlCacheEnabled")))
+            htmls = icache.GetCache<string>(OUTPUTHTML + url);
+            return htmls;
+        }
+
         #endregion
 
     }

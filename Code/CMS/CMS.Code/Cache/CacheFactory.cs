@@ -54,7 +54,7 @@ namespace CMS.Code
                     icache = new Cache();
                     break;
                 case CMS.Code.Enums.SysCacheType.Redis:
-                    icache = new Cache();
+                    icache = new RedisCache();
                     break;
             }
             return icache;

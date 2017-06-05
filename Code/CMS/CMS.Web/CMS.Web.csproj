@@ -990,7 +990,6 @@
     <Content Include="Areas\WebManage\Views\WebSiteConfig\MessageConfig.cshtml" />
     <Content Include="Areas\WebManage\Views\Message\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Message\MessageDetails.cshtml" />
-    <Content Include="Configs\redis.config" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

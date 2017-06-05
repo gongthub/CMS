@@ -14,22 +14,13 @@ namespace CMS.Code.Redis
     public class RedisProvider
     {
 
-        private static string REDISHOSTSECTION = "RedisHostSettings";
         private static string READWRITEHOSTS = "ReadWriteHosts";
         private static string READONLYHOSTS = "ReadOnlyHosts";
         private static string MAXWRITEPLLOSIZE = "MaxWritePoolSize";
         private static string MAXREADPLLOSIZE = "MaxReadPoolSize";
         private static string CONNECTTIMEOUT = "ConnectTimeout";
 
-        #region 获取配置节
-        /// <summary>
-        /// 获取配置节
-        /// </summary>
-        private static NameValueCollection ResConfSection
-        {
-            get { return Configs.GetSection(REDISHOSTSECTION); }
-        }
-
+        #region 获取配置节 
         /// <summary>
         /// 主IP端口
         /// </summary>
@@ -37,7 +28,7 @@ namespace CMS.Code.Redis
         {
             get
             {
-                string vals = ResConfSection[READWRITEHOSTS];
+                string vals = Configs.GetValue(READWRITEHOSTS);
                 return vals.Split(',').ToList();
             }
         }
@@ -48,7 +39,7 @@ namespace CMS.Code.Redis
         {
             get
             {
-                string vals = ResConfSection[READONLYHOSTS];
+                string vals = Configs.GetValue(READONLYHOSTS);
                 return vals.Split(',').ToList();
             }
         }
@@ -56,15 +47,15 @@ namespace CMS.Code.Redis
         /// <summary>
         /// 最大写连接池数量
         /// </summary>
-        private static int ResMaxWritePoolSize { get { return ResConfSection[MAXWRITEPLLOSIZE].ToInt(); } }
+        private static int ResMaxWritePoolSize { get { return Configs.GetValue(MAXWRITEPLLOSIZE).ToInt(); } }
         /// <summary>
         /// 最大读连接池数量
         /// </summary>
-        private static int ResMaxReadPoolSize { get { return ResConfSection[MAXREADPLLOSIZE].ToInt(); } }
+        private static int ResMaxReadPoolSize { get { return Configs.GetValue(MAXREADPLLOSIZE).ToInt(); } }
         /// <summary>
         /// 连接超时时间
         /// </summary>
-        private static int ResConnectTimeout { get { return ResConfSection[CONNECTTIMEOUT].ToInt(); } }
+        private static int ResConnectTimeout { get { return Configs.GetValue(CONNECTTIMEOUT).ToInt(); } }
 
         //private readonly static Lazy<ICacheProvider> redisClient = new Lazy<ICacheProvider>(() => ObjectContainer.Instance.GetService<ICacheProvider>(), LazyThreadSafetyMode.ExecutionAndPublication);
 
