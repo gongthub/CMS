@@ -1,4 +1,5 @@
-﻿using CMS.Code;
+﻿using CMS.Application.Comm;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository.SystemManage;
 using CMS.Domain.ViewModel;
@@ -46,7 +47,7 @@ namespace CMS.Application.SystemManage
         {
             var data = new List<ModuleButtonEntity>();
             //if (OperatorProvider.Provider.GetCurrent().IsSystem)
-                if (SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
+            if (SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
             {
                 data = moduleButtonApp.GetList();
             }
@@ -68,7 +69,8 @@ namespace CMS.Application.SystemManage
         public bool ActionValidate(string roleId, string moduleId, string action)
         {
             var authorizeurldata = new List<AuthorizeActionModel>();
-            var cachedata = CacheFactory.cacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
+            //var cachedata = CacheFactory.cacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
+            var cachedata = CacheHelp.cacheHelp.GetAuthorizeurlDatas(roleId);
             if (cachedata == null)
             {
                 var moduledata = moduleApp.GetList();
@@ -89,7 +91,8 @@ namespace CMS.Application.SystemManage
                             authorizeurldata.Add(new AuthorizeActionModel { Id = moduleButtonEntity.ModuleId, UrlAddress = moduleButtonEntity.UrlAddress });
                     }
                 }
-                CacheFactory.cacheFactory.Cache().WriteCache(authorizeurldata, "authorizeurldata_" + roleId, DateTime.Now.AddMinutes(5));
+                //CacheFactory.cacheFactory.Cache().WriteCache(authorizeurldata, "authorizeurldata_" + roleId, DateTime.Now.AddMinutes(5));
+                CacheHelp.cacheHelp.WriteAuthorizeurlDatas(authorizeurldata, roleId);
             }
             else
             {

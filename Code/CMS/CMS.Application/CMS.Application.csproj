@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comm\CacheHelp.cs" />
     <Compile Include="Comm\ConfigHelp.cs" />
     <Compile Include="Comm\LogHelp.cs" />
     <Compile Include="Comm\LucenceHelp.cs" />
