@@ -47,6 +47,39 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HandlerAuthorize]
+        public ActionResult UploadImgs()
+        {
+            try
+            {
+                List<UpFileDTO> entitys = new List<UpFileDTO>();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files;
+                    if (upFiles != null && upFiles.Count > 0)
+                    {
+                        for (int i = 0; i < upFiles.Count; i++)
+                        {
+                            CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                            UpFileDTO entity = upfileApp.UpLoadImg(upFiles[i], Base_WebSiteShortName);
+                            entitys.Add(entity);
+                        }
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entitys);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
         public ActionResult UploadFile()
         {
             try

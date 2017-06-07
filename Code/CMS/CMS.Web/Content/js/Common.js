@@ -16,7 +16,7 @@ function actionIndex() {
 
 
 //复制文本
-function copyToClipboard(txt) { 
+function copyToClipboard(txt) {
     if (window.clipboardData) {
         window.clipboardData.clearData();
         clipboardData.setData("Text", txt);
@@ -61,6 +61,47 @@ function uploadImg(fileId) {
     $.ajax({
         type: "POST",
         url: "/SystemManage/UpFile/UploadImg",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+        }
+    });
+    return dataret;
+}
+
+//上传多个图片
+function uploadImgs(fileId, imgfiles) {
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    var fileInput = $("#" + fileId + "")[0].files;
+    for (var i = 0; i < fileInput.length; i++) {
+        var names = fileInput[i].name;
+        var index = $.inArray(names, imgfiles);
+        if (index >= 0) {
+            formData.append("fileImg_" + i, $("#" + fileId + "")[0].files[i]);
+        }
+    } 
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/UploadImgs",
         dataType: "json",
         data: formData,
         async: false,

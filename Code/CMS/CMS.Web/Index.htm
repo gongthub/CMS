@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge" />-->
+    <meta name="viewport" content="width=device-width" />
     <link href="Content/js/TabPage/cmsPage.css" rel="stylesheet" />
     <title></title>
     <script type="text/javascript">
@@ -14,6 +15,30 @@
         .div-cmspage-pagetab-next {
             border: 1px solid black;
             cursor: pointer;
+        }
+
+        .img_div {
+            min-height: 100px;
+            min-width: 100px;
+        }
+        .isImg {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            float: left;
+            margin-left: 10px;
+        }
+        .removeBtn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 11;
+            border: 0px;
+            border-radius: 50px;
+            background: red;
+            width: 22px;
+            height: 22px;
+            color: white;
         }
     </style>
 </head>
@@ -90,17 +115,56 @@
         邮箱：<input name="UserEmaile" type="text" />
         <input type="button" onclick="submitMessage()" value="提交" />
     </form>
+
+    <div class="sys-div-imgupload">
+        <div class="sys-div-upload">
+            <input id="IconUp" type="file" />请选择图片
+        </div>
+        <img id="ImgPr" width="30" height="30" />
+    </div>
+    <div class="sys-div-imgupload">
+        <div class="sys-div-upload">
+            <input id="IconUpM" type="file" multiple="multiple" />请选择多个图片
+            <input type="button" value="Get" onclick="GetImgs()" />
+            <input type="button" value="upload" onclick="upload()" />
+        </div>
+        <div id="divShowImg"></div>
+    </div>
 </body>
 </html>
 
 <script src="Content/js/jquery/jquery-2.1.1.min.js"></script>
+<script src="Content/js/bootstrap/bootstrap.js?v=1000000000011"></script>
+<script src="Content/js/bootstrap/bootstrap-switch.js?v=1000000000011"></script>
+<script src="Content/js/wdtree/tree.js?v=1000000000011"></script>
+<script src="Content/js/select2/select2.min.js?v=1000000000011"></script>
+<script src="Content/js/wizard/wizard.js?v=1000000000011"></script>
+<script src="Content/js/datepicker/WdatePicker.js?v=1000000000011"></script>
+<script src="Content/js/validate/jquery.validate.min.js?v=1000000000011"></script>
+<script src="Content/js/framework-ui.js?v=1000000000011"></script>
+<script src="Content/js/Common.js?v=1000000000013"></script>
 <!--<script src="Content/js/jquery/jquery-3.1.1.min.js"></script>-->
 <!--<script src="Content/js/jquery/jquery-1.8.2.min.js"></script>-->
 <script src="Content/js/TabPage/cmsPage.js"></script>
-<script src="Content/js/website/webSiteCommon.js"></script>
+<!--<script src="Content/js/website/webSiteCommon.js"></script>-->
+<script src="Content/js/uploadPreview.js?v=100001"></script>
 <script type="text/javascript">
     $(function () {
-        $(".div-cmspage-pagetab-omit")[0].innerText = "  ";
+        //$(".div-cmspage-pagetab-omit")[0].innerText = "  ";
+        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        $("#IconUpM").uploadPreviews({ div: "divShowImg", Width: 120, Height: 120 });
     });
+
+    function GetImgs()
+    {
+        return uploadPreviewsgetImgs("IconUpM", "divShowImg");
+    }
+
+    function upload()
+    {
+        var files = GetImgs(); 
+        var jsonDataFile = uploadImgs("IconUpM", files);
+        alert(jsonDataFile.data);
+    }
 
 </script>

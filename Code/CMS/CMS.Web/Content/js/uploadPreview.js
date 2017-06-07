@@ -70,5 +70,91 @@ jQuery.fn.extend({
                 opts.Callback()
             }
         })
+    },
+
+    uploadPreviews: function (opts) {
+        var _self = this,
+           _this = $(this);
+        opts = jQuery.extend({
+            div: "divShowImg",
+            Width: 100,
+            Height: 100,
+            ImgType: ["gif", "jpeg", "jpg", "bmp", "png"],
+            Callback: function () { }
+        }, opts || {});
+        _self.getObjectURL = function (file) {
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file)
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file)
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file)
+            }
+            return url
+        };
+        _this.change(function () {
+            for (var i = 0; i < this.files.length; i++) {
+                if (this.value) {
+                    if (!RegExp("\.(" + opts.ImgType.join("|") + ")$", "i").test(this.value.toLowerCase())) {
+                        alert("选择文件错误,图片类型必须是" + opts.ImgType.join("，") + "中的一种");
+                        this.value = "";
+                        return false
+                    }
+                    if ($.browser.msie) {
+                        try {
+                            var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
+                                + "px; width:" + opts.Width + "px;' /><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
+                            $("#" + opts.div).append(img_html);
+                            //$("#" + opts.div).attr('src', _self.getObjectURL(this.files[i]))
+                        } catch (e) {
+                            var src = "";
+                            var obj = $("#" + opts.div);
+                            var div = obj.parent("div")[0];
+                            _self.select();
+                            if (top != self) {
+                                window.parent.document.body.focus()
+                            } else {
+                                _self.blur()
+                            }
+                            src = document.selection.createRange().text;
+                            document.selection.empty();
+                            obj.hide();
+                            obj.parent("div").css({
+                                'filter': 'progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)',
+                                'width': opts.Width + 'px',
+                                'height': opts.Height + 'px'
+                            });
+                            div.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = src
+                        }
+                    } else {
+                        var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
+                            + "px; width:" + opts.Width + "px;' /><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
+                        $("#" + opts.div).append(img_html);
+                        //$("#" + opts.Img).attr('src', _self.getObjectURL(this.files[i]))
+                    }
+                }
+                opts.Callback()
+            }
+        })
     }
 });
+//移除图片
+function uploadPreviewsremoveImg(r) {
+    $(r).parent().remove();
+}
+
+
+//获取图片
+function uploadPreviewsgetImgs(inputFileId, divShowId) {
+    var fileList =new Array();
+    var files = $("#" + inputFileId)[0].files;
+    var divImgs = $("#" + divShowId).find(".isImg");
+    for (var i = 0; i < divImgs.length; i++) {
+        for (var j = 0; j < files.length; j++) {
+            if (files[j].name == $(divImgs[i]).data("name"))
+                fileList.push(files[j].name);
+        }
+    }
+    return fileList;
+}
