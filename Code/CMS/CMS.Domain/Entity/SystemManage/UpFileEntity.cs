@@ -60,6 +60,11 @@ namespace CMS.Domain.Entity.SystemManage
         public string FileMd5 { get; set; }
 
         /// <summary>
+        /// UploadType
+        /// </summary>		
+        public int UploadType { get; set; }
+
+        /// <summary>
         /// Description
         /// </summary>		
         public string Description { get; set; }

@@ -53,6 +53,10 @@ namespace CMS.Domain.Entity.Common
         /// Sys_FileMd5
         /// </summary>		
         public string Sys_FileMd5 { get; set; }
+        /// <summary>
+        /// UploadType
+        /// </summary>		
+        public int UploadType { get; set; }
 
         /// <summary>
         /// Sys_Description

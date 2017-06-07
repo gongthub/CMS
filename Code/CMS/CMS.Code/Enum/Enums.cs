@@ -140,5 +140,15 @@ namespace CMS.Code
             [Description("Search")]
             Search = 1
         }
+        /// <summary>
+        /// 上传文件类型
+        /// </summary>
+        public enum UploadType
+        {
+            [Description("图片")]
+            Image = 0,
+            [Description("文件")]
+            File = 1
+        }
     }
 }

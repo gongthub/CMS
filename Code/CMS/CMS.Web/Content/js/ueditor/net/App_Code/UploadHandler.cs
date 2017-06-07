@@ -109,7 +109,7 @@ public class UploadHandler : Handler
         finally
         {
             UpFileApp upFileApp = new UpFileApp();
-            upFileApp.AddUpFileEntity(Base_WebSiteId, savePath, newFileName, uploadFileName, extension, CMS.Code.Md5.MD5File(savePath));
+            upFileApp.AddUpFileEntity(Base_WebSiteId, savePath, newFileName, uploadFileName, extension, CMS.Code.Md5.MD5File(savePath),1);
             WriteResult();
         }
     }

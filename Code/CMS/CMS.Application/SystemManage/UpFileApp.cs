@@ -154,6 +154,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.Image;
             }
             return entity;
         }
@@ -189,6 +190,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.Image;
             }
             return entity;
         }
@@ -352,6 +354,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.File;
             }
             return entity;
         }
@@ -387,6 +390,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.File;
             }
             return entity;
         }
@@ -422,6 +426,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.File;
                 if (IsSave)
                 {
                     string Ids = Guid.Empty.ToString();
@@ -475,6 +480,7 @@ namespace CMS.Application.SystemManage
                 entity.Sys_ExtName = fileExtension;
                 entity.Sys_FilePath = filePaths;
                 entity.Sys_FileMd5 = Code.Md5.MD5File(filePaths);
+                entity.UploadType = (int)Code.Enums.UploadType.File;
                 if (IsSave)
                 {
                     string Ids = Guid.Empty.ToString();
@@ -656,6 +662,7 @@ namespace CMS.Application.SystemManage
                 upFileEntity.ExtName = upFileDtoEntity.Sys_ExtName;
                 upFileEntity.FilePath = upFileDtoEntity.Sys_FilePath;
                 upFileEntity.FileMd5 = upFileDtoEntity.Sys_FileMd5;
+                upFileEntity.UploadType = upFileDtoEntity.UploadType;
                 upFileEntity.Description = upFileDtoEntity.Sys_Description;
                 upFileEntity.IsMain = upFileDtoEntity.Sys_IsMain;
                 upFileEntity.Create();
@@ -677,7 +684,7 @@ namespace CMS.Application.SystemManage
         /// </summary>
         /// <param name="upFileEntity"></param>
         /// <returns></returns>
-        public bool AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5)
+        public bool AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5, int uploadType)
         {
             bool bState = false;
             UpFileEntity upFileEntity = new UpFileEntity();
@@ -688,6 +695,7 @@ namespace CMS.Application.SystemManage
                 upFileEntity.ExtName = fileExtension;
                 upFileEntity.FilePath = filePath;
                 upFileEntity.FileMd5 = fileMd5;
+                upFileEntity.UploadType = uploadType;
 
                 if (!string.IsNullOrEmpty(webSiteId))
                 {
@@ -712,13 +720,13 @@ namespace CMS.Application.SystemManage
         /// </summary>
         /// <param name="upFileEntity"></param>
         /// <returns></returns>
-        public void AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5, bool isAsync)
+        public void AddUpFileEntity(string webSiteId, string filePath, string fileName, string fileOldName, string fileExtension, string fileMd5, int uploadType, bool isAsync)
         {
             if (isAsync)
             {
                 Thread thread = new Thread(() =>
                 {
-                    AddUpFileEntity(webSiteId, filePath, fileName, fileOldName, fileExtension, fileMd5);
+                    AddUpFileEntity(webSiteId, filePath, fileName, fileOldName, fileExtension, fileMd5, uploadType);
                 });
                 thread.Start();
             }
