@@ -148,7 +148,9 @@ namespace CMS.Code
             [Description("图片")]
             Image = 0,
             [Description("文件")]
-            File = 1
+            File = 1,
+            [Description("文本编辑器")]
+            Ueditor = 2
         }
     }
 }

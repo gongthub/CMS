@@ -89,7 +89,7 @@ public class UploadHandler : Handler
 
         Result.OriginFileName = uploadFileName;
 
-        var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat, Base_WebSiteShortName, out newFileName,out extension);
+        var savePath = PathFormatter.Format(uploadFileName, UploadConfig.PathFormat, Base_WebSiteShortName, out newFileName, out extension);
         var localPath = Server.MapPath(savePath);
         try
         {
@@ -109,7 +109,7 @@ public class UploadHandler : Handler
         finally
         {
             UpFileApp upFileApp = new UpFileApp();
-            upFileApp.AddUpFileEntity(Base_WebSiteId, savePath, newFileName, uploadFileName, extension, CMS.Code.Md5.MD5File(savePath),1);
+            upFileApp.AddUpFileEntity(Base_WebSiteId, savePath, newFileName, uploadFileName, extension, CMS.Code.Md5.MD5File(savePath), (int)CMS.Code.Enums.UploadType.Ueditor);
             WriteResult();
         }
     }
