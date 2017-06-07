@@ -1109,7 +1109,7 @@ namespace CMS.Application.Comm
                     WebSiteApp app = new WebSiteApp();
                     WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
                     htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
-                    Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
+                    //Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
                 //}
             }
             catch
