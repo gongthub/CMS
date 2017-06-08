@@ -76,7 +76,9 @@ namespace CMS.Code
             [Description("列表")]
             List = 2,
             [Description("连接")]
-            Link = 3
+            Link = 3,
+            [Description("高级列表")]
+            AdvancedList = 4
         }
         /// <summary>
         /// 上传文件模块

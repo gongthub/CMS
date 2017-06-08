@@ -39,6 +39,23 @@
                         <a onclick="setMessageConfig()" class="btn  btn-primary">留言板配置</a>
                     </td>
                 </tr>
+                <tr>
+                    <th class="formTitle">高级列表</th>
+                    <td class="formValue">
+                        @if (Model.AdvancedContentEnabledMark)
+                        {
+                            <input id="ckIsAdvancedContentEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsAdvancedContentEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
+                    </td>
+                    <th class="formTitle">高级列表配置</th>
+                    <td class="formValue">
+                        <a onclick="setAdvancedContentConfig()" class="btn  btn-primary">高级列表配置</a>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -80,6 +97,9 @@
             $("#ckIsMessageEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setMessageEnabled(state);
             });
+            $("#ckIsAdvancedContentEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setAdvancedContentEnabled(state);
+            });
         });
 
         //设置全站搜索开关
@@ -110,6 +130,39 @@
                 param: { serviceEnabled: state },
                 success: function (data) {
                     $.modalAlert(data.message);
+                }
+            })
+        }
+
+        //设置高级列表标识
+        function setAdvancedContentEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateAdvancedContentEnabled",
+                param: { advancedContentEnabled: state },
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+
+        //高级列表配置
+        function setAdvancedContentConfig() {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/IsAdvancedContent",
+                param: {},
+                success: function (data) {
+                    if (data.message == 'true') {
+                        $.modalOpen({
+                            id: "MessageConfig",
+                            title: "高级列表配置",
+                            url: "/WebManage/WebSiteConfig/AdvancedContentConfig",
+                            width: "600px",
+                            height: "550px",
+                            btn: null
+                        });
+                    } else {
+                        $.modalAlert('请先开启高级列表功能！');
+                    }
                 }
             })
         }

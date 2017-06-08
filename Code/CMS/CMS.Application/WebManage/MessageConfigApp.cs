@@ -65,7 +65,7 @@ namespace CMS.Application.WebManage
 
             return JsonStr.ToString();
         }
-
+         
 
         public List<MessageConfigEntity> GetViewShow(string webSiteId, string keyValue)
         {
@@ -101,7 +101,7 @@ namespace CMS.Application.WebManage
 
         public List<MessageConfigEntity> GetForms(string webSiteId)
         {
-            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).OrderBy(m => m.CreatorTime).ToList();
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true && m.EnabledMark).OrderBy(m => m.CreatorTime).ToList();
         }
         public List<MessageConfigEntity> GetFormsListShow(string webSiteId)
         {

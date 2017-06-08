@@ -13,7 +13,7 @@ namespace CMS.Code
     /// 枚举操作类
     /// </summary>
     public class EnumHelp
-    { 
+    {
 
         #region 单例模式创建对象
         //单例模式创建对象
@@ -64,9 +64,9 @@ namespace CMS.Code
             else
                 _description = enumName.ToString();
             return _description;
-        } 
+        }
         #endregion
-         
+
         #region 获取字段Description +DescriptionAttribute[] GetDescriptAttr(FieldInfo fieldInfo)
         /// <summary>
         /// 获取字段Description
@@ -80,7 +80,7 @@ namespace CMS.Code
                 return (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
             }
             return null;
-        } 
+        }
         #endregion
 
         #region 根据Description获取枚举 +T GetEnumName<T>(string description)
@@ -110,7 +110,7 @@ namespace CMS.Code
                 }
             }
             throw new ArgumentException(string.Format("{0} 未能找到对应的枚举.", description), "Description");
-        } 
+        }
         #endregion
 
         #region 将枚举转换为ArrayList +ArrayList ToArrayList(Type type)
@@ -135,9 +135,8 @@ namespace CMS.Code
                 return _array;
             }
             return null;
-        } 
+        }
         #endregion
-
 
         #region 将枚举转换为List<EnumModel> ToList(Type type)
         /// <summary>
@@ -157,14 +156,29 @@ namespace CMS.Code
                 foreach (Enum value in _enumValues)
                 {
                     EnumModel model = new EnumModel();
-                    model.Value =Convert.ToInt32(value);
+                    model.Value = Convert.ToInt32(value);
                     model.Name = Enum.GetName(type, value);
                     model.Desc = GetDescription(value);
                     list.Add(model);
-                }  
+                }
                 return list;
             }
             return null;
+        }
+        #endregion
+        #region 获取枚举对象 EnumModel GetEnumModel(Type type)
+        /// <summary>
+        /// 获取枚举对象
+        /// </summary>
+        /// <param name="type">枚举类型</param>
+        /// <returns>EnumModel</returns>
+        public EnumModel GetEnumModel(Enum value)
+        {
+            EnumModel model = new EnumModel();
+            model.Value = Convert.ToInt32(value);
+            model.Name = Enum.GetName(value.GetType(), value);
+            model.Desc = GetDescription(value);
+            return model;
         }
         #endregion
     }

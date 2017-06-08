@@ -990,6 +990,9 @@
     <Content Include="Areas\WebManage\Views\WebSiteConfig\MessageConfig.cshtml" />
     <Content Include="Areas\WebManage\Views\Message\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Message\MessageDetails.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\AdvancedForm.cshtml" />
+    <Content Include="Areas\WebManage\Views\Content\AdvancedDetails.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteConfig\AdvancedContentConfig.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

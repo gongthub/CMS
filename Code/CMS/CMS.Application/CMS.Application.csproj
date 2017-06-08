@@ -83,6 +83,7 @@
     <Compile Include="SystemSecurity\DbBackupApp.cs" />
     <Compile Include="SystemSecurity\FilterIPApp.cs" />
     <Compile Include="SystemSecurity\LogApp.cs" />
+    <Compile Include="WebManage\AdvancedContentConfigApp.cs" />
     <Compile Include="WebManage\ContentApp.cs" />
     <Compile Include="WebManage\ColumnsApp.cs" />
     <Compile Include="WebManage\KeyWordsApp.cs" />
@@ -111,9 +112,6 @@
       <Project>{abd5c5aa-1435-4b78-af70-01ec811c26dd}</Project>
       <Name>CMS.Repository</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

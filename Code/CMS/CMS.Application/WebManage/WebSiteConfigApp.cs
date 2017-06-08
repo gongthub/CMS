@@ -88,6 +88,31 @@ namespace CMS.Application.WebManage
             }
             return bState;
         }
+        public bool UpdateAdvancedContentEnableByWebSiteId(string webSiteId, bool advancedContentEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.AdvancedContentEnabledMark = advancedContentEnabled;
+                    service.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置高级列表=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + advancedContentEnabled, Enums.DbLogType.Create, "站点配置=>高级列表");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
 
         public bool UpdateServiceEnableByWebSiteId(string webSiteId, bool serviceEnabled)
         {
@@ -165,6 +190,27 @@ namespace CMS.Application.WebManage
                 if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
                 {
                     bState = webSiteConfigEntity.MessageEnabledMark;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            catch
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        public bool IsAdvancedContent(string webSiteId)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.AdvancedContentEnabledMark;
                 }
                 else
                 {

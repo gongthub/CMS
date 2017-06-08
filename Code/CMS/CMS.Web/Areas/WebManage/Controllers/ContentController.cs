@@ -15,7 +15,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
     [HandlerWebSiteMgr]
     public class ContentController : ControllerBase
     {
-         
+
         private ContentApp c_contentApp = new ContentApp();
 
         [HttpGet]
@@ -87,6 +87,24 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             return View();
         }
-         
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult AdvancedForm()
+        {
+            AdvancedContentConfigApp advanceApp = new AdvancedContentConfigApp();
+            List<AdvancedContentConfigEntity> models = advanceApp.GetForms(Base_WebSiteId);
+            ViewBag.DesNum = models.Count;
+            return View(models);
+        }
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult AdvancedDetails()
+        {
+            AdvancedContentConfigApp advanceApp = new AdvancedContentConfigApp();
+            List<AdvancedContentConfigEntity> models = advanceApp.GetForms(Base_WebSiteId);
+            ViewBag.DesNum = models.Count;
+            return View(models); 
+        }
+
     }
 }

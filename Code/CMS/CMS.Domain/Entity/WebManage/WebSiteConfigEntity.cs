@@ -33,6 +33,10 @@ namespace CMS.Domain.Entity.WebManage
         /// 网站留言板标识
         /// </summary>		
         public bool MessageEnabledMark { get; set; }
+        /// <summary>
+        /// 高级列表标识
+        /// </summary>		
+        public bool AdvancedContentEnabledMark { get; set; }
 
         /// <summary>
         /// EnabledMark

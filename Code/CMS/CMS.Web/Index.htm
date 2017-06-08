@@ -130,6 +130,20 @@
         </div>
         <div id="divShowImg"></div>
     </div>
+
+    <div>
+        <input type="button" onclick="getContent('editor_Content')" value="获取内容1" />
+        <input type="button" onclick="getContent('editor_Content1')" value="获取内容2" />
+        <div>
+            <script id="editor_Content" class="editordes" type="text/plain" style="width:200px;height:200px;">
+            </script>
+        </div>
+        <div>
+            <script id="editor_Content1" class="editordes" type="text/plain" style="width: 200px; height: 200px;">
+            </script>
+        </div>
+
+    </div>
 </body>
 </html>
 
@@ -148,23 +162,68 @@
 <script src="Content/js/TabPage/cmsPage.js"></script>
 <!--<script src="Content/js/website/webSiteCommon.js"></script>-->
 <script src="Content/js/uploadPreview.js?v=100001"></script>
+<script src="Content/js/ueditor/ueditor.config.js"></script>
+<script src="Content/js/ueditor/ueditor.all.min.js"></script>
+<script src="Content/js/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
     $(function () {
         //$(".div-cmspage-pagetab-omit")[0].innerText = "  ";
         $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
         $("#IconUpM").uploadPreviews({ div: "divShowImg", Width: 120, Height: 120 });
+
+        initEditor();
     });
 
-    function GetImgs()
-    {
+    function GetImgs() {
         return uploadPreviewsgetImgs("IconUpM", "divShowImg");
     }
 
-    function upload()
-    {
-        var files = GetImgs(); 
+    function upload() {
+        var files = GetImgs();
         var jsonDataFile = uploadImgs("IconUpM", files);
         alert(jsonDataFile.data);
     }
 
+
+    var NUM = 0;
+    //写入html编辑器内容
+    function insertHtml(id, value) {
+        if (value != null && value != undefined)
+            UE.getEditor(id).setContent(value);
+    }
+    //获取html编辑器内容
+    function getContent(id) {
+        alert(UE.getEditor(id).getContent());
+        return UE.getEditor(id).getContent()
+    }
+
+    function initEditor() {
+        var editors = $(".editordes");
+        if (editors != null && editors != undefined && editors.length > 0) {
+            for (var i = 0; i < editors.length; i++) {
+                var editorT = editors[i];
+                var ue = UE.getEditor(editorT.id);
+                //对编辑器的操作最好在编辑器ready之后再做
+                ue.ready(function () {
+                    NUM++;
+                    if (NUM == editors.length) {
+                        initHtml();
+                    }
+                });
+            }
+        }
+    }
+
+    function initHtml() {
+        var data = { Content: "内容" };
+        var idName = "editor_";
+        var editors = $(".editordes");
+        if (editors != null && editors != undefined && editors.length > 0) {
+            for (var i = 0; i < editors.length; i++) {
+                var editorT = editors[i];
+                var name = editorT.id.replace(idName, "");
+                insertHtml(editorT.id, data[name]);
+            }
+        }
+    }
 </script>

@@ -107,7 +107,7 @@
                 }).trigger('reloadGrid');
             });
         }
-
+         
         function btn_add() {
             if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
                 alert("请选择左侧栏目！");
@@ -139,6 +139,17 @@
                     height: "650px",
                     btn: null
                 });
+            }
+            //4为高级列表
+            if (type == 4) {
+                $.modalOpen({
+                    id: "AdvancedForm",
+                    title: moduleName + " 》新增高级内容",
+                    url: "/WebManage/Content/AdvancedForm?columnId=" + columnId,
+                    width: "1000px",
+                    height: "650px",
+                    btn: null
+                });
             } else {
                 $.modalOpen({
                     id: "Form",
@@ -162,6 +173,17 @@
                         id: "LinkForm",
                         title: moduleName + " 》修改连接",
                         url: "/WebManage/Content/LinkForm?keyValue=" + keyValue,
+                        width: "1000px",
+                        height: "650px",
+                        btn: null
+                    });
+                }
+                //4为高级列表
+                if (type == 4) {
+                    $.modalOpen({
+                        id: "AdvancedForm",
+                        title: moduleName + " 》修改高级内容",
+                        url: "/WebManage/Content/AdvancedForm?keyValue=" + keyValue,
                         width: "1000px",
                         height: "650px",
                         btn: null
@@ -210,6 +232,17 @@
                         id: "LinkDetails",
                         title: moduleName + " 》查看连接",
                         url: "/WebManage/Content/LinkDetails?keyValue=" + keyValue,
+                        width: "1000px",
+                        height: "650px",
+                        btn: null
+                    });
+                }
+                //4为高级列表
+                if (type == 4) {
+                    $.modalOpen({
+                        id: "AdvancedForm",
+                        title: moduleName + " 》查看高级内容",
+                        url: "/WebManage/Content/AdvancedDetails?keyValue=" + keyValue,
                         width: "1000px",
                         height: "650px",
                         btn: null

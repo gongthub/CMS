@@ -1,6 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
-using CMS.Domain.Entity.WebManage; 
+using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +58,11 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult GetTypeSelectJson()
         {
             List<EnumModel> models = EnumHelp.enumHelp.EnumToList(typeof(CMS.Code.Enums.ModuleType));
-
+            bool bState = new WebSiteConfigApp().IsAdvancedContent(Base_WebSiteId);
+            if (!bState)
+            {
+                models = models.FindAll(m => m.Value != (int)CMS.Code.Enums.ModuleType.AdvancedList);
+            }
             return Content(models.ToJson());
         }
 

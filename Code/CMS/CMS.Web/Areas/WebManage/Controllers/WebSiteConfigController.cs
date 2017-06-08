@@ -39,6 +39,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             return View();
         }
+
         [HttpGet]
         [HandlerAuthorize]
         public ActionResult GetMessageConfig()
@@ -47,6 +48,20 @@ namespace CMS.Web.Areas.WebManage.Controllers
             return Content(strJson.ToJson());
         }
 
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult GetAdvancedContentConfig()
+        {
+            object strJson = new AdvancedContentConfigApp().GetFormJsonStr(Base_WebSiteId);
+            return Content(strJson.ToJson());
+        }
+
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult AdvancedContentConfig()
+        {
+            return View();
+        } 
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -57,6 +72,23 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 bool bState = webSiteConfigApp.IsMessage(Base_WebSiteId);
+                return Success(bState.ToString().ToLower());
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult IsAdvancedContent()
+        {
+            try
+            {
+                bool bState = webSiteConfigApp.IsAdvancedContent(Base_WebSiteId);
                 return Success(bState.ToString().ToLower());
             }
             catch (Exception e)
@@ -98,6 +130,24 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 return Error(e.Message);
             }
         }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateAdvancedContentEnabled(bool advancedContentEnabled)
+        {
+            try
+            {
+                webSiteConfigApp.UpdateAdvancedContentEnableByWebSiteId(Base_WebSiteId, advancedContentEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
@@ -114,7 +164,6 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 return Error(e.Message);
             }
         }
-
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -133,8 +182,6 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
         }
 
-
-
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
@@ -145,6 +192,24 @@ namespace CMS.Web.Areas.WebManage.Controllers
             {
                 List<MessageConfigEntity> models = InitMessageConfigs(moduleEntity, Request);
                 new MessageConfigApp().AddForms(models, true);
+                return Success("配置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveAdvancedContentConfig(ContentEntity moduleEntity)
+        {
+            try
+            {
+                List<AdvancedContentConfigEntity> models = InitAdvancedContentConfigs(moduleEntity, Request);
+                new AdvancedContentConfigApp().AddForms(models, true);
                 return Success("配置成功。");
             }
             catch (Exception e)
@@ -209,6 +274,59 @@ namespace CMS.Web.Areas.WebManage.Controllers
                     model.EnabledMark = isEnable;
                     model.ListShowMark = isShowList;
                     model.ViewShowMark = isShowView;
+                }
+            }
+
+            return model;
+        }
+
+        #endregion
+
+        #region 处理高级列表配置
+        /// <summary>
+        /// 处理高级列表配置
+        /// </summary>
+        /// <param name="moduleEntity"></param>
+        /// <param name="requert"></param>
+        /// <returns></returns>
+        private List<AdvancedContentConfigEntity> InitAdvancedContentConfigs(ContentEntity moduleEntity, HttpRequestBase requert)
+        {
+            List<AdvancedContentConfigEntity> models = new List<AdvancedContentConfigEntity>();
+
+            PropertyInfo[] info = moduleEntity.GetType().GetProperties();
+            if (info != null && info.Count() > 0)
+            {
+                foreach (PropertyInfo item in info)
+                {
+                    AdvancedContentConfigEntity model = InitAdvancedContentConfig(item, requert);
+                    if (model != null && !string.IsNullOrEmpty(model.ColumnName))
+                    {
+                        object val = moduleEntity.GetType().GetProperty(item.Name).GetValue(moduleEntity, null);
+                        if (val != null)
+                            model.ColumnShowName = val.ToString();
+                        models.Add(model);
+                    }
+                }
+            }
+            return models;
+        }
+
+        private AdvancedContentConfigEntity InitAdvancedContentConfig(PropertyInfo item, HttpRequestBase requert)
+        {
+            string ckIsEnableMark = "ckIsEnable_";
+            AdvancedContentConfigEntity model = new AdvancedContentConfigEntity();
+            if (item != null)
+            {
+                ckIsEnableMark += item.Name;
+                if (requert[ckIsEnableMark] != null)
+                {
+                    bool isEnable = false;
+                    bool.TryParse(requert[ckIsEnableMark].ToString(), out isEnable);
+
+                    model.WebSiteId = Base_WebSiteId;
+                    model.ColumnName = item.Name;
+
+                    model.EnabledMark = isEnable;
                 }
             }
 

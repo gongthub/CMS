@@ -59,6 +59,7 @@
     <Compile Include="Entity\SystemSecurity\DbBackupEntity.cs" />
     <Compile Include="Entity\SystemSecurity\FilterIPEntity.cs" />
     <Compile Include="Entity\SystemSecurity\LogEntity.cs" />
+    <Compile Include="Entity\WebManage\AdvancedContentConfigEntity.cs" />
     <Compile Include="Entity\WebManage\ContentEntity.cs" />
     <Compile Include="Entity\WebManage\ColumnsEntity.cs" />
     <Compile Include="Entity\WebManage\KeyWordsEntity.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="IRepository\SystemSecurity\IDbBackupRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\ILogRepository.cs" />
+    <Compile Include="IRepository\WebManage\IAdvancedContentConfigRepository.cs" />
     <Compile Include="IRepository\WebManage\IContentRepository.cs" />
     <Compile Include="IRepository\WebManage\IKeyWordsRespository.cs" />
     <Compile Include="IRepository\WebManage\IMessageConfigRepository.cs" />
