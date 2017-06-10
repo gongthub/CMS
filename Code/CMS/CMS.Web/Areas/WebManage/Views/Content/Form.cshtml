@@ -216,24 +216,10 @@
 
             var upfiles = [];
             if (iconData != null && iconData != undefined) {
-                var upimg = {};
-                upimg.Sys_FileName = iconData.Sys_FileName;
-                upimg.Sys_FileOldName = iconData.Sys_FileOldName;
-                upimg.Sys_ExtName = iconData.Sys_ExtName;
-                upimg.Sys_FilePath = iconData.Sys_FilePath;
-                upimg.Sys_FileMd5 = iconData.Sys_FileMd5;
-                upimg.UploadType = iconData.UploadType;
-                upfiles.push(upimg);
+                upfiles.push(iconData);
             }
             if (fileData != null && fileData != undefined) {
-                var upfile = {};
-                upfile.Sys_FileName = fileData.Sys_FileName;
-                upfile.Sys_FileOldName = fileData.Sys_FileOldName;
-                upfile.Sys_ExtName = fileData.Sys_ExtName;
-                upfile.Sys_FilePath = fileData.Sys_FilePath;
-                upfile.Sys_FileMd5 = fileData.Sys_FileMd5;
-                upfile.UploadType = fileData.UploadType;
-                upfiles.push(upfile);
+                upfiles.push(fileData);
             }
 
             postData["upFileentitys"] = JSON.stringify(upfiles);

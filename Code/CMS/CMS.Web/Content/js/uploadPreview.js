@@ -104,7 +104,7 @@ jQuery.fn.extend({
                     if ($.browser.msie) {
                         try {
                             var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
-                                + "px; width:" + opts.Width + "px;' /><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
+                                + "px; width:" + opts.Width + "px;'><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
                             $("#" + opts.div).append(img_html);
                             //$("#" + opts.div).attr('src', _self.getObjectURL(this.files[i]))
                         } catch (e) {
@@ -129,7 +129,7 @@ jQuery.fn.extend({
                         }
                     } else {
                         var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
-                            + "px; width:" + opts.Width + "px;' /><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
+                            + "px; width:" + opts.Width + "px;'><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
                         $("#" + opts.div).append(img_html);
                         //$("#" + opts.Img).attr('src', _self.getObjectURL(this.files[i]))
                     }

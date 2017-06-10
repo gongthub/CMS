@@ -21,7 +21,12 @@ namespace CMS.Application.WebManage
 
         public ContentEntity GetForm(string keyValue)
         {
-            return service.FindEntity(keyValue);
+            ContentEntity entity = service.FindEntity(keyValue);
+            if (entity != null)
+            {
+                entity.UpImages = new UpFileApp().GetModulesByPid(keyValue, Enums.UploadType.Images);
+            }
+            return entity;
         }
         public ContentEntity GetFormNoDel(string keyValue)
         {
@@ -258,16 +263,77 @@ namespace CMS.Application.WebManage
                 }
                 if (upFileentitys != null && upFileentitys.Count > 0)
                 {
+                    upFileentitys = upFileentitys.FindAll(m => m != null);
                     foreach (UpFileDTO upFileentity in upFileentitys)
                     {
-                        //更新上传文件表
-                        UpFileApp upFileApp = new UpFileApp();
-
-                        upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
-                        upFileentity.Sys_ParentId = keyValue;
-                        upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
-                        upFileApp.AddUpFileEntity(upFileentity);
+                        if (upFileentity != null)
+                        {
+                            //更新上传文件表
+                            UpFileApp upFileApp = new UpFileApp();
+                            upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
+                            upFileentity.Sys_ParentId = keyValue;
+                            upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
+                            upFileApp.AddUpFileEntity(upFileentity);
+                        }
                     }
+                }
+            }
+            else
+            {
+                throw new Exception("存在非法关键词，请检查！关键字：" + strKeyWords);
+            }
+        }
+        public void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys, List<string> lstRemoveImgIds)
+        {
+            string strKeyWords = string.Empty;
+            if (!new KeyWordsApp().IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
+            {
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    service.Update(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "修改内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "内容管理");
+                }
+                else
+                {
+                    moduleEntity.Create();
+                    service.Insert(moduleEntity);
+                    keyValue = moduleEntity.Id;
+
+                    string mIds = moduleEntity.ColumnId;
+                    ColumnsApp c_ModulesApp = new ColumnsApp();
+                    ColumnsEntity cmModel = c_ModulesApp.GetFormNoDel(mIds);
+                    if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                    {
+                        string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                        moduleEntity.UrlAddress = urlAddress;
+                        SubmitForm(moduleEntity, moduleEntity.Id);
+                    }
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "内容管理");
+                }
+                if (upFileentitys != null && upFileentitys.Count > 0)
+                {
+                    upFileentitys = upFileentitys.FindAll(m => m != null);
+                    foreach (UpFileDTO upFileentity in upFileentitys)
+                    {
+                        if (upFileentity != null)
+                        {
+                            //更新上传文件表
+                            UpFileApp upFileApp = new UpFileApp();
+                            upFileentity.Sys_WebSiteId = moduleEntity.WebSiteId;
+                            upFileentity.Sys_ParentId = keyValue;
+                            upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.Contents);
+                            upFileApp.AddUpFileEntity(upFileentity);
+                        }
+                    }
+                }
+                if (lstRemoveImgIds != null && lstRemoveImgIds.Count > 0)
+                {
+                    //删除已上传文件
+                    UpFileApp upFileApp = new UpFileApp();
+                    upFileApp.DeleteByIds(lstRemoveImgIds);
                 }
             }
             else

@@ -40,13 +40,19 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 List<UpFileDTO> upFileentitys = new List<UpFileDTO>();
+                List<string> lstRemoveImgIds = new List<string>();
                 if (HttpContext.Request["upFileentitys"] != null)
                 {
                     string strupFiles = HttpContext.Request["upFileentitys"].ToString();
                     upFileentitys = JsonConvert.DeserializeObject<List<UpFileDTO>>(strupFiles);
                 }
+                if (HttpContext.Request["removeImageIds"] != null && !string.IsNullOrEmpty(keyValue))
+                {
+                    string strRemoveImageIds = HttpContext.Request["removeImageIds"].ToString();
+                    lstRemoveImgIds = JsonConvert.DeserializeObject<List<string>>(strRemoveImageIds);
+                }
                 moduleEntity.WebSiteId = Base_WebSiteId;
-                c_contentApp.SubmitForm(moduleEntity, keyValue, upFileentitys);
+                c_contentApp.SubmitForm(moduleEntity, keyValue, upFileentitys, lstRemoveImgIds);
                 return Success("操作成功。");
 
             }
@@ -103,7 +109,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
             AdvancedContentConfigApp advanceApp = new AdvancedContentConfigApp();
             List<AdvancedContentConfigEntity> models = advanceApp.GetForms(Base_WebSiteId);
             ViewBag.DesNum = models.Count;
-            return View(models); 
+            return View(models);
         }
 
     }

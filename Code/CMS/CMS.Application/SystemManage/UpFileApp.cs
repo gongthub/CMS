@@ -642,6 +642,18 @@ namespace CMS.Application.SystemManage
         }
 
         /// <summary>
+        /// 根据Ids逻辑删除
+        /// </summary>
+        /// <param name="keyValue"></param>
+        public void DeleteByIds(List<string> keyValues)
+        {
+            if (keyValues != null && keyValues.Count > 0)
+            {
+                service.DeleteById(t => keyValues.Contains(t.Id));
+            }
+        }
+
+        /// <summary>
         /// 保存上传文件信息
         /// </summary>
         /// <param name="upFileEntity"></param>
@@ -730,6 +742,20 @@ namespace CMS.Application.SystemManage
                 });
                 thread.Start();
             }
+        }
+
+        public List<UpFileEntity> GetModulesByPid(string Pid)
+        {
+            List<UpFileEntity> models = new List<UpFileEntity>();
+            models = service.IQueryable(m => m.ParentId == Pid && m.DeleteMark != true).ToList();
+            return models;
+        }
+
+        public List<UpFileEntity> GetModulesByPid(string Pid, Enums.UploadType type)
+        {
+            List<UpFileEntity> models = new List<UpFileEntity>();
+            models = service.IQueryable(m => m.ParentId == Pid && m.DeleteMark != true && m.UploadType == (int)type).ToList();
+            return models;
         }
     }
 }

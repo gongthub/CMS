@@ -11,6 +11,32 @@
         height: 100%;
         overflow: auto;
     }
+
+    .img_div {
+        min-height: 100px;
+        min-width: 100px;
+    }
+
+    .isImg {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        float: left;
+        margin-left: 10px;
+    }
+
+    .removeBtn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 11;
+        border: 0px;
+        border-radius: 50px;
+        background: red;
+        width: 22px;
+        height: 22px;
+        color: white;
+    }
 </style>
 <form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
@@ -138,8 +164,13 @@
                 </div>
             </div>
             <div class="step-pane" id="step-4">
-
-            </div> 
+                <div class="sys-div-imgupload">
+                    <div class="sys-div-upload">
+                        <input id="IconUpM" type="file" multiple="multiple" />请选择多个图片
+                    </div>
+                    <div id="divShowImg"></div>
+                </div>
+            </div>
             @{int numT = 5;
             foreach (var item in Model)
             {
@@ -166,13 +197,14 @@
     <script src="~/Content/js/ueditor/ueditor.all.min.js"></script>
     <script src="~/Content/js/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script>
-
+        var removeImageIds = [];
         var keyValue = $.request("keyValue");
         var columnId = $.request("columnId");
         $(function () {
             initControl();
             initEditor();
             $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+            $("#IconUpM").uploadPreviews({ div: "divShowImg", Width: 120, Height: 120 });
         })
 
         function initControl() {
@@ -204,40 +236,41 @@
             }
             var jsonDataIcon = uploadImg("IconUp");
             var jsonDataFile = uploadFile("FileUp");
+            var files = GetImgs();
+            var jsonDataImages = uploadImgs("IconUpM", files);
             if (jsonDataIcon.success == true && jsonDataFile.success == true) {
                 var iconData = jsonDataIcon.data;
                 var fileData = jsonDataFile.data;
+                var imagesData = jsonDataImages.data;
                 var postData = $("#form1").formSerialize();
-                var contentstrs = getContent();
-                postData["Content"] = htmlEncode(contentstrs);
                 postData["ColumnId"] = columnId;
                 postData["Icon"] = iconData.Sys_FilePath;
                 postData["FilePath"] = fileData.Sys_FilePath;
 
                 var upfiles = [];
-                if (iconData != null && iconData != undefined) {
-                    var upimg = {};
-                    upimg.Sys_FileName = iconData.Sys_FileName;
-                    upimg.Sys_FileOldName = iconData.Sys_FileOldName;
-                    upimg.Sys_ExtName = iconData.Sys_ExtName;
-                    upimg.Sys_FilePath = iconData.Sys_FilePath;
-                    upimg.Sys_FileMd5 = iconData.Sys_FileMd5;
-                    upimg.UploadType = iconData.UploadType;
-                    upfiles.push(upimg);
+                if (iconData != null && iconData != undefined && iconData != "") {
+                    upfiles.push(iconData);
                 }
-                if (fileData != null && fileData != undefined) {
-                    var upfile = {};
-                    upfile.Sys_FileName = fileData.Sys_FileName;
-                    upfile.Sys_FileOldName = fileData.Sys_FileOldName;
-                    upfile.Sys_ExtName = fileData.Sys_ExtName;
-                    upfile.Sys_FilePath = fileData.Sys_FilePath;
-                    upfile.Sys_FileMd5 = fileData.Sys_FileMd5;
-                    upfile.UploadType = fileData.UploadType;
-                    upfiles.push(upfile);
+                if (fileData != null && fileData != undefined && fileData != "") {
+                    upfiles.push(fileData);
                 }
-
+                if (imagesData != null && imagesData != undefined && imagesData.length > 0 && imagesData != "") {
+                    for (var i = 0; i < imagesData.length; i++) {
+                        upfiles.push(imagesData[i]);
+                    }
+                }
                 postData["upFileentitys"] = JSON.stringify(upfiles);
-
+                postData["removeImageIds"] = JSON.stringify(removeImageIds);
+                var idName = "editor_";
+                var editors = $(".editordes");
+                if (editors != null && editors != undefined && editors.length > 0) {
+                    for (var i = 0; i < editors.length; i++) {
+                        var editorT = editors[i];
+                        var name = editorT.id.replace(idName, "");
+                        var contentstrs = getContent(editorT.id);
+                        postData[name] = htmlEncode(contentstrs);
+                    }
+                }
                 $.submitForm({
                     url: "/WebManage/Content/SubmitForm?keyValue=" + keyValue,
                     param: postData,
@@ -250,12 +283,12 @@
 
         //写入html编辑器内容
         function insertHtml(id, value) {
-            if (value != null && value != undefined)
+            if (value != null && value != undefined && value != "") {
                 UE.getEditor(id).setContent(value);
+            }
         }
         //获取html编辑器内容
         function getContent(id) {
-            alert(UE.getEditor(id).getContent());
             return UE.getEditor(id).getContent()
         }
 
@@ -268,10 +301,10 @@
                     var ue = UE.getEditor(editorT.id);
                     //对编辑器的操作最好在编辑器ready之后再做
                     ue.ready(function () {
-                        NUM++;
                         if (NUM == editors.length) {
                             initHtml();
                         }
+                        NUM++;
                     });
                 }
             }
@@ -285,23 +318,45 @@
                     dataType: "json",
                     async: false,
                     success: function (data) {
-                        data.Content = htmlDecode(data.Content);
                         $("#ImgPr").attr("src", data.Icon);
                         $("#lbFilePath").text(data.FilePath);
                         $("#form1").formSerialize(data);
-
                         var idName = "editor_";
                         var editors = $(".editordes");
                         if (editors != null && editors != undefined && editors.length > 0) {
                             for (var i = 0; i < editors.length; i++) {
+                                var contentDesc = "";
                                 var editorT = editors[i];
                                 var name = editorT.id.replace(idName, "");
-                                insertHtml(editorT.id, data[name]);
+                                contentDesc = htmlDecode(data[name]);
+                                insertHtml(editorT.id, contentDesc);
                             }
                         }
+                        initShowImgs(data.UpImages);
                     }
                 });
             }
+        }
+
+        function GetImgs() {
+            return uploadPreviewsgetImgs("IconUpM", "divShowImg");
+        }
+
+        function initShowImgs(images) {
+            if (images != null && images != undefined && images != "" && images.length > 0) {
+                for (var i = 0; i < images.length; i++) {
+                    var img_html = "<div class='isImg' data-name='" + images[i].FileOldName + "' data-id='" + images[i].Id + "'><img src='" + images[i].FilePath
+                        + "' style='height:120px; width:120px;'><button class='removeBtn' onclick='javascript:removeImagesEdit(this)'>x</button></div>";
+                    $("#divShowImg").append(img_html);
+                }
+            }
+        }
+
+        function removeImagesEdit(e) {
+            var divImgs = $(e).parent();
+            var Ids = $(divImgs).data("id");
+            removeImageIds.push(Ids);
+            uploadPreviewsremoveImg(e);
         }
     </script>
 }

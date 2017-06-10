@@ -147,12 +147,16 @@ namespace CMS.Code
         /// </summary>
         public enum UploadType
         {
-            [Description("图片")]
+            [Description("单图片")]
             Image = 0,
-            [Description("文件")]
+            [Description("单文件")]
             File = 1,
+            [Description("多图片")]
+            Images = 2,
+            [Description("多文件")]
+            Files = 3,
             [Description("文本编辑器")]
-            Ueditor = 2
+            Ueditor = 4
         }
     }
 }

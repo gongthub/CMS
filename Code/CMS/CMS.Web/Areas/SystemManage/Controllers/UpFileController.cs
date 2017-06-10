@@ -61,6 +61,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                         {
                             CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
                             UpFileDTO entity = upfileApp.UpLoadImg(upFiles[i], Base_WebSiteShortName);
+                            entity.UploadType = (int)Code.Enums.UploadType.Images;
                             entitys.Add(entity);
                         }
                     }
@@ -113,21 +114,24 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                UpFileDTO entity = new UpFileDTO();
+                List<UpFileDTO> entitys = new List<UpFileDTO>();
                 if (HttpContext.Request.Files.Count > 0)
                 {
                     var upFiles = HttpContext.Request.Files;
                     for (int i = 0; i < upFiles.Count; i++)
                     {
+                        UpFileDTO entity = new UpFileDTO();
                         CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
-                        upfileApp.UpLoadFile(upFiles[i], Base_WebSiteShortName);
+                        entity = upfileApp.UpLoadFile(upFiles[i], Base_WebSiteShortName);
+                        entity.UploadType = (int)Code.Enums.UploadType.Files;
+                        entitys.Add(entity);
                     }
                 }
                 else
                 {
                     return Success("true");
                 }
-                return Success("true", entity);
+                return Success("true", entitys);
 
             }
             catch (Exception ex)

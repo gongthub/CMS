@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Domain.Entity.SystemManage
 {
-    public class UpFileEntity : IEntity<AreaEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
+    public class UpFileEntity : IEntity<UpFileEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
 
         /// <summary>

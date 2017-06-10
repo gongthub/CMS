@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Domain.Entity.WebManage
 {
-   public class ContentEntity : IEntity<ContentEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
+    public class ContentEntity : IEntity<ContentEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
 
@@ -40,7 +40,7 @@ namespace CMS.Domain.Entity.WebManage
         public string SEODesc { get; set; }
         public long ViewNum { get; set; }
         public bool EnabledMark { get; set; }
-        public bool? DeleteMark { get; set; } 
+        public bool? DeleteMark { get; set; }
         public string CreatorUserId { get; set; }
         public DateTime? CreatorTime { get; set; }
         public string DeleteUserId { get; set; }
@@ -58,7 +58,10 @@ namespace CMS.Domain.Entity.WebManage
         public string Description9 { get; set; }
         public string Description10 { get; set; }
 
-       [NotMapped]
+        [NotMapped]
         public string UrlPage { get; set; }
+
+        [NotMapped]
+        public List<Entity.SystemManage.UpFileEntity> UpImages { get; set; }
     }
 }

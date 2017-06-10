@@ -16,7 +16,6 @@ namespace CMS.Domain.Entity.WebManage
         [Description("站点")]
         public string WebSiteId { get; set; }
 
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
         [Description("父级")]
         public string ParentId { get; set; }
 
