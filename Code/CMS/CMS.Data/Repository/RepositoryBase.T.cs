@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -48,11 +49,17 @@ namespace CMS.Data
             PropertyInfo[] props = entity.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
             {
-                if (prop.GetValue(entity, null) != null)
+                Object[] attrs = prop.GetCustomAttributes(true);
+                string strDesc = string.Empty;
+                NotMappedAttribute notMapped = Attribute.GetCustomAttribute(prop, typeof(NotMappedAttribute)) as NotMappedAttribute;
+                if (notMapped == null)
                 {
-                    if (prop.GetValue(entity, null).ToString() == "&nbsp;")
-                        dbcontext.Entry(entity).Property(prop.Name).CurrentValue = null;
-                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                    if (prop.GetValue(entity, null) != null)
+                    {
+                        if (prop.GetValue(entity, null).ToString() == "&nbsp;")
+                            dbcontext.Entry(entity).Property(prop.Name).CurrentValue = null;
+                        dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                    }
                 }
             }
             return dbcontext.SaveChanges();

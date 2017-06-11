@@ -1,6 +1,8 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.SystemManage;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Code.Html;
+using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -418,6 +420,43 @@ namespace CMS.Application.Comm
             return strs;
 
         }
+        /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPage<T>(string codes, T model)
+        {
+            string strs = string.Empty;
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTMC);
+                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string htmlt = GetModelById(strts[1], model);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTMC);
+                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                }
+                strs = templets;
+            }
+            catch (Exception ex)
+            {
+                strs = string.Empty;
+            }
+            return strs;
+
+        }
 
         /// <summary>
         /// 获取模板元素集合
@@ -457,6 +496,82 @@ namespace CMS.Application.Comm
 
         }
 
+
+        /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPage<T>(string codes, T model, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTMC);
+                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string htmlt = GetModelById<T>(strts[1], model, attrs);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTMC);
+                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                }
+                strs = templets;
+            }
+            catch (Exception ex)
+            {
+                strs = string.Empty;
+            }
+            return strs;
+
+        }
+
+        /// <summary>
+        /// 获取模板元素集合
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public string GetHtmlPageForImages(string codes, UpFileEntity model, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            try
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                int i = templets.IndexOf(STARTMC);
+                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                while (i > 0 && j > 0)
+                {
+                    string templetst = templets.Substring(i, j - i);
+                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
+                    string[] strts = strt.Split('.');
+
+                    if (strts.Length >= 2 && strts[1] != null)
+                    {
+                        string htmlt = GetModelById(strts[1], model, attrs);
+                        templets = templets.Replace(templetst, htmlt);
+
+                    }
+                    i = templets.IndexOf(STARTMC);
+                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
+                }
+                strs = templets;
+            }
+            catch (Exception ex)
+            {
+                strs = string.Empty;
+            }
+            return strs;
+
+        }
         #endregion
 
         #endregion
@@ -486,6 +601,9 @@ namespace CMS.Application.Comm
                         {
                             case "contents":
                                 htmls = GetContentsById(Id, mcodes, attrs);
+                                break;
+                            case "images":
+                                htmls = GetImagessById(Id, mcodes, attrs);
                                 break;
                         }
                         break;
@@ -533,6 +651,9 @@ namespace CMS.Application.Comm
                             case "contents":
                                 htmls = GetContentsById(webSiteShortName, Id, mcodes, attrs, irequestType);
                                 break;
+                            case "images":
+                                htmls = GetImagessById(Id, mcodes, attrs);
+                                break;
                         }
                         break;
                     case "templet":
@@ -573,6 +694,23 @@ namespace CMS.Application.Comm
             return strs;
         }
 
+
+        /// <summary>
+        /// 根据model获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById<T>(string name, T model)
+        {
+            string strs = string.Empty;
+            if (model != null)
+            {
+                strs = ProContent<T>(name, model);
+            }
+
+            return strs;
+        }
+
         /// <summary>
         /// 根据model获取内容
         /// </summary>
@@ -585,6 +723,23 @@ namespace CMS.Application.Comm
             if (model != null)
             {
                 strs = ProContent<ContentEntity>(name, model, attrs);
+            }
+
+            return strs;
+        }
+
+        /// <summary>
+        /// 根据model获取内容
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetModelById<T>(string name, T model, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+
+            if (model != null)
+            {
+                strs = ProContent<T>(name, model, attrs);
             }
 
             return strs;
@@ -816,6 +971,77 @@ namespace CMS.Application.Comm
                 }
             }
 
+            return strs;
+        }
+
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetImagessById(string Ids, string mcodes, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            List<UpFileEntity> upFileEntitys = new List<UpFileEntity>();
+            UpFileApp upFileApp = new UpFileApp();
+            IQueryable<UpFileEntity> upFileEntitysT = upFileApp.GetListIq();
+
+            if (upFileEntitysT != null)
+            {
+                //排序
+                if (attrs.ContainsKey("sort"))
+                {
+                    string val = "";
+                    attrs.TryGetValue("sort", out val);
+
+                    string sortName = val;
+                    upFileEntitysT = upFileEntitysT.OrderBy(sortName);
+
+
+                }
+                //排序
+                if (attrs.ContainsKey("sortdesc"))
+                {
+                    string val = "";
+                    attrs.TryGetValue("sortdesc", out val);
+
+                    string sortName = val;
+                    upFileEntitysT = upFileEntitysT.OrderBy(sortName, true);
+
+                }
+                //行数
+                if (attrs.ContainsKey("tatol"))
+                {
+                    string val = "";
+                    attrs.TryGetValue("tatol", out val);
+                    int tatolnum = 0;
+                    if (int.TryParse(val, out tatolnum))
+                    {
+                        upFileEntitysT = upFileEntitysT.Take(tatolnum);
+                    }
+
+                }
+                upFileEntitysT = upFileEntitysT.Where(m => m.ParentId == Ids);
+                upFileEntitys = upFileEntitysT.ToList();
+                //处理连接地址
+                upFileEntitys.ForEach(delegate(UpFileEntity model)
+                {
+
+                    if (model != null && model.FilePath != null)
+                    {
+                        model.FilePath = model.FilePath;
+                        model.FilePath = model.FilePath.Replace(@"\", "/");
+                    }
+
+                });
+                if (upFileEntitys != null && upFileEntitys.Count > 0)
+                {
+                    foreach (UpFileEntity upFileEntity in upFileEntitys)
+                    {
+                        strs += GetHtmlPage<UpFileEntity>(mcodes, upFileEntity, attrs);
+                    }
+                }
+            }
             return strs;
         }
 
@@ -1104,12 +1330,12 @@ namespace CMS.Application.Comm
                 //htmls = Comm.CacheHelp.cacheHelp.GetOutPutHtmls(urlHost);
                 //if (string.IsNullOrEmpty(htmls))
                 //{
-                    //处理Url参数
-                    urlRaw = Common.HandleUrlRaw(urlRaw);
-                    WebSiteApp app = new WebSiteApp();
-                    WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
-                    htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
-                    //Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
+                //处理Url参数
+                urlRaw = Common.HandleUrlRaw(urlRaw);
+                WebSiteApp app = new WebSiteApp();
+                WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
+                htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
+                //Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
                 //}
             }
             catch

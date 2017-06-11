@@ -757,5 +757,9 @@ namespace CMS.Application.SystemManage
             models = service.IQueryable(m => m.ParentId == Pid && m.DeleteMark != true && m.UploadType == (int)type).ToList();
             return models;
         }
+        public IQueryable<UpFileEntity> GetListIq()
+        {
+            return service.IQueryable();
+        }
     }
 }
