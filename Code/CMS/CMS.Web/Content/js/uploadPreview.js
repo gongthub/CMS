@@ -94,6 +94,7 @@ jQuery.fn.extend({
             return url
         };
         _this.change(function () {
+            changeRemoveImgs(opts.div);
             for (var i = 0; i < this.files.length; i++) {
                 if (this.value) {
                     if (!RegExp("\.(" + opts.ImgType.join("|") + ")$", "i").test(this.value.toLowerCase())) {
@@ -103,7 +104,7 @@ jQuery.fn.extend({
                     }
                     if ($.browser.msie) {
                         try {
-                            var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
+                            var img_html = "<div class='isImg' data-name='" + this.files[i].name + "' data-id='0'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
                                 + "px; width:" + opts.Width + "px;'><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
                             $("#" + opts.div).append(img_html);
                             //$("#" + opts.div).attr('src', _self.getObjectURL(this.files[i]))
@@ -128,7 +129,7 @@ jQuery.fn.extend({
                             div.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = src
                         }
                     } else {
-                        var img_html = "<div class='isImg' data-name='" + this.files[i].name + "'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
+                        var img_html = "<div class='isImg' data-name='" + this.files[i].name + "' data-id='0'><img src='" + _self.getObjectURL(this.files[i]) + "' style='height:" + opts.Height
                             + "px; width:" + opts.Width + "px;'><button class='removeBtn' onclick='javascript:uploadPreviewsremoveImg(this)'>x</button></div>";
                         $("#" + opts.div).append(img_html);
                         //$("#" + opts.Img).attr('src', _self.getObjectURL(this.files[i]))
@@ -144,6 +145,15 @@ function uploadPreviewsremoveImg(r) {
     $(r).parent().remove();
 }
 
+function changeRemoveImgs(divShowId)
+{
+    var divImgs = $("#" + divShowId).find(".isImg");
+    for (var i = 0; i < divImgs.length; i++) {
+        var ids=$(divImgs[i]).data("id");
+        if (ids == 0)
+            $(divImgs[i]).remove();
+    }
+}
 
 //获取图片
 function uploadPreviewsgetImgs(inputFileId, divShowId) {
