@@ -15,17 +15,43 @@ namespace CMS.Code
         public static string md5(string str, int code)
         {
             string strEncrypt = string.Empty;
-            if (code == 16)
-            {
-                strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5").Substring(8, 16);
-            }
+            //if (code == 16)
+            //{
+            //   strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5").Substring(8, 16);
+            //}
 
-            if (code == 32)
-            {
-                strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5");
-            }
+            //if (code == 32)
+            //{
+            //    strEncrypt = System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(str, "MD5");
+            //}
+            strEncrypt = GetMD5(str, code);
 
             return strEncrypt;
+        }
+
+        /// <summary>
+        /// 获取MD5
+        /// </summary>
+        /// <param name="str">加密字符</param>
+        /// <param name="code">加密位数16/32</param>
+        /// <returns></returns>
+        public static string GetMD5(string str, int code)
+        {
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] bytValue, bytHash;
+            bytValue = System.Text.Encoding.UTF8.GetBytes(str);
+            bytHash = md5.ComputeHash(bytValue);
+            md5.Clear();
+            string sTemp = "";
+            for (int i = 0; i < bytHash.Length; i++)
+            {
+                sTemp += bytHash[i].ToString("X").PadLeft(2, '0');
+            }
+            if (code == 16)
+            {
+                sTemp = sTemp.Substring(8, 16);
+            }
+            return sTemp.ToLower();
         }
 
         /// <summary>

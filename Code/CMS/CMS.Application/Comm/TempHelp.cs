@@ -257,7 +257,7 @@ namespace CMS.Application.Comm
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 b = false;
             }
@@ -305,7 +305,7 @@ namespace CMS.Application.Comm
                 //格式化
                 //strs = HtmlCodeFormat.Format(strs);
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }
@@ -350,7 +350,7 @@ namespace CMS.Application.Comm
                 //格式化
                 //strs = HtmlCodeFormat.Format(strs);
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -413,7 +413,7 @@ namespace CMS.Application.Comm
                 }
                 strs = templets;
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }
@@ -450,7 +450,7 @@ namespace CMS.Application.Comm
                 }
                 strs = templets;
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }
@@ -488,7 +488,7 @@ namespace CMS.Application.Comm
                 }
                 strs = templets;
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }
@@ -527,7 +527,7 @@ namespace CMS.Application.Comm
                 }
                 strs = templets;
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }
@@ -565,7 +565,7 @@ namespace CMS.Application.Comm
                 }
                 strs = templets;
             }
-            catch (Exception ex)
+            catch
             {
                 strs = string.Empty;
             }

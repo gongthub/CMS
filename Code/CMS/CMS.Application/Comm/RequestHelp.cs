@@ -86,7 +86,7 @@ namespace CMS.Application.Comm
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 context.Response.Clear();
                 context.Response.StatusCode = 500;

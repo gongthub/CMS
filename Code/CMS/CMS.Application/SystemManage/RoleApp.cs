@@ -61,7 +61,7 @@ namespace CMS.Application.SystemManage
             {
                 //var LoginInfo = OperatorProvider.Provider.GetCurrent();
                 var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-                if (LoginInfo != null && LoginInfo.UserLevel != null)
+                if (LoginInfo != null)
                     strUserLevel = LoginInfo.UserLevel.ToString();
             }
             if (!string.IsNullOrEmpty(strUserLevel))

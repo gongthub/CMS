@@ -52,7 +52,6 @@ namespace CMS.Application.Comm
                     List<ContentEntity> contents = contentApp.GetListByWebSiteId(wenSiteIds);
 
                     IndexWriter iw = new IndexWriter(Lucene.Net.Store.FSDirectory.Open(INDEX_DIR), analyzer, true, IndexWriter.MaxFieldLength.LIMITED);
-                    int i = 0;
                     foreach (ContentEntity content in contents)
                     {
                         Document doc = new Document();
@@ -96,7 +95,6 @@ namespace CMS.Application.Comm
 
                     using (IndexWriter iw = new IndexWriter(Lucene.Net.Store.FSDirectory.Open(INDEX_DIR), analyzer, true, IndexWriter.MaxFieldLength.LIMITED))
                     {
-                        int i = 0;
                         foreach (ContentEntity content in contents)
                         {
                             Document doc = new Document();

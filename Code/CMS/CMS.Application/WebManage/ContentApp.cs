@@ -421,7 +421,7 @@ namespace CMS.Application.WebManage
         {
             long num = 0;
             ContentEntity moduleEntity = GetForm(ids);
-            if (moduleEntity != null && moduleEntity.ViewNum != null)
+            if (moduleEntity != null)
             {
                 num = moduleEntity.ViewNum;
             }
@@ -446,7 +446,7 @@ namespace CMS.Application.WebManage
                 if (Code.FileHelper.IsExistFile(urlPath, true))
                 {
                     htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
-                    if (contentEntity.ViewNum == null)
+                    if (contentEntity.ViewNum < 0)
                     {
                         contentEntity.ViewNum = 0;
                     }
