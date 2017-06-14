@@ -48,8 +48,8 @@
     function gridList() {
         var $gridList = $("#gridList");
         $gridList.dataGrid({
-            url: "/WebManage/KeyWordConfig/GetGridJson",
-            height: $(window).height() - 96,
+            url: "/WebManage/KeyWordConfig/GetGrid",
+            height: $(window).height() - 128,
             colModel: [
                 { label: "主键", name: "Id", hidden: true, key: true },
                 { label: '名称', name: 'FullName', width: 150, align: 'left' },
@@ -62,7 +62,7 @@
                 }
             ],
             pager: "#gridPager",
-            sortname: 'FullName asc,Description desc',
+            sortname: 'FullName asc',
             viewrecords: true
         });
         $("#btn_search").click(function () {

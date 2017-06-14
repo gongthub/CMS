@@ -27,6 +27,18 @@ namespace CMS.Application.SystemManage
             expression = expression.And(t => t.DeleteMark != true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
+        public List<ItemsDetailEntity> GetList(string itemId, string keyword, Pagination pagination)
+        {
+            var expression = ExtLinq.True<ItemsDetailEntity>();
+            expression = expression.And(t => t.ItemId == itemId);
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.ItemName.Contains(keyword));
+                expression = expression.Or(t => t.ItemCode.Contains(keyword));
+            }
+            expression = expression.And(t => t.DeleteMark != true);
+            return service.FindList(expression, pagination);
+        }
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {
             List<ItemsDetailEntity> lItemEntity = new List<ItemsDetailEntity>();
@@ -112,7 +124,7 @@ namespace CMS.Application.SystemManage
                     {
                         //var LoginInfo = OperatorProvider.Provider.GetCurrent();
                         var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-                        if (LoginInfo != null && LoginInfo.UserLevel >=0)
+                        if (LoginInfo != null && LoginInfo.UserLevel >= 0)
                             strUserLevel = LoginInfo.UserLevel.ToString();
                     }
                     if (!string.IsNullOrEmpty(strUserLevel))

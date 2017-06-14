@@ -11,6 +11,19 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGrid(Pagination pagination,string keyword)
+        {
+            var data = new
+            {
+                rows = filterIPApp.GetList(pagination, keyword),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson(string keyword)
         {
             var data = filterIPApp.GetList(keyword);

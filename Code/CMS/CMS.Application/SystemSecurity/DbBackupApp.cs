@@ -13,6 +13,27 @@ namespace CMS.Application.SystemSecurity
     {
         private IDbBackupRepository service = new DbBackupRepository();
 
+        public List<DbBackupEntity> GetList(Pagination pagination, string queryJson)
+        {
+            var expression = ExtLinq.True<DbBackupEntity>();
+            var queryParam = queryJson.ToJObject();
+            if (!queryParam["condition"].IsEmpty() && !queryParam["keyword"].IsEmpty())
+            {
+                string condition = queryParam["condition"].ToString();
+                string keyword = queryParam["keyword"].ToString();
+                switch (condition)
+                {
+                    case "DbName":
+                        expression = expression.And(t => t.DbName.Contains(keyword));
+                        break;
+                    case "FileName":
+                        expression = expression.And(t => t.FileName.Contains(keyword));
+                        break;
+                }
+            }
+            expression = expression.And(t => t.DeleteMark != true);
+            return service.FindList(expression, pagination);
+        }
         public List<DbBackupEntity> GetList(string queryJson)
         {
             var expression = ExtLinq.True<DbBackupEntity>();

@@ -11,6 +11,19 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGrid(Pagination pagination, string queryJson)
+        {
+            var data = new
+            {
+                rows = dbBackupApp.GetList(pagination, queryJson),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson(string queryJson)
         {
             var data = dbBackupApp.GetList(queryJson);

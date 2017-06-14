@@ -15,10 +15,9 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
 
         [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGrid(Pagination pagination, string keyword)
         {
-            //var data = templetApp.GetList();
-            //return Content(data.ToJson());
             var data = new
             {
                 rows = templetApp.GetListByWebSiteId(pagination, keyword, Base_WebSiteId),
@@ -30,6 +29,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         }
 
         [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson()
         {
             var data = templetApp.GetListByWebSiteId(Base_WebSiteId);

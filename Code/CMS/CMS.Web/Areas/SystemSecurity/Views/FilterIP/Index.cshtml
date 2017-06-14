@@ -38,6 +38,7 @@
 </div>
 <div class="gridPanel">
     <table id="gridList"></table>
+    <div id="gridPager"></div>
 </div>
 @section scripts {
     <script>
@@ -47,8 +48,8 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                url: "/SystemSecurity/FilterIP/GetGridJson",
-                height: $(window).height() - 96,
+                url: "/SystemSecurity/FilterIP/GetGrid",
+                height: $(window).height() - 128,
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
                     {
@@ -69,7 +70,10 @@
                         formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i', newformat: 'Y-m-d H:i' }
                     },
                     { label: '备注', name: 'Description', width: 300, align: 'left' }
-                ]
+                ],
+                pager: "#gridPager",
+                sortname: 'CreatorTime desc',
+                viewrecords: true
             });
             $("#btn_search").click(function () {
                 $gridList.jqGrid('setGridParam', {

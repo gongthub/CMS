@@ -16,18 +16,32 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGrid(Pagination pagination, string keyword)
+        {
+            var data = new
+            {
+                rows = roleApp.GetList(keyword, pagination),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
+
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson(string keyword)
         {
             var data = roleApp.GetList(keyword);
             return Content(data.ToJson());
-        } 
+        }
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetGridJsons(string keyValue)
         {
             var data = roleApp.GetLists(keyValue);
             return Content(data.ToJson());
-        } 
+        }
         [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetFormJson(string keyValue)

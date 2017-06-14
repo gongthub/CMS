@@ -18,6 +18,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
 
         [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGrid(Pagination pagination, string keyword)
         {
             var data = new

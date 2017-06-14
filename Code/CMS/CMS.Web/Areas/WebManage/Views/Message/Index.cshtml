@@ -34,6 +34,7 @@
 </div>
 <div class="gridPanel">
     <table id="gridList"></table>
+    <div id="gridPager"></div>
 </div>
 @section scripts {
     <script>
@@ -41,7 +42,6 @@
             gridList();
         })
         function gridList() {
-
             $.ajax({
                 url: "/WebManage/Message/GetListTitle",
                 data: {},
@@ -51,16 +51,21 @@
                     var dataT = eval('(' + data + ')');
                     var $gridList = $("#gridList");
                     $gridList.dataGrid({
-                        url: "/WebManage/Message/GetGridJson",
-                        height: $(window).height() - 96,
-                        colModel: dataT
+                        url: "/WebManage/Message/GetGrid",
+                        height: $(window).height() - 128,
+                        colModel: dataT,
+                        rowNum: 1,
+                        rowList: [1, 2, 30],
+                        pager: "#gridPager",
+                        sortname: 'CreatorTime desc',
+                        viewrecords: true
+                    });
+                    $("#btn_search").click(function () {
+                        $gridList.jqGrid('setGridParam', {
+                            postData: { keyword: $("#txt_keyword").val() },
+                        }).trigger('reloadGrid');
                     });
                 }
-            });
-            $("#btn_search").click(function () {
-                $gridList.jqGrid('setGridParam', {
-                    postData: { keyword: $("#txt_keyword").val() },
-                }).trigger('reloadGrid');
             });
         }
 

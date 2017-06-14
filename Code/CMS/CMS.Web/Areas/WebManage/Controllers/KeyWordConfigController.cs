@@ -19,6 +19,19 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGrid(Pagination pagination, string keyword)
+        {
+            var data = new
+            {
+                rows = keyWordApp.GetListByWebSiteId(Base_WebSiteId, pagination, keyword),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson(string keyword)
         {
             var data = keyWordApp.GetListByWebSiteId(Base_WebSiteId);

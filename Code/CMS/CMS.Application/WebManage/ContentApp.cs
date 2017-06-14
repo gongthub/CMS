@@ -127,6 +127,30 @@ namespace CMS.Application.WebManage
             });
             return models;
         }
+        public List<ContentEntity> GetList(string itemId, string keyword, Pagination pagination)
+        {
+            List<ContentEntity> models = new List<ContentEntity>();
+            var expression = ExtLinq.True<ContentEntity>();
+            expression = expression.And(t => t.ColumnId == itemId);
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            expression = expression.And(m => m.DeleteMark != true);
+
+            models = service.FindList(expression, pagination);
+            models.ForEach(delegate(ContentEntity model)
+            {
+
+                if (model != null && model.UrlAddress != null)
+                {
+                    model.UrlPage = model.UrlAddress;
+                    model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                }
+
+            });
+            return models;
+        }
         public List<ContentEntity> GetLists(Expression<Func<ContentEntity, bool>> predicate)
         {
             List<ContentEntity> models = new List<ContentEntity>();

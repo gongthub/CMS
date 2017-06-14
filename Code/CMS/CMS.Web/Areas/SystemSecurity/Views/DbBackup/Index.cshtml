@@ -48,6 +48,7 @@
 </div>
 <div class="gridPanel">
     <table id="gridList"></table>
+    <div id="gridPager"></div>
 </div>
 @section scripts {
     <script>
@@ -57,8 +58,8 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                url: "/SystemSecurity/DbBackup/GetGridJson",
-                height: $(window).height() - 96,
+                url: "/SystemSecurity/DbBackup/GetGrid",
+                height: $(window).height() - 128,
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
                     { label: '数据库名', name: 'DbName', width: 100, align: 'left' },
@@ -80,7 +81,10 @@
                     },
                     { label: '备份人员', name: 'CreatorUserId', width: 100, align: 'left' },
                     { label: '备份说明', name: 'Description', width: 300, align: 'left' }
-                ]
+                ],
+                pager: "#gridPager",
+                sortname: 'CreatorTime desc',
+                viewrecords: true
             });
             $("#txt_condition .dropdown-menu li").click(function () {
                 var text = $(this).find('a').html();

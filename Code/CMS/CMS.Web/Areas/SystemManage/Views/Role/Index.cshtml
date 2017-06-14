@@ -38,6 +38,7 @@
 </div>
 <div class="gridPanel">
     <table id="gridList"></table>
+    <div id="gridPager"></div>
 </div>
 @section scripts {
     <script>
@@ -47,10 +48,11 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                url: "/SystemManage/Role/GetGridJson",
-                height: $(window).height() - 96,
+                url: "/SystemManage/Role/GetGrid",
+                height: $(window).height() - 128,
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
+                    { label: '排序', name: 'SortCode', width: 150, align: 'left' },
                     { label: '角色名称', name: 'FullName', width: 150, align: 'left' },
                     { label: '角色编号', name: 'EnCode', width: 150, align: 'left' },
                     {
@@ -76,7 +78,10 @@
                         }
                     },
                     { label: '备注', name: 'Description', width: 300, align: 'left' }
-                ]
+                ],
+                pager: "#gridPager",
+                sortname: 'SortCode asc',
+                viewrecords: true
             });
             $("#btn_search").click(function () {
                 $gridList.jqGrid('setGridParam', {

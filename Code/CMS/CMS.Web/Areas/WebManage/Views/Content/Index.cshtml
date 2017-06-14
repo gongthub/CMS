@@ -43,6 +43,7 @@
         </div>
         <div class="gridPanel">
             <table id="gridList"></table>
+            <div id="gridPager"></div>
         </div>
     </div>
 </div>
@@ -57,9 +58,8 @@
 
         function treeView() {
             $("#itemTree").treeview({
-                url: "/WebManage/Columns/GetTreeJson",
+                url: "/WebManage/Columns/GetTreeSelectJson",
                 onnodeclick: function (item) {
-
                     var $operate = $(".operate");
                     $operate.animate({ "left": '-100.1%' }, 200);
                     $("#txt_keyword").val('');
@@ -71,9 +71,11 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                height: $(window).height() - 96,
+                height: $(window).height() - 128,
+                url: "/WebManage/Content/GetGrid",
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
+                    { label: '排序', name: 'SortCode', width: 150, align: 'left' },
                     { label: '名称', name: 'FullName', width: 120, align: 'left' },
                     {
                         label: '栏目', name: 'ColumnId', width: 80, align: 'left',
@@ -98,11 +100,14 @@
                     },
                     { label: '连接地址', name: 'UrlPage', width: 150, align: 'left' },
                     { label: "备注", name: "Description", index: "Description", width: 200, align: "left", sortable: false }
-                ]
+                ],
+                pager: "#gridPager",
+                sortname: 'SortCode asc',
+                viewrecords: true
             });
             $("#btn_search").click(function () {
                 $gridList.jqGrid('setGridParam', {
-                    url: "/WebManage/Content/GetGridJson",
+                    url: "/WebManage/Content/GetGrid",
                     postData: { itemId: $("#itemTree").getCurrentNode().id, keyword: $("#txt_keyword").val() },
                 }).trigger('reloadGrid');
             });

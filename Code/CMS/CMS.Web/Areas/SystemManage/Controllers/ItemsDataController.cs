@@ -13,6 +13,19 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpGet]
         [HandlerAjaxOnly]
+        public ActionResult GetGrid(string itemId, string keyword, Pagination pagination)
+        {
+            var data = new
+            {
+                rows = itemsDetailApp.GetList(itemId, keyword, pagination),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
+        [HttpGet]
+        [HandlerAjaxOnly]
         public ActionResult GetGridJson(string itemId, string keyword)
         {
             var data = itemsDetailApp.GetList(itemId, keyword);

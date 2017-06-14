@@ -49,11 +49,11 @@
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             url: "/WebManage/Templet/GetGrid",
-            height: $(window).height() - 96,
+            height: $(window).height() - 128,
             colModel: [
                 { label: "主键", name: "Id", hidden: true, key: true },
-                { label: '名称', name: 'FullName', width: 150, align: 'left' },
                 { label: '排序', name: 'SortCode', width: 150, align: 'left' },
+                { label: '名称', name: 'FullName', width: 150, align: 'left' },
                 { label: '描述', name: 'Description', width: 150, align: 'left' },
                 {
                     label: "有效", name: "EnabledMark", width: 60, align: "center",
@@ -63,7 +63,7 @@
                 }
             ],
             pager: "#gridPager",
-            sortname: 'FullName asc,Description desc',
+            sortname: 'SortCode asc',
             viewrecords: true
         });
         $("#btn_search").click(function () {

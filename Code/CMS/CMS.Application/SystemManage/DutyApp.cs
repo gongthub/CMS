@@ -24,6 +24,18 @@ namespace CMS.Application.SystemManage
             expression = expression.And(t => t.DeleteMark!=true);
             return service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
+        public List<RoleEntity> GetList(string keyword, Pagination pagination)
+        {
+            var expression = ExtLinq.True<RoleEntity>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+                expression = expression.Or(t => t.EnCode.Contains(keyword));
+            }
+            expression = expression.And(t => t.Category == 2);
+            expression = expression.And(t => t.DeleteMark != true);
+            return service.FindList(expression, pagination);
+        }
         public RoleEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);

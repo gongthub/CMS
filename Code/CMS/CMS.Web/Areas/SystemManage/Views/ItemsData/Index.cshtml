@@ -46,6 +46,7 @@
         </div>
         <div class="gridPanel">
             <table id="gridList"></table>
+            <div id="gridPager"></div>
         </div>
     </div>
 </div>
@@ -68,12 +69,13 @@
         function gridList() {
             var $gridList = $("#gridList");
             $gridList.dataGrid({
-                height: $(window).height() - 96,
+                height: $(window).height() - 128,
+                url: "/SystemManage/ItemsData/GetGrid",
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
+                    { label: '排序', name: 'SortCode', width: 80, align: 'center' },
                     { label: '名称', name: 'ItemName', width: 150, align: 'left' },
                     { label: '编号', name: 'ItemCode', width: 150, align: 'left' },
-                    { label: '排序', name: 'SortCode', width: 80, align: 'center' },
                     {
                         label: "默认", name: "IsDefault", width: 60, align: "center",
                         formatter: function (cellvalue) {
@@ -91,11 +93,14 @@
                         }
                     },
                     { label: "备注", name: "Description", index: "Description", width: 200, align: "left", sortable: false }
-                ]
+                ],
+                pager: "#gridPager",
+                sortname: 'SortCode asc',
+                viewrecords: true
             });
             $("#btn_search").click(function () {
                 $gridList.jqGrid('setGridParam', {
-                    url: "/SystemManage/ItemsData/GetGridJson",
+                    url: "/SystemManage/ItemsData/GetGrid",
                     postData: { itemId: $("#itemTree").getCurrentNode().id, keyword: $("#txt_keyword").val() },
                 }).trigger('reloadGrid');
             });

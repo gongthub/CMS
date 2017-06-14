@@ -50,7 +50,7 @@
         var $gridList = $("#gridList");
         $gridList.dataGrid({
             url: "/WebManage/WebSiteMgr/GetGrid",
-            height: $(window).height() - 96,
+            height: $(window).height() - 128,
             colModel: [
                 { label: "主键", name: "Id", hidden: true, key: true },
                 { label: '排序', name: 'SortCode', width: 150, align: 'left' },
@@ -66,7 +66,7 @@
                 }
             ],
             pager: "#gridPager",
-            sortname: 'SortCode asc,ShortName desc',
+            sortname: 'SortCode asc',
             viewrecords: true
         });
         $("#btn_search").click(function () {

@@ -12,6 +12,16 @@ namespace CMS.Application.SystemSecurity
     {
         private IFilterIPRepository service = new FilterIPRepository();
 
+        public List<FilterIPEntity> GetList(Pagination pagination, string keyword)
+        {
+            var expression = ExtLinq.True<FilterIPEntity>();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.StartIP.Contains(keyword));
+            }
+            expression = expression.And(t => t.DeleteMark != true);
+            return service.FindList(expression, pagination);
+        }
         public List<FilterIPEntity> GetList(string keyword)
         {
             var expression = ExtLinq.True<FilterIPEntity>();

@@ -24,6 +24,19 @@ namespace CMS.Web.Areas.WebManage.Controllers
             object strJson = new MessageConfigApp().GetListTitleJsonStr(Base_WebSiteId);
             return Content(strJson.ToJson());
         }
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetGrid(Pagination pagination, string keyword)
+        {
+            var data = new
+            {
+                rows = messagesApp.GetListByWebSiteId(pagination, keyword, Base_WebSiteId),
+                total = pagination.total,
+                page = pagination.page,
+                records = pagination.records
+            };
+            return Content(data.ToJson());
+        }
 
         [HttpGet]
         [HandlerAjaxOnly]
