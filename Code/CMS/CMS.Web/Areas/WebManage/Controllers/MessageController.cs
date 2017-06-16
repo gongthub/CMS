@@ -18,7 +18,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
 
         [HttpGet]
-        [HandlerAuthorize]
+        [HandlerAjaxOnly]
         public ActionResult GetListTitle()
         {
             object strJson = new MessageConfigApp().GetListTitleJsonStr(Base_WebSiteId);

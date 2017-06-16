@@ -203,6 +203,7 @@ function uploadFiles(fileId) {
 
 //上传多个资源文件
 function uploadResourceFiles(fileId, resourceId) {
+    $.loading(true, "正在上传文件……");
     var dataret = { success: true, data: "" };
     var formData = new FormData();
     formData.append("resourceId", resourceId);
@@ -217,7 +218,7 @@ function uploadResourceFiles(fileId, resourceId) {
         url: "/SystemManage/UpFile/uploadResourceFiles",
         dataType: "json",
         data: formData,
-        async: false,
+        async: true,
         // 告诉jQuery不要去处理发送的数据
         processData: false,
         // 告诉jQuery不要去设置Content-Type请求头
@@ -236,6 +237,7 @@ function uploadResourceFiles(fileId, resourceId) {
                 alert(jsonData.data);
                 return;
             }
+            $.loading(false);
         }
     });
     return dataret;
