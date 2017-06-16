@@ -686,6 +686,12 @@ namespace CMS.Data
                         throw new Exception("字段 '" + desc + "'格式不正确！");
                     }
                     break;
+                case Enums.VerifyType.IsDomainOrIP:
+                    if (val != null && !(Code.Validate.IsValidDomain(val.ToString()) || !Code.Validate.IsValidIP(val.ToString())))
+                    {
+                        throw new Exception("字段 '" + desc + "'格式不正确！");
+                    }
+                    break;
             }
         }
 

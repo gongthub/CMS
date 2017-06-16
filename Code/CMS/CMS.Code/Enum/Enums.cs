@@ -37,7 +37,9 @@ namespace CMS.Code
             [Description("日期有效性")]
             IsDate = 10,
             [Description("可空域名有效性")]
-            IsDomainOrEmpty = 11
+            IsDomainOrEmpty = 11,
+            [Description("域名或者IP")]
+            IsDomainOrIP = 12
         }
         /// <summary>
         /// 日志类型

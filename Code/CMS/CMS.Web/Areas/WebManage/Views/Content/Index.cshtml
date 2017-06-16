@@ -58,7 +58,7 @@
 
         function treeView() {
             $("#itemTree").treeview({
-                url: "/WebManage/Columns/GetTreeSelectJson",
+                url: "/WebManage/Columns/GetTreeJson",
                 onnodeclick: function (item) {
                     var $operate = $(".operate");
                     $operate.animate({ "left": '-100.1%' }, 200);
