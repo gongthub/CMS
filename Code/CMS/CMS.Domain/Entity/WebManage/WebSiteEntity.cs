@@ -30,7 +30,7 @@ namespace CMS.Domain.Entity.WebManage
         /// <summary>
         /// UrlAddress
         /// </summary>		
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsDomainOrIP)]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
         [Description("域名")]
         public string UrlAddress { get; set; }
 
