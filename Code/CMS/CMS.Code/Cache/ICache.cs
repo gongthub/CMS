@@ -8,6 +8,7 @@ namespace CMS.Code
 {
     public interface ICache
     {
+        List<string> GetAllKey();
         T GetCache<T>(string cacheKey) where T : class;
         void WriteCache<T>(T value, string cacheKey) where T : class;
         void WriteCache<T>(T value, string cacheKey, DateTime expireTime) where T : class;

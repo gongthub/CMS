@@ -799,6 +799,7 @@
     <Compile Include="Areas\SystemManage\Controllers\OrganizeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleAuthorizeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\SysSettingController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\UpFileController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\UserController.cs" />
     <Compile Include="Areas\SystemManage\SystemManageAreaRegistration.cs" />
@@ -993,6 +994,7 @@
     <Content Include="Areas\WebManage\Views\Content\AdvancedForm.cshtml" />
     <Content Include="Areas\WebManage\Views\Content\AdvancedDetails.cshtml" />
     <Content Include="Areas\WebManage\Views\WebSiteConfig\AdvancedContentConfig.cshtml" />
+    <Content Include="Areas\SystemManage\Views\SysSetting\Index.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

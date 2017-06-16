@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@model CMS.Domain.Entity.WebManage.WebSiteConfigEntity
+<form id="form1">
+    <div class="mail-box">
+        <div class="mail-header">缓存管理</div>
+        <div class="mail-body">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">清除所有缓存</th>
+                    <td class="formValue">
+                        <a onclick="clearAll()" class="btn  btn-primary">清除所有缓存</a>
+                    </td>
+                    <th class="formTitle">清除权限缓存</th>
+                    <td class="formValue">
+                        <a onclick="clearRole()" class="btn  btn-primary">清除权限缓存</a>
+                    </td>
+                </tr>
+                <tr></tr>
+            </table>
+        </div>
+    </div>
+</form>
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+         
+        });
+
+        //清除所有缓存
+        function clearAll() {
+            $.getPost({
+                url: "/SystemManage/SysSetting/ClearAll",
+                param: {},
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+
+        //清除权限缓存
+        function clearRole() {
+            $.getPost({
+                url: "/SystemManage/SysSetting/ClearRole",
+                param: {},
+                success: function (data) {
+                    $.modalAlert(data.message);
+                }
+            })
+        }
+    </script>
+}

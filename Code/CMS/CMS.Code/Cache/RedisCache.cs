@@ -10,6 +10,11 @@ namespace CMS.Code
     public class RedisCache : ICache
     {
 
+        public List<string> GetAllKey()
+        { 
+            List<string> allKeys = RedisHelp.redisHelp.GetAllKey();
+            return allKeys;
+        }
         public T GetCache<T>(string cacheKey) where T : class
         {
             return RedisHelp.redisHelp.GetCache<T>(cacheKey);

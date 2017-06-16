@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 
 
@@ -9,6 +10,16 @@ namespace CMS.Code
     {
         private static System.Web.Caching.Cache cache = HttpRuntime.Cache;
 
+        public List<string> GetAllKey()
+        {
+            List<string> lskeys = new List<string>();
+            IDictionaryEnumerator CacheEnum = cache.GetEnumerator();
+            while (CacheEnum.MoveNext())
+            {
+                lskeys.Add(CacheEnum.Key.ToString());
+            }
+            return lskeys;
+        }
         public T GetCache<T>(string cacheKey) where T : class
         {
             if (cache[cacheKey] != null)

@@ -51,6 +51,16 @@ namespace CMS.Application.Comm
         /// </summary>
         private static string OUTPUTHTML = "OUTPUTHTML_";
 
+        /// <summary>
+        /// 移除所有缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public void RemoveAll()
+        {
+            icache.RemoveCache();
+        }
+
         #region 菜单对象权限
 
         /// <summary>
@@ -73,6 +83,24 @@ namespace CMS.Application.Comm
         }
 
         /// <summary>
+        /// 移除菜单对象权限缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public void RemoveAuthorizeurlDatas()
+        {
+            List<string> allkeys = icache.GetAllKey();
+            foreach (var keys in allkeys)
+            {
+                if (keys.Contains(AUTHORIZEURLDATA))
+                {
+                    icache.RemoveCache(keys);
+                }
+            }
+
+        }
+
+        /// <summary>
         /// 获取菜单对象权限缓存
         /// </summary>
         /// <param name="roleId"></param>
@@ -92,18 +120,27 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        public void WriteOutPutHtmls(string htmls, string hosts)
+        public void WriteOutPutHtmls(string htmls, string webSiteIds, string urlRaws)
         {
-            icache.WriteCache(htmls, OUTPUTHTML + hosts, DateTime.Now.AddMinutes(5));
+            icache.WriteCache(htmls, OUTPUTHTML + webSiteIds + urlRaws, DateTime.Now.AddMinutes(5));
         }
         /// <summary>
         /// 移除输出Html缓存
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        public void RemoveOutPutHtmls(string hosts)
+        public void RemoveOutPutHtmls(string webSiteIds)
         {
-            icache.RemoveCache(OUTPUTHTML + hosts);
+            icache.RemoveCache(OUTPUTHTML + webSiteIds);
+        }
+        /// <summary>
+        /// 移除输出Html缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public void RemoveOutPutHtmls(string webSiteIds, string urlRaws)
+        {
+            icache.RemoveCache(OUTPUTHTML + webSiteIds + urlRaws);
         }
 
         /// <summary>
@@ -114,8 +151,18 @@ namespace CMS.Application.Comm
         public string GetOutPutHtmls(string url)
         {
             string htmls = string.Empty;
-            //if (!string.IsNullOrEmpty(Configs.GetValue("HtmlCacheEnabled")))
             htmls = icache.GetCache<string>(OUTPUTHTML + url);
+            return htmls;
+        }
+        /// <summary>
+        /// 获取输出Html缓存
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public string GetOutPutHtmls(string webSiteIds, string urlRaws)
+        {
+            string htmls = string.Empty;
+            htmls = icache.GetCache<string>(OUTPUTHTML + webSiteIds + urlRaws);
             return htmls;
         }
 
