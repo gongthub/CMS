@@ -71,7 +71,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         public ActionResult DisabledAccount(string keyValue)
         {
             UserEntity userEntity = new UserEntity();
-            userEntity.Id = keyValue;
+            userEntity = userApp.GetForm(keyValue);
             userEntity.EnabledMark = false;
             userApp.UpdateForm(userEntity);
             return Success("账户禁用成功。");
@@ -83,7 +83,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         public ActionResult EnabledAccount(string keyValue)
         {
             UserEntity userEntity = new UserEntity();
-            userEntity.Id = keyValue;
+            userEntity = userApp.GetForm(keyValue);
             userEntity.EnabledMark = true;
             userApp.UpdateForm(userEntity);
             return Success("账户启用成功。");

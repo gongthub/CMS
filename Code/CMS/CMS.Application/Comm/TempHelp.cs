@@ -48,50 +48,50 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 输出文件格式
         /// </summary>
-        private static readonly string HTMLFOR = ".html";
+        const string HTMLFOR = ".html";
         /// <summary>
         /// 模板开始特殊符
         /// </summary>
-        private static readonly string STARTCHAR = "{{#";
+        const string STARTCHAR = "{{#";
         /// <summary>
         /// 模板结束特殊符
         /// </summary>
-        private static readonly string ENDCHAR = "#}}";
+        const string ENDCHAR = "#}}";
         /// <summary>
         /// 模板列表内容开始特殊符
         /// </summary>
-        private static readonly string STARTMCHAR = "{";
+        const string STARTMCHAR = "{";
         /// <summary>
         /// 模板列表内容结束特殊符
         /// </summary>
-        private static readonly string ENDMCHAR = "}";
+        const string ENDMCHAR = "}";
 
         /// <summary>
         /// 模板列表内容开始特殊符
         /// </summary>
-        private static readonly string STARTMC = "@[";
+        const string STARTMC = "@[";
         /// <summary>
         /// 模板列表内容结束特殊符
         /// </summary>
-        private static readonly string ENDMC = "]@";
+        const string ENDMC = "]@";
 
         /// <summary>
         /// 模板列表内容开始特殊符
         /// </summary>
-        private static readonly string STARTMCNA = "[";
+        const string STARTMCNA = "[";
         /// <summary>
         /// 模板列表内容结束特殊符
         /// </summary>
-        private static readonly string ENDMCNA = "]";
+        const string ENDMCNA = "]";
 
         /// <summary>
         /// 模板列表内容结束特殊符
         /// </summary>
-        private static readonly string ATTRS = "@attrs=";
+        const string ATTRS = "@attrs=";
         /// <summary>
         /// 生成静态页面中内容浏览数特殊标识
         /// </summary>
-        public static readonly string STATICHTMLCONTENTNUM = "@viewnum@";
+        public const string STATICHTMLCONTENTNUM = "@viewnum@";
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
@@ -1337,6 +1337,7 @@ namespace CMS.Application.Comm
                 htmls = GetHtmlStrsByWebSite(entity, urlRaw, out isNoFind);
                 //Comm.CacheHelp.cacheHelp.WriteOutPutHtmls(htmls, urlHost);
                 //}
+                //LogFactory.GetLogger(this.GetType()).Info(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff") + " - " + urlHost + " - " + entity.FullName + " - " + entity.Id + "\r\n");
             }
             catch
             {

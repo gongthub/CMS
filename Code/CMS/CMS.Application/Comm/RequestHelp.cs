@@ -54,7 +54,7 @@ namespace CMS.Application.Comm
             string htmls = string.Empty;
             try
             {
-                string urlHost = GetHost(context);
+                string urlHost = GetHost(context); 
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
                 if (!IsLoginHost(context))

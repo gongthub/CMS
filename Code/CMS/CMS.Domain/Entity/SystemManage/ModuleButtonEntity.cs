@@ -7,7 +7,7 @@ namespace CMS.Domain.Entity.SystemManage
     public class ModuleButtonEntity : IEntity<ModuleButtonEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsNullOrGuid)]
         [Description("模块")]
         public string ModuleId { get; set; }
         public string ParentId { get; set; }

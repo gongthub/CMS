@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Comm;
+using CMS.Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace CMS.Web
     {
 
         protected void Application_Start(object sender, EventArgs e)
-        { 
+        {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -30,11 +31,11 @@ namespace CMS.Web
         }
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
-            HttpContext context = HttpContext.Current; 
+            HttpContext context = HttpContext.Current;
             RequestHelp.requestHelp.InitRequest(context);
         }
         protected void Application_EndRequest(object sender, EventArgs e)
-        { 
+        {
             HttpContext context = HttpContext.Current;
             RequestHelp.requestHelp.EndRequest(context);
         }
@@ -46,7 +47,26 @@ namespace CMS.Web
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            //在出现未处理的错误时运行的代码         
+            Exception objError = Server.GetLastError().GetBaseException();
+            string errortime = string.Empty;
+            string erroraddr = string.Empty;
+            string errorinfo = string.Empty;
+            string errorsource = string.Empty;
+            string errortrace = string.Empty;
+            string errormethodname = string.Empty;
+            string errorclassname = string.Empty;
 
+            errortime = "发生时间:" + System.DateTime.Now.ToString();
+            erroraddr = "发生异常页: " + System.Web.HttpContext.Current.Request.Url.ToString();
+            errorinfo = "异常信息: " + objError.Message;
+            errorsource = "错误源:" + objError.Source;
+            errortrace = "堆栈信息:" + objError.StackTrace;
+            errorclassname = "发生错误的类名" + objError.TargetSite.DeclaringType.FullName;
+            errormethodname = "发生错误的方法名：" + objError.TargetSite.Name;
+            //清除当前异常 使之不返回到请求页面
+            Server.ClearError();
+            LogFactory.GetLogger(this.GetType()).Error("异常：" + errortime + erroraddr + errorinfo + errorsource + errortrace + errorclassname + errormethodname + "\r\n");
         }
 
         protected void Session_End(object sender, EventArgs e)

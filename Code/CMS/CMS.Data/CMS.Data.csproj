@@ -50,12 +50,13 @@
     <Compile Include="DBContext\CMSDbContext.cs" />
     <Compile Include="Extensions\DbHelper.cs" />
     <Compile Include="Extensions\EntityInterfaceExtensions.cs" />
+    <Compile Include="Extensions\VerifyExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IRepositoryBase.cs" />
     <Compile Include="Repository\IRepositoryBase.T.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
     <Compile Include="Repository\RepositoryBase.T.cs" />
-    <Compile Include="Repository\VerifyBase.cs" />
+    <Compile Include="Extensions\VerifyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMS.Code\CMS.Code.csproj">

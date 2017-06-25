@@ -39,7 +39,9 @@ namespace CMS.Code
             [Description("可空域名有效性")]
             IsDomainOrEmpty = 11,
             [Description("域名或者IP")]
-            IsDomainOrIP = 12
+            IsDomainOrIP = 12,
+            [Description("可空GUID有效性")]
+            IsNullOrGuid = 13
         }
         /// <summary>
         /// 日志类型
