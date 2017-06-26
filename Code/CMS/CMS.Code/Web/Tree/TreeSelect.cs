@@ -9,7 +9,7 @@ namespace CMS.Code
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("[");
-            sb.Append(TreeSelectJson(data, "0", ""));
+            sb.Append(TreeSelectJson(data, "", ""));
             sb.Append("]");
             return sb.ToString();
         }
@@ -18,7 +18,7 @@ namespace CMS.Code
             StringBuilder sb = new StringBuilder();
             var ChildNodeList = data.FindAll(t => t.parentId == parentId);
             var tabline = "";
-            if (parentId != "0")
+            if (parentId != "")
             {
                 tabline = "　　";
             }
