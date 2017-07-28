@@ -1,4 +1,5 @@
-﻿using CMS.Application.WebManage;
+﻿using CMS.Application.SystemManage;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
@@ -16,6 +17,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
     {
 
         private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLSYSCONTENTSRC = CMS.Application.Comm.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
         [HttpPost]
         [HandlerAuthorize]
         public ActionResult UploadImg()
@@ -167,6 +169,56 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                             {
                                 CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
                                 string savePaths = HTMLCONTENTSRC + resourceEntity.UrlAddress + @"\\";
+                                upfileApp.UpLoadFile(upFiles[i], savePaths, true, false);
+                            }
+                        }
+                        else
+                        {
+                            return Success("true");
+                        }
+                    }
+                    return Success("true");
+                }
+                else
+                {
+                    return Success("false", "未选择资源文件夹！");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 上传系统模板资源文件
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadSysResourceFiles()
+        {
+            try
+            {
+                if (HttpContext.Request["resourceId"] != null && HttpContext.Request["parentId"] != null)
+                {
+                    string resourceId = HttpContext.Request["resourceId"];
+                    string parentId = HttpContext.Request["parentId"];
+
+                    SysTempletsApp sysTempletsApp = new SysTempletsApp();
+
+                    ResourceEntity resourceEntity = sysTempletsApp.GetResourcetForm(parentId, resourceId);
+                    if (resourceEntity != null)
+                    {
+                        UpFileDTO entity = new UpFileDTO();
+                        if (HttpContext.Request.Files.Count > 0)
+                        {
+                            var upFiles = HttpContext.Request.Files;
+                            for (int i = 0; i < upFiles.Count; i++)
+                            {
+                                CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                                string savePaths = HTMLSYSCONTENTSRC + resourceEntity.UrlAddress + @"\\";
                                 upfileApp.UpLoadFile(upFiles[i], savePaths, true, false);
                             }
                         }

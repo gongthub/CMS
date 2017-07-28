@@ -1,0 +1,104 @@
+﻿@{
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">简称</th>
+                <td class="formValue">
+                    <input id="ShortName" name="ShortName" type="text" class="form-control required" placeholder="请输入简称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">名称</th>
+                <td class="formValue">
+                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序</th>
+                <td class="formValue">
+                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入显示顺序" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">是否有效</th>
+                <td class="formValue" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">有效</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">图标</th>
+                <td class="formValue">
+                    <div>
+                        <div class="sys-div-imgupload">
+                            <div class="sys-div-upload">
+                                <input id="IconUp" type="file" />请选择图片
+                            </div>
+                            <img id="ImgPr" width="30" height="30" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" valign="top" style="padding-top: 5px;">
+                    描述
+                </th>
+                <td class="formValue">
+                    <textarea id="Description" name="Descriptions" class="form-control" style="height: 100px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div> 
+</form>
+@section scripts {
+    <script src="~/Content/js/uploadPreview.js"></script>
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/SystemManage/SysTemplets/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#ImgPr").attr("src", data.Icon);
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+            $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+        })
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            var jsonDataIcon = uploadImg("IconUp");
+            if (jsonDataIcon.success == true) {
+                var iconData = jsonDataIcon.data;
+                var postData = $("#form1").formSerialize();
+                postData["Icon"] = iconData.Sys_FilePath;
+
+                if (iconData != null && iconData != undefined) {
+                    postData["Sys_FileName"] = iconData.Sys_FileName;
+                    postData["Sys_FileOldName"] = iconData.Sys_FileOldName;
+                    postData["Sys_ExtName"] = iconData.Sys_ExtName;
+                    postData["Sys_FilePath"] = iconData.Sys_FilePath;
+                    postData["Sys_FileMd5"] = iconData.Sys_FileMd5;
+                    postData["UploadType"] = iconData.UploadType;
+                } 
+                $.submitForm({
+                    url: "/SystemManage/SysTemplets/SubmitForm?keyValue=" + keyValue,
+                    param: postData,
+                    success: function () {
+                        $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -35,7 +35,7 @@ namespace CMS.Web.Controllers
         {
             var itemdata = new ItemsDetailApp().GetList();
             Dictionary<string, object> dictionaryItem = new Dictionary<string, object>();
-            List<ItemsEntity> itemEntity= new ItemsApp().GetList();
+            List<ItemsEntity> itemEntity = new ItemsApp().GetList();
             foreach (var item in itemEntity)
             {
                 var dataItemList = itemdata.FindAll(t => t.ItemId == item.Id);
@@ -98,13 +98,11 @@ namespace CMS.Web.Controllers
         }
         private object GetMenuList()
         {
-            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
             var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic != true && m.EnabledMark != false), "0");
         }
         private object GetMenuListIndex()
         {
-            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
             var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             return ToMenuJson(new RoleAuthorizeApp().GetMenuList(roleId).FindAll(m => m.IsPublic == true && m.EnabledMark != false), "0");
         }
@@ -128,7 +126,6 @@ namespace CMS.Web.Controllers
         }
         private object GetMenuButtonList()
         {
-            //var roleId = OperatorProvider.Provider.GetCurrent().RoleId;
             var roleId = SysLoginObjHelp.sysLoginObjHelp.GetOperator().RoleId;
             var data = new RoleAuthorizeApp().GetButtonList(roleId);
             var dataModuleId = data.Distinct(new ExtList<ModuleButtonEntity>("ModuleId"));
@@ -144,7 +141,7 @@ namespace CMS.Web.Controllers
         private object GetModulesList()
         {
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            var data = c_ModulesApp.GetListNoDel();
+            var data = c_ModulesApp.GetListNoDel(m => m.EnabledMark != false);
             Dictionary<string, object> dictionary = new Dictionary<string, object>();
             foreach (ColumnsEntity item in data)
             {

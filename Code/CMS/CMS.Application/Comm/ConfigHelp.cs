@@ -61,6 +61,7 @@ namespace CMS.Application.Comm
                 return bIsOpenPort;
             }
         }
+
         /// <summary>
         /// 设置留言间隔时长 单位：秒
         /// </summary>
@@ -71,6 +72,17 @@ namespace CMS.Application.Comm
                 int timenum = 0;
                 int.TryParse(Code.Configs.GetValue("MessageTime").ToString(), out timenum);
                 return timenum;
+            }
+        }
+
+        /// <summary>
+        /// 系统模板路径
+        /// </summary>
+        public string HTMLSYSCONTENTSRC
+        {
+            get
+            {
+                return Code.Configs.GetValue("htmlSysContentSrc").ToString();
             }
         }
         #endregion

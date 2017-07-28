@@ -9,7 +9,7 @@ namespace CMS.Code
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("[");
-            sb.Append(TreeSelectJson(data, "", ""));
+            sb.Append(TreeSelectJson(data, "0", ""));
             sb.Append("]");
             return sb.ToString();
         }

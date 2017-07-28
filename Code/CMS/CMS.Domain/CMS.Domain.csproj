@@ -52,6 +52,8 @@
     <Compile Include="Entity\SystemManage\OrganizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleAuthorizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleEntity.cs" />
+    <Compile Include="Entity\SystemManage\SysTempletItemsEntity.cs" />
+    <Compile Include="Entity\SystemManage\SysTempletsEntity.cs" />
     <Compile Include="Entity\SystemManage\UpFileEntity.cs" />
     <Compile Include="Entity\SystemManage\UserEntity.cs" />
     <Compile Include="Entity\SystemManage\UserLogOnEntity.cs" />
@@ -83,10 +85,12 @@
     <Compile Include="IRepository\SystemManage\IOrganizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleAuthorizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleRepository.cs" />
+    <Compile Include="IRepository\SystemManage\ISysTempletsRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUpFileRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserLogOnRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserWebSiteRepository.cs" />
+    <Compile Include="IRepository\SystemManage\ISysTempletItemsRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IDbBackupRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="IRepository\SystemSecurity\ILogRepository.cs" />
