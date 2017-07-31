@@ -1,0 +1,247 @@
+﻿@{
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<form id="form1" enctype="multipart/form-data">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>网站信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>扩展信息<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="width: 98%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">排序</th>
+                                <td class="formValue">
+                                    <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                                </td>
+                                <th class="formTitle">简称</th>
+                                <td class="formValue">
+                                    <input id="ShortName" name="ShortName" type="text" class="form-control required" placeholder="请输入简称" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">名称</th>
+                                <td class="formValue">
+                                    <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                                </td>
+                                <th class="formTitle">所有人</th>
+                                <td class="formValue">
+                                    <input id="UserName" name="UserName" type="text" class="form-control" placeholder="请输入所有人" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">域名</th>
+                                <td class="formValue">
+                                    <input id="UrlAddress" name="UrlAddress" type="text" class="form-control required" placeholder="请输入地址" />
+                                </td>
+                                <th class="formTitle">备案</th>
+                                <td class="formValue">
+                                    <input id="Record" name="Record" type="text" class="form-control" placeholder="请输入备案" />
+                                </td>
+                                @*<th class="formTitle">端口</th>
+                        <td class="formValue">
+                            <input id="Point" name="Point" type="text" class="form-control required" placeholder="请输入端口" value="80" />
+                        </td>*@
+                            </tr>
+                            <tr>
+                                <th class="formTitle">手机号</th>
+                                <td class="formValue">
+                                    <input id="Phone" name="Phone" type="text" class="form-control" placeholder="请输入手机号" />
+                                </td>
+                                <th class="formTitle">邮箱</th>
+                                <td class="formValue">
+                                    <input id="Email" name="Email" type="text" class="form-control" placeholder="请输入邮箱" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">图标</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="IconUp" type="file" />请选择图片
+                                            </div>
+                                            <img id="ImgPr" width="30" height="30" />
+                                        </div>
+                                    </div>
+                                </td>
+                                <th class="formTitle" style="height: 35px;">是否启用</th>
+                                <td class="formValue" style="padding-top: 1px;">
+                                    <div class="ckbox">
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">启用</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                    备注
+                                </th>
+                                <td class="formValue" colspan="3">
+                                    <textarea id="Description" name="Description" class="form-control" style="height: 80px;"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
+                <div class="panel-body" style="width: 98%;">
+                    <table class="form">
+                        <tr>
+                            <th class="formTitle">备用域名01</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress01" name="SpareUrlAddress01" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                            <th class="formTitle">备用域名02</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress02" name="SpareUrlAddress02" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle">备用域名03</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress03" name="SpareUrlAddress03" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                            <th class="formTitle">备用域名04</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress04" name="SpareUrlAddress04" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle">备用域名05</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress05" name="SpareUrlAddress05" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                            <th class="formTitle">备用域名06</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress06" name="SpareUrlAddress06" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle">备用域名07</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress07" name="SpareUrlAddress07" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                            <th class="formTitle">备用域名08</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress08" name="SpareUrlAddress08" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle">备用域名09</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress09" name="SpareUrlAddress09" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                            <th class="formTitle">备用域名10</th>
+                            <td class="formValue">
+                                <input id="SpareUrlAddress10" name="SpareUrlAddress10" type="text" class="form-control" placeholder="请输入域名" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                关键字
+                            </th>
+                            <td class="formValue" colspan="3">
+                                <textarea id="KeyWords" name="KeyWords" class="form-control" style="height: 80px;"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle" valign="top" style="padding-top: 5px;">
+                                站点描述
+                            </th>
+                            <td class="formValue" colspan="3">
+                                <textarea id="SiteDesc" name="SiteDesc" class="form-control" style="height: 80px;"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+            <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+        </div>
+    </div>
+</form>
+@section scripts {
+    <script src="~/Content/js/uploadPreview.js"></script>
+    <script>
+
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/WebSiteMgr/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#ImgPr").attr("src", data.Icon);
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+            $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+
+        })
+
+        function initControl() {
+            $('#wizard').wizard().on('change', function (e, data) {
+                var $finish = $("#btn_finish");
+                var $next = $("#btn_next");
+                if (data.direction == "next") {
+                    switch (data.step) {
+                        case 1:
+                            if (!$('#form1').formValid()) {
+                                return false;
+                            }
+                            $finish.show();
+                            $next.hide();
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    $finish.hide();
+                    $next.show();
+                }
+            });
+        }
+
+        function submitForm() {
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            var jsonDataIcon = uploadImg("IconUp");
+            if (jsonDataIcon.success == true) {
+                var iconData = jsonDataIcon.data;
+                var postData = $("#form1").formSerialize();
+                postData["Icon"] = iconData.Sys_FilePath;
+
+                if (iconData != null && iconData != undefined) {
+                    postData["Sys_FileName"] = iconData.Sys_FileName;
+                    postData["Sys_FileOldName"] = iconData.Sys_FileOldName;
+                    postData["Sys_ExtName"] = iconData.Sys_ExtName;
+                    postData["Sys_FilePath"] = iconData.Sys_FilePath;
+                    postData["Sys_FileMd5"] = iconData.Sys_FileMd5;
+                    postData["UploadType"] = iconData.UploadType;
+                }
+                $.submitForm({
+                    url: "/WebManage/WebSiteMgr/SubmitForm?keyValue=" + keyValue,
+                    param: postData,
+                    success: function () {
+                        $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
+                });
+            }
+        }
+    </script>
+}

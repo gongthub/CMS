@@ -1,4 +1,5 @@
 ﻿using CMS.Application.Comm;
+using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
@@ -37,6 +38,11 @@ namespace CMS.Application.SystemManage
         {
             SysTempletItemsApp sysTempletItemsApp = new SysTempletItemsApp();
             return sysTempletItemsApp.GetList(pagination, parentIds, keyword);
+        }
+        public List<SysTempletItemsEntity> GetItemList(string parentIds)
+        {
+            SysTempletItemsApp sysTempletItemsApp = new SysTempletItemsApp();
+            return sysTempletItemsApp.GetList(parentIds);
         }
         public SysTempletsEntity GetForm(string keyValue)
         {
@@ -202,6 +208,65 @@ namespace CMS.Application.SystemManage
         }
 
         /// <summary>
+        /// 根据模板id和网站id创建网站模板，创建网站时选择系统模板
+        /// </summary>
+        /// <param name="templetId"></param>
+        /// <param name="webSiteId"></param>
+        public void CreateTemplet(string templetId, string webSiteId)
+        {
+            if (!string.IsNullOrEmpty(templetId) && !string.IsNullOrEmpty(webSiteId))
+            {
+                WebSiteApp websiteApp = new WebSiteApp();
+                TempletApp templetApp = new TempletApp();
+                SysTempletsEntity sysTempletModel = GetForm(templetId);
+                List<SysTempletItemsEntity> models = GetItemList(templetId);
+                WebSiteEntity websiteModel = websiteApp.GetForm(webSiteId);
+                if (sysTempletModel != null && !string.IsNullOrEmpty(sysTempletModel.Id)
+                    && websiteModel != null && !string.IsNullOrEmpty(websiteModel.Id))
+                {
+                    if (models != null && models.Count > 0)
+                    {
+                        List<TempletEntity> tmodels = new List<TempletEntity>();
+                        tmodels = (from list in models
+                                   select new TempletEntity
+                               {
+                                   WebSiteId = webSiteId,
+                                   SortCode = list.SortCode,
+                                   FullName = list.FullName,
+                                   Description = list.Description,
+                                   Content = list.Content,
+                                   TempletType = list.TempletType,
+                                   EnabledMark = list.EnabledMark,
+                                   DeleteMark = list.DeleteMark,
+                                   CreatorUserId = list.CreatorUserId,
+                                   CreatorTime = list.CreatorTime,
+                                   DeleteUserId = list.DeleteUserId,
+                                   DeleteTime = list.DeleteTime,
+                                   LastModifyTime = list.LastModifyTime,
+                                   LastModifyUserId = list.LastModifyUserId
+
+                               }).ToList();
+                        templetApp.AddModels(tmodels);
+                    }
+                    CopySysResourceToWebSite(sysTempletModel.ShortName, websiteModel.ShortName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 拷贝系统模板资源文件到网站资源文件目录
+        /// </summary>
+        /// <param name="TempletId"></param>
+        /// <param name="WebSiteId"></param>
+        private void CopySysResourceToWebSite(string templentShortName, string WebSiteShortName)
+        {
+            ResourceApp resourceApp = new ResourceApp();
+            string varFromDirectory = InitDirByTemplentShortName(templentShortName);
+            string varToDirectory = resourceApp.InitDirByWebSiteShortName(WebSiteShortName);
+            CMS.Code.FileHelper.CopyFolder(varFromDirectory, varToDirectory);
+        }
+
+        /// <summary>
         /// 根据网站简称获取所有资源文件
         /// </summary>
         /// <param name="webSiteShortName"></param>
@@ -221,6 +286,23 @@ namespace CMS.Application.SystemManage
             ReplaceUrl(ref models);
 
             return models;
+        }
+
+
+        /// <summary>
+        /// 根据系统模板简称初始化模板资源文件路径并返回绝对路径
+        /// </summary>
+        /// <param name="webSiteShortName"></param>
+        /// <returns></returns>
+        public string InitDirByTemplentShortName(string templentShortName)
+        {
+            string filePaths = HTMLSYSCONTENTSRC + @"\" + templentShortName + @"\";
+            filePaths = Code.FileHelper.MapPath(filePaths);
+            if (!Code.FileHelper.IsExistDirectory(filePaths))
+            {
+                Code.FileHelper.CreateDirectory(filePaths);
+            }
+            return filePaths;
         }
 
         /// <summary>
@@ -309,7 +391,7 @@ namespace CMS.Application.SystemManage
                 {
                     if (!string.IsNullOrEmpty(model.UrlAddress))
                     {
-                        string htmlcontents = HTMLSYSCONTENTSRC.Replace(@"\\", "/"); 
+                        string htmlcontents = HTMLSYSCONTENTSRC.Replace(@"\\", "/");
                         string webUrlContents = HTMLSYSCONTENTSRC;
                         string urlConfigMath = Code.FileHelper.MapPath(HTMLSYSCONTENTSRC);
                         model.id = model.id.Replace(urlConfigMath, webUrlContents);

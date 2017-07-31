@@ -218,7 +218,7 @@ function uploadResourceFiles(fileId, resourceId) {
         url: "/SystemManage/UpFile/uploadResourceFiles",
         dataType: "json",
         data: formData,
-        async: true,
+        async: false,
         // 告诉jQuery不要去处理发送的数据
         processData: false,
         // 告诉jQuery不要去设置Content-Type请求头
@@ -261,7 +261,7 @@ function uploadSysResourceFiles(fileId, parentId, resourceId) {
         url: "/SystemManage/UpFile/UploadSysResourceFiles",
         dataType: "json",
         data: formData,
-        async: true,
+        async: false,
         // 告诉jQuery不要去处理发送的数据
         processData: false,
         // 告诉jQuery不要去设置Content-Type请求头

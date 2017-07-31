@@ -277,6 +277,17 @@ namespace CMS.Application.WebManage
                 throw new Exception("名称不能为系统保留名称，请重新输入！");
             }
         }
+
+        public void AddModels(List<TempletEntity> moduleEntitys)
+        {
+            if (moduleEntitys != null && moduleEntitys.Count > 0)
+            {
+                foreach (var moduleEntity in moduleEntitys)
+                {
+                    SubmitForm(moduleEntity, null);
+                }
+            }
+        }
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);

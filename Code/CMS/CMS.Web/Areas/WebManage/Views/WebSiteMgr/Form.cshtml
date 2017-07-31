@@ -1,17 +1,42 @@
 ﻿@{
-    ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
+<style type="text/css">
+    .divShowTemp {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 5px;
+        float: left;
+        cursor: pointer;
+    }
+
+    .divShowTem_hover {
+        border: 1px solid red;
+    }
+
+    .divShowTemp span {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: 3px;
+    }
+</style>
 <form id="form1" enctype="multipart/form-data">
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
             <ul class="steps">
-                <li data-target="#step-1" class="active"><span class="step">1</span>网站信息<span class="chevron"></span></li>
-                <li data-target="#step-2"><span class="step">2</span>扩展信息<span class="chevron"></span></li>
+                <li data-target="#step-1" class="active"><span class="step">1</span>模板信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>网站信息<span class="chevron"></span></li>
+                <li data-target="#step-3"><span class="step">3</span>扩展信息<span class="chevron"></span></li>
             </ul>
         </div>
         <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
             <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div id="divShowSysTemplets">
+
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
                 <div class="panel panel-default">
                     <div class="panel-body" style="width: 98%;">
                         <table class="form">
@@ -90,7 +115,7 @@
                     </div>
                 </div>
             </div>
-            <div class="step-pane" id="step-2">
+            <div class="step-pane" id="step-3">
                 <div class="panel-body" style="width: 98%;">
                     <table class="form">
                         <tr>
@@ -171,79 +196,125 @@
     </div>
 </form>
 @section scripts {
-<script src="~/Content/js/uploadPreview.js"></script>
-<script>
+    <script src="~/Content/js/uploadPreview.js"></script>
+    <script>
 
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        if (!!keyValue) {
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            initSysTemplets();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/WebSiteMgr/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#ImgPr").attr("src", data.Icon);
+                        $("#form1").formSerialize(data);
+                    }
+                });
+            }
+            $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+
+            $(".divShowTemp").on("click", function () {
+                var temps = $(".divShowTemp");
+                if (temps != null && temps.length > 0) {
+                    var tidThis = $(this).attr("tid");
+                    for (var i = 0; i < temps.length; i++) {
+                        var tid = $(temps[i]).attr("tid");
+                        if (tid == tidThis) {
+                            $(temps[i]).addClass("divShowTem_hover")
+                        } else {
+                            $(temps[i]).removeClass("divShowTem_hover")
+                        }
+                    }
+                }
+            });
+        })
+
+        function initControl() {
+            $('#wizard').wizard().on('change', function (e, data) {
+                var $finish = $("#btn_finish");
+                var $next = $("#btn_next");
+                if (data.direction == "next") { 
+                    switch (data.step) {
+                        case 2:
+                            if (!$('#form1').formValid()) {
+                                return false;
+                            }
+                            $finish.show();
+                            $next.hide();
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    $finish.hide();
+                    $next.show();
+                }
+            });
+        }
+
+        function submitForm() {
+
+            if (!$('#form1').formValid()) {
+                return false;
+            } 
+            var tid = getSysTempletId();
+            var jsonDataIcon = uploadImg("IconUp");
+            if (jsonDataIcon.success == true) {
+                var iconData = jsonDataIcon.data;
+                var postData = $("#form1").formSerialize();
+                postData["Icon"] = iconData.Sys_FilePath;
+                postData["SysTempletId"] = tid;
+
+                if (iconData != null && iconData != undefined) {
+                    postData["Sys_FileName"] = iconData.Sys_FileName;
+                    postData["Sys_FileOldName"] = iconData.Sys_FileOldName;
+                    postData["Sys_ExtName"] = iconData.Sys_ExtName;
+                    postData["Sys_FilePath"] = iconData.Sys_FilePath;
+                    postData["Sys_FileMd5"] = iconData.Sys_FileMd5;
+                    postData["UploadType"] = iconData.UploadType;
+                }
+                $.submitForm({
+                    url: "/WebManage/WebSiteMgr/SubmitForm?keyValue=" + keyValue,
+                    param: postData,
+                    success: function () {
+                        $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
+                });
+            }
+        }
+
+        function initSysTemplets() {
             $.ajax({
-                url: "/WebManage/WebSiteMgr/GetFormJson",
-                data: { keyValue: keyValue },
+                url: "/SystemManage/SysTemplets/GetGridJson",
+                data: {},
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    $("#ImgPr").attr("src", data.Icon);
-                    $("#form1").formSerialize(data);
-                }
-            });
-        }
-
-        $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
-    })
-
-    function initControl() {
-        $('#wizard').wizard().on('change', function (e, data) {
-            var $finish = $("#btn_finish");
-            var $next = $("#btn_next");
-            if (data.direction == "next") {
-                switch (data.step) {
-                    case 1:
-                        if (!$('#form1').formValid()) {
-                            return false;
+                    $("#divShowSysTemplets").html("");
+                    var ntemps = "<div class='divShowTemp divShowTem_hover' tid=''><img id='imgTemplet' width='120' height='150' src='/Content/img/white.png' /><br /><span>空</span></div>";
+                    $("#divShowSysTemplets").append(ntemps);
+                    if (data != null && data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var telplets = "<div class='divShowTemp' tid='" + data[i].Id + "'><img id='imgTemplet" + i + "' width='120'height='150' src='" + data[i].Icon + "'  /><br /><span>" + data[i].FullName + "</span></div>";
+                            $("#divShowSysTemplets").append(telplets);
                         }
-                        $finish.show();
-                        $next.hide();
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $finish.hide();
-                $next.show();
-            }
-        });
-    }
-    function submitForm() {
-
-        if (!$('#form1').formValid()) {
-            return false;
-        }
-
-        var jsonDataIcon = uploadImg("IconUp");
-        if (jsonDataIcon.success == true) {
-            var iconData = jsonDataIcon.data;
-            var postData = $("#form1").formSerialize();
-            postData["Icon"] = iconData.Sys_FilePath;
-
-            if (iconData != null && iconData != undefined) {
-                postData["Sys_FileName"] = iconData.Sys_FileName;
-                postData["Sys_FileOldName"] = iconData.Sys_FileOldName;
-                postData["Sys_ExtName"] = iconData.Sys_ExtName;
-                postData["Sys_FilePath"] = iconData.Sys_FilePath;
-                postData["Sys_FileMd5"] = iconData.Sys_FileMd5;
-                postData["UploadType"] = iconData.UploadType;
-            }
-            $.submitForm({
-                url: "/WebManage/WebSiteMgr/SubmitForm?keyValue=" + keyValue,
-                param: postData,
-                success: function () {
-                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    }
                 }
             });
         }
-    }
 
-</script>
+        function getSysTempletId()
+        {
+            var tid = "";
+            var temps = $(".divShowTem_hover");
+            if (temps != null && temps.length > 0) {
+                tid = $(temps[0]).attr("tid");
+            }
+            return tid;
+        }
+    </script>
 }

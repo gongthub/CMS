@@ -139,5 +139,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
             return webSiteForUrlEntitys;
         }
+
+        [HttpGet]
+        [HandlerAuthorize]
+        public virtual ActionResult ModifyForm()
+        {
+            return View();
+        }
     }
 }

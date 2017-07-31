@@ -19,6 +19,12 @@ namespace CMS.Application.SystemManage
         {
             return service.IQueryable(m => m.DeleteMark != true).ToList();
         }
+        public List<SysTempletItemsEntity> GetList(string parentIds)
+        {
+            var expression = ExtLinq.True<SysTempletItemsEntity>(); 
+            expression = expression.And(t => t.DeleteMark != true && t.ParentId == parentIds);
+            return service.IQueryable(expression).ToList();
+        }
         public List<SysTempletItemsEntity> GetList(Pagination pagination, string parentIds, string keyword)
         {
             var expression = ExtLinq.True<SysTempletItemsEntity>();

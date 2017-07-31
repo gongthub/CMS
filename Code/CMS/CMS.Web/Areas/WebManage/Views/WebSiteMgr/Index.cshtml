@@ -1,5 +1,4 @@
 ﻿@{
-    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
 
@@ -90,7 +89,7 @@
         $.modalOpen({
             id: "Form",
             title: "修改网站",
-            url: "/WebManage/WebSiteMgr/Form?keyValue=" + keyValue,
+            url: "/WebManage/WebSiteMgr/ModifyForm?keyValue=" + keyValue,
             width: "1050px",
             height: "670px",
             btn: null

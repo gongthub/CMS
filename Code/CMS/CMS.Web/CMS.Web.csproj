@@ -1002,6 +1002,7 @@
     <Content Include="Areas\SystemManage\Views\SysTemplets\ManageDetails.cshtml" />
     <Content Include="Areas\SystemManage\Views\SysTemplets\ResourceIndex.cshtml" />
     <Content Include="Areas\SystemManage\Views\SysTemplets\ResourceForm.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteMgr\ModifyForm.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

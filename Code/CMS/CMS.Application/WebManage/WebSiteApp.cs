@@ -183,8 +183,11 @@ namespace CMS.Application.WebManage
                         }
                         //添加配置表
                         new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
+                        //添加站点模板
+                        new SysTempletsApp().CreateTemplet(moduleEntity.SysTempletId, moduleEntity.Id);
                         //添加站点搜索模板
                         new TempletApp().AddSearchModel(moduleEntity.Id);
+
                         //添加日志
                         LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                     }
@@ -201,6 +204,10 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue, UpFileDTO upFileentity)
         {
+            if (string.IsNullOrEmpty(moduleEntity.SysTempletId))
+            {
+                moduleEntity.SysTempletId = null;
+            }
             moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
             moduleEntity.Id = keyValue;
             if (!new WebSiteForUrlApp().IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
@@ -230,6 +237,12 @@ namespace CMS.Application.WebManage
                             {
                                 new UserWebSiteApp().AddUserWebSite(LoginInfo.UserId, moduleEntity.Id);
                             }
+                            //添加配置表
+                            new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
+                            //添加站点模板
+                            new SysTempletsApp().CreateTemplet(moduleEntity.SysTempletId, moduleEntity.Id);
+                            //添加站点搜索模板
+                            new TempletApp().AddSearchModel(moduleEntity.Id);
                             //添加日志
                             LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                         }
@@ -245,10 +258,6 @@ namespace CMS.Application.WebManage
                     upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
                     upFileApp.AddUpFileEntity(upFileentity);
                     SaveWebSiteSpareUrl(moduleEntity, webSiteForUrlEntitys, keyValue);
-                    //添加配置表
-                    new WebSiteConfigApp().AddWebSiteConfig(moduleEntity.Id);
-                    //添加站点搜索模板
-                    new TempletApp().AddSearchModel(moduleEntity.Id);
                 }
                 else
                 {
