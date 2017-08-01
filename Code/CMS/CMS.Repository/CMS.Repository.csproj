@@ -49,6 +49,7 @@
     <Compile Include="SystemManage\OrganizeRepository.cs" />
     <Compile Include="SystemManage\RoleAuthorizeRepository.cs" />
     <Compile Include="SystemManage\RoleRepository.cs" />
+    <Compile Include="SystemManage\SysColumnsRepository.cs" />
     <Compile Include="SystemManage\SysTempletItemsRepository.cs" />
     <Compile Include="SystemManage\SysTempletsRepository.cs" />
     <Compile Include="SystemManage\UpFileRepository.cs" />

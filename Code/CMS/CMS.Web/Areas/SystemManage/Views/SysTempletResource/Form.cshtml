@@ -1,0 +1,38 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <div style="padding-top: 20px; margin-right: 30px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">名称</th>
+                    <td class="formValue">
+                        <input id="DirName" name="DirName" type="text" class="form-control required" placeholder="请输入名称" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+@section scripts {
+    <script>
+        var keyValue = $.request("keyValue");
+        var parentId = $.request("parentId"); 
+    $(function () {
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            url: "/SystemManage/SysTempletResource/SubmitFormAdd?keyValue=" + keyValue + "&parentId=" + parentId,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").resetSelection();
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    </script>
+}

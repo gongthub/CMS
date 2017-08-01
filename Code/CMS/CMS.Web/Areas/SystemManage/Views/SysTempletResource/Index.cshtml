@@ -1,0 +1,130 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-back" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_back()"><i class="fa fa-plus"></i>返回</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-add" authorize="yes" onclick="btn_add()"><i class="fa fa-trash-o"></i>新建文件夹</a></li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除资源</a></li>
+                <li><a id="NF-upload" authorize="yes" onclick="btn_upload()"><i class="fa fa-trash-o"></i>上传资源</a></li>
+                <li><a id="NF-copy" authorize="yes" onclick="btn_copy()"><i class="fa fa-trash-o"></i>复制链接</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+    </div>
+    <input id="FilesUp" style="display:none" type="file" multiple="true" />
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+</div>
+@section scripts {
+    <script>
+        var parentId = $.request("parentId");
+        $(function () {
+            gridList();
+            $("#FilesUp").on("change", function () {
+                fileUploads();
+            });
+        })
+
+        function gridList() {
+            var $gridList = $("#gridList");
+            $gridList.dataTreeGrid({
+                ExpandColumn: "DirName",
+                url: "/SystemManage/SysTempletResource/GetGridJson?parentId=" + parentId,
+                height: $(window).height() - 96,
+                colModel: [
+                    { label: '主键', name: 'id', width: 20, align: 'left', hidden: true, key: true },
+                    { label: '文件夹', name: 'DirName', width: 700, align: 'left' },
+                    {
+                        label: '类型', name: 'Type', width: 80, align: 'center',
+                        formatter: function (cellvalue) {
+                            if (cellvalue == "0") {
+                                return "文件夹";
+                            } else if (cellvalue == "1") {
+                                return "文件";
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+
+        function btn_add() {
+            var selType = $("#gridList").jqGridRowValue().Type;
+            var key = $("#gridList").jqGridRowValue().id;
+
+            if (selType != "文件夹") {
+                alert("只能选择文件夹新建文件夹！");
+                return;
+            } else {
+                $.modalOpen({
+                    id: "Form",
+                    title: "新增文件夹",
+                    url: "/SystemManage/SysTempletResource/Form?keyValue=" + key + "&parentId=" + parentId,
+                    width: "700px",
+                    height: "440px",
+                    callBack: function (iframeId) {
+                        top.frames[iframeId].submitForm();
+                    }
+                });
+            }
+        }
+
+        function btn_delete() {
+            $.deleteForm({
+                url: "/SystemManage/SysTempletResource/DeleteForm",
+                param: { keyValue: $("#gridList").jqGridRowValue().id, parentId: parentId },
+                success: function () {
+                    $.currentWindow().$("#gridList").resetSelection();
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+
+        function btn_upload() {
+
+            var selType = $("#gridList").jqGridRowValue().Type;
+            var key = $("#gridList").jqGridRowValue().id;
+
+            if (selType != "文件夹") {
+                alert("只能选择文件夹上传资源！");
+                return;
+            } else {
+                $("#FilesUp").click();
+            }
+        }
+
+        function fileUploads() {
+            var key = $("#gridList").jqGridRowValue().id;
+            uploadSysResourceFiles("FilesUp", parentId, key);
+            $.currentWindow().$("#gridList").resetSelection();
+            $.currentWindow().$("#gridList").trigger("reloadGrid");
+        }
+
+        function btn_copy() {
+
+            var selType = $("#gridList").jqGridRowValue().Type;
+            var dirName = $("#gridList").jqGridRowValue().DirName;
+
+            if (selType != "文件") {
+                alert("只能选择文件进行复制链接！");
+                return;
+            } else {
+                copyToClipboard(dirName);
+            }
+        }
+        function btn_back() {
+            location.href = "/SystemManage/SysTemplets/Index";
+        }
+    </script>
+}

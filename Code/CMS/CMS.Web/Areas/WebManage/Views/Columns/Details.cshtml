@@ -23,17 +23,25 @@
                     <td class="formValue">
                         <select id="Type" name="Type" class="form-control required">
                             <option value="">==请选择==</option>
-                            <option value="0" title="导航">导航</option>
-                            <option value="1" title="内容">内容</option>
-                            <option value="2" title="列表">列表</option>
-                            <option value="3" title="连接">连接</option>
                         </select>
                     </td>
-                    <th class="formTitle">模板</th>
+                    <th class="formTitle">栏目模板</th>
                     <td class="formValue">
                         <select id="TempletId" name="TempletId" class="form-control required">
                             <option value="">==请选择==</option>
                         </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">内容模板</th>
+                    <td class="formValue">
+                        <select id="CTempletId" name="CTempletId" class="form-control">
+                            <option value="">==请选择==</option>
+                        </select>
+                    </td>
+                    <th class="formTitle">排序</th>
+                    <td class="formValue">
+                        <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
                     </td>
                 </tr>
                 <tr>
@@ -46,21 +54,17 @@
                         <input id="UrlAddress" name="UrlAddress" type="text" class="form-control" />
                     </td>
                 </tr>
-                <tr>
-                    <th class="formTitle">图标</th>
-                    <td class="formValue">
-                        <div class="input-group">
-                            <input id="Icon" name="Icon" type="text" class="form-control">
-                            <span class="input-group-btn">
-                                <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
-                            </span>
-                        </div>
-                    </td>
-                    <th class="formTitle">排序</th>
-                    <td class="formValue">
-                        <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
-                    </td>
-                </tr>
+                @*<tr>
+                        <th class="formTitle">图标</th>
+                        <td class="formValue">
+                            <div class="input-group">
+                                <input id="Icon" name="Icon" type="text" class="form-control">
+                                <span class="input-group-btn">
+                                    <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
+                                </span>
+                            </div>
+                        </td
+                    </tr>>*@
                 <tr>
                     <th class="formTitle">有效</th>
                     <td class="formValue">
@@ -72,8 +76,8 @@
                     <th class="formTitle">主页</th>
                     <td class="formValue">
                         <select id="MainMark" name="MainMark" class="form-control">
-                            <option value="true">是</option>
                             <option value="false">否</option>
+                            <option value="true">是</option>
                         </select>
                     </td>
                 </tr>
@@ -90,33 +94,69 @@
     </div>
 </form>
 @section scripts {
-<script>
-    var keyValue = $.request("keyValue");
-    $(function () {
-        initControl();
-        if (!!keyValue) {
-            $.ajax({
-                url: "/WebManage/Columns/GetFormJson",
-                data: { keyValue: keyValue },
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    $("#form1").formSerialize(data);
-                    $("#form1").find('.form-control,select,input').attr('disabled', 'disabled');
-                    $("#form1").find('div.ckbox label').attr('for', '');
-                }
+    <script>
+        var keyValue = $.request("keyValue");
+        $(function () {
+            initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/WebManage/Columns/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        $("#form1").formSerialize(data);
+                        $("#form1").find('.form-control,select,input').attr('disabled', 'disabled');
+                        $("#form1").find('div.ckbox label').attr('for', '');
+                    }
+                });
+            }
+        });
+        function initControl() {
+            $("#TempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#CTempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#Type").bindSelect({
+                url: "/WebManage/Columns/GetTypeSelectJson",
+                id: "Value",
+                text: "Desc"
+            });
+            $("#ParentId").bindSelect({
+                url: "/WebManage/Columns/GetTreeSelectJson",
+            });
+            $("#Type").change(function () {
+                selType();
             });
         }
-    });
-    function initControl() {
-        $("#TempletId").bindSelect({
-            url: "/WebManage/Templet/GetGridJson",
-            id: "Id",
-            text: "FullName"
-        });
-        $("#ParentId").bindSelect({
-            url: "/WebManage/Columns/GetTreeSelectJson",
-        });
-    }
-</script>
+        function submitForm() {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+            $.submitForm({
+                url: "/WebManage/Columns/SubmitForm?keyValue=" + keyValue,
+                param: $("#form1").formSerialize(),
+                success: function () {
+                    $.currentWindow().$("#gridList").resetSelection();
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            })
+        }
+
+        //类别选择事件
+        function selType() {
+            var typeval = $("#Type").val();
+            if (typeval == 2 || typeval == 4) {
+                $("#CTempletId").addClass("required");
+            } else {
+                $("#CTempletId").removeClass("required");
+            }
+        }
+    </script>
 }

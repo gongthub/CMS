@@ -150,6 +150,51 @@ namespace CMS.Application.WebManage
                 throw new Exception("简称不能为系统保留名称，请重新输入！");
             }
         }
+        public void AddModels(List<ColumnsEntity> moduleEntitys)
+        {
+            if (moduleEntitys != null && moduleEntitys.Count > 0)
+            {
+                foreach (var moduleEntity in moduleEntitys)
+                {
+                    AddModel(moduleEntity);
+                }
+            }
+        }
+        public void AddModel(ColumnsEntity moduleEntity)
+        {
+            if (!service.IsExist(null, "ActionName", moduleEntity.ActionName, moduleEntity.WebSiteId, true))
+            {
+                if (!Common.IsSystemHaveName(moduleEntity.ActionName) && !Common.IsSearch(moduleEntity.ActionName))
+                {
+                    moduleEntity.CreateNotId();
+
+                    if (moduleEntity.MainMark == true)
+                    {
+                        List<ColumnsEntity> models = service.IQueryable().Where(m => m.DeleteMark != true && m.Id != moduleEntity.Id && m.WebSiteId == moduleEntity.WebSiteId).ToList();
+                        if (models != null && models.Count > 0)
+                        {
+                            models.ForEach(delegate(ColumnsEntity model)
+                            {
+                                model.MainMark = false;
+                                service.Update(model);
+                            });
+                        }
+                    }
+                    service.Insert(moduleEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "添加栏目信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "栏目管理");
+
+                }
+                else
+                {
+                    throw new Exception("简称已存在，请重新输入！");
+                }
+            }
+            else
+            {
+                throw new Exception("简称不能为系统保留名称，请重新输入！");
+            }
+        }
 
     }
 }

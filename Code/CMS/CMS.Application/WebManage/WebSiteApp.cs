@@ -187,6 +187,8 @@ namespace CMS.Application.WebManage
                         new SysTempletsApp().CreateTemplet(moduleEntity.SysTempletId, moduleEntity.Id);
                         //添加站点搜索模板
                         new TempletApp().AddSearchModel(moduleEntity.Id);
+                        //添加站点栏目
+                        new SysColumnsApp().CopyToWebSite(moduleEntity.SysTempletId, moduleEntity.Id);
 
                         //添加日志
                         LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
@@ -243,6 +245,8 @@ namespace CMS.Application.WebManage
                             new SysTempletsApp().CreateTemplet(moduleEntity.SysTempletId, moduleEntity.Id);
                             //添加站点搜索模板
                             new TempletApp().AddSearchModel(moduleEntity.Id);
+                            //添加站点栏目
+                            new SysColumnsApp().CopyToWebSite(moduleEntity.SysTempletId, moduleEntity.Id);
                             //添加日志
                             LogHelp.logHelp.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                         }

@@ -22,6 +22,17 @@ namespace CMS.Domain
             entity.DeleteMark = false;
             entity.CreatorTime = DateTime.Now;
         }
+        public void CreateNotId()
+        {
+            var entity = this as ICreationAudited;  
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (LoginInfo != null)
+            {
+                entity.CreatorUserId = LoginInfo.UserId;
+            }
+            entity.DeleteMark = false;
+            entity.CreatorTime = DateTime.Now;
+        }
         public void Modify(string keyValue)
         {
             var entity = this as IModificationAudited;

@@ -1,0 +1,12 @@
+truncate table dbo.C_Columns
+truncate table dbo.C_Templets
+truncate table dbo.Sys_AccessLog
+truncate table dbo.Sys_Log
+truncate table dbo.Sys_TempletItems
+truncate table dbo.Sys_Templets
+truncate table dbo.Sys_UpFiles
+truncate table dbo.Sys_UserLogOn
+truncate table dbo.Sys_UserWebSites
+truncate table dbo.Sys_WebSiteConfigs
+truncate table dbo.Sys_WebSiteForUrls
+truncate table dbo.Sys_WebSites

@@ -52,6 +52,7 @@
     <Compile Include="Entity\SystemManage\OrganizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleAuthorizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleEntity.cs" />
+    <Compile Include="Entity\SystemManage\SysColumnsEntity.cs" />
     <Compile Include="Entity\SystemManage\SysTempletItemsEntity.cs" />
     <Compile Include="Entity\SystemManage\SysTempletsEntity.cs" />
     <Compile Include="Entity\SystemManage\UpFileEntity.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="IRepository\SystemManage\IOrganizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleAuthorizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleRepository.cs" />
+    <Compile Include="IRepository\SystemManage\ISysColumnsRepository.cs" />
     <Compile Include="IRepository\SystemManage\ISysTempletsRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUpFileRepository.cs" />
     <Compile Include="IRepository\SystemManage\IUserLogOnRepository.cs" />

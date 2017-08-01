@@ -36,5 +36,7 @@ namespace CMS.Data
         bool IsExist(string keyId, string name, string value, bool IsDeleteFlay);
         bool IsExist(string keyId, string name, string value, string webSiteId);
         bool IsExist(string keyId, string name, string value, string webSiteId, bool IsDeleteFlay);
+        bool IsExistAndMarkName(string keyId, string name, string value, string markName, string markValue);
+        bool IsExistAndMarkName(string keyId, string name, string value, string markName, string markValue, bool IsDeleteFlay);
     }
 }

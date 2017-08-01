@@ -76,6 +76,7 @@
     <Compile Include="SystemManage\OrganizeApp.cs" />
     <Compile Include="SystemManage\RoleApp.cs" />
     <Compile Include="SystemManage\RoleAuthorizeApp.cs" />
+    <Compile Include="SystemManage\SysColumnsApp.cs" />
     <Compile Include="SystemManage\SysTempletItemsApp.cs" />
     <Compile Include="SystemManage\SysTempletsApp.cs" />
     <Compile Include="SystemManage\UpFileApp.cs" />
