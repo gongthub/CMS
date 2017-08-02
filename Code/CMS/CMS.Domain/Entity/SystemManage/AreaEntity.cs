@@ -7,7 +7,7 @@ namespace CMS.Domain.Entity.SystemManage
     public class AreaEntity : IEntity<AreaEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsNullOrGuid)]
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
         [Description("父级")]
         public string ParentId { get; set; }
         public int? Layers { get; set; }

@@ -6,8 +6,7 @@
     <div class="widget-body">
         <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
             <ul class="steps">
-                <li data-target="#step-1" class="active"><span class="step">1</span>基本信息<span class="chevron"></span></li>
-                <li data-target="#step-2"><span class="step">2</span>扩展信息<span class="chevron"></span></li>
+                <li data-target="#step-1" class="active"><span class="step">1</span>基本信息<span class="chevron"></span></li> 
             </ul>
         </div>
         <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
@@ -26,31 +25,47 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="formTitle">公司</th>
-                                <td class="formValue">
-                                    <select id="OrganizeId" name="OrganizeId" class="form-control required"></select>
-                                </td>
-                                <th class="formTitle">部门</th>
-                                <td class="formValue">
-                                    <select id="DepartmentId" name="DepartmentId" class="form-control required">
-                                        <option value="">==请选择==</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <th class="formTitle">角色</th>
                                 <td class="formValue">
                                     <select id="RoleId" name="RoleId" class="form-control required">
                                         <option value="">==请选择==</option>
                                     </select>
                                 </td>
+                                <th class="formTitle">公司</th>
+                                <td class="formValue">
+                                    <select id="OrganizeId" name="OrganizeId" class="form-control required"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">类型</th>
+                                <td class="formValue">
+                                    <select id="UserLevel" name="UserLevel" class="form-control">
+                                        <option value="">==请选择==</option>
+                                    </select>
+                                </td>
+                                <th class="formTitle">允许登录</th>
+                                <td class="formValue">
+                                    <select id="EnabledMark" name="EnabledMark" class="form-control">
+                                        <option value="true">是</option>
+                                        <option value="false">否</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            @*<tr>
+                                <th class="formTitle">部门</th>
+                                   <td class="formValue">
+                                       <select id="DepartmentId" name="DepartmentId" class="form-control required">
+                                           <option value="">==请选择==</option>
+                                       </select>
+                                   </td>
+
                                 <th class="formTitle">岗位</th>
                                 <td class="formValue">
                                     <select id="DutyId" name="DutyId" class="form-control required">
                                         <option value="">==请选择==</option>
                                     </select>
                                 </td>
-                            </tr>
+                            </tr>*@
                             <tr>
                                 <th class="formTitle">姓名</th>
                                 <td class="formValue">
@@ -85,21 +100,6 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="formTitle">类型</th>
-                                <td class="formValue">
-                                    <select id="UserLevel" name="UserLevel" class="form-control">
-                                        <option value="">==请选择==</option>
-                                    </select>
-                                </td>
-                                <th class="formTitle">允许登录</th>
-                                <td class="formValue">
-                                    <select id="EnabledMark" name="EnabledMark" class="form-control">
-                                        <option value="true">是</option>
-                                        <option value="false">否</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <th class="formTitle" valign="top" style="padding-top: 5px;">
                                     备注
                                 </th>
@@ -116,9 +116,7 @@
             </div>
         </div>
         <div class="form-button" id="wizard-actions">
-            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
-            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
-            <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+            <a id="btn_finish" class="btn btn-default" onclick="submitForm()">完成</a>
         </div>
     </div>
 </form>
@@ -138,27 +136,7 @@
                         $("#UserPassword").val("******").attr('disabled', 'disabled');
                     }
                 });
-            }
-            $('#wizard').wizard().on('change', function (e, data) {
-                var $finish = $("#btn_finish");
-                var $next = $("#btn_next");
-                if (data.direction == "next") {
-                    switch (data.step) {
-                        case 1:
-                            if (!$('#form1').formValid()) {
-                                return false;
-                            }
-                            $finish.show();
-                            $next.hide();
-                            break;
-                        default:
-                            break;
-                    }
-                } else {
-                    $finish.hide();
-                    $next.show();
-                }
-            });
+            } 
             $("#webSiteTree").treeview({
                 height: 444,
                 showcheck: true,
@@ -172,20 +150,17 @@
             $("#OrganizeId").bindSelect({
                 url: "/SystemManage/Organize/GetTreeSelectJson"
             });
-            $("#DepartmentId").bindSelect({
-                url: "/SystemManage/Organize/GetTreeSelectJson",
-            });
             $("#RoleId").bindSelect({
                 url: "/SystemManage/Role/GetGridJsons",
                 param: { keyValue: keyValue },
                 id: "Id",
                 text: "FullName"
             });
-            $("#DutyId").bindSelect({
-                url: "/SystemManage/Duty/GetGridJson",
-                id: "Id",
-                text: "FullName"
-            });
+            //$("#DutyId").bindSelect({
+            //    url: "/SystemManage/Duty/GetGridJson",
+            //    id: "Id",
+            //    text: "FullName"
+            //});
             $("#UserLevel").bindSelect({
                 url: "/SystemManage/ItemsData/GetSelectJsons",
                 param: { enCode: "UserLevel", keyValue: keyValue }

@@ -137,6 +137,18 @@ namespace CMS.Data.Extensions
                         throw new Exception("字段 '" + desc + "'格式不正确！");
                     }
                     break;
+                case Enums.VerifyType.IsParentId:
+                    if (!Code.Validate.IsGuid(val.ToString()))
+                    {
+                        throw new Exception("字段 '" + desc + "'格式不正确！");
+                    }
+                    break;
+                case Enums.VerifyType.IsParentIdOrDefault:
+                    if (val != null && val.ToString() != "0" && (!string.IsNullOrEmpty(val.ToString()) && !Code.Validate.IsGuid(val.ToString())))
+                    {
+                        throw new Exception("字段 '" + desc + "'格式不正确！");
+                    }
+                    break;
             }
         }
     }

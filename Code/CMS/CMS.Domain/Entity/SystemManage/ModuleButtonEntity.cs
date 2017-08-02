@@ -10,6 +10,8 @@ namespace CMS.Domain.Entity.SystemManage
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsNullOrGuid)]
         [Description("模块")]
         public string ModuleId { get; set; }
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
+        [Description("父级")]
         public string ParentId { get; set; }
         public int? Layers { get; set; }
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]

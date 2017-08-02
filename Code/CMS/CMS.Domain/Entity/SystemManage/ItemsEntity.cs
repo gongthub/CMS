@@ -7,6 +7,8 @@ namespace CMS.Domain.Entity.SystemManage
     public class ItemsEntity : IEntity<ItemsEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
+        [Description("父级")]
         public string ParentId { get; set; }
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull)]
         [Description("编号")]

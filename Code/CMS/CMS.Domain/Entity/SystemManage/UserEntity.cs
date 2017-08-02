@@ -29,13 +29,13 @@ namespace CMS.Domain.Entity.SystemManage
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
         [Description("公司")]
         public string OrganizeId { get; set; }
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Verify(Code.Enums.VerifyType.IsNullOrGuid)]
         [Description("部门")]
         public string DepartmentId { get; set; }
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
         [Description("角色")]
         public string RoleId { get; set; }
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
+        [Verify(Code.Enums.VerifyType.IsNullOrGuid)]
         [Description("岗位")]
         public string DutyId { get; set; }
         public bool? IsAdministrator { get; set; }

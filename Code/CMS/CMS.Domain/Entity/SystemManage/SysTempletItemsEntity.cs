@@ -11,10 +11,10 @@ namespace CMS.Domain.Entity.SystemManage
     public class SysTempletItemsEntity : IEntity<SysTempletItemsEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
+         
 
-        [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
-
-        [Description("模板")]
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
+        [Description("父级")]
         public string ParentId { get; set; }
 
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsInt)]

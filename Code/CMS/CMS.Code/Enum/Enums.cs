@@ -41,7 +41,11 @@ namespace CMS.Code
             [Description("域名或者IP")]
             IsDomainOrIP = 12,
             [Description("可空GUID有效性")]
-            IsNullOrGuid = 13
+            IsNullOrGuid = 13,
+            [Description("通用父级有效性")]
+            IsParentId = 14,
+            [Description("通用父级含默认值有效性")]
+            IsParentIdOrDefault = 15
         }
         /// <summary>
         /// 日志类型

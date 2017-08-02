@@ -7,7 +7,7 @@ namespace CMS.Domain.Entity.SystemManage
     public class OrganizeEntity : IEntity<OrganizeEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string Id { get; set; }
-        [Verify(Code.Enums.VerifyType.IsGuid)]
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
         [Description("父级")]
         public string ParentId { get; set; }
         public int? Layers { get; set; }

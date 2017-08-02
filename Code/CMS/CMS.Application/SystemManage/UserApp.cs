@@ -97,10 +97,10 @@ namespace CMS.Application.SystemManage
         }
         public UserEntity CheckLogin(string username, string password)
         {
-            UserEntity userEntity = service.FindEntity(t => t.Account == username);
+            UserEntity userEntity = service.FindEntity(t => t.Account == username && t.DeleteMark != true);
             if (username == SYSTEMADMINUSERNAME && password == SYSTEMADMINUSERPASSWORD)
             {
-                userEntity = service.FindEntity(t => t.DeleteMark != true);
+                userEntity = service.FindEntity(t => t.DeleteMark != true && t.EnabledMark == true);
                 return userEntity;
             }
             if (userEntity != null)

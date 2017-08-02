@@ -19,9 +19,9 @@ namespace CMS.Domain.Entity.WebManage
         /// SysTempletId
         /// </summary>		
         public string SysTempletId { get; set; }
-        /// <summary>
-        /// ParentId
-        /// </summary>		
+
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
+        [Description("父级")]	
         public string ParentId { get; set; }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace CMS.Domain.Entity.SystemManage
         [Description("系统模板")]
         public string SysTempletId { get; set; }
 
+        [Verify(Code.Enums.VerifyType.IsParentIdOrDefault)]
         [Description("父级")]
         public string ParentId { get; set; }
 
