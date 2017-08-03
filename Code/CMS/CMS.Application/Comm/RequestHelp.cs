@@ -240,7 +240,7 @@ namespace CMS.Application.Comm
         public bool IsContistHost(string urlHost)
         {
             bool bState = false;
-            string strLoginHostConfigs = Comm.ConfigHelp.configHelp.LOGINHOST;
+            string strLoginHostConfigs = Code.ConfigHelp.configHelp.LOGINHOST;
             if (!string.IsNullOrEmpty(strLoginHostConfigs))
             {
                 strLoginHostConfigs = strLoginHostConfigs.ToLower();
@@ -269,7 +269,7 @@ namespace CMS.Application.Comm
         public string GetHost(System.Web.HttpContext context)
         {
             string urlHost = context.Request.Url.Host;
-            if (!context.Request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
+            if (!context.Request.Url.IsDefaultPort && Code.ConfigHelp.configHelp.ISOPENPORT)
             {
                 urlHost = context.Request.Url.Authority;
             }
@@ -285,7 +285,7 @@ namespace CMS.Application.Comm
         public string GetHostRequest(System.Web.HttpRequestBase request)
         {
             string urlHost = request.Url.Host;
-            if (!request.Url.IsDefaultPort && Comm.ConfigHelp.configHelp.ISOPENPORT)
+            if (!request.Url.IsDefaultPort && Code.ConfigHelp.configHelp.ISOPENPORT)
             {
                 urlHost = request.Url.Authority;
             }

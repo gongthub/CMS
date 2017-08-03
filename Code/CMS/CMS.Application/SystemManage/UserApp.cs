@@ -152,27 +152,27 @@ namespace CMS.Application.SystemManage
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.SystemUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_SYSTEMUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_SYSTEMUSER, out iWebSiteNum);
                 }
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_WEBSITEUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_WEBSITEUSER, out iWebSiteNum);
                 }
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_REGISTERUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_REGISTERUSER, out iWebSiteNum);
                 }
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_ORDINARYUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_ORDINARYUSER, out iWebSiteNum);
                 }
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_GOLDUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_GOLDUSER, out iWebSiteNum);
                 }
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
                 {
-                    int.TryParse(Comm.ConfigHelp.configHelp.WEBSITENUM_DIAMONDUSER, out iWebSiteNum);
+                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_DIAMONDUSER, out iWebSiteNum);
                 }
             }
             return iWebSiteNum;

@@ -23,11 +23,11 @@ namespace CMS.Application.SystemManage
         /// <summary>
         /// 上传图片保存路径
         /// </summary>
-        private static readonly string UPLOADIMGPATH = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMG;
+        private static readonly string UPLOADIMGPATH = Code.ConfigHelp.configHelp.UPLOADIMG;
         /// <summary>
         /// 上传文件保存路径
         /// </summary>
-        private static readonly string UPLOADFILEPATH = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILE;
+        private static readonly string UPLOADFILEPATH = Code.ConfigHelp.configHelp.UPLOADFILE;
 
         private IUpFileRepository service = new UpFileRepository();
 
@@ -227,7 +227,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyImgFormat(string formats)
         {
             bool bState = false;
-            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMGFORMAT;
+            string formatImgs = Code.ConfigHelp.configHelp.UPLOADIMGFORMAT;
             if (!string.IsNullOrEmpty(formats))
             {
                 if (formatImgs != "*")
@@ -251,7 +251,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyImgFormat(string formats, out string formatStr)
         {
             bool bState = false;
-            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMGFORMAT;
+            string formatImgs = Code.ConfigHelp.configHelp.UPLOADIMGFORMAT;
             if (!string.IsNullOrEmpty(formats))
             {
                 if (formatImgs != "*")
@@ -276,7 +276,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyImgSize(int size)
         {
             bool bState = false;
-            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMGSIZE;
+            string sizes = Code.ConfigHelp.configHelp.UPLOADIMGSIZE;
             int sizeT = 0;
             if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
             {
@@ -300,7 +300,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyImgSize(int size, out int maxSize)
         {
             bool bState = false;
-            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADIMGSIZE;
+            string sizes = Code.ConfigHelp.configHelp.UPLOADIMGSIZE;
             int sizeT = 0;
             if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
             {
@@ -528,7 +528,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyFileFormat(string formats)
         {
             bool bState = false;
-            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILEFORMAT;
+            string formatImgs = Code.ConfigHelp.configHelp.UPLOADFILEFORMAT;
             if (!string.IsNullOrEmpty(formats))
             {
                 if (formatImgs != "*")
@@ -552,7 +552,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyFileFormat(string formats, out string formatStr)
         {
             bool bState = false;
-            string formatImgs = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILEFORMAT;
+            string formatImgs = Code.ConfigHelp.configHelp.UPLOADFILEFORMAT;
             if (!string.IsNullOrEmpty(formats))
             {
                 if (formatImgs != "*")
@@ -577,7 +577,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyFileSize(int size)
         {
             bool bState = false;
-            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILESIZE;
+            string sizes = Code.ConfigHelp.configHelp.UPLOADFILESIZE;
             int sizeT = 0;
             if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
             {
@@ -601,7 +601,7 @@ namespace CMS.Application.SystemManage
         public bool VerifyFileSize(int size, out int maxSize)
         {
             bool bState = false;
-            string sizes = CMS.Application.Comm.ConfigHelp.configHelp.UPLOADFILESIZE;
+            string sizes = Code.ConfigHelp.configHelp.UPLOADFILESIZE;
             int sizeT = 0;
             if (!string.IsNullOrEmpty(sizes) && int.TryParse(sizes, out sizeT))
             {

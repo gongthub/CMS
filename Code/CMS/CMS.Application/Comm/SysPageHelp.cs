@@ -1,5 +1,6 @@
 ﻿using CMS.Application.SystemManage;
 using CMS.Application.WebManage;
+using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
 using System;

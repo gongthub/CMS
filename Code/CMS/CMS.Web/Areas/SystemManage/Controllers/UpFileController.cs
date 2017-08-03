@@ -17,7 +17,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
     {
 
         private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
-        private static readonly string HTMLSYSCONTENTSRC = CMS.Application.Comm.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
+        private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
         [HttpPost]
         [HandlerAuthorize]
         public ActionResult UploadImg()

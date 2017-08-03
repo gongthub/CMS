@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Application.Comm
+namespace CMS.Code
 {
     public class ConfigHelp
     {

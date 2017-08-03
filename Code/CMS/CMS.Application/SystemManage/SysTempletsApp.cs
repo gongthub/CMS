@@ -16,7 +16,7 @@ namespace CMS.Application.SystemManage
 {
     public class SysTempletsApp
     {
-        private static readonly string HTMLSYSCONTENTSRC = Comm.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
+        private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
         private ISysTempletsRepository service = new SysTempletsRepository();
 
         public List<SysTempletsEntity> GetList()
