@@ -57,10 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comm\CacheHelp.cs" />
+    <Compile Include="Comm\CacheHelp.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Comm\LogHelp.cs" />
     <Compile Include="Comm\LucenceHelp.cs" />
-    <Compile Include="Comm\QueryableHelp.cs" />
     <Compile Include="Comm\RequestHelp.cs" />
     <Compile Include="Comm\SysPageHelp.cs" />
     <Compile Include="Comm\TempHelp.cs" />

@@ -110,6 +110,7 @@
     <Compile Include="Operator\SysLoginObjHelp.cs" />
     <Compile Include="PanGu\PanGuHelp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryableHelp.cs" />
     <Compile Include="Redis\RedisHelp.cs" />
     <Compile Include="Redis\RedisProvider.cs" />
     <Compile Include="Security\DESEncrypt.cs" />

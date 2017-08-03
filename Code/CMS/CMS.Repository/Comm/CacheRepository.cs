@@ -1,48 +1,28 @@
 ﻿using CMS.Code;
 using CMS.Domain.IRepository.Comm;
 using CMS.Domain.ViewModel;
-using CMS.Repository.Comm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Application.Comm
+namespace CMS.Repository.Comm
 {
-    public class CacheHelp
+    public class CacheRepository : ICacheRepository
     {
-        private static ICacheRepository iCacheRepository;
+        private static ICache icache = CacheFactory.cacheFactory.Cache();
+         
+        /// <summary>
+        /// 菜单对象权限
+        /// </summary>
+        private static string AUTHORIZEURLDATA = "AUTHORIZEURLDATA_";
 
-        #region 单例模式创建对象
-        //单例模式创建对象
-        private static CacheHelp _cacheHelp = null;
-        // Creates an syn object.
-        private static readonly object SynObject = new object();
-        CacheHelp()
-        {
-        }
+        /// <summary>
+        /// 输出Html缓存
+        /// </summary>
+        private static string OUTPUTHTML = "OUTPUTHTML_";
 
-        public static CacheHelp cacheHelp
-        {
-            get
-            {
-                // Double-Checked Locking
-                if (null == _cacheHelp)
-                {
-                    lock (SynObject)
-                    {
-                        if (null == _cacheHelp)
-                        {
-                            _cacheHelp = new CacheHelp();
-                            iCacheRepository = new CacheRepository();
-                        }
-                    }
-                }
-                return _cacheHelp;
-            }
-        }
-        #endregion
         /// <summary>
         /// 移除所有缓存
         /// </summary>
@@ -50,7 +30,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void RemoveAll()
         {
-            iCacheRepository.RemoveAll();
+            icache.RemoveCache();
         }
 
         #region 菜单对象权限
@@ -62,7 +42,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void WriteAuthorizeurlDatas(List<AuthorizeActionModel> authorizeurldata, string roleId)
         {
-            iCacheRepository.WriteAuthorizeurlDatas(authorizeurldata, roleId);
+            icache.WriteCache(authorizeurldata, AUTHORIZEURLDATA + roleId, DateTime.Now.AddMinutes(5));
         }
         /// <summary>
         /// 移除菜单对象权限缓存
@@ -71,7 +51,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void RemoveAuthorizeurlDatas(string roleId)
         {
-            iCacheRepository.RemoveAuthorizeurlDatas(roleId);
+            icache.RemoveCache(AUTHORIZEURLDATA + roleId);
         }
 
         /// <summary>
@@ -81,7 +61,14 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void RemoveAuthorizeurlDatas()
         {
-            iCacheRepository.RemoveAuthorizeurlDatas();
+            List<string> allkeys = icache.GetAllKey();
+            foreach (var keys in allkeys)
+            {
+                if (keys.Contains(AUTHORIZEURLDATA))
+                {
+                    icache.RemoveCache(keys);
+                }
+            }
 
         }
 
@@ -92,7 +79,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public List<AuthorizeActionModel> GetAuthorizeurlDatas(string roleId)
         {
-            List<AuthorizeActionModel> datas = iCacheRepository.GetAuthorizeurlDatas(roleId);
+            List<AuthorizeActionModel> datas = icache.GetCache<List<AuthorizeActionModel>>(AUTHORIZEURLDATA + roleId);
             return datas;
         }
 
@@ -107,7 +94,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void WriteOutPutHtmls(string htmls, string webSiteIds, string urlRaws)
         {
-            iCacheRepository.WriteOutPutHtmls(htmls, webSiteIds, urlRaws);
+            icache.WriteCache(htmls, OUTPUTHTML + webSiteIds + urlRaws, DateTime.Now.AddMinutes(5));
         }
         /// <summary>
         /// 移除输出Html缓存
@@ -116,7 +103,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void RemoveOutPutHtmls(string webSiteIds)
         {
-            iCacheRepository.RemoveOutPutHtmls(webSiteIds);
+            icache.RemoveCache(OUTPUTHTML + webSiteIds);
         }
         /// <summary>
         /// 移除输出Html缓存
@@ -125,7 +112,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public void RemoveOutPutHtmls(string webSiteIds, string urlRaws)
         {
-            iCacheRepository.RemoveOutPutHtmls(webSiteIds, urlRaws);
+            icache.RemoveCache(OUTPUTHTML + webSiteIds + urlRaws);
         }
 
         /// <summary>
@@ -136,7 +123,7 @@ namespace CMS.Application.Comm
         public string GetOutPutHtmls(string url)
         {
             string htmls = string.Empty;
-            htmls = iCacheRepository.GetOutPutHtmls(url);
+            htmls = icache.GetCache<string>(OUTPUTHTML + url);
             return htmls;
         }
         /// <summary>
@@ -147,7 +134,7 @@ namespace CMS.Application.Comm
         public string GetOutPutHtmls(string webSiteIds, string urlRaws)
         {
             string htmls = string.Empty;
-            htmls = iCacheRepository.GetOutPutHtmls(webSiteIds, urlRaws);
+            htmls = icache.GetCache<string>(OUTPUTHTML + webSiteIds + urlRaws);
             return htmls;
         }
 

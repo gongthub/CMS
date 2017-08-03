@@ -5,6 +5,6 @@ namespace CMS.Domain.IRepository.SystemSecurity
 {
     public interface ILogRepository : IRepositoryBase<LogEntity>
     {
-        
+        void AddDbLog(LogEntity logEntity);
     }
 }

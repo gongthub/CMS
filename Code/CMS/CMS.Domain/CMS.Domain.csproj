@@ -77,6 +77,7 @@
     <Compile Include="Infrastructure\IDeleteAudited.cs" />
     <Compile Include="Infrastructure\IEntity.cs" />
     <Compile Include="Infrastructure\IModificationAudited.cs" />
+    <Compile Include="IRepository\Comm\ICacheRepository.cs" />
     <Compile Include="IRepository\SystemManage\IAccessLogRepository.cs" />
     <Compile Include="IRepository\SystemManage\IAreaRepository.cs" />
     <Compile Include="IRepository\SystemManage\IItemsDetailRepository.cs" />
