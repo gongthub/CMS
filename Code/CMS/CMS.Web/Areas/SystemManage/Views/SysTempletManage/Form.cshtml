@@ -68,6 +68,8 @@
         var parentId = $.request("parentId");
 
         $(function () {
+            var contentH = $(document).height() - 100;
+            $("#Content").height(contentH);
             initControl();
             if (!!keyValue) {
                 $.ajax({
