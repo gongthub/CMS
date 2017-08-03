@@ -144,37 +144,7 @@ namespace CMS.Application.SystemManage
         /// <returns></returns>
         public int GetUserWebSiteMaxNum()
         {
-            int iWebSiteNum = 0;
-
-            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
-            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-            if (LoginInfo != null)
-            {
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.SystemUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_SYSTEMUSER, out iWebSiteNum);
-                }
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_WEBSITEUSER, out iWebSiteNum);
-                }
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_REGISTERUSER, out iWebSiteNum);
-                }
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_ORDINARYUSER, out iWebSiteNum);
-                }
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_GOLDUSER, out iWebSiteNum);
-                }
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
-                {
-                    int.TryParse(Code.ConfigHelp.configHelp.WEBSITENUM_DIAMONDUSER, out iWebSiteNum);
-                }
-            }
+            int iWebSiteNum = service.GetUserWebSiteMaxNum();
             return iWebSiteNum;
         }
 
@@ -187,14 +157,7 @@ namespace CMS.Application.SystemManage
         /// <returns></returns>
         public bool IsSystemUserName(string name)
         {
-            bool retBool = false;
-            if (name != null && SYSTEMADMINUSERNAME != null)
-            {
-                if (name.ToLower() == SYSTEMADMINUSERNAME.ToLower())
-                {
-                    retBool = true;
-                }
-            }
+            bool retBool = service.IsSystemUserName(name);
             return retBool;
         }
 
@@ -204,34 +167,7 @@ namespace CMS.Application.SystemManage
         /// <returns></returns>
         public bool IsExistDefaultWebSite(ref string webSiteId)
         {
-            bool bState = false;
-            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
-            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-            if (LoginInfo != null)
-            {
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
-                {
-                    WebSiteApp webSiteApp = new WebSiteApp();
-                    List<WebSiteEntity> webSiteEntitys = webSiteApp.GetListForUserId();
-                    if (webSiteEntitys != null && webSiteEntitys.Count > 0)
-                    {
-                        if (webSiteEntitys.Count == 1)
-                        {
-                            bState = true;
-                            webSiteId = webSiteEntitys[0].Id;
-                        }
-                        else
-                        {
-                            WebSiteEntity webSiteEntity = webSiteEntitys.Find(m => m.MainMark == true);
-                            if (webSiteEntity != null)
-                            {
-                                bState = true;
-                                webSiteId = webSiteEntity.Id;
-                            }
-                        }
-                    }
-                }
-            }
+            bool bState = service.IsExistDefaultWebSite(ref webSiteId);
             return bState;
         }
     }
