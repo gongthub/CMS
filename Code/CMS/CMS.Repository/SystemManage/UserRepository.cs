@@ -17,7 +17,6 @@ namespace CMS.Repository.SystemManage
 {
     public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
     {
-        private IWebSiteRepository iWebSiteRepository = new WebSiteRepository();
         private IUserWebSiteRepository iUserWebSiteRepository = new UserWebSiteRepository();
 
         private ILogRepository iLogRepository = new LogRepository();
@@ -87,28 +86,38 @@ namespace CMS.Repository.SystemManage
                     }
 
                     //添加用户站点信息
-                    if (webSiteIds != null && webSiteIds.Length > 0)
-                    {
-                        List<UserWebSiteEntity> entitys = new List<UserWebSiteEntity>();
-                        foreach (var webSiteId in webSiteIds)
-                        {
-                            if (!string.IsNullOrEmpty(webSiteId))
-                            {
-                                UserWebSiteEntity entity = new UserWebSiteEntity();
-                                entity.Create();
-                                entity.UserId = userEntity.Id; ;
-                                entity.WebSiteId = webSiteId;
-                                entity.EnabledMark = true;
-                                db.Insert(entity);
-                            }
-                        }
-                    }
+                    AddUserWebSites(userEntity, webSiteIds, db);
                     db.Commit();
                 }
             }
             else
             {
                 throw new Exception("用户名已存在，请重新输入！");
+            }
+        }
+        /// <summary>
+        /// 添加用户站点信息
+        /// </summary>
+        /// <param name="userEntity"></param>
+        /// <param name="webSiteIds"></param>
+        /// <param name="db"></param>
+        private static void AddUserWebSites(UserEntity userEntity, string[] webSiteIds, IRepositoryBase db)
+        {
+            if (webSiteIds != null && webSiteIds.Length > 0)
+            {
+                List<UserWebSiteEntity> entitys = new List<UserWebSiteEntity>();
+                foreach (var webSiteId in webSiteIds)
+                {
+                    if (!string.IsNullOrEmpty(webSiteId))
+                    {
+                        UserWebSiteEntity entity = new UserWebSiteEntity();
+                        entity.Create();
+                        entity.UserId = userEntity.Id; ;
+                        entity.WebSiteId = webSiteId;
+                        entity.EnabledMark = true;
+                        db.Insert(entity);
+                    }
+                }
             }
         }
 

@@ -14,45 +14,6 @@ namespace CMS.Application.WebManage
     {
         private IWebSiteForUrlRepository service = new WebSiteForUrlRepository();
 
-
-        public void Save(List<WebSiteForUrlEntity> webSiteForUrlEntitys)
-        {
-            if (webSiteForUrlEntitys != null && webSiteForUrlEntitys.Count > 0)
-            {
-                foreach (var webSiteForUrlEntity in webSiteForUrlEntitys)
-                {
-                    webSiteForUrlEntity.UrlAddress = webSiteForUrlEntity.UrlAddress.Trim();
-
-                    WebSiteForUrlEntity TwebSiteForUrlEntity = service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == webSiteForUrlEntity.WebSiteId && m.SortCode == webSiteForUrlEntity.SortCode).FirstOrDefault();
-                    string TwebIds = string.Empty;
-                    if (TwebSiteForUrlEntity != null)
-                    {
-                        TwebIds = TwebSiteForUrlEntity.Id;
-                    }
-                    //if (!IsExistUrl(TwebIds, webSiteForUrlEntity.UrlAddress)) 
-                    if (!service.IsExist(TwebIds, "UrlAddress", webSiteForUrlEntity.UrlAddress, true))
-                    {
-                        if (TwebSiteForUrlEntity != null && !string.IsNullOrEmpty(TwebSiteForUrlEntity.Id))
-                        {
-                            TwebSiteForUrlEntity.Modify(TwebSiteForUrlEntity.Id);
-                            TwebSiteForUrlEntity.UrlAddress = webSiteForUrlEntity.UrlAddress;
-                            service.Update(TwebSiteForUrlEntity);
-                        }
-                        else
-                        {
-                            webSiteForUrlEntity.Create();
-                            service.Insert(webSiteForUrlEntity);
-                        }
-                    }
-                    else
-                    {
-
-                        throw new Exception("域名：" + webSiteForUrlEntity.UrlAddress + "已绑定站点，请重新输入！");
-                    }
-                }
-            }
-        }
-
         public List<WebSiteForUrlEntity> GetListByWebSiteId(string webSiteId)
         {
             List<WebSiteForUrlEntity> webSiteForUrlEntitys = new List<WebSiteForUrlEntity>();
@@ -89,69 +50,5 @@ namespace CMS.Application.WebManage
             }
         }
 
-
-        /// <summary>
-        /// 判断域名是否存在
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsExistUrl(string keyId, string url)
-        {
-            url = url.Trim();
-            bool retBool = false;
-            int flay = 0;   //标示位 判断是否需要查询
-            if (!string.IsNullOrEmpty(keyId))
-            {
-                Guid id = Guid.Empty;
-                WebSiteForUrlEntity moduleEntity = service.FindEntity(m => m.Id == keyId);
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    if (moduleEntity.UrlAddress != url)
-                    {
-                        flay = 1;
-                    }
-                }
-            }
-            else
-            {
-                flay = 1;
-            }
-            //需要判断
-            if (flay == 1)
-            {
-                Guid id = Guid.Empty;
-                WebSiteForUrlEntity moduleEntity = service.FindEntity(m => m.UrlAddress == url && m.DeleteMark != true && m.UrlAddress != null && m.UrlAddress != "");
-                if (moduleEntity != null && Guid.TryParse(moduleEntity.Id, out id))
-                {
-                    retBool = true;
-                }
-            }
-
-            return retBool;
-        }
-
-        /// <summary>
-        /// 判断域名是否存在
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsExistUrl(WebSiteEntity moduleEntity, string url)
-        {
-            moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
-
-            WebSiteForUrlEntity TwebSiteForUrlEntity = service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == moduleEntity.Id && m.SortCode == 0).FirstOrDefault();
-            if (TwebSiteForUrlEntity != null)
-            {
-                //return IsExistUrl(TwebSiteForUrlEntity.Id, moduleEntity.UrlAddress); 
-                return service.IsExist(TwebSiteForUrlEntity.Id, "UrlAddress", moduleEntity.UrlAddress, true);
-            }
-            else
-            {
-                //return IsExistUrl("", moduleEntity.UrlAddress);
-                return service.IsExist("", "UrlAddress", moduleEntity.UrlAddress, true);
-            }
-        }
     }
 }

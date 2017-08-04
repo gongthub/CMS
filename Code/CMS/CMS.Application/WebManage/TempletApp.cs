@@ -228,66 +228,11 @@ namespace CMS.Application.WebManage
             expression = expression.And(t => t.DeleteMark != true);
             return service.FindList(expression, pagination);
         }
-        /// <summary>
-        /// 添加全站搜索模板
-        /// </summary>
-        public void AddSearchModel(string WebSiteId)
-        {
-            if (!IsExistSearchModel(WebSiteId))
-            {
-                TempletEntity moduleEntity = new TempletEntity();
-                moduleEntity.WebSiteId = WebSiteId;
-                moduleEntity.SortCode = 0;
-                moduleEntity.FullName = ConfigHelp.configHelp.WEBSITESEARCHPATH;
-                moduleEntity.Description = "全站搜索模板";
-                moduleEntity.TempletType = (int)Code.Enums.TempletType.Search;
-                moduleEntity.EnabledMark = true;
-                moduleEntity.Create();
-                service.Insert(moduleEntity);
-            }
-        }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            if (moduleEntity.FullName.ToLower() != ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
-            {
-                if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
-                {
-                    if (!string.IsNullOrEmpty(keyValue))
-                    {
-                        moduleEntity.Modify(keyValue);
-                        service.Update(moduleEntity);
-                        //添加日志
-                        LogHelp.logHelp.WriteDbLog(true, "修改模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "模板管理");
-                    }
-                    else
-                    {
-                        moduleEntity.Create();
-                        service.Insert(moduleEntity);
-                        //添加日志
-                        LogHelp.logHelp.WriteDbLog(true, "添加模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "模板管理");
-                    }
-                }
-                else
-                {
-                    throw new Exception("名称已存在，请重新输入！");
-                }
-            }
-            else
-            {
-                throw new Exception("名称不能为系统保留名称，请重新输入！");
-            }
+            service.SubmitForm(moduleEntity, keyValue);
         }
 
-        public void AddModels(List<TempletEntity> moduleEntitys)
-        {
-            if (moduleEntitys != null && moduleEntitys.Count > 0)
-            {
-                foreach (var moduleEntity in moduleEntitys)
-                {
-                    SubmitForm(moduleEntity, null);
-                }
-            }
-        }
         public void DeleteForm(string keyValue)
         {
             service.DeleteById(t => t.Id == keyValue);
@@ -295,15 +240,5 @@ namespace CMS.Application.WebManage
             LogHelp.logHelp.WriteDbLog(true, "删除模板信息=>" + keyValue, Enums.DbLogType.Delete, "模板管理");
         }
 
-        public bool IsExistSearchModel(string WebSiteId)
-        {
-            bool bState = false;
-            TempletEntity model = GetSearchModel(WebSiteId);
-            if (model != null && !string.IsNullOrEmpty(model.Id))
-            {
-                bState = true;
-            }
-            return bState;
-        }
     }
 }

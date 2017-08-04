@@ -127,21 +127,6 @@ namespace CMS.Application.WebManage
             return models;
         }
 
-        /// <summary>
-        /// 根据网站简称初始化网站资源文件路径并返回绝对路径
-        /// </summary>
-        /// <param name="webSiteShortName"></param>
-        /// <returns></returns>
-        public string InitDirByWebSiteShortName(string webSiteShortName)
-        {
-            string filePaths = HTMLCONTENTSRC + @"\" + webSiteShortName + @"\";
-            filePaths = Code.FileHelper.MapPath(filePaths);
-            if (!Code.FileHelper.IsExistDirectory(filePaths))
-            {
-                Code.FileHelper.CreateDirectory(filePaths);
-            }
-            return filePaths;
-        }
 
         /// <summary>
         /// 处理文件夹文件

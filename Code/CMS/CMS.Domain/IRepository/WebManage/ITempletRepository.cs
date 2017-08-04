@@ -10,5 +10,7 @@ namespace CMS.Domain.IRepository.WebManage
 {
     public interface ITempletRepository : IRepositoryBase<TempletEntity>
     {
+        bool IsExistSearchModel(string WebSiteId);
+        void SubmitForm(TempletEntity moduleEntity, string keyValue);
     }
 }

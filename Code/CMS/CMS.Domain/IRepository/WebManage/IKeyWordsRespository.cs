@@ -10,5 +10,20 @@ namespace CMS.Domain.IRepository.WebManage
 {
     public interface IKeyWordsRespository : IRepositoryBase<KeyWordsEntity>
     {
+        /// <summary>
+        /// 判断是否存在非法关键字
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <param name="strs"></param>
+        /// <returns></returns>
+        bool IsHasKeyWords(string webSiteId, string strs);
+
+        /// <summary>
+        /// 判断是否存在非法关键字
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <param name="strs"></param>
+        /// <returns></returns>
+        bool IsHasKeyWords(string webSiteId, string strs, out string keyWords);
     }
 }

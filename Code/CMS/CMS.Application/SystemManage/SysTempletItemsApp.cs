@@ -51,8 +51,15 @@ namespace CMS.Application.SystemManage
         }
 
         public void DeleteForm(string keyValue)
-        {
-            service.DeleteById(t => t.Id == keyValue);
+        { 
+            if (IsExist(keyValue))
+            {
+                throw new Exception("删除失败！操作的对象包含了下级数据。");
+            }
+            else
+            {
+                service.DeleteById(t => t.Id == keyValue);
+            }
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除系统模板内容信息=>" + keyValue, Enums.DbLogType.Delete, "系统模板内容管理");
         }

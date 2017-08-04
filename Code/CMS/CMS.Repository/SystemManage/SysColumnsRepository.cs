@@ -11,5 +11,9 @@ namespace CMS.Repository.SystemManage
 {
     public class SysColumnsRepository : RepositoryBase<SysColumnsEntity>, ISysColumnsRepository
     {
+        public List<SysColumnsEntity> GetListBySysTempletId(string sysTempletId)
+        {
+            return IQueryable(m => m.SysTempletId == sysTempletId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+        }
     }
 }

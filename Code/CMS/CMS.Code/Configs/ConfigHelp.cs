@@ -85,6 +85,16 @@ namespace CMS.Code
                 return Code.Configs.GetValue("htmlSysContentSrc").ToString();
             }
         }
+        /// <summary>
+        /// 系统删除文件保存路径
+        /// </summary>
+        public string SYSFILEFORDEL
+        {
+            get
+            {
+                return Code.Configs.GetValue("SysFileForDel").ToString();
+            }
+        }
         #endregion
 
         #region 上传图片配置

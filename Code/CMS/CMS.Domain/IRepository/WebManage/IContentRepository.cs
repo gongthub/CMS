@@ -1,4 +1,5 @@
 ﻿using CMS.Data;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,8 @@ namespace CMS.Domain.IRepository.WebManage
 {
     public interface IContentRepository : IRepositoryBase<ContentEntity>
     {
+        void SubmitForm(ContentEntity moduleEntity, string keyValue);
+        void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys);
+        void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys, List<string> lstRemoveImgIds);
     }
 }

@@ -50,56 +50,11 @@ namespace CMS.Application.SystemManage
         }
         public void DeleteForm(string keyValue)
         {
-            SysTempletItemsApp sysTempletItemsApp = new SysTempletItemsApp();
-            if (sysTempletItemsApp.IsExist(keyValue))
-            {
-                throw new Exception("删除失败！操作的对象包含了下级数据。");
-            }
-            else
-            {
-                service.DeleteById(t => t.Id == keyValue);
-            }
-            //添加日志
-            LogHelp.logHelp.WriteDbLog(true, "删除系统模板信息=>" + keyValue, Enums.DbLogType.Delete, "系统模板管理");
+            service.DeleteForm(keyValue);
         }
         public void SubmitForm(SysTempletsEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
-            if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, true))
-            {
-                if (!service.IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
-                {
-                    if (!string.IsNullOrEmpty(keyValue))
-                    {
-                        moduleEntity.Modify(keyValue);
-                        service.Update(moduleEntity);
-                        //添加日志
-                        LogHelp.logHelp.WriteDbLog(true, "修改系统模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "系统模板管理");
-                    }
-                    else
-                    {
-                        moduleEntity.Create();
-                        service.Insert(moduleEntity);
-                        //添加日志
-                        LogHelp.logHelp.WriteDbLog(true, "添加系统模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "系统模板管理");
-                    }
-                    //更新上传文件表
-                    UpFileApp upFileApp = new UpFileApp();
-                    upFileentity.Sys_WebSiteId = moduleEntity.Id;
-                    upFileentity.Sys_ParentId = keyValue;
-                    upFileentity.Sys_ModuleName = EnumHelp.enumHelp.GetDescription(Enums.UpFileModule.WebSites);
-                    upFileApp.AddUpFileEntity(upFileentity);
-
-                }
-                else
-                {
-                    throw new Exception("简称已存在，请重新输入！");
-                }
-
-            }
-            else
-            {
-                throw new Exception("名称已存在，请重新输入！");
-            }
+            service.SubmitForm(moduleEntity, keyValue, upFileentity);
         }
         public SysTempletItemsEntity GetItemForm(string keyValue)
         {
@@ -207,64 +162,6 @@ namespace CMS.Application.SystemManage
             LogHelp.logHelp.WriteDbLog(true, "删除资源管理文件夹=>" + model.UrlAddress, Enums.DbLogType.Delete, "资源管理");
         }
 
-        /// <summary>
-        /// 根据模板id和网站id创建网站模板，创建网站时选择系统模板
-        /// </summary>
-        /// <param name="templetId"></param>
-        /// <param name="webSiteId"></param>
-        public void CreateTemplet(string templetId, string webSiteId)
-        {
-            if (!string.IsNullOrEmpty(templetId) && !string.IsNullOrEmpty(webSiteId))
-            {
-                WebSiteApp websiteApp = new WebSiteApp();
-                TempletApp templetApp = new TempletApp();
-                SysTempletsEntity sysTempletModel = GetForm(templetId);
-                List<SysTempletItemsEntity> models = GetItemList(templetId);
-                WebSiteEntity websiteModel = websiteApp.GetForm(webSiteId);
-                if (sysTempletModel != null && !string.IsNullOrEmpty(sysTempletModel.Id)
-                    && websiteModel != null && !string.IsNullOrEmpty(websiteModel.Id))
-                {
-                    if (models != null && models.Count > 0)
-                    {
-                        List<TempletEntity> tmodels = new List<TempletEntity>();
-                        tmodels = (from list in models
-                                   select new TempletEntity
-                               {
-                                   WebSiteId = webSiteId,
-                                   SortCode = list.SortCode,
-                                   FullName = list.FullName,
-                                   Description = list.Description,
-                                   Content = list.Content,
-                                   TempletType = list.TempletType,
-                                   EnabledMark = list.EnabledMark,
-                                   DeleteMark = list.DeleteMark,
-                                   CreatorUserId = list.CreatorUserId,
-                                   CreatorTime = list.CreatorTime,
-                                   DeleteUserId = list.DeleteUserId,
-                                   DeleteTime = list.DeleteTime,
-                                   LastModifyTime = list.LastModifyTime,
-                                   LastModifyUserId = list.LastModifyUserId
-
-                               }).ToList();
-                        templetApp.AddModels(tmodels);
-                    }
-                    CopySysResourceToWebSite(sysTempletModel.ShortName, websiteModel.ShortName);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 拷贝系统模板资源文件到网站资源文件目录
-        /// </summary>
-        /// <param name="TempletId"></param>
-        /// <param name="WebSiteId"></param>
-        private void CopySysResourceToWebSite(string templentShortName, string WebSiteShortName)
-        {
-            ResourceApp resourceApp = new ResourceApp();
-            string varFromDirectory = InitDirByTemplentShortName(templentShortName);
-            string varToDirectory = resourceApp.InitDirByWebSiteShortName(WebSiteShortName);
-            CMS.Code.FileHelper.CopyFolder(varFromDirectory, varToDirectory);
-        }
 
         /// <summary>
         /// 根据网站简称获取所有资源文件
@@ -288,22 +185,6 @@ namespace CMS.Application.SystemManage
             return models;
         }
 
-
-        /// <summary>
-        /// 根据系统模板简称初始化模板资源文件路径并返回绝对路径
-        /// </summary>
-        /// <param name="webSiteShortName"></param>
-        /// <returns></returns>
-        public string InitDirByTemplentShortName(string templentShortName)
-        {
-            string filePaths = HTMLSYSCONTENTSRC + @"\" + templentShortName + @"\";
-            filePaths = Code.FileHelper.MapPath(filePaths);
-            if (!Code.FileHelper.IsExistDirectory(filePaths))
-            {
-                Code.FileHelper.CreateDirectory(filePaths);
-            }
-            return filePaths;
-        }
 
         /// <summary>
         /// 处理文件夹文件

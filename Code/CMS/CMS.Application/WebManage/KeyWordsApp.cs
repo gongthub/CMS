@@ -43,7 +43,7 @@ namespace CMS.Application.WebManage
             return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderByDescending(t => t.CreatorTime).ToList();
 
         }
-        public List<KeyWordsEntity> GetListByWebSiteId(string WebSiteId,Pagination pagination, string keyword)
+        public List<KeyWordsEntity> GetListByWebSiteId(string WebSiteId, Pagination pagination, string keyword)
         {
             var expression = ExtLinq.True<KeyWordsEntity>();
             if (!string.IsNullOrEmpty(keyword))
@@ -73,7 +73,8 @@ namespace CMS.Application.WebManage
             List<KeyWordsEntity> models = GetListByWebSiteIdNoEnable(WebSiteId);
             if (models != null && models.Count > 0)
             {
-                models.ForEach(delegate(KeyWordsEntity model) {
+                models.ForEach(delegate(KeyWordsEntity model)
+                {
                     lsWords.Add(model.FullName);
                 });
             }
@@ -117,27 +118,9 @@ namespace CMS.Application.WebManage
         /// <param name="webSiteId"></param>
         /// <param name="strs"></param>
         /// <returns></returns>
-        public bool IsHasKeyWords(string webSiteId,string strs)
+        public bool IsHasKeyWords(string webSiteId, string strs)
         {
-            bool bState = false;
-            List<string> lsKeyWords = GetWordByWebSiteIdNoEnable(webSiteId);
-            if (lsKeyWords != null && lsKeyWords.Count > 0)
-            {
-                List<string> lsWords = Code.PanGu.PanGuHelp.panGuHelp.GenWords(strs);
-                if (lsWords != null && lsWords.Count > 0)
-                {
-                    foreach (string item in lsKeyWords)
-                    {
-                        if (lsWords.Contains(item))
-                        {
-                            bState = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return bState;
+            return service.IsHasKeyWords(webSiteId, strs);
         }
 
         /// <summary>
@@ -146,29 +129,9 @@ namespace CMS.Application.WebManage
         /// <param name="webSiteId"></param>
         /// <param name="strs"></param>
         /// <returns></returns>
-        public bool IsHasKeyWords(string webSiteId, string strs,out string keyWords)
+        public bool IsHasKeyWords(string webSiteId, string strs, out string keyWords)
         {
-            bool bState = false;
-            keyWords=string.Empty;
-            List<string> lsKeyWords = GetWordByWebSiteIdNoEnable(webSiteId);
-            if (lsKeyWords != null && lsKeyWords.Count > 0)
-            {
-                List<string> lsWords = Code.PanGu.PanGuHelp.panGuHelp.GenWords(strs);
-                if (lsWords != null && lsWords.Count > 0)
-                {
-                    foreach (string item in lsKeyWords)
-                    {
-                        if (lsWords.Contains(item))
-                        {
-                            bState = true;
-                            keyWords = item;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return bState;
+            return service.IsHasKeyWords(webSiteId, strs, out keyWords);
         }
     }
 }

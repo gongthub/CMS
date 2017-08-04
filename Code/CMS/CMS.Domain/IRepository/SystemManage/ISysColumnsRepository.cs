@@ -10,5 +10,6 @@ namespace CMS.Domain.IRepository.SystemManage
 {
     public interface ISysColumnsRepository : IRepositoryBase<SysColumnsEntity>
     {
+        List<SysColumnsEntity> GetListBySysTempletId(string sysTempletId);
     }
 }

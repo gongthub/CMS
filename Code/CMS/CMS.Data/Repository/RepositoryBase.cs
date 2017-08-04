@@ -103,6 +103,71 @@ namespace CMS.Data
             entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
             return dbTransaction == null ? this.Commit() : 0;
         }
+        public int DeleteById<TEntity>(TEntity entity) where TEntity : class
+        {
+            RemoveHoldingEntityInContext(entity);
+            //var entity = this as IDeleteAudited;
+            dbcontext.Set<TEntity>().Attach(entity);
+            PropertyInfo[] props = entity.GetType().GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                if (prop.Name.ToLower() == "DeleteMark".ToLower())
+                {
+                    dbcontext.Entry(entity).Property(prop.Name).CurrentValue = true;
+                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                }
+                if (prop.Name.ToLower() == "DeleteUserId".ToLower())
+                { 
+                    var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+                    if (LoginInfo != null)
+                    {
+                        dbcontext.Entry(entity).Property(prop.Name).CurrentValue = LoginInfo.UserId;
+                        dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                    }
+                }
+                if (prop.Name.ToLower() == "DeleteTime".ToLower())
+                {
+                    dbcontext.Entry(entity).Property(prop.Name).CurrentValue = DateTime.Now;
+                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                }
+            }
+            return dbTransaction == null ? this.Commit() : 0;
+        }
+
+        public int DeleteById<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+        {
+            var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
+            for (int i = 0; i < entitys.Count; i++)
+            {
+                RemoveHoldingEntityInContext(entitys[i]);
+                dbcontext.Set<TEntity>().Attach(entitys[i]);
+                PropertyInfo[] props = entitys[i].GetType().GetProperties();
+                foreach (PropertyInfo prop in props)
+                {
+                    if (prop.Name.ToLower() == "DeleteMark".ToLower())
+                    {
+                        dbcontext.Entry(entitys[i]).Property(prop.Name).CurrentValue = true;
+                        dbcontext.Entry(entitys[i]).Property(prop.Name).IsModified = true;
+                    }
+                    if (prop.Name.ToLower() == "DeleteUserId".ToLower())
+                    {
+                        //var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                        var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+                        if (LoginInfo != null)
+                        {
+                            dbcontext.Entry(entitys[i]).Property(prop.Name).CurrentValue = LoginInfo.UserId;
+                            dbcontext.Entry(entitys[i]).Property(prop.Name).IsModified = true;
+                        }
+                    }
+                    if (prop.Name.ToLower() == "DeleteTime".ToLower())
+                    {
+                        dbcontext.Entry(entitys[i]).Property(prop.Name).CurrentValue = DateTime.Now;
+                        dbcontext.Entry(entitys[i]).Property(prop.Name).IsModified = true;
+                    }
+                }
+            }
+            return dbTransaction == null ? this.Commit() : 0;
+        }
         public TEntity FindEntity<TEntity>(object keyValue) where TEntity : class
         {
             return dbcontext.Set<TEntity>().Find(keyValue);
@@ -184,5 +249,22 @@ namespace CMS.Data
             return tempData.ToList();
         }
 
+        //用于监测Context中的Entity是否存在，如果存在，将其Detach，防止出现问题。
+        private Boolean RemoveHoldingEntityInContext<TEntity>(TEntity entity) where TEntity : class
+        {
+            var objContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
+            var objSet = objContext.CreateObjectSet<TEntity>();
+            var entityKey = objContext.CreateEntityKey(objSet.EntitySet.Name, entity);
+
+            Object foundEntity;
+            var exists = objContext.TryGetObjectByKey(entityKey, out foundEntity);
+
+            if (exists)
+            {
+                objContext.Detach(foundEntity);
+            }
+
+            return (exists);
+        }
     }
 }

@@ -320,6 +320,37 @@ namespace CMS.Code
         }
         #endregion
 
+        #region 移动文件夹(剪贴--粘贴)
+        /// <summary>
+        /// 移动文件夹(剪贴--粘贴)
+        /// </summary>
+        /// <param name="dir1">要移动的文件的路径及全名(包括后缀)</param>
+        /// <param name="dir2">文件移动到新的位置,并指定新的文件名</param>
+        public static void MoveDir(string dir1, string dir2)
+        {
+            dir1 = dir1.Replace("/", "\\");
+            dir2 = dir2.Replace("/", "\\");
+            if (IsExistDirectory(dir1))
+            {
+                Directory.Move(dir1, dir2);
+            }
+        }
+        /// <summary>
+        /// 移动文件夹(剪贴--粘贴)
+        /// </summary>
+        /// <param name="dir1">要移动的文件的路径及全名(包括后缀)</param>
+        /// <param name="dir2">文件移动到新的位置,并指定新的文件名</param>
+        public static void MoveDir(string dir1, string dir2,string basedir)
+        {
+            basedir = MapPath(basedir);
+            if (!IsExistDirectory(basedir))
+            {
+                CreateDirectory(basedir);
+            }
+            MoveDir(dir1, dir2);
+        }
+        #endregion
+
         #region 复制文件
         /// <summary>
         /// 复制文件

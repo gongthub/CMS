@@ -25,19 +25,6 @@ namespace CMS.Application.WebManage
         }
 
 
-        public void AddWebSiteConfig(string webSiteId)
-        {
-            if (!service.IsExist(string.Empty, "WebSiteId", webSiteId, true))
-            {
-                WebSiteConfigEntity webSiteConfigEntity = new WebSiteConfigEntity();
-                webSiteConfigEntity.WebSiteId = webSiteId;
-                webSiteConfigEntity.SearchEnabledMark = false;
-                webSiteConfigEntity.Create();
-                service.Insert(webSiteConfigEntity);
-                //添加日志
-                LogHelp.logHelp.WriteDbLog(true, "添加站点配置信息=>" + webSiteConfigEntity.WebSiteId, Enums.DbLogType.Create, "站点配置");
-            }
-        }
         public bool UpdateSearchEnableByWebSiteId(string webSiteId, bool searchEnabled)
         {
             bool bState = true;
@@ -141,87 +128,19 @@ namespace CMS.Application.WebManage
         }
         public bool IsSearch(string webSiteId)
         {
-            bool bState = false;
-            try
-            {
-                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
-                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
-                {
-                    bState = webSiteConfigEntity.SearchEnabledMark;
-                }
-                else
-                {
-                    bState = false;
-                }
-            }
-            catch
-            {
-                bState = false;
-            }
-            return bState;
+            return service.IsSearch(webSiteId);
         }
         public bool IsService(string webSiteId)
         {
-            bool bState = true;
-            try
-            {
-                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
-                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
-                {
-                    bState = webSiteConfigEntity.ServiceEnabledMark;
-                }
-                else
-                {
-                    bState = true;
-                }
-            }
-            catch
-            {
-                bState = true;
-            }
-            return bState;
+            return service.IsService(webSiteId);
         }
         public bool IsMessage(string webSiteId)
         {
-            bool bState = true;
-            try
-            {
-                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
-                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
-                {
-                    bState = webSiteConfigEntity.MessageEnabledMark;
-                }
-                else
-                {
-                    bState = true;
-                }
-            }
-            catch
-            {
-                bState = true;
-            }
-            return bState;
+            return service.IsMessage(webSiteId);
         }
         public bool IsAdvancedContent(string webSiteId)
         {
-            bool bState = true;
-            try
-            {
-                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
-                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
-                {
-                    bState = webSiteConfigEntity.AdvancedContentEnabledMark;
-                }
-                else
-                {
-                    bState = true;
-                }
-            }
-            catch
-            {
-                bState = true;
-            }
-            return bState;
+            return service.IsAdvancedContent(webSiteId);
         }
     }
 }
