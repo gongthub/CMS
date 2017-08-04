@@ -12,19 +12,14 @@ namespace CMS.Web.Controllers
     [HandlerLogin]
     public class HomeController : Controller
     {
-        //public static readonly string WEBSITEID = "WEBSITEID";
-        //public static readonly string WEBSITENAME = "WEBSITENAME";
-        //public static readonly string WEBSITESHORTNAME = "WEBSITESHORTNAME";
-        //public static readonly string WEBSITEURLADDRESS = "WEBSITEURLADDRESS";
-        //public static readonly string WEBSITEENTITY = "WEBSITEENTITY";
         [HttpGet]
         public ActionResult Index(string strLoginMark)
         {
             if (!string.IsNullOrEmpty(strLoginMark))
             {
-                UserApp userApp = new UserApp();
+                WebSiteApp webSiteApp = new WebSiteApp();
                 string strWebSiteIds = string.Empty;
-                if (userApp.IsExistDefaultWebSite(ref strWebSiteIds))
+                if (webSiteApp.IsExistDefaultWebSite(ref strWebSiteIds))
                 {
                     return RedirectToAction("WebSite", "Home", new { key = strWebSiteIds });
                 }

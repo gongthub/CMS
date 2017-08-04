@@ -7,6 +7,7 @@ namespace CMS.Domain.IRepository.SystemManage
     {
         void DeleteForm(string keyValue);
         void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue);
+        void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string[] webSiteIds);
 
         /// <summary>
         /// 获取当前用户可最大添加网站数
@@ -21,11 +22,5 @@ namespace CMS.Domain.IRepository.SystemManage
         /// <param name="name"></param>
         /// <returns></returns>
         bool IsSystemUserName(string name);
-
-        /// <summary>
-        /// 判断当前用户是否包含默认站点 
-        /// </summary>
-        /// <returns></returns>
-        bool IsExistDefaultWebSite(ref string webSiteId);
     }
 }

@@ -56,38 +56,7 @@ namespace CMS.Application.SystemManage
         }
         public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string[] webSiteIds)
         {
-            bool IsAdd = true;
-            userEntity.Account = userEntity.Account.Trim();
-            if (!service.IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
-            {
-                if (!string.IsNullOrEmpty(keyValue))
-                {
-                    userEntity.Modify(keyValue);
-                    IsAdd = false;
-                }
-                else
-                {
-                    userEntity.Create();
-                }
-                service.SubmitForm(userEntity, userLogOnEntity, keyValue);
-                UserWebSiteApp userWebSiteApp = new UserWebSiteApp();
-                userWebSiteApp.SaveUserWebSite(userEntity.Id, webSiteIds);
-
-                if (IsAdd)
-                {
-                    //添加日志
-                    LogHelp.logHelp.WriteDbLog(true, "添加用户信息=>" + userEntity.Account, Enums.DbLogType.Create, "用户管理");
-                }
-                else
-                {
-                    //添加日志
-                    LogHelp.logHelp.WriteDbLog(true, "修改用户信息=>" + userEntity.Account, Enums.DbLogType.Update, "用户管理");
-                }
-            }
-            else
-            {
-                throw new Exception("用户名已存在，请重新输入！");
-            }
+            service.SubmitForm(userEntity, userLogOnEntity, keyValue, webSiteIds);
         }
         public void UpdateForm(UserEntity userEntity)
         {
@@ -148,27 +117,5 @@ namespace CMS.Application.SystemManage
             return iWebSiteNum;
         }
 
-
-        /// <summary>
-        /// 判断是否为系统管理员用户
-        /// </summary>
-        /// <param name="keyId"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool IsSystemUserName(string name)
-        {
-            bool retBool = service.IsSystemUserName(name);
-            return retBool;
-        }
-
-        /// <summary>
-        /// 判断当前用户是否包含默认站点 
-        /// </summary>
-        /// <returns></returns>
-        public bool IsExistDefaultWebSite(ref string webSiteId)
-        {
-            bool bState = service.IsExistDefaultWebSite(ref webSiteId);
-            return bState;
-        }
     }
 }

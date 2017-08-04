@@ -3,16 +3,25 @@ using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository.SystemSecurity;
 using CMS.Domain.IRepository.WebManage;
 using CMS.Repository.SystemManage;
+using CMS.Repository.SystemSecurity;
 using CMS.Repository.WebManage;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace CMS.Repository.SystemManage
 {
     public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
     {
         private IWebSiteRepository iWebSiteRepository = new WebSiteRepository();
+        private IUserWebSiteRepository iUserWebSiteRepository = new UserWebSiteRepository();
+
+        private ILogRepository iLogRepository = new LogRepository();
+
         private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
         private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
         public void DeleteForm(string keyValue)
@@ -43,6 +52,63 @@ namespace CMS.Repository.SystemManage
 
                 }
                 db.Commit();
+            }
+        }
+
+
+        public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string[] webSiteIds)
+        {
+            userEntity.Account = userEntity.Account.Trim();
+            if (!IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
+            {
+                iUserWebSiteRepository.DeleteById(m => m.UserId == keyValue);
+                using (var db = new RepositoryBase().BeginTrans())
+                {
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        userEntity.Modify(keyValue);
+                        db.Update(userEntity);
+
+                        //添加日志
+                        iLogRepository.WriteDbLog(true, "修改用户信息=>" + userEntity.Account, Enums.DbLogType.Update, "用户管理");
+                    }
+                    else
+                    {
+                        userEntity.Create();
+                        userLogOnEntity.Id = userEntity.Id;
+                        userLogOnEntity.UserId = userEntity.Id;
+                        userLogOnEntity.UserSecretkey = Md5.md5(Common.CreateNo(), 16).ToLower();
+                        userLogOnEntity.UserPassword = Md5.md5(DESEncrypt.Encrypt(Md5.md5(userLogOnEntity.UserPassword, 32).ToLower(), userLogOnEntity.UserSecretkey).ToLower(), 32).ToLower();
+                        db.Insert(userEntity);
+                        db.Insert(userLogOnEntity);
+
+                        //添加日志
+                        iLogRepository.WriteDbLog(true, "添加用户信息=>" + userEntity.Account, Enums.DbLogType.Create, "用户管理");
+                    }
+
+                    //添加用户站点信息
+                    if (webSiteIds != null && webSiteIds.Length > 0)
+                    {
+                        List<UserWebSiteEntity> entitys = new List<UserWebSiteEntity>();
+                        foreach (var webSiteId in webSiteIds)
+                        {
+                            if (!string.IsNullOrEmpty(webSiteId))
+                            {
+                                UserWebSiteEntity entity = new UserWebSiteEntity();
+                                entity.Create();
+                                entity.UserId = userEntity.Id; ;
+                                entity.WebSiteId = webSiteId;
+                                entity.EnabledMark = true;
+                                db.Insert(entity);
+                            }
+                        }
+                    }
+                    db.Commit();
+                }
+            }
+            else
+            {
+                throw new Exception("用户名已存在，请重新输入！");
             }
         }
 
@@ -105,39 +171,6 @@ namespace CMS.Repository.SystemManage
             return retBool;
         }
 
-        /// <summary>
-        /// 判断当前用户是否包含默认站点 
-        /// </summary>
-        /// <returns></returns>
-        public bool IsExistDefaultWebSite(ref string webSiteId)
-        {
-            bool bState = false;
-            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-            if (LoginInfo != null)
-            {
-                if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
-                {
-                    List<WebSiteEntity> webSiteEntitys = iWebSiteRepository.GetListForUserId();
-                    if (webSiteEntitys != null && webSiteEntitys.Count > 0)
-                    {
-                        if (webSiteEntitys.Count == 1)
-                        {
-                            bState = true;
-                            webSiteId = webSiteEntitys[0].Id;
-                        }
-                        else
-                        {
-                            WebSiteEntity webSiteEntity = webSiteEntitys.Find(m => m.MainMark == true);
-                            if (webSiteEntity != null)
-                            {
-                                bState = true;
-                                webSiteId = webSiteEntity.Id;
-                            }
-                        }
-                    }
-                }
-            }
-            return bState;
-        }
+
     }
 }

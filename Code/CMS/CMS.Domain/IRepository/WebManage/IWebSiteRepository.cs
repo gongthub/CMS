@@ -11,6 +11,13 @@ namespace CMS.Domain.IRepository.WebManage
 {
     public interface IWebSiteRepository : IRepositoryBase<WebSiteEntity>
     {
+
+        /// <summary>
+        /// 判断当前用户是否包含默认站点 
+        /// </summary>
+        /// <returns></returns>
+        bool IsExistDefaultWebSite(ref string webSiteId);
+        
         List<WebSiteEntity> GetListForUserId();
 
         List<WebSiteEntity> GetListByCreatorId();

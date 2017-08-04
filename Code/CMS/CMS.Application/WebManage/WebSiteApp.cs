@@ -334,5 +334,15 @@ namespace CMS.Application.WebManage
             moduleEntity.SpareUrlAddress09 = null;
             moduleEntity.SpareUrlAddress10 = null;
         }
+
+        /// <summary>
+        /// 判断当前用户是否包含默认站点 
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExistDefaultWebSite(ref string webSiteId)
+        {
+            bool bState = service.IsExistDefaultWebSite(ref webSiteId);
+            return bState;
+        }
     }
 }
