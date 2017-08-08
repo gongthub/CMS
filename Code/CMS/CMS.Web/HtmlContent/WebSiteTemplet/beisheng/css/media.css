@@ -1,0 +1,160 @@
+/*@media (max-width: 1100px) and (min-width: 768px) {
+    .w-navwrap .container {
+        width: 95% !important;
+    }
+
+    .w-navwrap .navbar-nav {
+        float: left;
+    }
+}
+@media (min-width: 1100px) {
+    .myCarousel-div-desc {
+        margin-top: -450px;
+    }
+    #myCarousel {
+        margin-top: 50px;
+    }
+
+    .myCarousel-div-desc {
+        margin-top: -350px;
+    }
+
+    .myCarousel-div-optionbtn-to {
+        width: 35%;
+    }
+}
+
+
+@media (max-width: 550px) and (min-width: 414px) {
+    .w-navwrap .navbar-nav {
+        float: none !important;
+    }
+
+    .w-secmenu {
+        display: block;
+    }
+
+    .w-news-href {
+        display: block;
+    }
+
+    .navbar-main-fixed-top-sm {
+        position: fixed;
+        right: 0;
+        left: 0;
+        top: 0;
+        z-index: 1030
+    }
+
+    #myCarousel {
+        margin-top: 50px;
+    }
+
+    .myCarousel-div-desc {
+        margin-top: -130px;
+    }
+
+    .myCarousel-div-optionbtn-to {
+        width: 35%;
+    }
+}
+
+@media (max-width: 768px) and (min-width: 550px) {
+    .w-navwrap .navbar-nav {
+        float: none !important;
+    }
+
+    .w-secmenu {
+        display: block;
+    }
+
+    .w-news-href {
+        display: block;
+    }
+
+    .navbar-main-fixed-top-sm {
+        position: fixed;
+        right: 0;
+        left: 0;
+        top: 0;
+        z-index: 1030
+    }
+
+    #myCarousel {
+        margin-top: 50px;
+    }
+
+    .myCarousel-div-desc {
+        margin-top: -200px;
+    }
+
+    .myCarousel-div-optionbtn-to {
+        width: 35%;
+    }
+}
+
+
+@media (max-width: 414px)and (min-width: 300px) {
+    .navbar-main-fixed-top-sm {
+        position: fixed;
+        right: 0;
+        left: 0;
+        top: 0;
+        z-index: 1030
+    }
+
+    #myCarousel {
+        margin-top: 50px;
+    }
+
+    .myCarousel-div-desc {
+        margin-top: -120px;
+    }
+
+    .myCarousel-div-optionbtn-to {
+        width: 45%;
+    }
+}
+
+@media (max-width: 990px) and (min-width: 768px) {
+    .w-footer-top-dl:last-child {
+        float: none;
+    }
+
+    #myCarousel {
+        margin-top: 50px;
+    }
+
+    .myCarousel-div-desc {
+        margin-top: -220px;
+    }
+
+    .myCarousel-div-optionbtn-to {
+        width: 35%;
+    }
+}
+ */
+
+@media screen and (min-width:1200px){
+	.d-Licence{
+		width: 1000px;
+	}
+	.d-new-show{
+		width: 1000px;
+	}
+	}
+
+@media screen and (min-width: 960px) and (max-width: 1199px) {  }
+
+@media screen and (min-width: 768px) and (max-width: 959px){   
+	.w-navwrap .container {
+        width: 95% !important;
+    }
+
+    .w-navwrap .navbar-nav {
+        float: left;
+    }}
+
+@media only screen and (min-width: 480px) and (max-width: 767px){  }
+
+@media only screen and (max-width: 479px){  }

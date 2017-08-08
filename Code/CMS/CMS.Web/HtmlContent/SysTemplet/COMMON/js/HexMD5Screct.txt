@@ -1,0 +1,14 @@
+
+        public static string HexMD5Screct(string timestamp, string screct)
+        {
+            screct = timestamp + screct;
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] result = md5.ComputeHash(System.Text.Encoding.Default.GetBytes(screct));
+            //return System.Text.Encoding.UTF8.GetString(result);
+            string encryptPwd = "";
+            foreach (byte b in result)
+            {
+                encryptPwd += b.ToString("X2");
+            }
+            return encryptPwd.ToLower();
+        }

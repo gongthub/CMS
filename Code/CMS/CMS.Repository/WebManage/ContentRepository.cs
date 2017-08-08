@@ -25,7 +25,7 @@ namespace CMS.Repository.WebManage
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
             string strKeyWords = string.Empty;
-            if (iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
+            if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
                 using (var db = new RepositoryBase().BeginTrans())
                 {
@@ -133,6 +133,7 @@ namespace CMS.Repository.WebManage
                     }
                     else
                     {
+                        moduleEntity.Create();
                         string mIds = moduleEntity.ColumnId;
                         ColumnsEntity cmModel = iColumnsRepository.GetFormNoDel(mIds);
                         if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
@@ -141,7 +142,6 @@ namespace CMS.Repository.WebManage
                             moduleEntity.UrlAddress = urlAddress;
                             //SubmitForm(moduleEntity, moduleEntity.Id);
                         }
-                        moduleEntity.Create();
                         db.Insert(moduleEntity);
                         //添加日志
                         iLogRepository.WriteDbLog(true, "添加内容信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "内容管理");
