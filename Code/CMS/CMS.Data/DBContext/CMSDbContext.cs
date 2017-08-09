@@ -6,6 +6,7 @@ using System.Reflection;
 
 namespace CMS.Data
 {
+    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
     public class CMSDbContext : DbContext
     {
         public CMSDbContext()
