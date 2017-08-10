@@ -54,18 +54,10 @@ namespace CMS.Application.Comm
             string htmls = string.Empty;
             try
             {
-                string urlHost = GetHost(context); 
+                string urlHost = GetHost(context);
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
                 if (!IsLoginHost(context))
-                {
-                    context.Response.Clear();
-                    context.Response.StatusCode = 404;
-                    //插入访问日志
-                    SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
-                    context.ApplicationInstance.CompleteRequest();
-                }
-                else
                 {
                     if (IsProcess(urlHost, urlRaw))
                     {
@@ -84,13 +76,35 @@ namespace CMS.Application.Comm
                         SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
                         context.ApplicationInstance.CompleteRequest();
                     }
+                    else
+                    {
+                        if (IsLoginUrl(context))
+                        {
+                            context.Response.Clear();
+                            context.Response.StatusCode = 404;
+                            //插入访问日志
+                            SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
+                            context.ApplicationInstance.CompleteRequest();
+                        }
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(urlRaw) || urlRaw=="/")
+                    {
+                        context.Response.Clear();
+                        context.Response.Redirect("/Login/Index",false);
+                        context.ApplicationInstance.CompleteRequest();
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 context.Response.Clear();
                 context.Response.StatusCode = 500;
                 context.ApplicationInstance.CompleteRequest();
+
+                LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
             }
         }
         #endregion
@@ -221,8 +235,29 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         public bool IsLoginHost(System.Web.HttpContext context)
         {
-            bool bState = true;
-            string urlHost = context.Request.Url.Host;
+            bool bState = false;
+            string urlHost = GetHost(context); ;
+            //string urlPath = context.Request.Path.ToString();
+
+            //if (urlPath.Length >= LOGINURLMARK.Length)
+            //{
+            //    urlPath = urlPath.Substring(0, LOGINURLMARK.Length);
+            //}
+
+            //if (!string.IsNullOrEmpty(urlHost) && !string.IsNullOrEmpty(urlPath) && urlPath.ToLower() == LOGINURLMARK.ToLower())
+            if (!string.IsNullOrEmpty(urlHost))
+            {
+                bState = IsContistHost(urlHost);
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 域名是否可访问后台
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLoginUrl(System.Web.HttpContext context)
+        {
+            bool bState = false;
             string urlPath = context.Request.Path.ToString();
 
             if (urlPath.Length >= LOGINURLMARK.Length)
@@ -230,9 +265,9 @@ namespace CMS.Application.Comm
                 urlPath = urlPath.Substring(0, LOGINURLMARK.Length);
             }
 
-            if (!string.IsNullOrEmpty(urlHost) && !string.IsNullOrEmpty(urlPath) && urlPath.ToLower() == LOGINURLMARK.ToLower())
+            if (!string.IsNullOrEmpty(urlPath) && urlPath.ToLower() == LOGINURLMARK.ToLower())
             {
-                bState = IsContistHost(urlHost);
+                bState = true;
             }
             return bState;
         }
