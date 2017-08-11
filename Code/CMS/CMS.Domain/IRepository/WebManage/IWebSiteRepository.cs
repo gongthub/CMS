@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Domain.IRepository.WebManage
+namespace CMS.Domain.IRepository
 {
     public interface IWebSiteRepository : IRepositoryBase<WebSiteEntity>
     {

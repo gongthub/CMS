@@ -57,15 +57,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBContext\CMSDbContext.cs" />
+    <Compile Include="DBContext\SqlServerCMSDbContext.cs" />
+    <Compile Include="DBContext\MySqlCMSDbContext.cs" />
     <Compile Include="Extensions\DbHelper.cs" />
     <Compile Include="Extensions\EntityInterfaceExtensions.cs" />
     <Compile Include="Extensions\VerifyExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IRepositoryBase.cs" />
     <Compile Include="Repository\IRepositoryBase.T.cs" />
-    <Compile Include="Repository\RepositoryBase.cs" />
-    <Compile Include="Repository\RepositoryBase.T.cs" />
+    <Compile Include="Repository\MySqlRepositoryBase.cs" />
+    <Compile Include="Repository\SqlServerRepositoryBase.cs" />
+    <Compile Include="Repository\SqlServerRepositoryBase.T.cs" />
     <Compile Include="Extensions\VerifyBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +79,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Compile Include="Repository\MySqlRepositoryBase.T.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

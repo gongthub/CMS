@@ -2,9 +2,7 @@
 using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemManage;
 using CMS.Repository.SystemSecurity;
 using CMS.Repository.WebManage;
@@ -15,7 +13,7 @@ using System.Linq.Expressions;
 
 namespace CMS.Repository.SystemManage
 {
-    public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
+    public class UserRepository : SqlServerRepositoryBase<UserEntity>, IUserRepository
     {
         private IUserWebSiteRepository iUserWebSiteRepository = new UserWebSiteRepository();
 
@@ -25,7 +23,7 @@ namespace CMS.Repository.SystemManage
         private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
         public void DeleteForm(string keyValue)
         {
-            using (var db = new RepositoryBase().BeginTrans())
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
             {
                 db.Delete<UserEntity>(t => t.Id == keyValue);
                 db.Delete<UserLogOnEntity>(t => t.UserId == keyValue);
@@ -34,7 +32,7 @@ namespace CMS.Repository.SystemManage
         }
         public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue)
         {
-            using (var db = new RepositoryBase().BeginTrans())
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
@@ -61,7 +59,7 @@ namespace CMS.Repository.SystemManage
             if (!IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
             {
                 iUserWebSiteRepository.DeleteById(m => m.UserId == keyValue);
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {

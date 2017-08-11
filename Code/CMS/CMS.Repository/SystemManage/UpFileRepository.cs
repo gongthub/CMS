@@ -1,7 +1,7 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.SystemManage
 {
-    public class UpFileRepository : RepositoryBase<UpFileEntity>, IUpFileRepository
+    public class UpFileRepository : SqlServerRepositoryBase<UpFileEntity>, IUpFileRepository
     {
         /// <summary>
         /// 保存上传文件信息

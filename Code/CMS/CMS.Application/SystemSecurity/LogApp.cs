@@ -1,7 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Repository.SystemSecurity;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +9,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class LogApp
     {
-        private ILogRepository service = new LogRepository();
+        private ILogRepository service = DataAccess.CreateILogRepository;
 
         public List<LogEntity> GetList(Pagination pagination, string queryJson)
         {

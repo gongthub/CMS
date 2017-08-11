@@ -1,11 +1,11 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 
 namespace CMS.Repository.SystemSecurity
 {
-    public class FilterIPRepository : RepositoryBase<FilterIPEntity>, IFilterIPRepository
+    public class FilterIPRepository : SqlServerRepositoryBase<FilterIPEntity>, IFilterIPRepository
     {
        
     }

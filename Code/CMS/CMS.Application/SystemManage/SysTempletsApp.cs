@@ -4,8 +4,8 @@ using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace CMS.Application.SystemManage
     public class SysTempletsApp
     {
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
-        private ISysTempletsRepository service = new SysTempletsRepository();
+        private ISysTempletsRepository service = DataAccess.CreateISysTempletsRepository;
 
         public List<SysTempletsEntity> GetList()
         {

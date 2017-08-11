@@ -2,16 +2,16 @@
 using CMS.Data;
 using CMS.Data.Extensions;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 
 namespace CMS.Repository.SystemSecurity
 {
-    public class DbBackupRepository : RepositoryBase<DbBackupEntity>, IDbBackupRepository
+    public class DbBackupRepository : SqlServerRepositoryBase<DbBackupEntity>, IDbBackupRepository
     {
         public void DeleteForm(string keyValue)
         {
-            using (var db = new RepositoryBase().BeginTrans())
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
             {
                 var dbBackupEntity = db.FindEntity<DbBackupEntity>(keyValue);
                 if (dbBackupEntity != null)

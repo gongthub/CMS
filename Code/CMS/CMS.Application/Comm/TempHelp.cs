@@ -100,6 +100,14 @@ namespace CMS.Application.Comm
         /// 静态页面相对路径
         /// </summary>
         private static readonly string HTMLSAVEHTMLPATH = ConfigurationManager.AppSettings["htmlSrcPath"].ToString();
+        /// <summary>
+        /// 网站资源文件根目录
+        /// </summary>
+        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        /// <summary>
+        /// 网站根路径
+        /// </summary>
+        private static readonly string WEBURL = Configs.GetValue("WebUrl");
 
         #region 初始化静态页面保持路径
         /// <summary>
@@ -339,7 +347,7 @@ namespace CMS.Application.Comm
                     if (strts.Length >= 2 && strts[1] != null)
                     {
                         string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(webSiteShortName, strt.Trim(), templetstm, Id, attrs, irequestType);
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -621,6 +629,15 @@ namespace CMS.Application.Comm
                                 break;
                         }
                         break;
+                    case "sys":
+                        switch (modelStr.Trim().ToLower())
+                        {
+                            case "resourceurl":
+                                string webSiteUrls = GetWebSiteById("UrlAddress", Id);
+                                htmls = WEBURL + webSiteUrls + HTMLCONTENTSRC;
+                                break;
+                        }
+                        break;
                 }
 
             }
@@ -630,7 +647,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string webSiteShortName, string codes, string mcodes, string Id, Dictionary<string, string> attrs, int irequestType)
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType)
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -649,7 +666,7 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "contents":
-                                htmls = GetContentsById(webSiteShortName, Id, mcodes, attrs, irequestType);
+                                htmls = GetContentsById(Id, mcodes, attrs, webSiteShortName, irequestType);
                                 break;
                             case "images":
                                 htmls = GetImagessById(Id, mcodes, attrs);
@@ -667,6 +684,15 @@ namespace CMS.Application.Comm
                         {
                             case "viewnum":
                                 htmls = new ContentApp().GetViewNum(Id).ToString();
+                                break;
+                        }
+                        break;
+                    case "sys":
+                        switch (modelStr.Trim().ToLower())
+                        {
+                            case "resourceurl":
+                                string webSiteUrls = GetWebSiteById("UrlAddress", Id);
+                                htmls = WEBURL + webSiteUrls + HTMLCONTENTSRC;
                                 break;
                         }
                         break;
@@ -897,7 +923,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType)
+        private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs, string webSiteShortName, int irequestType)
         {
             string strs = string.Empty;
 

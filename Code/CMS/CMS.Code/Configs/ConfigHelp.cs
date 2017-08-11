@@ -95,6 +95,16 @@ namespace CMS.Code
                 return Code.Configs.GetValue("SysFileForDel").ToString();
             }
         }
+        /// <summary>
+        /// 系统数据库类型
+        /// </summary>
+        public string SYSDBTYPE
+        {
+            get
+            {
+                return Code.Configs.GetValue("Sys_DBType").ToString();
+            }
+        }
         #endregion
 
         #region 上传图片配置

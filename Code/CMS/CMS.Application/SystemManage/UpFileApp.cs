@@ -4,8 +4,8 @@ using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,7 +29,7 @@ namespace CMS.Application.SystemManage
         /// </summary>
         private static readonly string UPLOADFILEPATH = Code.ConfigHelp.configHelp.UPLOADFILE;
 
-        private IUpFileRepository service = new UpFileRepository();
+        private IUpFileRepository service = DataAccess.CreateIUpFileRepository;
 
         #region 通用方法
         /// <summary>

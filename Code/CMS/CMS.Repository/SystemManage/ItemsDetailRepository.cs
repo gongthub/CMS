@@ -1,6 +1,6 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemManage;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CMS.Repository.SystemManage
 {
-    public class ItemsDetailRepository : RepositoryBase<ItemsDetailEntity>, IItemsDetailRepository
+    public class ItemsDetailRepository : SqlServerRepositoryBase<ItemsDetailEntity>, IItemsDetailRepository
     {
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {

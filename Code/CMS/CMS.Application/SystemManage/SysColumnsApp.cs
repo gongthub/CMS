@@ -3,8 +3,8 @@ using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace CMS.Application.SystemManage
 {
     public class SysColumnsApp
     {
-        private ISysColumnsRepository service = new SysColumnsRepository();
+        private ISysColumnsRepository service = DataAccess.CreateISysColumnsRepository;
 
         public SysColumnsEntity GetForm(string keyValue)
         {

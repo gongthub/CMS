@@ -57,7 +57,16 @@ namespace CMS.Application.Comm
                 string urlHost = GetHost(context);
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
-                if (!IsLoginHost(context))
+                if (IsLoginHost(context) && Code.ConfigHelp.configHelp.LOGINHOST != LOGINHOSTCONFIGALLMARK)
+                {
+                    if (string.IsNullOrEmpty(urlRaw) || urlRaw == "/")
+                    {
+                        context.Response.Clear();
+                        context.Response.Redirect("/Login/Index", false);
+                        context.ApplicationInstance.CompleteRequest();
+                    }
+                }
+                else
                 {
                     if (IsProcess(urlHost, urlRaw))
                     {
@@ -86,15 +95,6 @@ namespace CMS.Application.Comm
                             SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
                             context.ApplicationInstance.CompleteRequest();
                         }
-                    }
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(urlRaw) || urlRaw=="/")
-                    {
-                        context.Response.Clear();
-                        context.Response.Redirect("/Login/Index",false);
-                        context.ApplicationInstance.CompleteRequest();
                     }
                 }
             }

@@ -1,8 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
-using CMS.Repository.WebManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +15,7 @@ namespace CMS.Application.WebManage
 {
     public class MessageConfigApp
     {
-        private IMessageConfigRepository service = new MessageConfigRepository();
+        private IMessageConfigRepository service = DataAccess.CreateIMessageConfigRepository;
 
         public string GetFormJsonStr(string webSiteId)
         {

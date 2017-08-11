@@ -1,6 +1,6 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class WebSiteForUrlRepository : RepositoryBase<WebSiteForUrlEntity>, IWebSiteForUrlRepository
+    public class WebSiteForUrlRepository : SqlServerRepositoryBase<WebSiteForUrlEntity>, IWebSiteForUrlRepository
     {
         /// <summary>
         /// 判断域名是否存在

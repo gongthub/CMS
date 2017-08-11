@@ -3,9 +3,8 @@ using CMS.Data;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
+using CMS.Repository;
 using CMS.Repository.SystemManage;
 using CMS.Repository.SystemSecurity;
 using System;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class ContentRepository : RepositoryBase<ContentEntity>, IContentRepository
+    public class ContentRepository : SqlServerRepositoryBase<ContentEntity>, IContentRepository
     {
         private IKeyWordsRespository iKeyWordsRespository = new KeyWordsRespository();
         private IColumnsRepository iColumnsRepository = new ColumnsRepository();
@@ -27,7 +26,7 @@ namespace CMS.Repository.WebManage
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -66,7 +65,7 @@ namespace CMS.Repository.WebManage
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -122,7 +121,7 @@ namespace CMS.Repository.WebManage
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {

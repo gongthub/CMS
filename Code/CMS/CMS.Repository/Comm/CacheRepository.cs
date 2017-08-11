@@ -1,5 +1,5 @@
 ﻿using CMS.Code;
-using CMS.Domain.IRepository.Comm;
+using CMS.Domain.IRepository;
 using CMS.Domain.ViewModel;
 using System;
 using System.Collections.Generic;

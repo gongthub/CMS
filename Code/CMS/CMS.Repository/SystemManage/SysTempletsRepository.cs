@@ -3,8 +3,7 @@ using CMS.Data;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.SystemSecurity;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.SystemManage
 {
-    public class SysTempletsRepository : RepositoryBase<SysTempletsEntity>, ISysTempletsRepository
+    public class SysTempletsRepository : SqlServerRepositoryBase<SysTempletsEntity>, ISysTempletsRepository
     {
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
         private static readonly string SYSFILEFORDEL = Code.ConfigHelp.configHelp.SYSFILEFORDEL;
@@ -38,7 +37,7 @@ namespace CMS.Repository.SystemManage
             SysTempletsEntity sysTempletsEntity = FindEntity(keyValue);
             if (sysTempletsEntity != null && !string.IsNullOrEmpty(sysTempletsEntity.Id))
             {
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     db.DeleteById<SysTempletsEntity>(t => t.Id == keyValue);
                     db.DeleteById<SysTempletItemsEntity>(t => t.ParentId == keyValue);
@@ -68,7 +67,7 @@ namespace CMS.Repository.SystemManage
             {
                 if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
-                    using (var db = new RepositoryBase().BeginTrans())
+                    using (var db = new SqlServerRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

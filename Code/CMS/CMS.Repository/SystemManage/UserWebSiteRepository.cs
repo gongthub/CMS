@@ -1,8 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.WebManage;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.SystemManage
 {
-    public class UserWebSiteRepository : RepositoryBase<UserWebSiteEntity>, IUserWebSiteRepository
+    public class UserWebSiteRepository : SqlServerRepositoryBase<UserWebSiteEntity>, IUserWebSiteRepository
     {
 
     }

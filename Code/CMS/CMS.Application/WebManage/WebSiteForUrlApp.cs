@@ -1,6 +1,6 @@
 ﻿using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
-using CMS.Repository.WebManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace CMS.Application.WebManage
 {
     public class WebSiteForUrlApp
     {
-        private IWebSiteForUrlRepository service = new WebSiteForUrlRepository();
+        private IWebSiteForUrlRepository service = DataAccess.CreateIWebSiteForUrlRepository;
 
         public List<WebSiteForUrlEntity> GetListByWebSiteId(string webSiteId)
         {

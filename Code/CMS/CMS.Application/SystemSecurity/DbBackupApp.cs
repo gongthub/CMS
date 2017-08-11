@@ -1,8 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Repository.SystemSecurity;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class DbBackupApp
     {
-        private IDbBackupRepository service = new DbBackupRepository();
+        private IDbBackupRepository service = DataAccess.CreateIDbBackupRepository;
 
         public List<DbBackupEntity> GetList(Pagination pagination, string queryJson)
         {

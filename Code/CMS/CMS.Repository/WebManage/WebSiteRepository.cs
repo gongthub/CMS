@@ -3,9 +3,7 @@ using CMS.Data;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemManage;
 using CMS.Repository.SystemSecurity;
 using System;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class WebSiteRepository : RepositoryBase<WebSiteEntity>, IWebSiteRepository
+    public class WebSiteRepository : SqlServerRepositoryBase<WebSiteEntity>, IWebSiteRepository
     {
         private IUserRepository iUserRepository = new UserRepository();
         private IUserWebSiteRepository iUserWebSiteRepository = new UserWebSiteRepository();
@@ -141,7 +139,7 @@ namespace CMS.Repository.WebManage
             WebSiteEntity webSiteEntity = FindEntity(keyValue);
             if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
             {
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     db.DeleteById<WebSiteEntity>(t => t.Id == keyValue);
                     db.DeleteById<WebSiteForUrlEntity>(t => t.WebSiteId == keyValue);
@@ -208,7 +206,7 @@ namespace CMS.Repository.WebManage
             if (!iWebSiteForUrlRepository.IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
             {
                 InitSpareUrl(ref moduleEntity);
-                using (var db = new RepositoryBase().BeginTrans())
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -277,7 +275,7 @@ namespace CMS.Repository.WebManage
                 if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
                     InitSpareUrl(ref moduleEntity);
-                    using (var db = new RepositoryBase().BeginTrans())
+                    using (var db = new SqlServerRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

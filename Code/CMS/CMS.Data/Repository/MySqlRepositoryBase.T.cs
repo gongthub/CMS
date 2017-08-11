@@ -14,15 +14,15 @@ using System.Text.RegularExpressions;
 
 namespace CMS.Data
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class,new()
+    public class MySqlRepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class,new()
     {
-        public CMSDbContext dbcontext = null;
+        public SqlServerCMSDbContext dbcontext = null;
 
-        public RepositoryBase()
+        public MySqlRepositoryBase()
         {
             if (dbcontext == null)
             {
-                dbcontext = new CMSDbContext();
+                dbcontext = new SqlServerCMSDbContext();
             }
         }
         public int Insert(TEntity entity)

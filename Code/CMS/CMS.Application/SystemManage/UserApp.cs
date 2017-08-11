@@ -3,8 +3,8 @@ using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 
@@ -14,7 +14,7 @@ namespace CMS.Application.SystemManage
     {
         private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
         private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
-        private IUserRepository service = new UserRepository();
+        private IUserRepository service = DataAccess.CreateIUserRepository;
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
         public List<UserEntity> GetList(Pagination pagination, string keyword)

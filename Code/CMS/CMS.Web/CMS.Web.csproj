@@ -973,14 +973,6 @@
       <Project>{4d383bb6-954f-4a80-b37c-d280f2ee37f9}</Project>
       <Name>CMS.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj">
-      <Project>{a7d0b5f6-bc95-4798-b054-6ca6d14a5e10}</Project>
-      <Name>CMS.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CMS.Mapping\CMS.Mapping.csproj">
-      <Project>{ed874426-3aa8-4424-8ce6-d66076fb296a}</Project>
-      <Name>CMS.Mapping</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HtmlContent\" />

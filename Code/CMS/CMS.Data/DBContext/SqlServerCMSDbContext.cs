@@ -6,10 +6,9 @@ using System.Reflection;
 
 namespace CMS.Data
 {
-    [DbConfigurationType(typeof(MySql.Data.Entity.MySqlEFConfiguration))]
-    public class CMSDbContext : DbContext
+    public class SqlServerCMSDbContext : DbContext
     {
-        public CMSDbContext()
+        public SqlServerCMSDbContext()
             : base("CMSDbContext")
         {
             this.Configuration.AutoDetectChangesEnabled = false;

@@ -1,7 +1,7 @@
 ﻿using CMS.Code;
-using CMS.Domain.IRepository.Comm;
+using CMS.Domain.IRepository;
 using CMS.Domain.ViewModel;
-using CMS.Repository.Comm;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace CMS.Application.Comm
 {
     public class CacheHelp
     {
-        private static ICacheRepository iCacheRepository;
+        private static ICacheRepository iCacheRepository = DataAccess.CreateICacheRepository();
 
         #region 单例模式创建对象
         //单例模式创建对象
@@ -35,7 +35,7 @@ namespace CMS.Application.Comm
                         if (null == _cacheHelp)
                         {
                             _cacheHelp = new CacheHelp();
-                            iCacheRepository = new CacheRepository();
+                            iCacheRepository = DataAccess.CreateICacheRepository();
                         }
                     }
                 }

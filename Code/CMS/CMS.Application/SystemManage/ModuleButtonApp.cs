@@ -1,8 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class ModuleButtonApp
     {
-        private IModuleButtonRepository service = new ModuleButtonRepository();
+        private IModuleButtonRepository service = DataAccess.CreateIModuleButtonRepository;
 
         public List<ModuleButtonEntity> GetList(string moduleId = "")
         {

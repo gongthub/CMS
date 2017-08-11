@@ -1,8 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class ColumnsRepository : RepositoryBase<ColumnsEntity>, IColumnsRepository
+    public class ColumnsRepository : SqlServerRepositoryBase<ColumnsEntity>, IColumnsRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
 
@@ -26,7 +25,7 @@ namespace CMS.Repository.WebManage
             {
                 if (!Common.IsSystemHaveName(moduleEntity.ActionName) && !Common.IsSearch(moduleEntity.ActionName))
                 {
-                    using (var db = new RepositoryBase().BeginTrans())
+                    using (var db = new SqlServerRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

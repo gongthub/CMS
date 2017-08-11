@@ -1,8 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class ItemsApp
     {
-        private IItemsRepository service = new ItemsRepository();
+        private IItemsRepository service = DataAccess.CreateIItemsRepository;
 
         public List<ItemsEntity> GetList()
         {

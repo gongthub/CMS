@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CMS.Domain.IRepository.SystemManage
+namespace CMS.Domain.IRepository
 {
     public interface IUpFileRepository : IRepositoryBase<UpFileEntity>
     {

@@ -2,7 +2,7 @@
 using CMS.Domain.Entity.SystemManage;
 using System.Collections.Generic;
 
-namespace CMS.Domain.IRepository.SystemManage
+namespace CMS.Domain.IRepository
 {
     public interface IModuleButtonRepository : IRepositoryBase<ModuleButtonEntity>
     {

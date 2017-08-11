@@ -1,9 +1,9 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository;
 using CMS.Domain.ViewModel;
-using CMS.Repository.SystemManage;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace CMS.Application.SystemManage
 {
     public class RoleAuthorizeApp
     {
-        private IRoleAuthorizeRepository service = new RoleAuthorizeRepository();
+        private IRoleAuthorizeRepository service = DataAccess.CreateIRoleAuthorizeRepository;
         private ModuleApp moduleApp = new ModuleApp();
         private ModuleButtonApp moduleButtonApp = new ModuleButtonApp();
 

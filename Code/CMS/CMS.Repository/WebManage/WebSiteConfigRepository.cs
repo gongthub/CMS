@@ -1,7 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class WebSiteConfigRepository : RepositoryBase<WebSiteConfigEntity>, IWebSiteConfigRepository
+    public class WebSiteConfigRepository : SqlServerRepositoryBase<WebSiteConfigEntity>, IWebSiteConfigRepository
     {
         public WebSiteConfigEntity GetFormByWebSiteId(string webSiteId)
         {

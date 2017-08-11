@@ -1,8 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Repository.SystemSecurity;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class FilterIPApp
     {
-        private IFilterIPRepository service = new FilterIPRepository();
+        private IFilterIPRepository service = DataAccess.CreateIFilterIPRepository;
 
         public List<FilterIPEntity> GetList(Pagination pagination, string keyword)
         {

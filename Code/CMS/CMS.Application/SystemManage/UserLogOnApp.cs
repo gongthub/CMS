@@ -1,14 +1,14 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 
 namespace CMS.Application.SystemManage
 {
     public class UserLogOnApp
     {
-        private IUserLogOnRepository service = new UserLogOnRepository();
+        private IUserLogOnRepository service = DataAccess.CreateIUserLogOnRepository;
 
         public UserLogOnEntity GetForm(string keyValue)
         {

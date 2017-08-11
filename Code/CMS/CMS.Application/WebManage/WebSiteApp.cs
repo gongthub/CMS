@@ -3,8 +3,8 @@ using CMS.Application.SystemManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
-using CMS.Repository.WebManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,27 @@ namespace CMS.Application.WebManage
 {
     public class WebSiteApp
     {
-        private IWebSiteRepository service = new WebSiteRepository();
-        private IWebSiteForUrlRepository serviceWebSiteForUrl = new WebSiteForUrlRepository();
+        private IWebSiteRepository service = DataAccess.CreateIWebSiteRepository;
+        private IWebSiteForUrlRepository serviceWebSiteForUrl = DataAccess.CreateIWebSiteForUrlRepository;
+
+        private static string LUCENCEINDEXPATH = Configs.GetValue("LucenceIndexPath");
+        /// <summary>
+        /// 静态页面缓存路径
+        /// </summary>
+        private static readonly string HTMLSRC = Code.Configs.GetValue("htmlSrc");
+        /// <summary>
+        /// 网站资源文件根目录
+        /// </summary>
+        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+
+        /// <summary>
+        /// 上传图片保存路径
+        /// </summary>
+        private static readonly string UPLOADIMGPATH = Code.ConfigHelp.configHelp.UPLOADIMG;
+        /// <summary>
+        /// 上传文件保存路径
+        /// </summary>
+        private static readonly string UPLOADFILEPATH = Code.ConfigHelp.configHelp.UPLOADFILE;
 
         public WebSiteEntity GetForm(string keyValue)
         {
@@ -122,6 +141,29 @@ namespace CMS.Application.WebManage
         {
             bool bState = service.IsExistDefaultWebSite(ref webSiteId);
             return bState;
+        }
+
+        /// <summary>
+        /// 获取站点资源文件所占大小
+        /// </summary>
+        /// <returns></returns>
+        public long GetWebSiteDirSize(string webSiteShortName)
+        {
+            long dirSize = 0;
+
+            string lucenceFilePaths = FileHelper.MapPath(string.Format(LUCENCEINDEXPATH, webSiteShortName));
+            string htmlSrcPaths = FileHelper.MapPath(HTMLSRC + @"\" + webSiteShortName + @"\");
+            string htmlContentSrcPaths = FileHelper.MapPath(HTMLCONTENTSRC + @"\" + webSiteShortName + @"\");
+            string uploadImgPaths = FileHelper.MapPath(UPLOADIMGPATH + @"\" + webSiteShortName + @"\");
+            string uploadFilePaths = FileHelper.MapPath(UPLOADFILEPATH + @"\" + webSiteShortName + @"\");
+
+            dirSize += FileHelper.GetDirectoryLength(lucenceFilePaths);
+            dirSize += FileHelper.GetDirectoryLength(htmlSrcPaths);
+            dirSize += FileHelper.GetDirectoryLength(htmlContentSrcPaths);
+            dirSize += FileHelper.GetDirectoryLength(uploadImgPaths);
+            dirSize += FileHelper.GetDirectoryLength(uploadFilePaths);
+
+            return dirSize;
         }
     }
 }

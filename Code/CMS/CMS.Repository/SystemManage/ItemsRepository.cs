@@ -1,11 +1,11 @@
 ﻿using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemManage;
 
 namespace CMS.Repository.SystemManage
 {
-    public class ItemsRepository : RepositoryBase<ItemsEntity>, IItemsRepository
+    public class ItemsRepository : SqlServerRepositoryBase<ItemsEntity>, IItemsRepository
     {
 
     }

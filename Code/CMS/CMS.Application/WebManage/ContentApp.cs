@@ -3,8 +3,8 @@ using CMS.Application.SystemManage;
 using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.WebManage;
-using CMS.Repository.WebManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace CMS.Application.WebManage
 {
     public class ContentApp
     {
-        private IContentRepository service = new ContentRepository();
+        private IContentRepository service = DataAccess.CreateIContentRepository;
 
         public ContentEntity GetForm(string keyValue)
         {

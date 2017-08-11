@@ -1,20 +1,19 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Domain.IRepository.SystemSecurity;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemManage;
 using CMS.Repository.SystemSecurity;
 using System.Collections.Generic;
 
 namespace CMS.Repository.SystemManage
 {
-    public class RoleRepository : RepositoryBase<RoleEntity>, IRoleRepository
+    public class RoleRepository : SqlServerRepositoryBase<RoleEntity>, IRoleRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
         public void DeleteForm(string keyValue)
         {
-            using (var db = new RepositoryBase().BeginTrans())
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
             {
                 db.Delete<RoleEntity>(t => t.Id == keyValue);
                 db.Delete<RoleAuthorizeEntity>(t => t.ObjectId == keyValue);
@@ -23,7 +22,7 @@ namespace CMS.Repository.SystemManage
         }
         public void SubmitForm(RoleEntity roleEntity, List<RoleAuthorizeEntity> roleAuthorizeEntitys, string keyValue)
         {
-            using (var db = new RepositoryBase().BeginTrans())
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {

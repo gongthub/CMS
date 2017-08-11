@@ -1,8 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository.SystemSecurity;
-using CMS.Domain.IRepository.WebManage;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CMS.Repository.WebManage
 {
-    public class TempletRepository : RepositoryBase<TempletEntity>, ITempletRepository
+    public class TempletRepository : SqlServerRepositoryBase<TempletEntity>, ITempletRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
         public bool IsExistSearchModel(string WebSiteId)

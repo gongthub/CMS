@@ -1,7 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
-using CMS.Domain.IRepository.SystemManage;
-using CMS.Repository.SystemManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace CMS.Application.SystemManage
 {
     public class AccessLogApp
     {
-        private IAccessLogRepository service = new AccessLogRepository();
+        private static IAccessLogRepository service = DataAccess.CreateIAccessLogRepository;
 
         public List<AccessLogEntity> GetList()
         {
@@ -46,7 +46,5 @@ namespace CMS.Application.SystemManage
             accessLogEntity.Date = DateTime.Now;
             service.Insert(accessLogEntity);
         }
-
-
     }
 }

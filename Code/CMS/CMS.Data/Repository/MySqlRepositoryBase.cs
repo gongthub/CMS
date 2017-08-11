@@ -14,9 +14,9 @@ using System.Text.RegularExpressions;
 
 namespace CMS.Data
 {
-    public class RepositoryBase : IRepositoryBase, IDisposable
+    public class MySqlRepositoryBase : IRepositoryBase, IDisposable
     {
-        private CMSDbContext dbcontext = new CMSDbContext();
+        private SqlServerCMSDbContext dbcontext = new SqlServerCMSDbContext();
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
@@ -117,7 +117,7 @@ namespace CMS.Data
                     dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
                 }
                 if (prop.Name.ToLower() == "DeleteUserId".ToLower())
-                { 
+                {
                     var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                     if (LoginInfo != null)
                     {

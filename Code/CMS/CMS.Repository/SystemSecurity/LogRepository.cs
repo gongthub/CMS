@@ -1,13 +1,13 @@
 ﻿using CMS.Code;
 using CMS.Data;
 using CMS.Domain.Entity.SystemSecurity;
-using CMS.Domain.IRepository.SystemSecurity;
+using CMS.Domain.IRepository;
 using CMS.Repository.SystemSecurity;
 using System;
 
 namespace CMS.Repository.SystemSecurity
 {
-    public class LogRepository : RepositoryBase<LogEntity>, ILogRepository
+    public class LogRepository : SqlServerRepositoryBase<LogEntity>, ILogRepository
     {
         public void AddDbLog(LogEntity logEntity)
         {
