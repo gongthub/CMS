@@ -13,7 +13,7 @@ namespace CMS.Application.SystemManage
 {
     public class SysTempletItemsApp
     {
-        private ISysTempletItemsRepository service = DataAccess.CreateISysTempletItemsRepository;
+        private ISysTempletItemsRepository service = DataAccess.CreateISysTempletItemsRepository();
 
         public List<SysTempletItemsEntity> GetList()
         {

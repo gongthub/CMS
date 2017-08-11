@@ -2,7 +2,6 @@
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository;
-using CMS.Repository.SystemManage;
 using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
@@ -14,8 +13,8 @@ namespace CMS.Application.SystemManage
 {
     public class UserWebSiteApp
     {
-        private IUserWebSiteRepository service = new AccessLogRepository();
-        private IWebSiteRepository webSiteservice = DataAccess.CreateIWebSiteRepository;
+        private IUserWebSiteRepository service = DataAccess.CreateIUserWebSiteRepository();
+        private IWebSiteRepository webSiteservice = DataAccess.CreateIWebSiteRepository();
 
         public List<UserWebSiteEntity> GetList(Pagination pagination, string userId)
         {

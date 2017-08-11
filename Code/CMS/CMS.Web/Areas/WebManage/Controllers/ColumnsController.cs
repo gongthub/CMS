@@ -58,7 +58,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult GetTypeSelectJson()
         {
             List<EnumModel> models = EnumHelp.enumHelp.EnumToList(typeof(CMS.Code.Enums.ModuleType));
-            bool bState = new WebSiteConfigApp().IsAdvancedContent(Base_WebSiteId);
+            bool bState = new WebSiteApp().IsAdvancedContent(Base_WebSiteId);
             if (!bState)
             {
                 models = models.FindAll(m => m.Value != (int)CMS.Code.Enums.ModuleType.AdvancedList);

@@ -7,6 +7,5 @@ namespace CMS.Repository.SystemManage
 {
     public class UserLogOnRepository : SqlServerRepositoryBase<UserLogOnEntity>, IUserLogOnRepository
     {
-
     }
 }

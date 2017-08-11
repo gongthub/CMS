@@ -10,7 +10,7 @@ namespace CMS.Application.SystemManage
 {
     public class RoleApp
     {
-        private IRoleRepository service = DataAccess.CreateIRoleRepository;
+        private IRoleRepository service = DataAccess.CreateIRoleRepository();
         private ModuleApp moduleApp = new ModuleApp();
         private ModuleButtonApp moduleButtonApp = new ModuleButtonApp();
 

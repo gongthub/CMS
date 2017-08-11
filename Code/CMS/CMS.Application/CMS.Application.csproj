@@ -192,9 +192,17 @@
       <Project>{ed874426-3aa8-4424-8ce6-d66076fb296a}</Project>
       <Name>CMS.Mapping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.Repository\CMS.Repository.csproj">
-      <Project>{abd5c5aa-1435-4b78-af70-01ec811c26dd}</Project>
-      <Name>CMS.Repository</Name>
+    <ProjectReference Include="..\CMS.MySqlRepository\CMS.MySqlRepository.csproj">
+      <Project>{65932687-a380-4009-8b6f-1898d2565374}</Project>
+      <Name>CMS.MySqlRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.RepositoryFactory\CMS.RepositoryFactory.csproj">
+      <Project>{6084ffd6-04ac-4360-aff3-03fe1b0c9feb}</Project>
+      <Name>CMS.RepositoryFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.SqlServerRepository\CMS.SqlServerRepository.csproj">
+      <Project>{89d4c0e7-d7bd-46c7-a8be-bc04ebf0073a}</Project>
+      <Name>CMS.SqlServerRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace CMS.Application.WebManage
 {
     public class MessagesApp
     {
-        private IMessagesRepository service = DataAccess.CreateIMessagesRepository;
+        private IMessagesRepository service = DataAccess.CreateIMessagesRepository();
 
 
         public MessagesEntity GetForm(string keyValue)

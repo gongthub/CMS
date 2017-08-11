@@ -15,8 +15,9 @@ namespace CMS.Application.WebManage
 {
     public class WebSiteApp
     {
-        private IWebSiteRepository service = DataAccess.CreateIWebSiteRepository;
-        private IWebSiteForUrlRepository serviceWebSiteForUrl = DataAccess.CreateIWebSiteForUrlRepository;
+        private IWebSiteRepository service = DataAccess.CreateIWebSiteRepository();
+        private IWebSiteForUrlRepository serviceWebSiteForUrl = DataAccess.CreateIWebSiteForUrlRepository();
+        private IWebSiteConfigRepository webSiteConfigRepository = DataAccess.CreateIWebSiteConfigRepository();
 
         private static string LUCENCEINDEXPATH = Configs.GetValue("LucenceIndexPath");
         /// <summary>
@@ -47,6 +48,10 @@ namespace CMS.Application.WebManage
             }
 
             return webSiteEntity;
+        }
+        public WebSiteEntity GetFormByShortName(string shortName)
+        {
+            return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.ShortName == shortName);
         }
 
         public WebSiteEntity GetFormNoDel(string keyValue)
@@ -143,13 +148,167 @@ namespace CMS.Application.WebManage
             return bState;
         }
 
+
+        public WebSiteConfigEntity GetWebSiteConfigFormByWebSiteId(string webSiteId)
+        {
+            WebSiteConfigEntity webSiteConfigEntity = new WebSiteConfigEntity();
+            var expression = ExtLinq.True<WebSiteConfigEntity>();
+            expression = expression.And(t => t.DeleteMark != true && t.WebSiteId == webSiteId);
+            webSiteConfigEntity = webSiteConfigRepository.IQueryable(expression).FirstOrDefault();
+            webSiteConfigEntity.WebSiteUseResourceSize = GetWebSiteDirSizeByWebSiteId(webSiteId);
+            return webSiteConfigEntity;
+        }
+
+
+        public bool UpdateSearchEnableByWebSiteId(string webSiteId, bool searchEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.SearchEnabledMark = searchEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置全站搜索=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + searchEnabled, Enums.DbLogType.Create, "站点配置=>全站搜索");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
+        public bool UpdateMessageEnableByWebSiteId(string webSiteId, bool messageEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.MessageEnabledMark = messageEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置留言板=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + messageEnabled, Enums.DbLogType.Create, "站点配置=>留言板");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
+        public bool UpdateAdvancedContentEnableByWebSiteId(string webSiteId, bool advancedContentEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.AdvancedContentEnabledMark = advancedContentEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置高级列表=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + advancedContentEnabled, Enums.DbLogType.Create, "站点配置=>高级列表");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
+
+        public bool UpdateServiceEnableByWebSiteId(string webSiteId, bool serviceEnabled)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.ServiceEnabledMark = serviceEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置站点维护=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + serviceEnabled, Enums.DbLogType.Create, "站点配置=>站点维护");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
+        public bool IsSearch(string webSiteId)
+        {
+            return webSiteConfigRepository.IsSearch(webSiteId);
+        }
+        public bool IsService(string webSiteId)
+        {
+            return webSiteConfigRepository.IsService(webSiteId);
+        }
+        public bool IsMessage(string webSiteId)
+        {
+            return webSiteConfigRepository.IsMessage(webSiteId);
+        }
+        public bool IsAdvancedContent(string webSiteId)
+        {
+            return webSiteConfigRepository.IsAdvancedContent(webSiteId);
+        }
+
+        /// <summary>
+        /// 获取站点空间大小
+        /// </summary>
+        /// <returns></returns>
+        public decimal GetWebSiteSize(string webSiteShortName)
+        {
+            decimal websiteSize = 0;
+            WebSiteEntity webSiteEntity = GetFormByShortName(webSiteShortName);
+            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+            {
+                WebSiteConfigEntity model = GetWebSiteConfigFormByWebSiteId(webSiteEntity.Id);
+                websiteSize = model.WebSiteResourceSize;
+            }
+            return websiteSize;
+        }
+        /// <summary>
+        /// 获取站点空间大小
+        /// </summary>
+        /// <returns></returns>
+        public decimal GetWebSiteSizeByWebSiteId(string webSiteId)
+        {
+            WebSiteConfigEntity model = GetWebSiteConfigFormByWebSiteId(webSiteId); 
+            return model.WebSiteResourceSize;
+        }
         /// <summary>
         /// 获取站点资源文件所占大小
         /// </summary>
         /// <returns></returns>
-        public long GetWebSiteDirSize(string webSiteShortName)
+        public decimal GetWebSiteDirSize(string webSiteShortName)
         {
-            long dirSize = 0;
+            decimal dirSize = 0;
 
             string lucenceFilePaths = FileHelper.MapPath(string.Format(LUCENCEINDEXPATH, webSiteShortName));
             string htmlSrcPaths = FileHelper.MapPath(HTMLSRC + @"\" + webSiteShortName + @"\");
@@ -163,6 +322,41 @@ namespace CMS.Application.WebManage
             dirSize += FileHelper.GetDirectoryLength(uploadImgPaths);
             dirSize += FileHelper.GetDirectoryLength(uploadFilePaths);
 
+            if (dirSize > 0)
+            {
+                dirSize = Math.Round(dirSize / 1024 / 1024, 2);
+            }
+            return dirSize;
+        }
+
+
+        /// <summary>
+        /// 获取站点资源文件所占大小 单位m
+        /// </summary>
+        /// <returns></returns>
+        public decimal GetWebSiteDirSizeByWebSiteId(string webSiteId)
+        {
+            decimal dirSize = 0;
+            WebSiteEntity webSiteEntity = GetForm(webSiteId);
+            if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+            {
+                string lucenceFilePaths = FileHelper.MapPath(string.Format(LUCENCEINDEXPATH, webSiteEntity.ShortName));
+                string htmlSrcPaths = FileHelper.MapPath(HTMLSRC + @"\" + webSiteEntity.ShortName + @"\");
+                string htmlContentSrcPaths = FileHelper.MapPath(HTMLCONTENTSRC + @"\" + webSiteEntity.ShortName + @"\");
+                string uploadImgPaths = FileHelper.MapPath(UPLOADIMGPATH + @"\" + webSiteEntity.ShortName + @"\");
+                string uploadFilePaths = FileHelper.MapPath(UPLOADFILEPATH + @"\" + webSiteEntity.ShortName + @"\");
+
+                dirSize += FileHelper.GetDirectoryLength(lucenceFilePaths);
+                dirSize += FileHelper.GetDirectoryLength(htmlSrcPaths);
+                dirSize += FileHelper.GetDirectoryLength(htmlContentSrcPaths);
+                dirSize += FileHelper.GetDirectoryLength(uploadImgPaths);
+                dirSize += FileHelper.GetDirectoryLength(uploadFilePaths);
+
+                if (dirSize > 0)
+                {
+                    dirSize = Math.Round(dirSize / 1024 / 1024,2);
+                }
+            }
             return dirSize;
         }
     }

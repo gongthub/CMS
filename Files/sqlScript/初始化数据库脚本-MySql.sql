@@ -1864,6 +1864,8 @@ CREATE TABLE `sys_websiteconfigs` (
   `DeleteTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `LastModifyUserId` varchar(50) DEFAULT NULL,
   `LastModifyTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `WebSiteUseResourceSize` decimal(18,2) NOT NULL DEFAULT 0,
+  `WebSiteResourceSize` decimal(18,2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

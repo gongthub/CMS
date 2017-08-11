@@ -14,7 +14,7 @@ namespace CMS.Application.SystemManage
     {
         private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
         private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
-        private IUserRepository service = DataAccess.CreateIUserRepository;
+        private IUserRepository service = DataAccess.CreateIUserRepository();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
         public List<UserEntity> GetList(Pagination pagination, string keyword)

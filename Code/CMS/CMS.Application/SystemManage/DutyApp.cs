@@ -10,7 +10,7 @@ namespace CMS.Application.SystemManage
 {
     public class DutyApp
     {
-        private IRoleRepository service = DataAccess.CreateIRoleRepository;
+        private IRoleRepository service = DataAccess.CreateIRoleRepository();
 
         public List<RoleEntity> GetList(string keyword = "")
         {

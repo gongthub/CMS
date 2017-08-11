@@ -17,7 +17,7 @@ namespace CMS.Application.WebManage
 {
     public class ContentApp
     {
-        private IContentRepository service = DataAccess.CreateIContentRepository;
+        private IContentRepository service = DataAccess.CreateIContentRepository();
 
         public ContentEntity GetForm(string keyValue)
         {

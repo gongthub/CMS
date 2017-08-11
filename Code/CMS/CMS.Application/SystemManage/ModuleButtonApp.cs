@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class ModuleButtonApp
     {
-        private IModuleButtonRepository service = DataAccess.CreateIModuleButtonRepository;
+        private IModuleButtonRepository service = DataAccess.CreateIModuleButtonRepository();
 
         public List<ModuleButtonEntity> GetList(string moduleId = "")
         {

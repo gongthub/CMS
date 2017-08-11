@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class OrganizeApp
     {
-        private IOrganizeRepository service = DataAccess.CreateIOrganizeRepository;
+        private IOrganizeRepository service = DataAccess.CreateIOrganizeRepository();
 
         public List<OrganizeEntity> GetList()
         {

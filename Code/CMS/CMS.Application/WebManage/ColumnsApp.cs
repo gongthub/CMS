@@ -14,7 +14,7 @@ namespace CMS.Application.WebManage
 {
     public class ColumnsApp
     {
-        private IColumnsRepository service = DataAccess.CreateIColumnsRepository;
+        private IColumnsRepository service = DataAccess.CreateIColumnsRepository();
 
         public ColumnsEntity GetForm(string keyValue)
         {

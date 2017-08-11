@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class ItemsApp
     {
-        private IItemsRepository service = DataAccess.CreateIItemsRepository;
+        private IItemsRepository service = DataAccess.CreateIItemsRepository();
 
         public List<ItemsEntity> GetList()
         {

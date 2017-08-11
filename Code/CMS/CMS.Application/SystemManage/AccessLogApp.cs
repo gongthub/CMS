@@ -12,7 +12,7 @@ namespace CMS.Application.SystemManage
 {
     public class AccessLogApp
     {
-        private static IAccessLogRepository service = DataAccess.CreateIAccessLogRepository;
+        private static IAccessLogRepository service = DataAccess.CreateIAccessLogRepository();
 
         public List<AccessLogEntity> GetList()
         {

@@ -29,7 +29,7 @@ namespace CMS.Application.SystemManage
         /// </summary>
         private static readonly string UPLOADFILEPATH = Code.ConfigHelp.configHelp.UPLOADFILE;
 
-        private IUpFileRepository service = DataAccess.CreateIUpFileRepository;
+        private IUpFileRepository service = DataAccess.CreateIUpFileRepository();
 
         #region 通用方法
         /// <summary>

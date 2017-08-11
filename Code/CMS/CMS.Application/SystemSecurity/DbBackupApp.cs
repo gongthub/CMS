@@ -11,7 +11,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class DbBackupApp
     {
-        private IDbBackupRepository service = DataAccess.CreateIDbBackupRepository;
+        private IDbBackupRepository service = DataAccess.CreateIDbBackupRepository();
 
         public List<DbBackupEntity> GetList(Pagination pagination, string queryJson)
         {

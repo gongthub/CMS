@@ -1381,7 +1381,7 @@ namespace CMS.Application.Comm
                 int irequestType = (int)Enums.TempletType.Common;
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
                 {
-                    if (!new WebSiteConfigApp().IsService(entity.Id))
+                    if (!new WebSiteApp().IsService(entity.Id))
                     {
                         List<string> urlRaws = WebHelper.GetUrls(urlRaw);
                         ContentApp contentApp = new ContentApp();
@@ -1468,7 +1468,7 @@ namespace CMS.Application.Comm
                 int irequestType = (int)Enums.TempletType.Common;
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
                 {
-                    if (!new WebSiteConfigApp().IsService(entity.Id))
+                    if (!new WebSiteApp().IsService(entity.Id))
                     {
                         List<string> urlRaws = WebHelper.GetUrls(urlRaw);
                         ContentApp contentApp = new ContentApp();

@@ -10,7 +10,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class FilterIPApp
     {
-        private IFilterIPRepository service = DataAccess.CreateIFilterIPRepository;
+        private IFilterIPRepository service = DataAccess.CreateIFilterIPRepository();
 
         public List<FilterIPEntity> GetList(Pagination pagination, string keyword)
         {

@@ -13,7 +13,7 @@ namespace CMS.Application.WebManage
 {
     public class KeyWordsApp
     {
-        private IKeyWordsRespository service = DataAccess.CreateIKeyWordsRespository;
+        private IKeyWordsRespository service = DataAccess.CreateIKeyWordsRespository();
 
         public KeyWordsEntity GetForm(string keyValue)
         {

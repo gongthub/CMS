@@ -8,7 +8,7 @@ namespace CMS.Application.SystemManage
 {
     public class UserLogOnApp
     {
-        private IUserLogOnRepository service = DataAccess.CreateIUserLogOnRepository;
+        private IUserLogOnRepository service = DataAccess.CreateIUserLogOnRepository();
 
         public UserLogOnEntity GetForm(string keyValue)
         {

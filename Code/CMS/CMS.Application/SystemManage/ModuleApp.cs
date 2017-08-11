@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class ModuleApp
     {
-        private IModuleRepository service = DataAccess.CreateIModuleRepository;
+        private IModuleRepository service = DataAccess.CreateIModuleRepository();
 
         public List<ModuleEntity> GetList()
         {

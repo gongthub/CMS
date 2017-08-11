@@ -8,5 +8,9 @@ namespace CMS.MySqlRepository
     public class UserLogOnRepository : SqlServerRepositoryBase<UserLogOnEntity>, IUserLogOnRepository
     {
 
+        public void Init()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

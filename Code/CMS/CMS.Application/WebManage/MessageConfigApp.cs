@@ -15,7 +15,7 @@ namespace CMS.Application.WebManage
 {
     public class MessageConfigApp
     {
-        private IMessageConfigRepository service = DataAccess.CreateIMessageConfigRepository;
+        private IMessageConfigRepository service = DataAccess.CreateIMessageConfigRepository();
 
         public string GetFormJsonStr(string webSiteId)
         {

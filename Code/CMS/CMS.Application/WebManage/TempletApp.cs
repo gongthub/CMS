@@ -13,7 +13,7 @@ namespace CMS.Application.WebManage
 {
     public class TempletApp
     {
-        private ITempletRepository service = DataAccess.CreateITempletRepository;
+        private ITempletRepository service = DataAccess.CreateITempletRepository();
 
         public TempletEntity GetForm(string keyValue)
         {
@@ -103,7 +103,7 @@ namespace CMS.Application.WebManage
             {
                 if (Common.IsSearchForUrl(urlRaws))
                 {
-                    if (new WebSiteConfigApp().IsSearch(webSiteId))
+                    if (new WebSiteApp().IsSearch(webSiteId))
                     {
                         templet = GetSearchModel(webSiteId);
                     }
@@ -133,7 +133,7 @@ namespace CMS.Application.WebManage
             {
                 if (Common.IsSearchForUrl(urlRaws))
                 {
-                    if (new WebSiteConfigApp().IsSearch(webSiteId))
+                    if (new WebSiteApp().IsSearch(webSiteId))
                     {
                         templet = GetSearchModel(webSiteId);
                         irequestType = (int)Enums.TempletType.Search;
@@ -201,7 +201,7 @@ namespace CMS.Application.WebManage
         }
         public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
         {
-            if (new WebSiteConfigApp().IsSearch(WebSiteId))
+            if (new WebSiteApp().IsSearch(WebSiteId))
             {
                 return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
             }
@@ -221,7 +221,7 @@ namespace CMS.Application.WebManage
             {
                 expression = expression.And(t => t.WebSiteId == WebSiteId);
             }
-            if (!new WebSiteConfigApp().IsSearch(WebSiteId))
+            if (!new WebSiteApp().IsSearch(WebSiteId))
             {
                 expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common);
             }

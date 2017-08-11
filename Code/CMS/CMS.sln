@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.SqlServerRepository", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.RepositoryFactory", "CMS.RepositoryFactory\CMS.RepositoryFactory.csproj", "{6084FFD6-04AC-4360-AFF3-03FE1B0C9FEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Repository", "CMS.Repository\CMS.Repository.csproj", "{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,10 +69,6 @@ Global
 		{6084FFD6-04AC-4360-AFF3-03FE1B0C9FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6084FFD6-04AC-4360-AFF3-03FE1B0C9FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6084FFD6-04AC-4360-AFF3-03FE1B0C9FEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABD5C5AA-1435-4B78-AF70-01EC811C26DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

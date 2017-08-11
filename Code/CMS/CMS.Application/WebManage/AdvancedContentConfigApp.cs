@@ -14,7 +14,7 @@ namespace CMS.Application.WebManage
 {
     public class AdvancedContentConfigApp
     {
-        private IAdvancedContentConfigRepository service = DataAccess.CreateIAdvancedContentConfigRepository;
+        private IAdvancedContentConfigRepository service = DataAccess.CreateIAdvancedContentConfigRepository();
 
         public string GetFormJsonStr(string webSiteId)
         {

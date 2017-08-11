@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,5 +78,15 @@ namespace CMS.Domain.Entity.WebManage
         /// LastModifyUserId
         /// </summary>		
         public string LastModifyUserId { get; set; }
+
+        /// <summary>
+        /// 网站资源文件使用大小
+        /// </summary>
+        public decimal WebSiteUseResourceSize { get; set; }
+
+        /// <summary>
+        /// 网站资源文件大小
+        /// </summary>
+        public decimal WebSiteResourceSize { get; set; }
     }
 }

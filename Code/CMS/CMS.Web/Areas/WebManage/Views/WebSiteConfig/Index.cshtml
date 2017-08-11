@@ -56,6 +56,22 @@
                         <a onclick="setAdvancedContentConfig()" class="btn  btn-primary">高级列表配置</a>
                     </td>
                 </tr>
+                <tr>
+                    <th class="formTitle">网站空间</th>
+                    <td class="formValue">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: @ViewBag.WebSiteSizePer%;background-color:#14a689;">
+                            </div>
+                            <span style="position:absolute;left:30%;right:30%;color:red;line-height:1.8;">@Model.WebSiteUseResourceSize M / @Model.WebSiteResourceSize M  已使用 @ViewBag.WebSiteSizePer%</span>
+                        </div>
+                    </td>
+                    @*<th class="formTitle">升级空间</th>
+                    <td class="formValue"> 
+                    </td>*@
+
+                </tr>
             </table>
         </div>
     </div>

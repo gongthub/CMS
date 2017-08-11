@@ -11,7 +11,7 @@ namespace CMS.Application.SystemManage
 {
     public class AreaApp
     {
-        private IAreaRepository service = DataAccess.CreateIAreaRepository;
+        private IAreaRepository service = DataAccess.CreateIAreaRepository();
 
         public List<AreaEntity> GetList()
         {

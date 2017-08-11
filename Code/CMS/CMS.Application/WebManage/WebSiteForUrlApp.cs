@@ -12,7 +12,7 @@ namespace CMS.Application.WebManage
 {
     public class WebSiteForUrlApp
     {
-        private IWebSiteForUrlRepository service = DataAccess.CreateIWebSiteForUrlRepository;
+        private IWebSiteForUrlRepository service = DataAccess.CreateIWebSiteForUrlRepository();
 
         public List<WebSiteForUrlEntity> GetListByWebSiteId(string webSiteId)
         {

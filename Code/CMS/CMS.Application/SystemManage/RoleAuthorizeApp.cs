@@ -12,7 +12,7 @@ namespace CMS.Application.SystemManage
 {
     public class RoleAuthorizeApp
     {
-        private IRoleAuthorizeRepository service = DataAccess.CreateIRoleAuthorizeRepository;
+        private IRoleAuthorizeRepository service = DataAccess.CreateIRoleAuthorizeRepository();
         private ModuleApp moduleApp = new ModuleApp();
         private ModuleButtonApp moduleButtonApp = new ModuleButtonApp();
 

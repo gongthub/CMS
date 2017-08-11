@@ -10,7 +10,7 @@ namespace CMS.Application.SystemManage
 {
     public class ItemsDetailApp
     {
-        private IItemsDetailRepository service = DataAccess.CreateIItemsDetailRepository;
+        private IItemsDetailRepository service = DataAccess.CreateIItemsDetailRepository();
 
         public List<ItemsDetailEntity> GetList(string itemId = "", string keyword = "")
         {

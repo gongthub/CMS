@@ -15,13 +15,21 @@ namespace CMS.Web.Areas.WebManage.Controllers
     [HandlerWebSiteMgr]
     public class WebSiteConfigController : ControllerBase
     {
-        private WebSiteConfigApp webSiteConfigApp = new WebSiteConfigApp();
+        private WebSiteApp webSiteApp = new WebSiteApp();
 
         [HttpGet]
         [HandlerAuthorize]
         public override ActionResult Index()
         {
-            var data = webSiteConfigApp.GetFormByWebSiteId(Base_WebSiteId);
+            var data = webSiteApp.GetWebSiteConfigFormByWebSiteId(Base_WebSiteId);
+            if (data.WebSiteResourceSize > 0)
+            {
+                ViewBag.WebSiteSizePer = Math.Round((data.WebSiteUseResourceSize / data.WebSiteResourceSize) * 100, 2);
+            }
+            else
+            {
+                ViewBag.WebSiteSizePer = 100;
+            }
             return View(data);
         }
 
@@ -29,7 +37,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         public ActionResult GetFormJson()
         {
-            var data = webSiteConfigApp.GetFormByWebSiteId(Base_WebSiteId);
+            var data = webSiteApp.GetWebSiteConfigFormByWebSiteId(Base_WebSiteId);
             return Content(data.ToJson());
         }
 
@@ -61,7 +69,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult AdvancedContentConfig()
         {
             return View();
-        } 
+        }
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -71,7 +79,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                bool bState = webSiteConfigApp.IsMessage(Base_WebSiteId);
+                bool bState = webSiteApp.IsMessage(Base_WebSiteId);
                 return Success(bState.ToString().ToLower());
             }
             catch (Exception e)
@@ -88,7 +96,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                bool bState = webSiteConfigApp.IsAdvancedContent(Base_WebSiteId);
+                bool bState = webSiteApp.IsAdvancedContent(Base_WebSiteId);
                 return Success(bState.ToString().ToLower());
             }
             catch (Exception e)
@@ -105,7 +113,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                webSiteConfigApp.UpdateSearchEnableByWebSiteId(Base_WebSiteId, searchEnabled);
+                webSiteApp.UpdateSearchEnableByWebSiteId(Base_WebSiteId, searchEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)
@@ -122,7 +130,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                webSiteConfigApp.UpdateMessageEnableByWebSiteId(Base_WebSiteId, messageEnabled);
+                webSiteApp.UpdateMessageEnableByWebSiteId(Base_WebSiteId, messageEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)
@@ -139,7 +147,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                webSiteConfigApp.UpdateAdvancedContentEnableByWebSiteId(Base_WebSiteId, advancedContentEnabled);
+                webSiteApp.UpdateAdvancedContentEnableByWebSiteId(Base_WebSiteId, advancedContentEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)
@@ -156,7 +164,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             try
             {
-                webSiteConfigApp.UpdateServiceEnableByWebSiteId(Base_WebSiteId, serviceEnabled);
+                webSiteApp.UpdateServiceEnableByWebSiteId(Base_WebSiteId, serviceEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)

@@ -105,6 +105,18 @@ namespace CMS.Code
                 return Code.Configs.GetValue("Sys_DBType").ToString();
             }
         }
+        /// <summary>
+        /// 网站空间默认大小 单位 M
+        /// </summary>
+        public decimal WEBSITESIZE
+        {
+            get
+            {
+                decimal WebSiteSize = 0;
+                decimal.TryParse(Code.Configs.GetValue("WebSiteSize").ToString(), out WebSiteSize);
+                return WebSiteSize;
+            }
+        }
         #endregion
 
         #region 上传图片配置

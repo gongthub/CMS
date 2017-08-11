@@ -973,6 +973,30 @@
       <Project>{4d383bb6-954f-4a80-b37c-d280f2ee37f9}</Project>
       <Name>CMS.Code</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CMS.Data\CMS.Data.csproj">
+      <Project>{ad5e0635-dc2a-4c78-a802-8571b9e965d9}</Project>
+      <Name>CMS.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj">
+      <Project>{a7d0b5f6-bc95-4798-b054-6ca6d14a5e10}</Project>
+      <Name>CMS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.Mapping\CMS.Mapping.csproj">
+      <Project>{ed874426-3aa8-4424-8ce6-d66076fb296a}</Project>
+      <Name>CMS.Mapping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.MySqlRepository\CMS.MySqlRepository.csproj">
+      <Project>{65932687-a380-4009-8b6f-1898d2565374}</Project>
+      <Name>CMS.MySqlRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.RepositoryFactory\CMS.RepositoryFactory.csproj">
+      <Project>{6084ffd6-04ac-4360-aff3-03fe1b0c9feb}</Project>
+      <Name>CMS.RepositoryFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMS.SqlServerRepository\CMS.SqlServerRepository.csproj">
+      <Project>{89d4c0e7-d7bd-46c7-a8be-bc04ebf0073a}</Project>
+      <Name>CMS.SqlServerRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="HtmlContent\" />

@@ -1,4 +1,5 @@
-﻿using CMS.Domain.IRepository;
+﻿using CMS.Domain.Entity.WebManage;
+using CMS.Domain.IRepository;
 using CMS.SqlServerRepository;
 using System;
 using System.Collections.Generic;
@@ -233,12 +234,11 @@ namespace CMS.RepositoryFactory
         /// 接口IUserWebSiteRepository映射 
         /// </summary>
         /// <returns></returns>
-        public static UserWebSiteRepository CreateIUserWebSiteRepository()
+        public static IUserWebSiteRepository CreateIUserWebSiteRepository()
         {
-            return new UserWebSiteRepository();
-            //string ClassNamespace = DLLPATHHASDB + ".UserWebSiteRepository";
-            //object objType = CreateObject(ClassNamespace);
-            //return (IUserWebSiteRepository)objType;
+            string ClassNamespace = DLLPATHHASDB + ".UserWebSiteRepository";
+            object objType = CreateObject(ClassNamespace);
+            return (IUserWebSiteRepository)objType;
         }
         /// <summary>
         /// 接口IDbBackupRepository映射 

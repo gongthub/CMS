@@ -9,7 +9,7 @@ namespace CMS.Application.SystemSecurity
 {
     public class LogApp
     {
-        private ILogRepository service = DataAccess.CreateILogRepository;
+        private ILogRepository service = DataAccess.CreateILogRepository();
 
         public List<LogEntity> GetList(Pagination pagination, string queryJson)
         {

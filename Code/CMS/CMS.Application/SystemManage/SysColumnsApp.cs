@@ -16,7 +16,7 @@ namespace CMS.Application.SystemManage
 {
     public class SysColumnsApp
     {
-        private ISysColumnsRepository service = DataAccess.CreateISysColumnsRepository;
+        private ISysColumnsRepository service = DataAccess.CreateISysColumnsRepository();
 
         public SysColumnsEntity GetForm(string keyValue)
         {
