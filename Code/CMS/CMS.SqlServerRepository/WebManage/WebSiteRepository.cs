@@ -496,6 +496,7 @@ namespace CMS.SqlServerRepository
             if (!iWebSiteConfigRepository.IsExist(string.Empty, "WebSiteId", moduleEntity.Id, true))
             {
                 WebSiteConfigEntity webSiteConfigEntity = new WebSiteConfigEntity();
+                webSiteConfigEntity.WebSiteResourceSize = Code.ConfigHelp.configHelp.WEBSITESIZE;
                 webSiteConfigEntity.WebSiteId = moduleEntity.Id;
                 webSiteConfigEntity.SearchEnabledMark = false;
                 webSiteConfigEntity.Create();

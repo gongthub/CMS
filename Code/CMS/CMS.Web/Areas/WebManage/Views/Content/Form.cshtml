@@ -50,10 +50,10 @@
                                 <td class="formValue">
                                     <input id="EditTime" name="EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
                                 </td>
-                                <th class="formTitle" style="height: 35px;">是否有效</th>
+                                <th class="formTitle" style="height: 35px;">是否发布</th>
                                 <td class="formValue" style="padding-top: 1px;">
                                     <div class="ckbox">
-                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">有效</label>
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">发布</label>
                                     </div>
                                 </td>
                             </tr>
@@ -126,7 +126,6 @@
             </div>
             <div class="step-pane" id="step-3">
                 <div class="Content_Form_divContents">
-                    @*<textarea id="Content" name="Content"></textarea>*@
                     <script id="editorContent" type="text/plain" style="width:100%;height:500px;">
                     </script>
                 </div>
@@ -163,7 +162,6 @@
                     success: function (data) {
                         data.Content = htmlDecode(data.Content);
                         insertHtml(data.Content);
-                        //editor.setValue(data.Content)
                         $("#ImgPr").attr("src", data.Icon);
                         $("#lbFilePath").text(data.FilePath);
                         $("#form1").formSerialize(data);
@@ -207,7 +205,6 @@
             var iconData = jsonDataIcon.data;
             var fileData = jsonDataFile.data;
             var postData = $("#form1").formSerialize();
-            //var postData = $("#form1").serialize();
             var contentstrs = getContent();
             postData["Content"] = htmlEncode(contentstrs);
             postData["ColumnId"] = columnId;

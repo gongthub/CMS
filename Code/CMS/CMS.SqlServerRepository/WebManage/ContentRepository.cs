@@ -173,5 +173,42 @@ namespace CMS.SqlServerRepository
                 throw new Exception("存在非法关键词，请检查！关键字：" + strKeyWords);
             }
         }
+
+        public void Up(string keyValue)
+        {
+            ContentEntity contentEntity = FindEntity(keyValue);
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+            {
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                {
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        contentEntity.EnabledMark = true;
+                        db.Update(contentEntity);
+                        //添加日志
+                        iLogRepository.WriteDbLog(true, "发布内容信息=>" + contentEntity.FullName, Enums.DbLogType.Update, "内容管理");
+                    }
+                    db.Commit();
+                }
+            }
+        }
+        public void Down(string keyValue)
+        {
+            ContentEntity contentEntity = FindEntity(keyValue);
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+            {
+                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                {
+                    if (!string.IsNullOrEmpty(keyValue))
+                    {
+                        contentEntity.EnabledMark = false;
+                        db.Update(contentEntity);
+                        //添加日志
+                        iLogRepository.WriteDbLog(true, "移除内容信息=>" + contentEntity.FullName, Enums.DbLogType.Update, "内容管理");
+                    }
+                    db.Commit();
+                }
+            }
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace CMS.Domain.IRepository
         void SubmitForm(ContentEntity moduleEntity, string keyValue);
         void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys);
         void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys, List<string> lstRemoveImgIds);
+        void Up(string keyValue);
+        void Down(string keyValue);
     }
 }

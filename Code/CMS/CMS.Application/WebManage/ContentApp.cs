@@ -233,6 +233,15 @@ namespace CMS.Application.WebManage
             service.SubmitForm(moduleEntity, keyValue, upFileentitys, lstRemoveImgIds);
         }
 
+        public void Up(string keyValue)
+        {
+            service.Up(keyValue);
+        }
+        public void Down(string keyValue)
+        {
+            service.Down(keyValue);
+        }
+
         public void UpdateViewNum(string keyValue)
         {
             ContentEntity moduleEntity = GetForm(keyValue);

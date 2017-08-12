@@ -83,6 +83,24 @@ namespace CMS.Web.Areas.WebManage.Controllers
             c_contentApp.DeleteFormById(keyValue);
             return Success("删除成功。");
         }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpForm(string keyValue)
+        {
+            c_contentApp.Up(keyValue);
+            return Success("发布成功。");
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult DownForm(string keyValue)
+        {
+            c_contentApp.Down(keyValue);
+            return Success("移除成功。");
+        }
 
         [HttpPost]
         [HandlerAjaxOnly]

@@ -37,19 +37,20 @@ namespace CMS.RepositoryFactory
         /// </summary>
         public static object CreateObject(string classNamespace)
         {
-            object objType = DataCache.GetCache(classNamespace);//从缓存读取
-            if (objType == null)
+            //object objType = DataCache.GetCache(classNamespace);//从缓存读取
+            object objType = new object();
+            //if (objType == null)
+            //{
+            try
             {
-                try
-                {
-                    objType = Assembly.Load(DLLPATHHASDB).CreateInstance(classNamespace);//反射创建
-                    DataCache.SetCache(classNamespace, objType);// 写入缓存
-                }
-                catch (Exception er)
-                {
-                    throw er;
-                }
+                objType = Assembly.Load(DLLPATHHASDB).CreateInstance(classNamespace);//反射创建
+                //DataCache.SetCache(classNamespace, objType);// 写入缓存
             }
+            catch (Exception er)
+            {
+                throw er;
+            }
+            //}
             return objType;
         }
         #endregion 默认方法
