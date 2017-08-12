@@ -274,6 +274,10 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = GetModuleByContentID(keyValue);
             if (module != null)
             {
+                if (new WebSiteApp().IsOverSizeByWebSiteId(module.WebSiteId))
+                {
+                    throw new Exception("该站点空间已不足，请联系管理员！");
+                }
                 TempletApp templetapp = new TempletApp();
                 TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
                 if (templet != null)

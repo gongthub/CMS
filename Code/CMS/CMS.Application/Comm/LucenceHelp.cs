@@ -86,6 +86,10 @@ namespace CMS.Application.Comm
                 {
                     throw new Exception("该站点未启用全站搜索功能！");
                 }
+                if (new WebSiteApp().IsOverSize(wenSiteShortName))
+                {
+                    throw new Exception("该站点空间已不足，请联系管理员！");
+                }
                 if (!string.IsNullOrEmpty(wenSiteShortName))
                 {
                     ContentApp contentApp = new ContentApp();

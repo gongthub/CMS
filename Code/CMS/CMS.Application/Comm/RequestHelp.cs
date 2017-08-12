@@ -57,16 +57,34 @@ namespace CMS.Application.Comm
                 string urlHost = GetHost(context);
                 string urlRaw = context.Request.RawUrl.ToString();
                 urlRaw = context.Server.UrlDecode(urlRaw);
-                if (IsLoginHost(context) && Code.ConfigHelp.configHelp.LOGINHOST != LOGINHOSTCONFIGALLMARK)
+                bool isShoudPre = false;
+                if (IsLoginHost(context))
                 {
-                    if (string.IsNullOrEmpty(urlRaw) || urlRaw == "/")
+                    if (Code.ConfigHelp.configHelp.LOGINHOST != LOGINHOSTCONFIGALLMARK)
                     {
-                        context.Response.Clear();
-                        context.Response.Redirect("/Login/Index", false);
-                        context.ApplicationInstance.CompleteRequest();
+                        if (string.IsNullOrEmpty(urlRaw) || urlRaw == "/")
+                        {
+                            context.Response.Clear();
+                            context.Response.Redirect("/Login/Index", false);
+                            context.ApplicationInstance.CompleteRequest();
+                        }
+                        else
+                            if (!IsLoginUrl(context))
+                            {
+                                isShoudPre = true;
+                            }
                     }
+                    else
+                        if (!IsLoginUrl(context))
+                        {
+                            isShoudPre = true;
+                        }
                 }
                 else
+                {
+                    isShoudPre = true;
+                }
+                if (isShoudPre == true)
                 {
                     if (IsProcess(urlHost, urlRaw))
                     {

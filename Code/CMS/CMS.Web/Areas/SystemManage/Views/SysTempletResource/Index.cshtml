@@ -109,6 +109,7 @@
             uploadSysResourceFiles("FilesUp", parentId, key);
             $.currentWindow().$("#gridList").resetSelection();
             $.currentWindow().$("#gridList").trigger("reloadGrid");
+            resetFileInput();
         }
 
         function btn_copy() {
@@ -125,6 +126,10 @@
         }
         function btn_back() {
             location.href = "/SystemManage/SysTemplets/Index";
+        }
+        function resetFileInput() {
+            var file = $("#FilesUp")
+            file.val('');
         }
     </script>
 }

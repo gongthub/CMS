@@ -166,6 +166,10 @@ namespace CMS.Application.SystemManage
         /// <returns></returns>
         public UpFileDTO UpLoadImg(HttpPostedFileBase file, string strWebSiteShotName)
         {
+            if (new WebSiteApp().IsOverSize(strWebSiteShotName, file.ContentLength))
+            {
+                throw new Exception("该站点空间已不足，请联系管理员！");
+            }
             UpFileDTO entity = new UpFileDTO();
             string filePaths = string.Empty;
             string upPaths = GetImgPathByDate(strWebSiteShotName);
@@ -366,6 +370,11 @@ namespace CMS.Application.SystemManage
         /// <returns></returns>
         public UpFileDTO UpLoadFile(HttpPostedFileBase file, string strWebSiteShotName)
         {
+
+            if (new WebSiteApp().IsOverSize(strWebSiteShotName, file.ContentLength))
+            {
+                throw new Exception("该站点空间已不足，请联系管理员！");
+            }
             UpFileDTO entity = new UpFileDTO();
             string filePaths = string.Empty;
             string upPaths = GetFilePathByDate(strWebSiteShotName);

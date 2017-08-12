@@ -122,6 +122,7 @@
         uploadResourceFiles("FilesUp", key);
         $.currentWindow().$("#gridList").resetSelection();
         $.currentWindow().$("#gridList").trigger("reloadGrid");
+        resetFileInput();
     }
 
     function btn_copy() {
@@ -135,6 +136,10 @@
         } else {
             copyToClipboard(dirName);
         }
+    }
+    function resetFileInput() {
+        var file = $("#FilesUp")
+        file.val('');
     }
 </script>
 }

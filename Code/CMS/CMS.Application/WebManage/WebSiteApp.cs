@@ -278,6 +278,83 @@ namespace CMS.Application.WebManage
             return webSiteConfigRepository.IsAdvancedContent(webSiteId);
         }
 
+
+        /// <summary>
+        /// 站点空间是否超过可使用大小
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public bool IsOverSize(string webSiteShortName)
+        {
+            bool bState = false;
+            decimal webSize = GetWebSiteSize(webSiteShortName);
+            decimal webSizeDir = GetWebSiteDirSize(webSiteShortName);
+            if (webSizeDir >= webSize)
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 站点空间是否超过可使用大小
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public bool IsOverSize(string webSiteShortName, long fileSize)
+        {
+            bool bState = false;
+            decimal webSize = GetWebSiteSize(webSiteShortName);
+            decimal webSizeDir = GetWebSiteDirSize(webSiteShortName);
+            if (fileSize > 0)
+            {
+                decimal fileSizeT = fileSize;
+                fileSizeT = Math.Round((fileSizeT / 1024 / 1024), 2);
+                webSizeDir += fileSizeT;
+            }
+            if (webSizeDir >= webSize)
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 站点空间是否超过可使用大小
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public bool IsOverSizeByWebSiteId(string webSiteId)
+        {
+            bool bState = false;
+            decimal webSize = GetWebSiteSizeByWebSiteId(webSiteId);
+            decimal webSizeDir = GetWebSiteDirSizeByWebSiteId(webSiteId);
+            if (webSizeDir >= webSize)
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        /// <summary>
+        /// 站点空间是否超过可使用大小
+        /// </summary>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public bool IsOverSizeByWebSiteId(string webSiteId, long fileSize)
+        {
+            bool bState = false;
+            decimal webSize = GetWebSiteSizeByWebSiteId(webSiteId);
+            decimal webSizeDir = GetWebSiteDirSizeByWebSiteId(webSiteId);
+            if (fileSize > 0)
+            {
+                decimal fileSizeT = fileSize;
+                fileSizeT = Math.Round((fileSizeT / 1024 / 1024), 2);
+                webSizeDir += fileSizeT;
+            }
+            if (webSizeDir >= webSize)
+            {
+                bState = true;
+            }
+            return bState;
+        }
         /// <summary>
         /// 获取站点空间大小
         /// </summary>
@@ -299,7 +376,7 @@ namespace CMS.Application.WebManage
         /// <returns></returns>
         public decimal GetWebSiteSizeByWebSiteId(string webSiteId)
         {
-            WebSiteConfigEntity model = GetWebSiteConfigFormByWebSiteId(webSiteId); 
+            WebSiteConfigEntity model = GetWebSiteConfigFormByWebSiteId(webSiteId);
             return model.WebSiteResourceSize;
         }
         /// <summary>
@@ -354,7 +431,7 @@ namespace CMS.Application.WebManage
 
                 if (dirSize > 0)
                 {
-                    dirSize = Math.Round(dirSize / 1024 / 1024,2);
+                    dirSize = Math.Round(dirSize / 1024 / 1024, 2);
                 }
             }
             return dirSize;

@@ -18,6 +18,130 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadSysImg()
+        {
+            try
+            {
+                UpFileDTO entity = new UpFileDTO();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files[0];
+                    if (upFiles != null)
+                    {
+                        CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                        entity = upfileApp.UpLoadImg(upFiles);
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entity);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadSysImgs()
+        {
+            try
+            {
+                List<UpFileDTO> entitys = new List<UpFileDTO>();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files;
+                    if (upFiles != null && upFiles.Count > 0)
+                    {
+                        for (int i = 0; i < upFiles.Count; i++)
+                        {
+                            CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                            UpFileDTO entity = upfileApp.UpLoadImg(upFiles[i]);
+                            entity.UploadType = (int)Code.Enums.UploadType.Images;
+                            entitys.Add(entity);
+                        }
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entitys);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadSysFile()
+        {
+            try
+            {
+                UpFileDTO entity = new UpFileDTO();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files[0];
+                    if (upFiles != null)
+                    {
+                        CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                        entity = upfileApp.UpLoadFile(upFiles);
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entity);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadSysFiles()
+        {
+            try
+            {
+                List<UpFileDTO> entitys = new List<UpFileDTO>();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files;
+                    for (int i = 0; i < upFiles.Count; i++)
+                    {
+                        UpFileDTO entity = new UpFileDTO();
+                        CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                        entity = upfileApp.UpLoadFile(upFiles[i]);
+                        entity.UploadType = (int)Code.Enums.UploadType.Files;
+                        entitys.Add(entity);
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true", entitys);
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
         [HttpPost]
         [HandlerAuthorize]
         public ActionResult UploadImg()
@@ -167,6 +291,10 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                             var upFiles = HttpContext.Request.Files;
                             for (int i = 0; i < upFiles.Count; i++)
                             {
+                                if (new WebSiteApp().IsOverSizeByWebSiteId(Base_WebSiteId, upFiles[i].ContentLength))
+                                {
+                                    throw new Exception("该站点空间已不足，请联系管理员！");
+                                }
                                 CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
                                 string savePaths = HTMLCONTENTSRC + resourceEntity.UrlAddress + @"\\";
                                 upfileApp.UpLoadFile(upFiles[i], savePaths, true, false);

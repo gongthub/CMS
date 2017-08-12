@@ -54,6 +54,154 @@ function copyToClipboard(txt) {
 }
 
 //上传图片
+function uploadSysImg(fileId) {
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    formData.append("fileicon", $("#" + fileId + "")[0].files[0]);
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/UploadSysImg",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+        }
+    });
+    return dataret;
+}
+
+//上传多个图片
+function uploadSysImgs(fileId, imgfiles) {
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    var fileInput = $("#" + fileId + "")[0].files;
+    for (var i = 0; i < fileInput.length; i++) {
+        var names = fileInput[i].name;
+        var index = $.inArray(names, imgfiles);
+        if (index >= 0) {
+            formData.append("fileImg_" + i, $("#" + fileId + "")[0].files[i]);
+        }
+    } 
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/UploadSysImgs",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+        }
+    });
+    return dataret;
+}
+
+//上传文件
+function uploadSysFile(fileId) {
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    formData.append("fileicon", $("#" + fileId + "")[0].files[0]);
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/UploadSysFile",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+        }
+    });
+    return dataret;
+}
+
+//上传多个文件
+function uploadSysFiles(fileId) {
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    var upfiles = $("#" + fileId + "")[0].files;
+    if (upfiles != null) {
+        for (var i = 0; i < upfiles.length; i++) {
+            formData.append("files" + i, upfiles[i]);
+        }
+    }
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/UploadSysFiles",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+        }
+    });
+    return dataret;
+}
+
+//上传图片
 function uploadImg(fileId) {
     var dataret = { success: true, data: "" };
     var formData = new FormData();

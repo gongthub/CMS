@@ -107,7 +107,7 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 网站根路径
         /// </summary>
-        private static readonly string WEBURL = Configs.GetValue("WebUrl");
+        private static readonly string WEBURLHTTP = Configs.GetValue("WebUrlHttp");
 
         #region 初始化静态页面保持路径
         /// <summary>
@@ -633,8 +633,12 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "resourceurl":
-                                string webSiteUrls = GetWebSiteById("UrlAddress", Id);
-                                htmls = WEBURL + webSiteUrls + HTMLCONTENTSRC;
+                                string shortNames = string.Empty;
+                                string webSiteUrls = GetWebSiteById("UrlAddress", Id, out shortNames);
+                                string urlStr = webSiteUrls + HTMLCONTENTSRC + shortNames + "/";
+                                urlStr = urlStr.Replace(@"\", @"/");
+                                urlStr = urlStr.Replace(@"//", @"/");
+                                htmls = WEBURLHTTP + urlStr;
                                 break;
                         }
                         break;
@@ -691,8 +695,15 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "resourceurl":
-                                string webSiteUrls = GetWebSiteById("UrlAddress", Id);
-                                htmls = WEBURL + webSiteUrls + HTMLCONTENTSRC;
+                                WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                if (webSiteEntity != null)
+                                {
+                                    string webSiteUrls = webSiteEntity.UrlAddress;
+                                    string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
+                                    urlStr = urlStr.Replace(@"\", @"/");
+                                    urlStr = urlStr.Replace(@"//", @"/");
+                                    htmls = WEBURLHTTP + urlStr;
+                                }
                                 break;
                         }
                         break;
@@ -821,6 +832,29 @@ namespace CMS.Application.Comm
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
             {
                 WebSiteEntity entity = new WebSiteApp().GetFormNoDel(contentEntity.WebSiteId);
+                if (entity != null && !string.IsNullOrEmpty(entity.Id))
+                {
+                    strs = ProContent<WebSiteEntity>(name, entity);
+                }
+            }
+
+            return strs;
+        }
+        /// <summary>
+        /// 根据id获取，站点信息
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetWebSiteById(string name, string Ids, out string webSiteShortName)
+        {
+            webSiteShortName = string.Empty;
+            string strs = string.Empty;
+            ContentApp c_ContentApp = new ContentApp();
+            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
+            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
+            {
+                WebSiteEntity entity = new WebSiteApp().GetFormNoDel(contentEntity.WebSiteId);
+                webSiteShortName = entity.ShortName;
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
                 {
                     strs = ProContent<WebSiteEntity>(name, entity);
