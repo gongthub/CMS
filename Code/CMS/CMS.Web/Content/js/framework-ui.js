@@ -8,8 +8,7 @@ $(document).ajaxComplete(function (event, request, settings) {
     processResposeText(request);
 });
 
-function processResposeText(request)
-{
+function processResposeText(request) {
     if (request.responseText == "WebSiteLogout") {
         alert("站点信息丢失！请重新选择站点！");
         parent.window.location.href = '/Home/Index';
@@ -596,6 +595,46 @@ $.getPostNoConfirm = function (options) {
                 } else {
                     $.modalAlert(data.message, data.state);
                 }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                processResposeText(XMLHttpRequest);
+                $.loading(false);
+                $.modalMsg(errorThrown, "error");
+            },
+            beforeSend: function () {
+                $.loading(true, options.loading);
+            },
+            complete: function () {
+                $.loading(false);
+            }
+        });
+    }, 500);
+
+}
+
+$.getPostAndData = function (options) {
+    var defaults = {
+        prompt: "注：您确定要操作？",
+        url: "",
+        param: [],
+        loading: "正在请求...",
+        success: null,
+        close: true
+    };
+    var options = $.extend(defaults, options);
+    if ($('[name=__RequestVerificationToken]').length > 0) {
+        options.param["__RequestVerificationToken"] = $('[name=__RequestVerificationToken]').val();
+    }
+    $.loading(true, options.loading);
+    window.setTimeout(function () {
+        $.ajax({
+            url: options.url,
+            data: options.param,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                options.success(data);
+                $.loading(false);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 processResposeText(XMLHttpRequest);

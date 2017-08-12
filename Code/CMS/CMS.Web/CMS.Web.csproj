@@ -763,6 +763,7 @@
     <Compile Include="Areas\WebManage\Controllers\ColumnsController.cs" />
     <Compile Include="Areas\WebManage\Controllers\KeyWordConfigController.cs" />
     <Compile Include="Areas\WebManage\Controllers\MessageController.cs" />
+    <Compile Include="Areas\WebManage\Controllers\ReportController.cs" />
     <Compile Include="Areas\WebManage\Controllers\ResourceController.cs" />
     <Compile Include="Areas\WebManage\Controllers\TempletController.cs" />
     <Compile Include="Areas\WebManage\Controllers\WebSiteConfigController.cs" />
@@ -954,6 +955,7 @@
     <Content Include="Areas\SystemManage\Views\SysColumns\Details.cshtml" />
     <Content Include="Areas\SystemManage\Views\SysColumns\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\SysColumns\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\Report\AccessDay.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

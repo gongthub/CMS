@@ -256,6 +256,7 @@ CREATE TABLE `sys_accesslog` (
   `WebSiteId` varchar(50) DEFAULT NULL,
   `WebSiteName` varchar(50) DEFAULT NULL,
   `SessionID` varchar(50) DEFAULT NULL,
+  `ClientID` varchar(50) DEFAULT NULL,
   `IPAddress` varchar(50) DEFAULT NULL,
   `Province` varchar(50) DEFAULT NULL,
   `City` varchar(50) DEFAULT NULL,

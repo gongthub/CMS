@@ -27,6 +27,10 @@ namespace CMS.Domain.Entity.SystemManage
         /// SessionID
         /// </summary>		
         public string SessionID { get; set; }
+        /// <summary>
+        /// ClientID
+        /// </summary>		
+        public string ClientID { get; set; }
 
         /// <summary>
         /// IPAddress

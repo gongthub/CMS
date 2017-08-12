@@ -9,11 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CMS.Application.Comm
 {
     public class SysPageHelp
     {
+        private const string CLINETID = "CMS_CLIENTID";
+
         #region 单例模式创建对象
         //单例模式创建对象
         private static SysPageHelp _sysPageHelp = null;
@@ -99,6 +102,24 @@ namespace CMS.Application.Comm
         public void CreateAccessLog(System.Web.HttpContext context)
         {
             AccessLogEntity entity = InitAccessLog(context);
+
+            HttpCookie cookie = context.Request.Cookies.Get(CLINETID);
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                entity.ClientID = cookie.Value;
+            }
+            else
+            {
+                string clientIds = Guid.NewGuid().ToString();
+                entity.ClientID = cookie.Value;
+                cookie = new HttpCookie(CLINETID);
+                cookie.Name = CLINETID;
+                cookie.Value = clientIds;
+                cookie.Expires = DateTime.Now.AddYears(1);
+                entity.ClientID = clientIds;
+
+                context.Response.Cookies.Set(cookie);
+            }
             InsertAccessLog(entity);
         }
 
@@ -111,6 +132,23 @@ namespace CMS.Application.Comm
             if (IsAsync)
             {
                 AccessLogEntity entity = InitAccessLog(context);
+                HttpCookie cookie = context.Request.Cookies.Get(CLINETID);
+                if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+                {
+                    entity.ClientID = cookie.Value;
+                }
+                else
+                {
+                    string clientIds = Guid.NewGuid().ToString();
+                    entity.ClientID = cookie.Value;
+                    cookie = new HttpCookie(CLINETID);
+                    cookie.Name = CLINETID;
+                    cookie.Value = clientIds;
+                    cookie.Expires = DateTime.Now.AddYears(1);
+                    entity.ClientID = clientIds;
+
+                    context.Response.Cookies.Set(cookie);
+                }
                 Thread thread = new Thread(new ThreadStart(() =>
                 {
                     InsertAccessLog(entity);

@@ -18,6 +18,11 @@ namespace CMS.Application.SystemManage
         {
             return service.IQueryable(m => m.DeleteMark != true).ToList();
         }
+        public List<AccessLogEntity> GetListByDate(string WebSiteId, DateTime startDate, DateTime endDate)
+        {
+            endDate = endDate.AddDays(1);
+            return service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == WebSiteId && m.Date >= startDate && m.Date < endDate).ToList();
+        }
         public AccessLogEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
