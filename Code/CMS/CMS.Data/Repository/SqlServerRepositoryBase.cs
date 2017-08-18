@@ -20,13 +20,15 @@ namespace CMS.Data
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
-            DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection;
-            if (dbConnection.State == ConnectionState.Closed)
+            using (DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection)
             {
-                dbConnection.Open();
+                if (dbConnection.State == ConnectionState.Closed)
+                {
+                    dbConnection.Open();
+                }
+                dbTransaction = dbConnection.BeginTransaction();
+                return this;
             }
-            dbTransaction = dbConnection.BeginTransaction();
-            return this;
         }
         public int Commit()
         {
@@ -117,7 +119,7 @@ namespace CMS.Data
                     dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
                 }
                 if (prop.Name.ToLower() == "DeleteUserId".ToLower())
-                { 
+                {
                     var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                     if (LoginInfo != null)
                     {

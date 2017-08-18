@@ -254,6 +254,8 @@
     <Content Include="Content\js\jqgrid\jqgrid.min.js" />
     <Content Include="Content\js\jqprint\jquery.jqprint-0.3.js" />
     <Content Include="Content\js\jqprint\jquery.jqprint.css" />
+    <Content Include="Content\js\jquery-pagination\jquery.pagination.css" />
+    <Content Include="Content\js\jquery-pagination\jquery.pagination.min.js" />
     <Content Include="Content\js\jquery-ui\images\calendar.gif" />
     <Content Include="Content\js\jquery-ui\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\js\jquery-ui\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -710,11 +712,15 @@
     <Content Include="Content\js\zsign\jquery.zsign.js" />
     <Content Include="Content\js\zsign\signet.gif" />
     <Content Include="Global.asax" />
+    <Content Include="HtmlContent\SysContent\jquery-2.1.1.min.js" />
+    <Content Include="HtmlContent\SysContent\jquery.pagination.css" />
+    <Content Include="HtmlContent\SysContent\jquery.pagination.min.js" />
     <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
     <Content Include="SysPage\500\500.html" />
     <Content Include="SysPage\Service\Service.html" />
+    <Content Include="Test.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1001,7 +1007,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HtmlContent\" />
     <Folder Include="Html\" />
     <Folder Include="SysFileForDel\" />
   </ItemGroup>

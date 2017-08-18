@@ -5,7 +5,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class ItemsRepository : SqlServerRepositoryBase<ItemsEntity>, IItemsRepository
+    public class ItemsRepository : MySqlRepositoryBase<ItemsEntity>, IItemsRepository
     {
 
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class UpFileRepository : SqlServerRepositoryBase<UpFileEntity>, IUpFileRepository
+    public class UpFileRepository : MySqlRepositoryBase<UpFileEntity>, IUpFileRepository
     {
         /// <summary>
         /// 保存上传文件信息

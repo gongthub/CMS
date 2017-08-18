@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class SysColumnsRepository : SqlServerRepositoryBase<SysColumnsEntity>, ISysColumnsRepository
+    public class SysColumnsRepository : MySqlRepositoryBase<SysColumnsEntity>, ISysColumnsRepository
     {
         public List<SysColumnsEntity> GetListBySysTempletId(string sysTempletId)
         {

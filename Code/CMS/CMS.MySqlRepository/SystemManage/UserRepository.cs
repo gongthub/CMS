@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace CMS.MySqlRepository
 {
-    public class UserRepository : SqlServerRepositoryBase<UserEntity>, IUserRepository
+    public class UserRepository : MySqlRepositoryBase<UserEntity>, IUserRepository
     {
         private IUserWebSiteRepository iUserWebSiteRepository = new UserWebSiteRepository();
 

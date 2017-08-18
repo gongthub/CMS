@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="/HtmlContent/SysContent/jquery.pagination.css" rel="stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div class="box">
+        <div id="pagination1" class="page fl"></div>
+        <div class="info fl">
+            <p>当前页数：<span id="current1">1</span></p>
+        </div>
+    </div>
+    <div class="box">
+        <div id="pagination2" class="page fl"></div>
+        <div class="info fl">
+            <p>当前页数：<span id="current2">3</span></p>
+        </div>
+    </div>
+    <div class="box">
+        <div id="pagination3" class="page fl"></div>
+        <div class="info fl">
+            <p>当前页数：<span id="current3">4</span></p>
+        </div>
+        <button id="getPage">getPage</button>
+        <button id="setPage">setPage</button>
+    </div>
+    
+</body>
+</html>
+
+<script src="/HtmlContent/SysContent/jquery-2.1.1.min.js"></script>
+<script src="/HtmlContent/SysContent/jquery.pagination.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        var pages = $("#hdcurrentPage").val();
+        if (pages == null || pages == undefined) {
+            pages = 1;
+        }
+        var pageInt = Number(pages);
+
+        var totalPages = $("#hdPageSize").val();
+        var totalPageint = Number(totalPages);
+
+        $("#current3").text(pageInt)
+        $("#pagination3").pagination({
+            currentPage: pageInt,
+            totalPage: totalPageint,
+            isShow: true,
+            count: 7,
+            homePageText: "首页",
+            endPageText: "尾页",
+            prevPageText: "上一页",
+            nextPageText: "下一页",
+            callback: function (current) { 
+                window.location.href = "Test.html?page=" + current;
+            }
+        });
+
+        $("#getPage").on("click", function () {
+            var info = $("#pagination3").pagination("getPage");
+            alert("当前页数：" + info.current + ",总页数：" + info.total);
+        });
+
+        $("#setPage").on("click", function () {
+            $("#pagination3").pagination("setPage", 1, 10);
+        });
+    });
+</script>

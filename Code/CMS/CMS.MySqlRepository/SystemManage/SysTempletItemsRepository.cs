@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class SysTempletItemsRepository : SqlServerRepositoryBase<SysTempletItemsEntity>, ISysTempletItemsRepository
+    public class SysTempletItemsRepository : MySqlRepositoryBase<SysTempletItemsEntity>, ISysTempletItemsRepository
     {
     }
 }

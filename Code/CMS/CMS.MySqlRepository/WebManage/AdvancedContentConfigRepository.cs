@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class AdvancedContentConfigRepository : SqlServerRepositoryBase<AdvancedContentConfigEntity>, IAdvancedContentConfigRepository
+    public class AdvancedContentConfigRepository : MySqlRepositoryBase<AdvancedContentConfigEntity>, IAdvancedContentConfigRepository
     {
     }
 }

@@ -111,7 +111,7 @@ namespace CMS.Application.Comm
             else
             {
                 string clientIds = Guid.NewGuid().ToString();
-                entity.ClientID = cookie.Value;
+                entity.ClientID = clientIds;
                 cookie = new HttpCookie(CLINETID);
                 cookie.Name = CLINETID;
                 cookie.Value = clientIds;
@@ -140,7 +140,7 @@ namespace CMS.Application.Comm
                 else
                 {
                     string clientIds = Guid.NewGuid().ToString();
-                    entity.ClientID = cookie.Value;
+                    entity.ClientID = clientIds;
                     cookie = new HttpCookie(CLINETID);
                     cookie.Name = CLINETID;
                     cookie.Value = clientIds;

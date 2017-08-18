@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class TempletRepository : SqlServerRepositoryBase<TempletEntity>, ITempletRepository
+    public class TempletRepository : MySqlRepositoryBase<TempletEntity>, ITempletRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
         public bool IsExistSearchModel(string WebSiteId)

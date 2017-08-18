@@ -110,7 +110,9 @@ namespace CMS.Application.WebManage
                 }
                 else
                 {
-                    if (urlRaws.Count == 1)
+                    string Ids = urlRaws.LastOrDefault();
+                    int Id = 0;
+                    if (urlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
                     {
                         templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
                     }
@@ -141,7 +143,10 @@ namespace CMS.Application.WebManage
                 }
                 else
                 {
-                    if (urlRaws.Count == 1)
+
+                    string Ids = urlRaws.LastOrDefault();
+                    int Id = 0;
+                    if (urlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
                     {
                         templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
                     }

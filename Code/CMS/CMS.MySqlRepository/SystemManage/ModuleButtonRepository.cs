@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CMS.MySqlRepository
 {
-    public class ModuleButtonRepository : SqlServerRepositoryBase<ModuleButtonEntity>, IModuleButtonRepository
+    public class ModuleButtonRepository : MySqlRepositoryBase<ModuleButtonEntity>, IModuleButtonRepository
     {
         public void SubmitCloneButton(List<ModuleButtonEntity> entitys)
         {

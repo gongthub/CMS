@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class MessagesRepository : SqlServerRepositoryBase<MessagesEntity>, IMessagesRepository
+    public class MessagesRepository : MySqlRepositoryBase<MessagesEntity>, IMessagesRepository
     {
     }
 }

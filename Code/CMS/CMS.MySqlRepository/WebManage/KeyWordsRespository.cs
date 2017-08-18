@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class KeyWordsRespository : SqlServerRepositoryBase<KeyWordsEntity>, IKeyWordsRespository
+    public class KeyWordsRespository : MySqlRepositoryBase<KeyWordsEntity>, IKeyWordsRespository
     {
         public List<KeyWordsEntity> GetListByWebSiteIdNoEnable(string WebSiteId)
         {

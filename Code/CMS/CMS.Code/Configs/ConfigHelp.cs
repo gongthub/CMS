@@ -50,6 +50,18 @@ namespace CMS.Code
             }
         }
         /// <summary>
+        /// 是否处理url
+        /// </summary>
+        public bool ISPROREQUEST
+        {
+            get
+            {
+                bool IsProRequest = false;
+                bool.TryParse(Code.Configs.GetValue("IsProRequest").ToString(), out IsProRequest);
+                return IsProRequest;
+            }
+        }
+        /// <summary>
         /// 是否启用端口
         /// </summary>
         public bool ISOPENPORT

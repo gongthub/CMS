@@ -5,7 +5,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class FilterIPRepository : SqlServerRepositoryBase<FilterIPEntity>, IFilterIPRepository
+    public class FilterIPRepository : MySqlRepositoryBase<FilterIPEntity>, IFilterIPRepository
     {
        
     }

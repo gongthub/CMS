@@ -7,7 +7,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class DbBackupRepository : SqlServerRepositoryBase<DbBackupEntity>, IDbBackupRepository
+    public class DbBackupRepository : MySqlRepositoryBase<DbBackupEntity>, IDbBackupRepository
     {
         public void DeleteForm(string keyValue)
         {

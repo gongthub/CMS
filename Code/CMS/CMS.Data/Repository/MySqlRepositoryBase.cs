@@ -16,16 +16,18 @@ namespace CMS.Data
 {
     public class MySqlRepositoryBase : IRepositoryBase, IDisposable
     {
-        private SqlServerCMSDbContext dbcontext = new SqlServerCMSDbContext();
+        private MySqlCMSDbContext dbcontext = new MySqlCMSDbContext();
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
-            DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection;
-            if (dbConnection.State == ConnectionState.Closed)
+            using (DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection)
             {
-                dbConnection.Open();
+                if (dbConnection.State == ConnectionState.Closed)
+                {
+                    dbConnection.Open();
+                }
+                dbTransaction = dbConnection.BeginTransaction();
             }
-            dbTransaction = dbConnection.BeginTransaction();
             return this;
         }
         public int Commit()

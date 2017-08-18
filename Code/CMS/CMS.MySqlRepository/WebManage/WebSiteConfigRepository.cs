@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class WebSiteConfigRepository : SqlServerRepositoryBase<WebSiteConfigEntity>, IWebSiteConfigRepository
+    public class WebSiteConfigRepository : MySqlRepositoryBase<WebSiteConfigEntity>, IWebSiteConfigRepository
     {
         public WebSiteConfigEntity GetFormByWebSiteId(string webSiteId)
         {

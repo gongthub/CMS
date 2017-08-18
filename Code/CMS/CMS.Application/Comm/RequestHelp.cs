@@ -51,22 +51,30 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
-            string htmls = string.Empty;
-            try
+            if (ConfigHelp.configHelp.ISPROREQUEST)
             {
-                string urlHost = GetHost(context);
-                string urlRaw = context.Request.RawUrl.ToString();
-                urlRaw = context.Server.UrlDecode(urlRaw);
-                bool isShoudPre = false;
-                if (IsLoginHost(context))
+                string htmls = string.Empty;
+                try
                 {
-                    if (Code.ConfigHelp.configHelp.LOGINHOST != LOGINHOSTCONFIGALLMARK)
+                    string urlHost = GetHost(context);
+                    string urlRaw = context.Request.RawUrl.ToString();
+                    urlRaw = context.Server.UrlDecode(urlRaw);
+                    bool isShoudPre = false;
+                    if (IsLoginHost(context))
                     {
-                        if (string.IsNullOrEmpty(urlRaw) || urlRaw == "/")
+                        if (Code.ConfigHelp.configHelp.LOGINHOST != LOGINHOSTCONFIGALLMARK)
                         {
-                            context.Response.Clear();
-                            context.Response.Redirect("/Login/Index", false);
-                            context.ApplicationInstance.CompleteRequest();
+                            if (string.IsNullOrEmpty(urlRaw) || urlRaw == "/")
+                            {
+                                context.Response.Clear();
+                                context.Response.Redirect("/Login/Index", false);
+                                context.ApplicationInstance.CompleteRequest();
+                            }
+                            else
+                                if (!IsLoginUrl(context))
+                                {
+                                    isShoudPre = true;
+                                }
                         }
                         else
                             if (!IsLoginUrl(context))
@@ -75,54 +83,49 @@ namespace CMS.Application.Comm
                             }
                     }
                     else
-                        if (!IsLoginUrl(context))
-                        {
-                            isShoudPre = true;
-                        }
-                }
-                else
-                {
-                    isShoudPre = true;
-                }
-                if (isShoudPre == true)
-                {
-                    if (IsProcess(urlHost, urlRaw))
                     {
-                        context.Response.Clear();
-                        bool isNoFind = false;
-                        htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw, out isNoFind);
-                        if (isNoFind)
-                        {
-                            context.Response.StatusCode = 404;
-                        }
-                        else
-                        {
-                            context.Response.Write(htmls);
-                        }
-                        //插入访问日志
-                        SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
-                        context.ApplicationInstance.CompleteRequest();
+                        isShoudPre = true;
                     }
-                    else
+                    if (isShoudPre == true)
                     {
-                        if (IsLoginUrl(context))
+                        if (IsProcess(urlHost, urlRaw))
                         {
                             context.Response.Clear();
-                            context.Response.StatusCode = 404;
+                            bool isNoFind = false;
+                            htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw, out isNoFind);
+                            if (isNoFind)
+                            {
+                                context.Response.StatusCode = 404;
+                            }
+                            else
+                            {
+                                context.Response.Write(htmls);
+                            }
                             //插入访问日志
                             SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
                             context.ApplicationInstance.CompleteRequest();
                         }
+                        else
+                        {
+                            if (IsLoginUrl(context))
+                            {
+                                context.Response.Clear();
+                                context.Response.StatusCode = 404;
+                                //插入访问日志
+                                SysPageHelp.sysPageHelp.CreateAccessLog(context, true);
+                                context.ApplicationInstance.CompleteRequest();
+                            }
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                context.Response.Clear();
-                context.Response.StatusCode = 500;
-                context.ApplicationInstance.CompleteRequest();
+                catch (Exception ex)
+                {
+                    context.Response.Clear();
+                    context.Response.StatusCode = 500;
+                    context.ApplicationInstance.CompleteRequest();
 
-                LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
+                    LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
+                }
             }
         }
         #endregion
@@ -222,7 +225,8 @@ namespace CMS.Application.Comm
         {
             bool bState = false;
             //判断是否前台url
-            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw) && Common.IsExistExtended(urlRaw))
+            //if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw) && Common.IsExistExtended(urlRaw))
+            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw))
             {
                 bState = true;
             }

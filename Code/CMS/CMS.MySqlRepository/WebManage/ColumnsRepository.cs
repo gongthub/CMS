@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class ColumnsRepository : SqlServerRepositoryBase<ColumnsEntity>, IColumnsRepository
+    public class ColumnsRepository : MySqlRepositoryBase<ColumnsEntity>, IColumnsRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
 

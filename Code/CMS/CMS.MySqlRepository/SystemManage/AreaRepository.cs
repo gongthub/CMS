@@ -5,7 +5,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class AreaRepository : SqlServerRepositoryBase<AreaEntity>, IAreaRepository
+    public class AreaRepository : MySqlRepositoryBase<AreaEntity>, IAreaRepository
     {
         
     }

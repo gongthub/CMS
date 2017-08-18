@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class UserWebSiteRepository : SqlServerRepositoryBase<UserWebSiteEntity>, IUserWebSiteRepository
+    public class UserWebSiteRepository : MySqlRepositoryBase<UserWebSiteEntity>, IUserWebSiteRepository
     {
 
     }

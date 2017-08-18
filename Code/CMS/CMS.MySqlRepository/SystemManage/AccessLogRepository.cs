@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class AccessLogRepository : SqlServerRepositoryBase<AccessLogEntity>, IAccessLogRepository
+    public class AccessLogRepository : MySqlRepositoryBase<AccessLogEntity>, IAccessLogRepository
     {
     }
 }

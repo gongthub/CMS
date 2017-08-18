@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace CMS.MySqlRepository
 {
-    public class RoleRepository : SqlServerRepositoryBase<RoleEntity>, IRoleRepository
+    public class RoleRepository : MySqlRepositoryBase<RoleEntity>, IRoleRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
         public void DeleteForm(string keyValue)

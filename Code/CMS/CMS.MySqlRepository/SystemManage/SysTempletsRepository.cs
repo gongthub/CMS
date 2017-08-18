@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class SysTempletsRepository : SqlServerRepositoryBase<SysTempletsEntity>, ISysTempletsRepository
+    public class SysTempletsRepository : MySqlRepositoryBase<SysTempletsEntity>, ISysTempletsRepository
     {
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
         private static readonly string SYSFILEFORDEL = Code.ConfigHelp.configHelp.SYSFILEFORDEL;

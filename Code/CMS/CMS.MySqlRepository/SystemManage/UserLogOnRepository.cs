@@ -5,7 +5,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class UserLogOnRepository : SqlServerRepositoryBase<UserLogOnEntity>, IUserLogOnRepository
+    public class UserLogOnRepository : MySqlRepositoryBase<UserLogOnEntity>, IUserLogOnRepository
     {
 
         public void Init()

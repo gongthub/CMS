@@ -5,7 +5,7 @@ using CMS.MySqlRepository;
 
 namespace CMS.MySqlRepository
 {
-    public class RoleAuthorizeRepository : SqlServerRepositoryBase<RoleAuthorizeEntity>, IRoleAuthorizeRepository
+    public class RoleAuthorizeRepository : MySqlRepositoryBase<RoleAuthorizeEntity>, IRoleAuthorizeRepository
     {
     }
 }

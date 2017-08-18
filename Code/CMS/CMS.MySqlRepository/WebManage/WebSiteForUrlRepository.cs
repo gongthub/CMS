@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class WebSiteForUrlRepository : SqlServerRepositoryBase<WebSiteForUrlEntity>, IWebSiteForUrlRepository
+    public class WebSiteForUrlRepository : MySqlRepositoryBase<WebSiteForUrlEntity>, IWebSiteForUrlRepository
     {
         /// <summary>
         /// 判断域名是否存在

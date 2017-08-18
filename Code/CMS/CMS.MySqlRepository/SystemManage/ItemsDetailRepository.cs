@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CMS.MySqlRepository
 {
-    public class ItemsDetailRepository : SqlServerRepositoryBase<ItemsDetailEntity>, IItemsDetailRepository
+    public class ItemsDetailRepository : MySqlRepositoryBase<ItemsDetailEntity>, IItemsDetailRepository
     {
         public List<ItemsDetailEntity> GetItemList(string enCode)
         {

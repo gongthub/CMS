@@ -7,7 +7,7 @@ using System;
 
 namespace CMS.MySqlRepository
 {
-    public class LogRepository : SqlServerRepositoryBase<LogEntity>, ILogRepository
+    public class LogRepository : MySqlRepositoryBase<LogEntity>, ILogRepository
     {
         public void AddDbLog(LogEntity logEntity)
         {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CMS.MySqlRepository
 {
-    public class ContentRepository : SqlServerRepositoryBase<ContentEntity>, IContentRepository
+    public class ContentRepository : MySqlRepositoryBase<ContentEntity>, IContentRepository
     {
         private IKeyWordsRespository iKeyWordsRespository = new KeyWordsRespository();
         private IColumnsRepository iColumnsRepository = new ColumnsRepository();
