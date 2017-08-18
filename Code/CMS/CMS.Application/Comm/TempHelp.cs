@@ -1078,7 +1078,7 @@ namespace CMS.Application.Comm
                                 int pagecount = 0;
                                 if (int.TryParse(pagecountStr, out pagecount))
                                 {
-                                    double decnum = (contententitys.Count() / (double)pagecount); 
+                                    double decnum = (contententitys.Count() / (double)pagecount);
 
                                     string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
                                     Int32.TryParse(res, out totalPage);
@@ -1210,7 +1210,7 @@ namespace CMS.Application.Comm
                                 int pagecount = 0;
                                 if (int.TryParse(pagecountStr, out pagecount))
                                 {
-                                    double decnum = (contententitys.Count() / (double)pagecount); 
+                                    double decnum = (contententitys.Count() / (double)pagecount);
                                     string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
                                     Int32.TryParse(res, out totalPage);
                                     int pageNumberT = pageNumber - 1;
@@ -1333,22 +1333,169 @@ namespace CMS.Application.Comm
                         }
                     }
                     List<ContentEntity> contententitysT = contententitys.ToList();
-                    //处理连接地址
-                    contententitysT.ForEach(delegate(ContentEntity model)
-                    {
 
-                        if (model != null && model.UrlAddress != null)
-                        {
-                            model.UrlPage = model.UrlAddress;
-                            model.UrlPage = model.UrlPage.Replace(@"\", "/");
-                        }
-
-                    });
+                    int totalPage = 0;
                     if (contententitysT != null && contententitysT.Count > 0)
                     {
-                        foreach (ContentEntity contententity in contententitys)
+
+                        //分页
+                        if (attrs.ContainsKey("pagestyle"))
                         {
-                            strs += GetHtmlPage(mcodes, contententity, attrs);
+                            string val = "";
+                            attrs.TryGetValue("pagestyle", out val);
+                            if (val.ToLower() == "newpage")
+                            {
+                                //行数
+                                if (attrs.ContainsKey("pagecount"))
+                                {
+                                    string pagecountStr = "";
+                                    attrs.TryGetValue("pagecount", out pagecountStr);
+                                    int pagecount = 0;
+                                    if (int.TryParse(pagecountStr, out pagecount))
+                                    {
+                                        double decnum = (contententitys.Count() / (double)pagecount);
+
+                                        string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
+                                        Int32.TryParse(res, out totalPage);
+                                        int pageNumberT = 0;
+                                        int skipCount = pageNumberT * pagecount;
+                                        contententitysT = contententitysT.Skip(skipCount).Take(pagecount).ToList();
+                                    }
+
+                                }
+                            }
+                        }
+
+                        //处理连接地址
+                        contententitysT.ForEach(delegate(ContentEntity model)
+                        {
+
+                            if (model != null && model.UrlAddress != null)
+                            {
+                                model.UrlPage = model.UrlAddress;
+                                model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                            }
+
+                        });
+                        if (contententitysT != null && contententitysT.Count > 0)
+                        {
+                            foreach (ContentEntity contententity in contententitys)
+                            {
+                                strs += GetHtmlPage(mcodes, contententity, attrs);
+                            }
+                        }
+                        //分页
+                        if (attrs.ContainsKey("pagestyle"))
+                        {
+                            string val = "";
+                            attrs.TryGetValue("pagestyle", out val);
+                            if (val.ToLower() == "newpage")
+                            {
+                                strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
+                                strs += "<input type='hidden' id='hdcurrentPage' value=" + 1 + " />";
+                            }
+                        }
+                    }
+                }
+            }
+
+            return strs;
+        }
+        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
+        {
+            string strs = string.Empty;
+            IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids);
+            if (contententitys != null)
+            {
+                if (contententitys != null)
+                {
+                    //排序
+                    if (attrs.ContainsKey("sort"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("sort", out val);
+                        string sortName = val;
+                        contententitys = contententitys.OrderBy(sortName);
+                    }
+                    //排序
+                    if (attrs.ContainsKey("sortdesc"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("sortdesc", out val);
+
+                        string sortName = val;
+                        contententitys = contententitys.OrderBy(sortName, true);
+                    }
+                    //行数
+                    if (attrs.ContainsKey("tatol"))
+                    {
+                        string val = "";
+                        attrs.TryGetValue("tatol", out val);
+                        int tatolnum = 0;
+                        if (int.TryParse(val, out tatolnum))
+                        {
+                            contententitys = contententitys.Take(tatolnum);
+                        }
+                    }
+                    List<ContentEntity> contententitysT = contententitys.ToList();
+
+                    int totalPage = 0;
+                    if (contententitysT != null && contententitysT.Count > 0)
+                    {
+                        //分页
+                        if (attrs.ContainsKey("pagestyle"))
+                        {
+                            string val = "";
+                            attrs.TryGetValue("pagestyle", out val);
+                            if (val.ToLower() == "newpage")
+                            {
+                                //行数
+                                if (attrs.ContainsKey("pagecount"))
+                                {
+                                    string pagecountStr = "";
+                                    attrs.TryGetValue("pagecount", out pagecountStr);
+                                    int pagecount = 0;
+                                    if (int.TryParse(pagecountStr, out pagecount))
+                                    {
+                                        double decnum = (contententitys.Count() / (double)pagecount);
+                                        string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
+                                        Int32.TryParse(res, out totalPage);
+                                        int pageNumberT = pageNumber - 1;
+                                        int skipCount = pageNumberT * pagecount;
+                                        contententitysT = contententitysT.Skip(skipCount).Take(pagecount).ToList();
+                                    }
+
+                                }
+                            }
+                        }
+                        //处理连接地址
+                        contententitysT.ForEach(delegate(ContentEntity model)
+                        {
+
+                            if (model != null && model.UrlAddress != null)
+                            {
+                                model.UrlPage = model.UrlAddress;
+                                model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                            }
+
+                        });
+                        if (contententitysT != null && contententitysT.Count > 0)
+                        {
+                            foreach (ContentEntity contententity in contententitys)
+                            {
+                                strs += GetHtmlPage(mcodes, contententity, attrs);
+                            }
+                        }
+                        //分页
+                        if (attrs.ContainsKey("pagestyle"))
+                        {
+                            string val = "";
+                            attrs.TryGetValue("pagestyle", out val);
+                            if (val.ToLower() == "newpage")
+                            {
+                                strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
+                                strs += "<input type='hidden' id='hdcurrentPage' value=" + pageNumber + " />";
+                            }
                         }
                     }
                 }
