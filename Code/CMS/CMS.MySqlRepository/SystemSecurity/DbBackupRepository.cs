@@ -11,7 +11,7 @@ namespace CMS.MySqlRepository
     {
         public void DeleteForm(string keyValue)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 var dbBackupEntity = db.FindEntity<DbBackupEntity>(keyValue);
                 if (dbBackupEntity != null)

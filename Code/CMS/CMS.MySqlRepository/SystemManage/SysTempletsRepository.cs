@@ -37,7 +37,7 @@ namespace CMS.MySqlRepository
             SysTempletsEntity sysTempletsEntity = FindEntity(keyValue);
             if (sysTempletsEntity != null && !string.IsNullOrEmpty(sysTempletsEntity.Id))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     db.DeleteById<SysTempletsEntity>(t => t.Id == keyValue);
                     db.DeleteById<SysTempletItemsEntity>(t => t.ParentId == keyValue);
@@ -67,7 +67,7 @@ namespace CMS.MySqlRepository
             {
                 if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
-                    using (var db = new SqlServerRepositoryBase().BeginTrans())
+                    using (var db = new MySqlRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

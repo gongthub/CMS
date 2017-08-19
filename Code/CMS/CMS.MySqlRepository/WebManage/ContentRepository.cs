@@ -24,7 +24,7 @@ namespace CMS.MySqlRepository
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -63,7 +63,7 @@ namespace CMS.MySqlRepository
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -119,7 +119,7 @@ namespace CMS.MySqlRepository
             string strKeyWords = string.Empty;
             if (!iKeyWordsRespository.IsHasKeyWords(moduleEntity.WebSiteId, moduleEntity.Content, out strKeyWords))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -179,7 +179,7 @@ namespace CMS.MySqlRepository
             ContentEntity contentEntity = FindEntity(keyValue);
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -197,7 +197,7 @@ namespace CMS.MySqlRepository
             ContentEntity contentEntity = FindEntity(keyValue);
             if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {

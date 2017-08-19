@@ -330,7 +330,7 @@ namespace CMS.Code
         {
             string WebSiteSearchPath = Configs.GetValue("WebSiteSearchPath");
             bool bState = false;
-            if (urlRaws != null && urlRaws.Count == 2)
+            if (urlRaws != null && urlRaws.Count >= 2)
             {
                 if (urlRaws.FirstOrDefault().ToLower() == WebSiteSearchPath.ToLower())
                 {

@@ -20,14 +20,12 @@ namespace CMS.Data
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
-            using (DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection)
+            DbConnection dbConnection = ((IObjectContextAdapter)dbcontext).ObjectContext.Connection;
+            if (dbConnection.State == ConnectionState.Closed)
             {
-                if (dbConnection.State == ConnectionState.Closed)
-                {
-                    dbConnection.Open();
-                }
-                dbTransaction = dbConnection.BeginTransaction();
+                dbConnection.Open();
             }
+            dbTransaction = dbConnection.BeginTransaction();
             return this;
         }
         public int Commit()

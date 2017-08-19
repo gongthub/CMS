@@ -111,7 +111,6 @@ namespace CMS.Data
                     }
                     if (prop.Name.ToLower() == "DeleteUserId".ToLower())
                     {
-                        //var LoginInfo = OperatorProvider.Provider.GetCurrent();
                         var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                         if (LoginInfo != null)
                         {
@@ -148,7 +147,6 @@ namespace CMS.Data
                         }
                         if (prop.Name.ToLower() == "DeleteUserId".ToLower())
                         {
-                            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
                             var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
                             if (LoginInfo != null)
                             {

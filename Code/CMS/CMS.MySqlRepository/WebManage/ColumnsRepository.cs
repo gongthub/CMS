@@ -25,7 +25,7 @@ namespace CMS.MySqlRepository
             {
                 if (!Common.IsSystemHaveName(moduleEntity.ActionName) && !Common.IsSearch(moduleEntity.ActionName))
                 {
-                    using (var db = new SqlServerRepositoryBase().BeginTrans())
+                    using (var db = new MySqlRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

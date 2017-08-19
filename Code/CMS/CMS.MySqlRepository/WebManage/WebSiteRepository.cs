@@ -138,7 +138,7 @@ namespace CMS.MySqlRepository
             WebSiteEntity webSiteEntity = FindEntity(keyValue);
             if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
             {
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     db.DeleteById<WebSiteEntity>(t => t.Id == keyValue);
                     db.DeleteById<WebSiteForUrlEntity>(t => t.WebSiteId == keyValue);
@@ -205,7 +205,7 @@ namespace CMS.MySqlRepository
             if (!iWebSiteForUrlRepository.IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
             {
                 InitSpareUrl(ref moduleEntity);
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
@@ -274,7 +274,7 @@ namespace CMS.MySqlRepository
                 if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
                     InitSpareUrl(ref moduleEntity);
-                    using (var db = new SqlServerRepositoryBase().BeginTrans())
+                    using (var db = new MySqlRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {

@@ -10,7 +10,7 @@ namespace CMS.MySqlRepository
     {
         public void SubmitCloneButton(List<ModuleButtonEntity> entitys)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 foreach (var item in entitys)
                 {

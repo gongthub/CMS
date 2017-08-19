@@ -32,7 +32,7 @@ namespace CMS.Application.Comm.Tests
         [TestMethod()]
         public void SearchByShortNameTest()
         {
-            LucenceHelp.SearchByShortName("canlilong", "名称");
+            LucenceHelp.SearchByShortName("TEST111", "新");
         }
 
         [TestMethod()]

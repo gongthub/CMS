@@ -24,6 +24,16 @@ namespace CMS.MySqlRepository
             }
             return bState;
         }
+        public bool IsSearchModel(string WebSiteId)
+        {
+            bool bState = false;
+            TempletEntity model = GetSearchModel(WebSiteId);
+            if (model != null && !string.IsNullOrEmpty(model.Id))
+            {
+                bState = true;
+            }
+            return bState;
+        }
         /// <summary>
         /// 获取全站搜索模板
         /// </summary>
@@ -42,33 +52,37 @@ namespace CMS.MySqlRepository
 
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
-            if (moduleEntity.FullName.ToLower() != ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
+            if (moduleEntity.FullName.ToLower() == ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower() && IsSearchModel(moduleEntity.Id))
             {
-                if (!IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
+                moduleEntity.TempletType = (int)Code.Enums.TempletType.Search;
+            }
+            else
+            {
+                if (moduleEntity.FullName.ToLower() == ConfigHelp.configHelp.WEBSITESEARCHPATH.ToLower())
                 {
-                    if (!string.IsNullOrEmpty(keyValue))
-                    {
-                        moduleEntity.Modify(keyValue);
-                        Update(moduleEntity);
-                        //添加日志
-                        iLogRepository.WriteDbLog(true, "修改模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "模板管理");
-                    }
-                    else
-                    {
-                        moduleEntity.Create();
-                        Insert(moduleEntity);
-                        //添加日志
-                        iLogRepository.WriteDbLog(true, "添加模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "模板管理");
-                    }
+                    throw new Exception("名称不能为系统保留名称，请重新输入！");
+                }
+            } 
+            if (!IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
+            {
+                if (!string.IsNullOrEmpty(keyValue))
+                {
+                    moduleEntity.Modify(keyValue);
+                    Update(moduleEntity);
+                    //添加日志
+                    iLogRepository.WriteDbLog(true, "修改模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "模板管理");
                 }
                 else
                 {
-                    throw new Exception("名称已存在，请重新输入！");
+                    moduleEntity.Create();
+                    Insert(moduleEntity);
+                    //添加日志
+                    iLogRepository.WriteDbLog(true, "添加模板信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "模板管理");
                 }
             }
             else
             {
-                throw new Exception("名称不能为系统保留名称，请重新输入！");
+                throw new Exception("名称已存在，请重新输入！");
             }
         }
     }

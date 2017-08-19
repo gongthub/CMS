@@ -21,7 +21,7 @@ namespace CMS.MySqlRepository
         private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
         public void DeleteForm(string keyValue)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 db.Delete<UserEntity>(t => t.Id == keyValue);
                 db.Delete<UserLogOnEntity>(t => t.UserId == keyValue);
@@ -30,7 +30,7 @@ namespace CMS.MySqlRepository
         }
         public void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
@@ -57,7 +57,7 @@ namespace CMS.MySqlRepository
             if (!IsExist(keyValue, "Account", userEntity.Account) && !IsSystemUserName(userEntity.Account))
             {
                 iUserWebSiteRepository.DeleteById(m => m.UserId == keyValue);
-                using (var db = new SqlServerRepositoryBase().BeginTrans())
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {

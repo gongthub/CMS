@@ -12,7 +12,7 @@ namespace CMS.MySqlRepository
         private ILogRepository iLogRepository = new LogRepository();
         public void DeleteForm(string keyValue)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 db.Delete<RoleEntity>(t => t.Id == keyValue);
                 db.Delete<RoleAuthorizeEntity>(t => t.ObjectId == keyValue);
@@ -21,7 +21,7 @@ namespace CMS.MySqlRepository
         }
         public void SubmitForm(RoleEntity roleEntity, List<RoleAuthorizeEntity> roleAuthorizeEntitys, string keyValue)
         {
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
