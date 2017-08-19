@@ -232,7 +232,7 @@ namespace CMS.Application.Comm
             }
             else
             {
-                if (Common.IsExistExtended(urlRaw))
+                if (Common.IsExistUrlRaw(urlRaw))
                 {
                     bState = true;
                 }
