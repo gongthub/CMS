@@ -2,6 +2,7 @@
 using CMS.Application.WebManage;
 using CMS.Code;
 using CMS.Code.Html;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
 using System;
@@ -1000,6 +1001,47 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
+        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType)
+        {
+            string strs = string.Empty;
+
+            switch (irequestType)
+            {
+                case (int)Enums.TempletType.Common:
+                    strs = GetContentsById(Ids, mcodes, attrs);
+                    break;
+                case (int)Enums.TempletType.Search:
+                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs);
+                    break;
+            }
+            return strs;
+        }
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType, int pageNumber)
+        {
+            string strs = string.Empty;
+
+            switch (irequestType)
+            {
+                case (int)Enums.TempletType.Common:
+                    strs = GetContentsById(Ids, mcodes, attrs, pageNumber);
+                    break;
+                case (int)Enums.TempletType.Search:
+                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs, pageNumber);
+                    break;
+            }
+            return strs;
+        }
+
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = string.Empty;
@@ -1062,7 +1104,7 @@ namespace CMS.Application.Comm
                 }
                 contententitys = contententitysT.ToList();
 
-                int totalPage = 0;
+                string extHtmls = string.Empty;
                 if (contententitys != null && contententitys.Count > 0)
                 {
 
@@ -1071,27 +1113,7 @@ namespace CMS.Application.Comm
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-                        if (val.ToLower() == "newpage")
-                        {
-                            //行数
-                            if (attrs.ContainsKey("pagecount"))
-                            {
-                                string pagecountStr = "";
-                                attrs.TryGetValue("pagecount", out pagecountStr);
-                                int pagecount = 0;
-                                if (int.TryParse(pagecountStr, out pagecount))
-                                {
-                                    double decnum = (contententitys.Count() / (double)pagecount);
-
-                                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
-                                    Int32.TryParse(res, out totalPage);
-                                    int pageNumberT = 0;
-                                    int skipCount = pageNumberT * pagecount;
-                                    contententitys = contententitys.Skip(skipCount).Take(pagecount).ToList();
-                                }
-
-                            }
-                        }
+                        InitContentPages(val, attrs, ref contententitys, 1, ref extHtmls);
                     }
 
                     //处理连接地址
@@ -1112,22 +1134,12 @@ namespace CMS.Application.Comm
                             strs += GetHtmlPage(mcodes, contententity, attrs);
                         }
                     }
-
-                    //分页
-                    if (attrs.ContainsKey("pagestyle"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("pagestyle", out val);
-                        if (val.ToLower() == "newpage")
-                        {
-                            strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
-                            strs += "<input type='hidden' id='hdcurrentPage' value=" + 1 + " />";
-                        }
-                    }
+                    strs += extHtmls;
                 }
             }
             return strs;
         }
+
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
@@ -1195,7 +1207,7 @@ namespace CMS.Application.Comm
 
                 contententitys = contententitysT.ToList();
 
-                int totalPage = 0;
+                string extHtmls = string.Empty;
                 if (contententitys != null && contententitys.Count > 0)
                 {
                     //分页
@@ -1203,26 +1215,9 @@ namespace CMS.Application.Comm
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-                        if (val.ToLower() == "newpage")
-                        {
-                            //行数
-                            if (attrs.ContainsKey("pagecount"))
-                            {
-                                string pagecountStr = "";
-                                attrs.TryGetValue("pagecount", out pagecountStr);
-                                int pagecount = 0;
-                                if (int.TryParse(pagecountStr, out pagecount))
-                                {
-                                    double decnum = (contententitys.Count() / (double)pagecount);
-                                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
-                                    Int32.TryParse(res, out totalPage);
-                                    int pageNumberT = pageNumber - 1;
-                                    int skipCount = pageNumberT * pagecount;
-                                    contententitys = contententitys.Skip(skipCount).Take(pagecount).ToList();
-                                }
 
-                            }
-                        }
+                        InitContentPages(val, attrs, ref contententitys, pageNumber, ref extHtmls);
+
                     }
                     //处理连接地址
                     contententitys.ForEach(delegate(ContentEntity model)
@@ -1243,62 +1238,10 @@ namespace CMS.Application.Comm
                         }
                     }
                 }
-
-                //分页
-                if (attrs.ContainsKey("pagestyle"))
-                {
-                    string val = "";
-                    attrs.TryGetValue("pagestyle", out val);
-                    if (val.ToLower() == "newpage")
-                    {
-                        strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
-                        strs += "<input type='hidden' id='hdcurrentPage' value=" + pageNumber + " />";
-                    }
-                }
+                strs += extHtmls;
             }
             return strs;
         }
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType)
-        {
-            string strs = string.Empty;
-
-            switch (irequestType)
-            {
-                case (int)Enums.TempletType.Common:
-                    strs = GetContentsById(Ids, mcodes, attrs);
-                    break;
-                case (int)Enums.TempletType.Search:
-                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs);
-                    break;
-            }
-            return strs;
-        }
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType, int pageNumber)
-        {
-            string strs = string.Empty;
-
-            switch (irequestType)
-            {
-                case (int)Enums.TempletType.Common:
-                    strs = GetContentsById(Ids, mcodes, attrs, pageNumber);
-                    break;
-                case (int)Enums.TempletType.Search:
-                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs, pageNumber);
-                    break;
-            }
-            return strs;
-        }
-
         private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = string.Empty;
@@ -1407,7 +1350,7 @@ namespace CMS.Application.Comm
         private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
         {
             string strs = string.Empty;
-            IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids); 
+            IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids);
             if (contententitys != null)
             {
                 //排序
@@ -1573,6 +1516,114 @@ namespace CMS.Application.Comm
                 }
             }
             return strs;
+        }
+
+        private static void InitContentPages(string val, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, int pageNumber, ref string extHtmls)
+        {
+            PageModel pageModel = InitPageModel(attrs, contententitys, pageNumber);
+            switch (val.ToLower())
+            {
+                case "newpage":
+                    InitContentPageForNewPage(attrs, ref contententitys, pageModel, ref extHtmls);
+                    break;
+                case "pageajax":
+                    InitContentPageForAjax(attrs, ref contententitys, pageModel, ref extHtmls);
+                    break;
+            }
+        }
+
+        private static PageModel InitPageModel(Dictionary<string, string> attrs, List<ContentEntity> contententitys, int pageNumber)
+        {
+            PageModel pageModel = new PageModel();
+            if (attrs.ContainsKey("totalcount"))
+            {
+                string totalcounts = string.Empty;
+                int totalcount = 0;
+                attrs.TryGetValue("totalcount", out totalcounts);
+                if (Int32.TryParse(totalcounts, out totalcount))
+                {
+                    pageModel.TotalCount = totalcount;
+                }
+            }
+            if (attrs.ContainsKey("currcount"))
+            {
+                string currcounts = string.Empty;
+                int currcount = 0;
+                attrs.TryGetValue("currcount", out currcounts);
+                if (Int32.TryParse(currcounts, out currcount))
+                {
+                    pageModel.CurrCount = currcount;
+                }
+            }
+            if (attrs.ContainsKey("totalcount"))
+            {
+                string totalcounts = string.Empty;
+                int totalcount = 0;
+                attrs.TryGetValue("totalcount", out totalcounts);
+                if (Int32.TryParse(totalcounts, out totalcount))
+                {
+                    pageModel.TotalCount = totalcount;
+                }
+            }
+            string eleStrIds = string.Empty;
+            if (attrs.ContainsKey("pageele"))
+            {
+                attrs.TryGetValue("pageele", out eleStrIds);
+                pageModel.EleId = eleStrIds;
+            }
+
+            double decnum = (contententitys.Count() / (double)pageModel.CurrCount);
+
+            string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
+            int totalPage = 0;
+            Int32.TryParse(res, out totalPage);
+            pageModel.TotalPage = totalPage;
+
+            pageModel.CurrPage = pageNumber;
+            return pageModel;
+        }
+
+        private static void InitContentPageForNewPage(Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
+        {
+            //行数
+            if (attrs.ContainsKey("pagecount"))
+            {
+                string pagecountStr = "";
+                attrs.TryGetValue("pagecount", out pagecountStr);
+                int pagecount = 0;
+                if (int.TryParse(pagecountStr, out pagecount))
+                {
+                    double decnum = (contententitys.Count() / (double)pagecount);
+
+                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
+                    int totalPage = 0;
+                    Int32.TryParse(res, out totalPage);
+                    int pageNumberT = 0;
+                    int skipCount = pageNumberT * pagecount;
+                    contententitys = contententitys.Skip(skipCount).Take(pagecount).ToList();
+                    pagemodel.TotalPage = totalPage;
+                }
+
+                extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "' totalCount='" + pagemodel.TotalCount + "' currCount='" + pagemodel.CurrCount + "' totalPage='" + pagemodel.TotalPage + "' currPage='" + pagemodel.CurrPage + "'/>";
+            }
+        }
+        private static void InitContentPageForAjax(Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
+        {
+            int pageNumberT = 0;
+            int skipCount = pageNumberT * pagemodel.CurrCount;
+            contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount).ToList();
+
+            extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "'  totalCount='" +
+                pagemodel.TotalCount + "' currCount='" + pagemodel.CurrCount + "' totalPage='" +
+                pagemodel.TotalPage + "' currPage='" + pagemodel.CurrPage + "' class='hdsyspage' ";
+            if (attrs != null && attrs.Count > 0)
+            {
+                foreach (var item in attrs)
+                {
+                    extHtmls += item.Key + "='" + item.Value + "' ";
+                }
+            }
+            extHtmls += "/>";
         }
 
         #endregion
