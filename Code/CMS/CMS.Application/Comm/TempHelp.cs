@@ -1434,7 +1434,7 @@ namespace CMS.Application.Comm
             {
                 if (item.Key.Contains("_"))
                 {
-                    extHtmls += "<span class='sysajaxpageattr' fname='" + item.Key + "' fvalue='" + item.Key + "'></span>";
+                    extHtmls += "<span class='sysajaxpageattr' fname='" + item.Key + "' fvalue='" + item.Value + "'></span>";
                 }
             }
             extHtmls += "</div>";
@@ -2205,6 +2205,8 @@ namespace CMS.Application.Comm
                 {
                     contententitysT = contententitysT.Take(pageModel.Total);
                 }
+
+
                 contententitys = contententitysT.ToList();
 
 
@@ -2219,10 +2221,11 @@ namespace CMS.Application.Comm
 
                     int pageNumberT = pageModel.CurrPage - 1;
                     int skCount = pageNumberT * pageModel.CurrCount;
-                    contententitys = contententitys.Skip(skCount).Take(pageModel.CurrCount).ToList();
+
+                    contententitys = contententitysT.Skip(skCount).Take(pageModel.CurrCount).ToList();
 
                     extPageModel.CurrCount = pageModel.CurrCount;
-                    extPageModel.CurrPage = pageModel.CurrPage + 1;
+                    extPageModel.CurrPage = pageModel.CurrPage;
                 }
 
                 if (contententitys != null && contententitys.Count > 0)
@@ -2249,7 +2252,7 @@ namespace CMS.Application.Comm
                     {
                         foreach (ContentEntity contententity in contententitys)
                         {
-                            strs += GetHtmlPage(pageModel.MCodes, contententity, new Dictionary<string, string>());
+                            strs += GetHtmlPage(pageModel.MCodes, contententity, pageModel.AttrDatas);
                         }
                     }
                     extPageModel.Htmlstr = strs;
