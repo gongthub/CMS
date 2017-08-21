@@ -4,7 +4,8 @@ using CMS.Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using CMS.Application.Comm;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CMS.Web.Controllers
@@ -27,6 +28,14 @@ namespace CMS.Web.Controllers
             {
                 return Json(new { state = false, message = "提交失败。" + e.Message });
             }
+        }
+
+        [HttpPost]
+        public ActionResult GetContentModels()
+        {
+            System.Web.HttpContext context = System.Web.HttpContext.Current;
+            object objDatas = RequestHelp.requestHelp.GetPageModels(context);
+            return Json(objDatas);
         }
     }
 }

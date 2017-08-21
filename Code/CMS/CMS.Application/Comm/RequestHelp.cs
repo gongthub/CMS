@@ -1,5 +1,8 @@
-﻿using CMS.Code;
+﻿using CMS.Application.WebManage;
+using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -317,6 +320,69 @@ namespace CMS.Application.Comm
             return bState;
         }
         #endregion
+
+        #region 获取分页内容 +ExtPageModel GetPageModels(System.Web.HttpContext context)
+        /// <summary>
+        /// 获取分页内容
+        /// </summary>
+        /// <returns></returns>
+        public ExtPageModel GetPageModels(System.Web.HttpContext context)
+        {
+            ExtPageModel extPageModel = new ExtPageModel();
+            string strRqs = context.Request["pageDatas"];
+            if (!string.IsNullOrEmpty(strRqs))
+            {
+                ExtPageModel extPageModelReq = Json.ToObject<ExtPageModel>(strRqs);
+                string cIds = GetColumnIds(context);
+                extPageModelReq.SourceIds = cIds;
+
+                string attrDatas = context.Request["attrDatas"];
+                if (!string.IsNullOrEmpty(attrDatas))
+                {
+                    extPageModelReq.AttrDatas = Json.ToObject<Dictionary<string, string>>(attrDatas);
+                }
+                extPageModel = TempHelp.tempHelp.GetContentModels(extPageModelReq);
+            }
+            return extPageModel;
+        }
+        
+        #endregion
+
+        /// <summary>
+        /// 获取请求路径栏目Id
+        /// </summary>
+        /// <returns></returns>
+        private string GetColumnIds(System.Web.HttpContext context)
+        {
+            string cIds = string.Empty;
+            string urlHost = GetHost(context);
+            string urlRaw = context.Request.RawUrl.ToString();
+            urlRaw = context.Server.UrlDecode(urlRaw);
+
+            //处理Url参数
+            urlRaw = Common.HandleUrlRaw(urlRaw);
+            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+            WebSiteApp app = new WebSiteApp();
+            ColumnsApp c_ColumnsApp = new ColumnsApp();
+            WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
+            if (urlRaws == null || urlRaws.Count == 0)
+            {
+                ColumnsEntity columnsEntity = c_ColumnsApp.GetMain(entity.Id);
+                if (columnsEntity != null)
+                    cIds = columnsEntity.Id;
+            }
+            else
+            {
+                if (urlRaws.Count > 0)
+                {
+                    ColumnsEntity columnsEntity = c_ColumnsApp.GetFormByActionName(urlRaws.FirstOrDefault(), entity.Id);
+                    if (columnsEntity != null)
+                        cIds = columnsEntity.Id;
+                }
+            }
+
+            return cIds;
+        }
 
         /// <summary>
         /// 获取请求urlHost

@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Common\ExtPageModel.cs" />
     <Compile Include="Entity\Common\PageModel.cs" />
     <Compile Include="Entity\Common\UpFileDTO.cs" />
     <Compile Include="Entity\SystemManage\AccessLogEntity.cs" />

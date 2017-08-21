@@ -1,6 +1,4 @@
-﻿using CMS.Domain.Entity.WebManage;
-using CMS.Domain.IRepository;
-using CMS.SqlServerRepository;
+﻿using CMS.Domain.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;

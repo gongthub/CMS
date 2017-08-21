@@ -57,14 +57,6 @@
       <Project>{a7d0b5f6-bc95-4798-b054-6ca6d14a5e10}</Project>
       <Name>CMS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.MySqlRepository\CMS.MySqlRepository.csproj">
-      <Project>{65932687-a380-4009-8b6f-1898d2565374}</Project>
-      <Name>CMS.MySqlRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CMS.SqlServerRepository\CMS.SqlServerRepository.csproj">
-      <Project>{89d4c0e7-d7bd-46c7-a8be-bc04ebf0073a}</Project>
-      <Name>CMS.SqlServerRepository</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

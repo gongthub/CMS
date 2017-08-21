@@ -1,32 +1,31 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/HtmlContent/SysContent/jquery.pagination.css" rel="stylesheet" />
     <title></title>
 </head>
 <body>
-    <div class="box">
-        <div id="pagination1" class="page fl"></div>
-        <div class="info fl">
-            <p>当前页数：<span id="current1">1</span></p>
+
+    <div id="divPageNew">
+
+        <li><a href="/News/82593b3f-6c44-4925-863a-f153c8aebda3">新闻1</a></li>
+
+        <li><a href="/News/d7ec8ce3-5091-4127-9552-b50ac0af15de">新闻2</a></li>
+
+        <li><a href="/News/f7a7f3af-6e38-4087-b983-ff031cb760cf">新闻3</a></li>
+        <div style='display:none;' id='hddivPageNew' totalcount='9' currcount='3' totalpage='3' currpage='1' eleid='divPageNew' class='hdsyspage' sort='FullName' sourcename='News' formattime_edittime='yyyy-MM-dd' pagestyle='pageajax' pageele='divPageNew'>
+            <li><a href="@[model.UrlPage]@">@[model.FullName]@</a></li>
+
+
         </div>
     </div>
     <div class="box">
-        <div id="pagination2" class="page fl"></div>
-        <div class="info fl">
-            <p>当前页数：<span id="current2">3</span></p>
-        </div>
-    </div>
-    <div class="box">
-        <div id="pageEle" class="page fl"></div>
+        <div id="pageEledivPageNew" class="page fl"></div>
         <div class="info fl">
             <p>当前页数：<span id="current3">4</span></p>
         </div>
-        <button id="getPage">getPage</button>
-        <button id="setPage">setPage</button>
     </div>
-    
 </body>
 </html>
 
@@ -34,76 +33,95 @@
 <script src="/HtmlContent/SysContent/jquery.pagination.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        var hdsyspagelst = $(".hdsyspage");
-        if (hdsyspagelst != null && hdsyspagelst.length > 0)
-        {
-            for (var i = 0; i < hdsyspagelst.length; i++) {
-
-                var eleDiv = $(hdsyspagelst[i]);
-                var eleIds = eleDiv.attr("id");
-                var totalPages = eleDiv.attr("pagecount");
-                var pages = eleDiv.attr("currPage");
-                 
-                if (pages == null || pages == undefined) {
-                    pages = 1;
-                }
-                var pageInt = Number(pages);
-                 
-                var totalPageint = Number(totalPages);
-                 
-                $("#pageEle" + eleIds).pagination({
-                    currentPage: pageInt,
-                    totalPage: totalPageint,
-                    isShow: true,
-                    count: 7,
-                    homePageText: "首页",
-                    endPageText: "尾页",
-                    prevPageText: "上一页",
-                    nextPageText: "下一页",
-                    callback: function (current) {
-                        window.location.href = "Test.html?page=" + current;
-                    }
-                });
-            }
-        }
-        
-
-        var pages = $("#hdcurrentPage").val();
-        if (pages == null || pages == undefined) {
-            pages = 1;
-        }
-        var pageInt = Number(pages);
-
-        var totalPages = $("#hdPageSize").val();
-        var totalPageint = Number(totalPages);
-
-        $("#current3").text(pageInt)
-        $("#pagination3").pagination({
-            currentPage: pageInt,
-            totalPage: totalPageint,
+        $("#pageEledivPageNew").pagination({
+            currentPage: 1,
+            totalPage: 3,
             isShow: true,
             count: 7,
             homePageText: "首页",
             endPageText: "尾页",
             prevPageText: "上一页",
             nextPageText: "下一页",
-            callback: function (current) { 
-                window.location.href = "Test.html?page=" + current;
+            callback: function (current) {
+                GetDatas("divPageNew", current);
             }
         });
 
-        $("#getPage").on("click", function () {
-            var info = $("#pagination3").pagination("getPage");
-            alert("当前页数：" + info.current + ",总页数：" + info.total);
-        });
 
-        $("#setPage").on("click", function () {
-            $("#pagination3").pagination("setPage", 1, 10);
-        });
-
-
-        var eleDiv = $("#hddivAjax");
-        var totalPages = eleDiv.attr("pagecount");
-        var pages = eleDiv.attr("currPage");
     });
+
+    function GetDatas(Ids, curr) {
+        var hdPageEle = $("#hd" + Ids);
+        var currCounts = hdPageEle.attr("currCount");
+        var currPages = hdPageEle.attr("currPage");
+        var sourcename = hdPageEle.attr("sourcename");
+        var sort = hdPageEle.attr("sort");
+        var sortdesc = hdPageEle.attr("sortdesc");
+        var sortdesc = hdPageEle.attr("sortdesc");
+
+        var mcodes = hdPageEle.html();
+        var ishtmls = hdPageEle.attr("ishtml");
+        if (ishtmls != "true") {
+            ishtmls = "false";
+        }
+        if (sort == null || typeof (sort) == "undefined") {
+            sort = "";
+        }
+        if (sortdesc == null || typeof (sortdesc) == "undefined") {
+            sortdesc = "";
+        }
+
+        var currCount = Number(currCounts);
+        var currPage = Number(currPages);
+
+        var attrDatas = [];
+        var sysajaxpageattrs = hdPageEle.find(".sysajaxpageattr");
+        if (sysajaxpageattrs != null && sysajaxpageattrs != undefined && sysajaxpageattrs.length > 0) {
+            for (var i = 0; i < sysajaxpageattrs.length; i++) {
+                var fname = $(sysajaxpageattrs[i]).attr("fname");
+                var fvalue = $(sysajaxpageattrs[i]).attr("fvalue");
+                var attrDatasT = { fname: fname, fvalue: fvalue };
+                attrDatas.push = attrDatasT;
+            }
+        }
+
+        var jsondata = {
+            SourceName: sourcename,
+            Sort: sort,
+            SortDesc: sortdesc,
+            CurrCount: currCount,
+            CurrPage: currPage,
+            IsHtml: ishtmls,
+            MCodes: htmlEncode(mcodes)
+        }
+        var formData = new FormData();
+        formData.append("pageDatas", JSON.stringify(jsondata));
+        formData.append("attrDatas", JSON.stringify(attrDatas));
+
+        $.ajax({
+            url: '/WebSiteCommon/GetContentModels',
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            data: formData,
+            dataType: 'JSON',
+            type: 'POST',
+            success: function (datas) {
+                var data = eval(datas);
+                hdPageEle.attr("totalCount", data.TotalCount);
+                hdPageEle.attr("totalPage", data.TotalPage);
+                hdPageEle.attr("currCount", data.CurrCount);
+                hdPageEle.attr("currPage", data.CurrPage);
+                if (data.ContentModels != null) {
+                    alert(data.ContentModels);
+                }
+            }
+        });
+    }
+    function htmlEncode(str) {
+        var ele = document.createElement('span');
+        ele.appendChild(document.createTextNode(str));
+        return ele.innerHTML;
+    }
 </script>

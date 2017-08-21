@@ -1045,98 +1045,17 @@ namespace CMS.Application.Comm
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
         {
             string strs = string.Empty;
-            List<ContentEntity> contententitys = new List<ContentEntity>();
-            IQueryable<ContentEntity> contententitysT = null;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, attrs, 1, ref extHtmls);
 
-            ContentApp c_ContentApp = new ContentApp();
-            //数据源
-            if (attrs.ContainsKey("sourcename"))
+            if (contententitys != null && contententitys.Count > 0)
             {
-                string sourceName = "";
-                attrs.TryGetValue("sourcename", out sourceName);
-                ColumnsEntity moduleentity = new ColumnsEntity();
-                ColumnsApp c_ModulesApp = new ColumnsApp();
-                moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
-                if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+                foreach (ContentEntity contententity in contententitys)
                 {
-                    contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
+                    strs += GetHtmlPage(mcodes, contententity, attrs);
                 }
             }
-            else
-            {
-                contententitysT = c_ContentApp.GetListIq(Ids);
-            }
-            if (contententitysT != null)
-            {
-                //排序
-                if (attrs.ContainsKey("sort"))
-                {
-                    string val = "";
-                    attrs.TryGetValue("sort", out val);
-
-                    string sortName = val;
-                    contententitysT = contententitysT.OrderBy(sortName);
-
-
-                }
-                //排序
-                if (attrs.ContainsKey("sortdesc"))
-                {
-                    string val = "";
-                    attrs.TryGetValue("sortdesc", out val);
-
-                    string sortName = val;
-                    contententitysT = contententitysT.OrderBy(sortName, true);
-
-                }
-
-                //行数
-                if (attrs.ContainsKey("tatol"))
-                {
-                    string val = "";
-                    attrs.TryGetValue("tatol", out val);
-                    int tatolnum = 0;
-                    if (int.TryParse(val, out tatolnum))
-                    {
-                        contententitysT = contententitysT.Take(tatolnum);
-                    }
-
-                }
-                contententitys = contententitysT.ToList();
-
-                string extHtmls = string.Empty;
-                if (contententitys != null && contententitys.Count > 0)
-                {
-
-                    //分页
-                    if (attrs.ContainsKey("pagestyle"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("pagestyle", out val);
-                        InitContentPages(val, attrs, ref contententitys, 1, ref extHtmls);
-                    }
-
-                    //处理连接地址
-                    contententitys.ForEach(delegate(ContentEntity model)
-                    {
-
-                        if (model != null && model.UrlAddress != null)
-                        {
-                            model.UrlPage = model.UrlAddress;
-                            model.UrlPage = model.UrlPage.Replace(@"\", "/");
-                        }
-
-                    });
-                    if (contententitys != null && contententitys.Count > 0)
-                    {
-                        foreach (ContentEntity contententity in contententitys)
-                        {
-                            strs += GetHtmlPage(mcodes, contententity, attrs);
-                        }
-                    }
-                    strs += extHtmls;
-                }
-            }
+            strs += extHtmls;
             return strs;
         }
 
@@ -1148,6 +1067,55 @@ namespace CMS.Application.Comm
         private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
         {
             string strs = string.Empty;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, attrs, pageNumber, ref extHtmls);
+
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                foreach (ContentEntity contententity in contententitys)
+                {
+                    strs += GetHtmlPage(mcodes, contententity, attrs);
+                }
+            }
+            strs += extHtmls;
+            return strs;
+        }
+        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetSearchsByAttrs(webSiteShortName, Ids, mcodes, attrs, 1, ref extHtmls);
+
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                foreach (ContentEntity contententity in contententitys)
+                {
+                    strs += GetHtmlPage(mcodes, contententity, attrs);
+                }
+            }
+            strs += extHtmls;
+
+            return strs;
+        }
+        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
+        {
+            string strs = string.Empty;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetSearchsByAttrs(webSiteShortName, Ids, mcodes, attrs, pageNumber, ref extHtmls);
+
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                foreach (ContentEntity contententity in contententitys)
+                {
+                    strs += GetHtmlPage(mcodes, contententity, attrs);
+                }
+            }
+
+            return strs;
+        }
+        private List<ContentEntity> GetContentsByAttrs(string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
+        {
+            string strs = string.Empty;
             List<ContentEntity> contententitys = new List<ContentEntity>();
             IQueryable<ContentEntity> contententitysT = null;
 
@@ -1192,6 +1160,7 @@ namespace CMS.Application.Comm
                     contententitysT = contententitysT.OrderBy(sortName, true);
 
                 }
+
                 //行数
                 if (attrs.ContainsKey("tatol"))
                 {
@@ -1204,21 +1173,19 @@ namespace CMS.Application.Comm
                     }
 
                 }
-
                 contententitys = contententitysT.ToList();
 
-                string extHtmls = string.Empty;
                 if (contententitys != null && contententitys.Count > 0)
                 {
+
                     //分页
                     if (attrs.ContainsKey("pagestyle"))
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-
-                        InitContentPages(val, attrs, ref contententitys, pageNumber, ref extHtmls);
-
+                        InitContentPages(val, mcodes, attrs, ref contententitys, pageNumber, ref extHtmls);
                     }
+
                     //处理连接地址
                     contententitys.ForEach(delegate(ContentEntity model)
                     {
@@ -1230,126 +1197,14 @@ namespace CMS.Application.Comm
                         }
 
                     });
-                    if (contententitys != null && contententitys.Count > 0)
-                    {
-                        foreach (ContentEntity contententity in contententitys)
-                        {
-                            strs += GetHtmlPage(mcodes, contententity, attrs);
-                        }
-                    }
-                }
-                strs += extHtmls;
-            }
-            return strs;
-        }
-        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs)
-        {
-            string strs = string.Empty;
-            IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids);
-            if (contententitys != null)
-            {
-                if (contententitys != null)
-                {
-                    //排序
-                    if (attrs.ContainsKey("sort"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("sort", out val);
-                        string sortName = val;
-                        contententitys = contententitys.OrderBy(sortName);
-                    }
-                    //排序
-                    if (attrs.ContainsKey("sortdesc"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("sortdesc", out val);
-
-                        string sortName = val;
-                        contententitys = contententitys.OrderBy(sortName, true);
-                    }
-                    //行数
-                    if (attrs.ContainsKey("tatol"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("tatol", out val);
-                        int tatolnum = 0;
-                        if (int.TryParse(val, out tatolnum))
-                        {
-                            contententitys = contententitys.Take(tatolnum);
-                        }
-                    }
-                    List<ContentEntity> contententitysT = contententitys.ToList();
-
-                    int totalPage = 0;
-                    if (contententitysT != null && contententitysT.Count > 0)
-                    {
-
-                        //分页
-                        if (attrs.ContainsKey("pagestyle"))
-                        {
-                            string val = "";
-                            attrs.TryGetValue("pagestyle", out val);
-                            if (val.ToLower() == "newpage")
-                            {
-                                //行数
-                                if (attrs.ContainsKey("pagecount"))
-                                {
-                                    string pagecountStr = "";
-                                    attrs.TryGetValue("pagecount", out pagecountStr);
-                                    int pagecount = 0;
-                                    if (int.TryParse(pagecountStr, out pagecount))
-                                    {
-                                        double decnum = (contententitys.Count() / (double)pagecount);
-
-                                        string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
-                                        Int32.TryParse(res, out totalPage);
-                                        int pageNumberT = 0;
-                                        int skipCount = pageNumberT * pagecount;
-                                        contententitysT = contententitysT.Skip(skipCount).Take(pagecount).ToList();
-                                    }
-
-                                }
-                            }
-                        }
-
-                        //处理连接地址
-                        contententitysT.ForEach(delegate(ContentEntity model)
-                        {
-
-                            if (model != null && model.UrlAddress != null)
-                            {
-                                model.UrlPage = model.UrlAddress;
-                                model.UrlPage = model.UrlPage.Replace(@"\", "/");
-                            }
-
-                        });
-                        if (contententitysT != null && contententitysT.Count > 0)
-                        {
-                            foreach (ContentEntity contententity in contententitys)
-                            {
-                                strs += GetHtmlPage(mcodes, contententity, attrs);
-                            }
-                        }
-                        //分页
-                        if (attrs.ContainsKey("pagestyle"))
-                        {
-                            string val = "";
-                            attrs.TryGetValue("pagestyle", out val);
-                            if (val.ToLower() == "newpage")
-                            {
-                                strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
-                                strs += "<input type='hidden' id='hdcurrentPage' value=" + 1 + " />";
-                            }
-                        }
-                    }
                 }
             }
-
-            return strs;
+            return contententitys;
         }
-        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
+        private List<ContentEntity> GetSearchsByAttrs(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
         {
             string strs = string.Empty;
+            List<ContentEntity> contententitysT = new List<ContentEntity>();
             IQueryable<ContentEntity> contententitys = LucenceHelp.SearchByShortNameIq(webSiteShortName, Ids);
             if (contententitys != null)
             {
@@ -1381,37 +1236,20 @@ namespace CMS.Application.Comm
                         contententitys = contententitys.Take(tatolnum);
                     }
                 }
-                List<ContentEntity> contententitysT = contententitys.ToList();
+                contententitysT = contententitys.ToList();
 
-                int totalPage = 0;
                 if (contententitysT != null && contententitysT.Count > 0)
                 {
+
                     //分页
                     if (attrs.ContainsKey("pagestyle"))
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-                        if (val.ToLower() == "newpage")
-                        {
-                            //行数
-                            if (attrs.ContainsKey("pagecount"))
-                            {
-                                string pagecountStr = "";
-                                attrs.TryGetValue("pagecount", out pagecountStr);
-                                int pagecount = 0;
-                                if (int.TryParse(pagecountStr, out pagecount))
-                                {
-                                    double decnum = (contententitys.Count() / (double)pagecount);
-                                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
-                                    Int32.TryParse(res, out totalPage);
-                                    int pageNumberT = pageNumber - 1;
-                                    int skipCount = pageNumberT * pagecount;
-                                    contententitysT = contententitysT.Skip(skipCount).Take(pagecount).ToList();
-                                }
+                        InitContentPages(val, mcodes, attrs, ref contententitysT, pageNumber, ref extHtmls);
 
-                            }
-                        }
                     }
+
                     //处理连接地址
                     contententitysT.ForEach(delegate(ContentEntity model)
                     {
@@ -1423,30 +1261,10 @@ namespace CMS.Application.Comm
                         }
 
                     });
-                    if (contententitysT != null && contententitysT.Count > 0)
-                    {
-                        foreach (ContentEntity contententity in contententitys)
-                        {
-                            strs += GetHtmlPage(mcodes, contententity, attrs);
-                        }
-                    }
-                    //分页
-                    if (attrs.ContainsKey("pagestyle"))
-                    {
-                        string val = "";
-                        attrs.TryGetValue("pagestyle", out val);
-                        if (val.ToLower() == "newpage")
-                        {
-                            strs += "<input type='hidden' id='hdPageSize' value=" + totalPage + " />";
-                            strs += "<input type='hidden' id='hdcurrentPage' value=" + pageNumber + " />";
-                        }
-                    }
                 }
             }
-
-            return strs;
+            return contententitysT;
         }
-
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
@@ -1518,7 +1336,7 @@ namespace CMS.Application.Comm
             return strs;
         }
 
-        private static void InitContentPages(string val, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, int pageNumber, ref string extHtmls)
+        private static void InitContentPages(string val, string mcodes, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, int pageNumber, ref string extHtmls)
         {
             PageModel pageModel = InitPageModel(attrs, contententitys, pageNumber);
             switch (val.ToLower())
@@ -1527,7 +1345,7 @@ namespace CMS.Application.Comm
                     InitContentPageForNewPage(attrs, ref contententitys, pageModel, ref extHtmls);
                     break;
                 case "pageajax":
-                    InitContentPageForAjax(attrs, ref contententitys, pageModel, ref extHtmls);
+                    InitContentPageForAjax(mcodes, attrs, ref contententitys, pageModel, ref extHtmls);
                     break;
             }
         }
@@ -1535,16 +1353,9 @@ namespace CMS.Application.Comm
         private static PageModel InitPageModel(Dictionary<string, string> attrs, List<ContentEntity> contententitys, int pageNumber)
         {
             PageModel pageModel = new PageModel();
-            if (attrs.ContainsKey("totalcount"))
-            {
-                string totalcounts = string.Empty;
-                int totalcount = 0;
-                attrs.TryGetValue("totalcount", out totalcounts);
-                if (Int32.TryParse(totalcounts, out totalcount))
-                {
-                    pageModel.TotalCount = totalcount;
-                }
-            }
+
+            pageModel.TotalCount = contententitys.Count();
+
             if (attrs.ContainsKey("currcount"))
             {
                 string currcounts = string.Empty;
@@ -1555,14 +1366,14 @@ namespace CMS.Application.Comm
                     pageModel.CurrCount = currcount;
                 }
             }
-            if (attrs.ContainsKey("totalcount"))
+            if (attrs.ContainsKey("currpage"))
             {
-                string totalcounts = string.Empty;
-                int totalcount = 0;
-                attrs.TryGetValue("totalcount", out totalcounts);
-                if (Int32.TryParse(totalcounts, out totalcount))
+                string currpages = string.Empty;
+                int currpage = 0;
+                attrs.TryGetValue("currpage", out currpages);
+                if (Int32.TryParse(currpages, out currpage))
                 {
-                    pageModel.TotalCount = totalcount;
+                    pageModel.CurrPage = currpage;
                 }
             }
             string eleStrIds = string.Empty;
@@ -1585,45 +1396,51 @@ namespace CMS.Application.Comm
 
         private static void InitContentPageForNewPage(Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
         {
-            //行数
-            if (attrs.ContainsKey("pagecount"))
+            if (pagemodel.CurrCount > 0)
             {
-                string pagecountStr = "";
-                attrs.TryGetValue("pagecount", out pagecountStr);
-                int pagecount = 0;
-                if (int.TryParse(pagecountStr, out pagecount))
-                {
-                    double decnum = (contententitys.Count() / (double)pagecount);
-
-                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
-                    int totalPage = 0;
-                    Int32.TryParse(res, out totalPage);
-                    int pageNumberT = 0;
-                    int skipCount = pageNumberT * pagecount;
-                    contententitys = contententitys.Skip(skipCount).Take(pagecount).ToList();
-                    pagemodel.TotalPage = totalPage;
-                }
-
-                extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "' totalCount='" + pagemodel.TotalCount + "' currCount='" + pagemodel.CurrCount + "' totalPage='" + pagemodel.TotalPage + "' currPage='" + pagemodel.CurrPage + "'/>";
+                int pageNumberT = pagemodel.CurrPage - 1;
+                int skipCount = pageNumberT * pagemodel.CurrCount;
+                contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount).ToList();
+                extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "' totalCount='" + pagemodel.TotalCount + "' currCount='" +
+                    pagemodel.CurrCount + "' totalPage='" + pagemodel.TotalPage + "' currPage='" +
+                    pagemodel.CurrPage + "' eleId='" + pagemodel.EleId + "'/>";
             }
         }
-        private static void InitContentPageForAjax(Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
+        private static void InitContentPageForAjax(string mcodes, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
         {
+            //string mcodesT = mcodes.Clone().ToString();
+            //mcodesT = mcodesT.Replace(STARTMC, "").Replace(ENDMC, "");
             int pageNumberT = 0;
             int skipCount = pageNumberT * pagemodel.CurrCount;
             contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount).ToList();
 
-            extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "'  totalCount='" +
-                pagemodel.TotalCount + "' currCount='" + pagemodel.CurrCount + "' totalPage='" +
-                pagemodel.TotalPage + "' currPage='" + pagemodel.CurrPage + "' class='hdsyspage' ";
+            extHtmls += "<div style='display:none;' id='hd" + pagemodel.EleId + "'  totalCount='" +
+                pagemodel.TotalCount + "' totalPage='" +
+                pagemodel.TotalPage + "' currPage='" + pagemodel.CurrPage + "' eleId='" + pagemodel.EleId + "' class='hdsyspage' ";
             if (attrs != null && attrs.Count > 0)
             {
                 foreach (var item in attrs)
                 {
-                    extHtmls += item.Key + "='" + item.Value + "' ";
+                    if (!item.Key.Contains("_"))
+                    {
+                        extHtmls += item.Key + "='" + item.Value + "' ";
+                    }
                 }
             }
-            extHtmls += "/>";
+            extHtmls += ">";
+
+            extHtmls += "<div style='display:none;'>";
+            foreach (var item in attrs)
+            {
+                if (item.Key.Contains("_"))
+                {
+                    extHtmls += "<span class='sysajaxpageattr' fname='" + item.Key + "' fvalue='" + item.Key + "'></span>";
+                }
+            }
+            extHtmls += "</div>";
+            extHtmls += mcodes;
+
+            extHtmls += "</div>";
         }
 
         #endregion
@@ -1712,7 +1529,7 @@ namespace CMS.Application.Comm
                                 {
                                     strs = System.Web.HttpUtility.HtmlDecode(strs);
                                 }
-                                strs = InitFormat(strs, attrs);
+                                strs = InitFormat(name, strs, attrs);
                             }
                         }
                     }
@@ -1931,7 +1748,6 @@ namespace CMS.Application.Comm
             string htmls = string.Empty;
             try
             {
-                int iFlay = 0;
                 bool isNoFind = true;
                 int irequestType = (int)Enums.TempletType.Common;
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
@@ -1966,7 +1782,6 @@ namespace CMS.Application.Comm
                                 if (urlRaws.Count == 2)
                                 {
                                     Ids = urlRaws.LastOrDefault();
-                                    iFlay = 1;
                                 }
                             }
                             if (templetmodel != null)
@@ -1992,18 +1807,6 @@ namespace CMS.Application.Comm
                                         htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
                                         isNoFind = false;
                                     }
-                                    //if (iFlay == 1)
-                                    //{
-                                    //    TempHelp temphelp = new TempHelp();
-                                    //    htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                    //    isNoFind = false;
-                                    //}
-                                    //else
-                                    //{
-                                    //    TempHelp temphelp = new TempHelp();
-                                    //    htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                    //    isNoFind = false;
-                                    //}
                                     //更新浏览数
                                     new ContentApp().UpdateViewNum(Ids, true);
                                 }
@@ -2036,7 +1839,6 @@ namespace CMS.Application.Comm
             string htmls = string.Empty;
             try
             {
-                int iFlay = 0;
                 isNoFind = true;
                 int irequestType = (int)Enums.TempletType.Common;
                 if (entity != null && !string.IsNullOrEmpty(entity.Id))
@@ -2071,7 +1873,6 @@ namespace CMS.Application.Comm
                                 if (urlRaws.Count >= 2)
                                 {
                                     Ids = urlRaws.LastOrDefault();
-                                    iFlay = 1;
                                 }
                             }
                             if (templetmodel != null)
@@ -2097,18 +1898,6 @@ namespace CMS.Application.Comm
                                         htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
                                         isNoFind = false;
                                     }
-                                    //if (iFlay == 1)
-                                    //{
-                                    //    TempHelp temphelp = new TempHelp();
-                                    //    htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                    //    isNoFind = false;
-                                    //}
-                                    //else
-                                    //{
-                                    //    TempHelp temphelp = new TempHelp();
-                                    //    htmls = temphelp.GetHtmlPages(entity.ShortName, htmls, Ids, irequestType);
-                                    //    isNoFind = false;
-                                    //}
                                     //更新浏览数
                                     new ContentApp().UpdateViewNum(Ids, true);
                                 }
@@ -2211,7 +2000,7 @@ namespace CMS.Application.Comm
             string contexts = context;
 
             //处理时间格式
-            string formatNames = "formattime";
+            string formatNames = "formattime_" + context;
             if (attrs.ContainsKey(formatNames))
             {
                 DateTime Times = new DateTime();
@@ -2369,7 +2158,107 @@ namespace CMS.Application.Comm
             contentEntity = c_ContentApp.GetFormNoDel(Ids);
             return contentEntity;
         }
-    }
         #endregion
 
+        #region 获取ajax 分页数据 +ExtPageModel GetContentModels(ExtPageModel pageModel)
+        /// <summary>
+        /// 获取ajax 分页数据
+        /// </summary>
+        /// <returns></returns>
+        public ExtPageModel GetContentModels(ExtPageModel pageModel)
+        {
+            ExtPageModel extPageModel = new ExtPageModel();
+            string strs = string.Empty;
+            List<ContentEntity> contententitys = new List<ContentEntity>();
+            IQueryable<ContentEntity> contententitysT = null;
+
+            ContentApp c_ContentApp = new ContentApp();
+            //数据源
+            if (!string.IsNullOrEmpty(pageModel.SourceName))
+            {
+                ColumnsEntity moduleentity = new ColumnsEntity();
+                ColumnsApp c_ModulesApp = new ColumnsApp();
+                moduleentity = c_ModulesApp.GetFormByActionName(pageModel.SourceName);
+                if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+                {
+                    contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
+                }
+            }
+            else
+            {
+                contententitysT = c_ContentApp.GetListIq(pageModel.SourceIds);
+            }
+            if (contententitysT != null)
+            {
+                //排序
+                if (!string.IsNullOrEmpty(pageModel.Sort))
+                {
+                    contententitysT = contententitysT.OrderBy(pageModel.Sort);
+                }
+                if (!string.IsNullOrEmpty(pageModel.SortDesc))
+                {
+                    contententitysT = contententitysT.OrderBy(pageModel.SortDesc);
+                }
+
+                //行数
+                if (pageModel.Total > 0)
+                {
+                    contententitysT = contententitysT.Take(pageModel.Total);
+                }
+                contententitys = contententitysT.ToList();
+
+
+                if (pageModel.CurrCount > 0 && pageModel.CurrPage > 0)
+                {
+                    double decnum = (contententitys.Count() / (double)pageModel.CurrCount);
+                    string res = Math.Ceiling(Convert.ToDecimal(decnum)).ToString();
+                    int totalPage = 0;
+                    Int32.TryParse(res, out totalPage);
+                    extPageModel.TotalPage = totalPage;
+                    extPageModel.TotalCount = contententitys.Count();
+
+                    int pageNumberT = pageModel.CurrPage - 1;
+                    int skCount = pageNumberT * pageModel.CurrCount;
+                    contententitys = contententitys.Skip(skCount).Take(pageModel.CurrCount).ToList();
+
+                    extPageModel.CurrCount = pageModel.CurrCount;
+                    extPageModel.CurrPage = pageModel.CurrPage + 1;
+                }
+
+                if (contententitys != null && contententitys.Count > 0)
+                {
+                    //处理连接地址
+                    contententitys.ForEach(delegate(ContentEntity model)
+                    {
+
+                        if (model != null && model.UrlAddress != null)
+                        {
+                            model.UrlPage = model.UrlAddress;
+                            model.UrlPage = model.UrlPage.Replace(@"\", "/");
+                        }
+
+                    });
+                }
+                if (!pageModel.IsHtml)
+                {
+                    extPageModel.ContentModels = contententitys;
+                }
+                else
+                {
+                    if (contententitys != null && contententitys.Count > 0)
+                    {
+                        foreach (ContentEntity contententity in contententitys)
+                        {
+                            strs += GetHtmlPage(pageModel.MCodes, contententity, new Dictionary<string, string>());
+                        }
+                    }
+                    extPageModel.Htmlstr = strs;
+                }
+            }
+            return extPageModel;
+        }
+
+
+        #endregion
+    }
 }
