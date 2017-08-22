@@ -348,6 +348,7 @@ namespace CMS.Application.Comm
         
         #endregion
 
+        #region 获取请求路径栏目Id -string GetColumnIds(System.Web.HttpContext context)
         /// <summary>
         /// 获取请求路径栏目Id
         /// </summary>
@@ -382,8 +383,10 @@ namespace CMS.Application.Comm
             }
 
             return cIds;
-        }
+        } 
+        #endregion
 
+        #region 获取请求urlHost +string GetHost(System.Web.HttpContext context)
         /// <summary>
         /// 获取请求urlHost
         /// </summary>
@@ -398,8 +401,10 @@ namespace CMS.Application.Comm
             }
             return urlHost;
         }
+        
+        #endregion
 
-
+        #region 获取请求urlHost +string GetHostRequest(System.Web.HttpRequestBase request)
         /// <summary>
         /// 获取请求urlHost
         /// </summary>
@@ -413,6 +418,7 @@ namespace CMS.Application.Comm
                 urlHost = request.Url.Authority;
             }
             return urlHost;
-        }
+        } 
+        #endregion
     }
 }

@@ -1173,19 +1173,19 @@ namespace CMS.Application.Comm
                     }
 
                 }
-                contententitys = contententitysT.ToList();
 
-                if (contententitys != null && contententitys.Count > 0)
+                //if (contententitys != null && contententitys.Count > 0)
+                if (contententitysT != null)
                 {
-
                     //分页
                     if (attrs.ContainsKey("pagestyle"))
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-                        InitContentPages(val, mcodes, attrs, ref contententitys, pageNumber, ref extHtmls);
+                        InitContentPages(val, mcodes, attrs, ref contententitysT, pageNumber, ref extHtmls);
                     }
 
+                    contententitys = contententitysT.ToList();
                     //处理连接地址
                     contententitys.ForEach(delegate(ContentEntity model)
                     {
@@ -1236,24 +1236,21 @@ namespace CMS.Application.Comm
                         contententitys = contententitys.Take(tatolnum);
                     }
                 }
-                contententitysT = contententitys.ToList();
 
-                if (contententitysT != null && contententitysT.Count > 0)
+                if (contententitys != null)
                 {
-
                     //分页
                     if (attrs.ContainsKey("pagestyle"))
                     {
                         string val = "";
                         attrs.TryGetValue("pagestyle", out val);
-                        InitContentPages(val, mcodes, attrs, ref contententitysT, pageNumber, ref extHtmls);
-
+                        InitContentPages(val, mcodes, attrs, ref contententitys, pageNumber, ref extHtmls);
                     }
+                    contententitysT = contententitys.ToList();
 
                     //处理连接地址
                     contententitysT.ForEach(delegate(ContentEntity model)
                     {
-
                         if (model != null && model.UrlAddress != null)
                         {
                             model.UrlPage = model.UrlAddress;
@@ -1336,7 +1333,7 @@ namespace CMS.Application.Comm
             return strs;
         }
 
-        private static void InitContentPages(string val, string mcodes, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, int pageNumber, ref string extHtmls)
+        private static void InitContentPages(string val, string mcodes, Dictionary<string, string> attrs, ref IQueryable<ContentEntity> contententitys, int pageNumber, ref string extHtmls)
         {
             PageModel pageModel = InitPageModel(attrs, contententitys, pageNumber);
             switch (val.ToLower())
@@ -1350,7 +1347,7 @@ namespace CMS.Application.Comm
             }
         }
 
-        private static PageModel InitPageModel(Dictionary<string, string> attrs, List<ContentEntity> contententitys, int pageNumber)
+        private static PageModel InitPageModel(Dictionary<string, string> attrs, IQueryable<ContentEntity> contententitys, int pageNumber)
         {
             PageModel pageModel = new PageModel();
 
@@ -1394,25 +1391,23 @@ namespace CMS.Application.Comm
             return pageModel;
         }
 
-        private static void InitContentPageForNewPage(Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
+        private static void InitContentPageForNewPage(Dictionary<string, string> attrs, ref IQueryable<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
         {
             if (pagemodel.CurrCount > 0)
             {
                 int pageNumberT = pagemodel.CurrPage - 1;
                 int skipCount = pageNumberT * pagemodel.CurrCount;
-                contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount).ToList();
+                contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount);
                 extHtmls += "<input type='hidden' id='hd" + pagemodel.EleId + "' totalCount='" + pagemodel.TotalCount + "' currCount='" +
                     pagemodel.CurrCount + "' totalPage='" + pagemodel.TotalPage + "' currPage='" +
                     pagemodel.CurrPage + "' eleId='" + pagemodel.EleId + "'/>";
             }
         }
-        private static void InitContentPageForAjax(string mcodes, Dictionary<string, string> attrs, ref List<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
+        private static void InitContentPageForAjax(string mcodes, Dictionary<string, string> attrs, ref IQueryable<ContentEntity> contententitys, PageModel pagemodel, ref string extHtmls)
         {
-            //string mcodesT = mcodes.Clone().ToString();
-            //mcodesT = mcodesT.Replace(STARTMC, "").Replace(ENDMC, "");
             int pageNumberT = 0;
             int skipCount = pageNumberT * pagemodel.CurrCount;
-            contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount).ToList();
+            contententitys = contententitys.Skip(skipCount).Take(pagemodel.CurrCount);
 
             extHtmls += "<div style='display:none;' id='hd" + pagemodel.EleId + "'  totalCount='" +
                 pagemodel.TotalCount + "' totalPage='" +

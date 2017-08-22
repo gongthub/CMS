@@ -41,20 +41,35 @@ function initNewPageEle(eleId) {
     }
 }
 
-//初始化Ajax分页加载控件
-function initAjaxPageEle(eleId)
-{
+//初始化Ajax分页加载控件 重新填充当前区域
+function initAjaxPageEle(eleId) {
     var hdPageEle = $("#hd" + eleId);
     var totalPages = hdPageEle.attr("totalPage");
     var currPages = hdPageEle.attr("currPage");
     var totalPage = Number(totalPages);
     var currPage = Number(currPages);
-    if (currPages >= currPage) {
-        initPage(eleId,currPage, totalPage);
+    if (totalPage >= currPage) {
+        initPage(eleId, currPage, totalPage);
     }
 }
 
-function initPage(eleId,currpage, totalpage) {
+//初始化Ajax分页加载控件 叠加内容在内容区域
+function initAjaxPageEleOver(eleId) {
+    var hdPageEle = $("#hd" + eleId);
+    var totalPages = hdPageEle.attr("totalPage");
+    var currPages = hdPageEle.attr("currPage");
+    var totalPage = Number(totalPages);
+    var currPage = Number(currPages);
+    var nextdiv = "";
+    if (totalPage >= currPage) {
+        nextdiv = '<div class="syspageEleNext" id="syspageEleNext' + eleId + '" onclick="initPageOver(' + "'" + eleId + "'" + ')" style="cursor:pointer">加载更多...</div>';
+    } else {
+        nextdiv = '<div class="syspageEleNextNull">没有更多了</div>';
+    }
+    $("#pageEle" + eleId).append(nextdiv);
+}
+
+function initPage(eleId, currpage, totalpage) {
 
     $("#pageEle" + eleId).pagination({
         currentPage: currpage,
@@ -66,12 +81,42 @@ function initPage(eleId,currpage, totalpage) {
         prevPageText: "上一页",
         nextPageText: "下一页",
         callback: function (current) {
-            GetDatas(eleId, current);
+            GetDatas(eleId, current, 1);
         }
     });
 }
 
-function GetDatas(Ids, curr) {
+function initPageOver(eleId) {
+    var hdPageEle = $("#hd" + eleId);
+    var totalPages = hdPageEle.attr("totalPage");
+    var currPages = hdPageEle.attr("currPage");
+    var totalPage = Number(totalPages);
+    var currPage = Number(currPages);
+    currPage++;
+    if (totalPage >= currPage) {
+        GetDatas(eleId, currPage, 2);
+    }
+    if (totalPage <= currPage) {
+        $("#syspageEleNext" + eleId).remove();
+        var nextdiv = '<div class="syspageEleNext">没有更多了</div>';
+        $("#pageEle" + eleId).append(nextdiv);
+    }
+    //$("#pageEle" + eleId).pagination({
+    //    currentPage: currpage,
+    //    totalPage: totalpage,
+    //    isShow: true,
+    //    count: 7,
+    //    homePageText: "首页",
+    //    endPageText: "尾页",
+    //    prevPageText: "上一页",
+    //    nextPageText: "下一页",
+    //    callback: function (current) {
+    //        GetDatas(eleId, current, 2);
+    //    }
+    //});
+}
+
+function GetDatas(Ids, curr, contentType) {
     var hdPageEle = $("#hd" + Ids);
     var currCounts = hdPageEle.attr("currCount");
     var sourcename = hdPageEle.attr("sourcename");
@@ -130,9 +175,17 @@ function GetDatas(Ids, curr) {
             if (data.IsHtml == "false") {
                 return data.ContentModels;
             } else {
-                var ohtmls = hdPageEle[0].outerHTML;
-                var PageEle = $("#" + Ids);
-                PageEle.html(data.Htmlstr + ohtmls);
+                if (contentType == 1) {
+                    var ohtmls = hdPageEle[0].outerHTML;
+                    var PageEle = $("#" + Ids);
+                    PageEle.html(data.Htmlstr + ohtmls);
+                } else
+                    if (contentType == 2) {
+                        var PageEle = $("#" + Ids);
+                        var oldHtmls = PageEle.html();
+                        PageEle.html(oldHtmls + data.Htmlstr);
+                    }
+
             }
             hdPageEle = $("#hd" + Ids);
             hdPageEle.attr("totalCount", data.TotalCount);
