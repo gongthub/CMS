@@ -96,15 +96,15 @@ namespace CMS.Application.Comm
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
-        private static readonly string HTMLSAVEPATH = ConfigurationManager.AppSettings["htmlSrc"].ToString();
+        private static readonly string HTMLSAVEPATH = ConfigHelp.configHelp.HTMLSRC;
         /// <summary>
         /// 静态页面相对路径
         /// </summary>
-        private static readonly string HTMLSAVEHTMLPATH = ConfigurationManager.AppSettings["htmlSrcPath"].ToString();
+        private static readonly string HTMLSAVEHTMLPATH = ConfigHelp.configHelp.HTMLSRCPATH;
         /// <summary>
         /// 网站资源文件根目录
         /// </summary>
-        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
         /// <summary>
         /// 网站根路径
         /// </summary>

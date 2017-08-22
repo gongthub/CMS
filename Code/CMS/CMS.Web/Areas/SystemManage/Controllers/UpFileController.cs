@@ -16,7 +16,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
     public class UpFileController : ControllerBase
     {
 
-        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
 
         [HttpPost]

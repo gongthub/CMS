@@ -261,7 +261,7 @@ namespace CMS.Application.Comm
         public bool IsLoginHost(System.Web.HttpContext context)
         {
             bool bState = false;
-            string urlHost = GetHost(context); ;
+            string urlHost = GetHost(context); 
             //string urlPath = context.Request.Path.ToString();
 
             //if (urlPath.Length >= LOGINURLMARK.Length)

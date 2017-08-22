@@ -129,6 +129,66 @@ namespace CMS.Code
                 return WebSiteSize;
             }
         }
+        /// <summary>
+        /// PanGu配置路径
+        /// </summary>
+        public string PANGUXML
+        {
+            get
+            {
+                return Code.Configs.GetValue("PanguXml").ToString();
+            }
+        }
+        /// <summary>
+        /// PanGu字典路径
+        /// </summary>
+        public string PANGUDICPATH
+        {
+            get
+            {
+                return Code.Configs.GetValue("PanguDicPath").ToString();
+            }
+        }
+        /// <summary>
+        /// Lucence索引路径
+        /// </summary>
+        public string LUCENCEINDEXPATH
+        {
+            get
+            {
+                return Code.Configs.GetValue("LucenceIndexPath").ToString();
+            }
+        }
+        /// <summary>
+        /// 静态页面缓存路径
+        /// </summary>
+        public string HTMLSRC
+        {
+            get
+            {
+                return Code.Configs.GetValue("htmlSrc").ToString();
+            }
+        }
+        /// <summary>
+        /// 网站资源文件路径
+        /// </summary>
+        public string HTMLCONTENTSRC
+        {
+            get
+            {
+                return Code.Configs.GetValue("htmlContentSrc").ToString();
+            }
+        }
+        /// <summary>
+        /// 静态页面相对路径
+        /// </summary>
+        public string HTMLSRCPATH
+        {
+            get
+            {
+                return Code.Configs.GetValue("htmlSrcPath").ToString();
+            }
+        }
         #endregion
 
         #region 上传图片配置

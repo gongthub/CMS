@@ -23,11 +23,11 @@ namespace CMS.Application.WebManage
         /// <summary>
         /// 静态页面缓存路径
         /// </summary>
-        private static readonly string HTMLSRC = Code.Configs.GetValue("htmlSrc");
+        private static readonly string HTMLSRC = ConfigHelp.configHelp.HTMLSRC;
         /// <summary>
         /// 网站资源文件根目录
         /// </summary>
-        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
 
         /// <summary>
         /// 上传图片保存路径

@@ -26,9 +26,9 @@ namespace CMS.MySqlRepository
 
 
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
-        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
         private static readonly string SYSFILEFORDEL = Code.ConfigHelp.configHelp.SYSFILEFORDEL;
-        private static readonly string HTMLSRE = Code.Configs.GetValue("htmlSrc");
+        private static readonly string HTMLSRE = ConfigHelp.configHelp.HTMLSRC;
         private static readonly string UPLOADIMG = Code.ConfigHelp.configHelp.UPLOADIMG;
         private static readonly string UPLOADFILE = Code.ConfigHelp.configHelp.UPLOADFILE;
 

@@ -19,9 +19,9 @@ namespace CMS.Application.Comm
 {
     public class LucenceHelp
     {
-        private static string PANGUXML = Configs.GetValue("PanguXml");
-        private static string PANGUDICPATH = Configs.GetValue("PanguDicPath");
-        private static string LUCENCEINDEXPATH = Configs.GetValue("LucenceIndexPath");
+        private static string PANGUXML = ConfigHelp.configHelp.PANGUXML;
+        private static string PANGUDICPATH = ConfigHelp.configHelp.PANGUDICPATH;
+        private static string LUCENCEINDEXPATH = ConfigHelp.configHelp.LUCENCEINDEXPATH;
         private static DirectoryInfo INDEX_DIR;
         private static Analyzer analyzer = new PanGuAnalyzer();
 

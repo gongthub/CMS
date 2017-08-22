@@ -11,7 +11,7 @@ namespace CMS.Application.WebManage
 {
     public class ResourceApp
     {
-        private static readonly string HTMLCONTENTSRC = Code.Configs.GetValue("htmlContentSrc");
+        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
         private static readonly string WEBURLHTTP = Code.Configs.GetValue("WebUrlHttp");
 
         /// <summary>

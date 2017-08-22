@@ -340,7 +340,7 @@ namespace CMS.Code
         /// </summary>
         /// <param name="dir1">要移动的文件的路径及全名(包括后缀)</param>
         /// <param name="dir2">文件移动到新的位置,并指定新的文件名</param>
-        public static void MoveDir(string dir1, string dir2,string basedir)
+        public static void MoveDir(string dir1, string dir2, string basedir)
         {
             basedir = MapPath(basedir);
             if (!IsExistDirectory(basedir))
@@ -958,6 +958,35 @@ namespace CMS.Code
         {
             return System.IO.Path.GetFullPath(path);
         }
+
+        /// <summary>
+        /// WebForm和WinForm通用的取当前根目录的方法 
+        /// </summary>
+        public static string BasePath
+        {
+            get
+            {
+                System.Diagnostics.Process p = System.Diagnostics.Process.GetCurrentProcess();
+                //WebDev.WebServer      visual studio web server
+                //xxx.vhost             Winform
+                //w3wp                  IIS7
+                //aspnet_wp             IIS6
+                string processName = p.ProcessName.ToLower();
+                if (processName == "aspnet_wp" || processName == "w3wp" || processName == "webdev.webserver")
+                {
+                    if (System.Web.HttpContext.Current != null)
+                        return System.Web.HttpContext.Current.Server.MapPath("~/").TrimEnd(new char[] { '\\' });
+                    else //当控件在定时器的触发程序中使用时就为空
+                    {
+                        return System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd(new char[] { '\\' });
+                    }
+                }
+                else
+                {
+                    return System.Windows.Forms.Application.StartupPath;
+                }
+            }
+        }
         #endregion
 
         #region 将内容写入文本文件(如果文件path存在就打开，不存在就新建)
@@ -1133,7 +1162,7 @@ namespace CMS.Code
                 }
             }
             return len;
-        } 
+        }
         #endregion
     }
 }
