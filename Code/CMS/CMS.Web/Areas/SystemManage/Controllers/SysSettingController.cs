@@ -16,7 +16,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                CacheHelp.cacheHelp.RemoveAll();
+                new CacheHelp().RemoveAll();
                 return Success("清除成功。");
             }
             catch (Exception e)
@@ -34,7 +34,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         {
             try
             {
-                CacheHelp.cacheHelp.RemoveAuthorizeurlDatas();
+                new CacheHelp().RemoveAuthorizeurlDatas();
                 return Success("清除成功。");
             }
             catch (Exception e)

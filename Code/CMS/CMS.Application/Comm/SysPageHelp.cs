@@ -181,7 +181,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private AccessLogEntity InitAccessLog(System.Web.HttpContext context)
         {
-            string urlHost = RequestHelp.requestHelp.GetHost(context);
+            string urlHost = new RequestHelp().GetHost(context);
             string urlRaw = context.Request.RawUrl.ToString();
             AccessLogEntity entity = new AccessLogEntity();
             entity.WebSiteName = urlHost;

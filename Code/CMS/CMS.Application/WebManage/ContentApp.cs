@@ -284,7 +284,7 @@ namespace CMS.Application.WebManage
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
 
-                    TempHelp.tempHelp.GenHtmlPage(templets, keyValue);
+                    new TempHelp().GenHtmlPage(templets, keyValue);
                 }
             }
             //添加日志
@@ -308,8 +308,8 @@ namespace CMS.Application.WebManage
                 {
                     string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
 
-                    TempHelp.tempHelp.GenHtmlPage(templets, keyValue);
-                    htmls = TempHelp.tempHelp.GetHtmlPages(templets, keyValue);
+                    new TempHelp().GenHtmlPage(templets, keyValue);
+                    htmls = new TempHelp().GetHtmlPages(templets, keyValue);
                 }
             }
 

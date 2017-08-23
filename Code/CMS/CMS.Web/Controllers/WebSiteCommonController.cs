@@ -35,7 +35,7 @@ namespace CMS.Web.Controllers
         public ActionResult GetContentModels()
         {
             System.Web.HttpContext context = System.Web.HttpContext.Current;
-            object objDatas = RequestHelp.requestHelp.GetPageModels(context);
+            object objDatas = new RequestHelp().GetPageModels(context);
             return Json(objDatas);
         }
     }

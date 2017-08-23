@@ -70,7 +70,7 @@ namespace CMS.Application.SystemManage
         {
             var authorizeurldata = new List<AuthorizeActionModel>();
             //var cachedata = CacheFactory.cacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
-            var cachedata = CacheHelp.cacheHelp.GetAuthorizeurlDatas(roleId);
+            var cachedata = new CacheHelp().GetAuthorizeurlDatas(roleId);
             if (cachedata == null)
             {
                 var moduledata = moduleApp.GetList();
@@ -92,7 +92,7 @@ namespace CMS.Application.SystemManage
                     }
                 }
                 //CacheFactory.cacheFactory.Cache().WriteCache(authorizeurldata, "authorizeurldata_" + roleId, DateTime.Now.AddMinutes(5));
-                CacheHelp.cacheHelp.WriteAuthorizeurlDatas(authorizeurldata, roleId);
+                new CacheHelp().WriteAuthorizeurlDatas(authorizeurldata, roleId);
             }
             else
             {

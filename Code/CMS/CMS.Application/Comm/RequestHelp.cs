@@ -18,34 +18,7 @@ namespace CMS.Application.Comm
     {
         private static string LOGINHOSTCONFIGALLMARK = "*";
         private static string LOGINURLMARK = "/Login/Index";
-        #region 单例模式创建对象
-        //单例模式创建对象
-        private static RequestHelp _requestHelp = null;
-        // Creates an syn object.
-        private static readonly object SynObject = new object();
-        RequestHelp()
-        {
-        }
-
-        public static RequestHelp requestHelp
-        {
-            get
-            {
-                // Double-Checked Locking
-                if (null == _requestHelp)
-                {
-                    lock (SynObject)
-                    {
-                        if (null == _requestHelp)
-                        {
-                            _requestHelp = new RequestHelp();
-                        }
-                    }
-                }
-                return _requestHelp;
-            }
-        }
-        #endregion
+        private static RequestHelp _requestHelp = new RequestHelp();
 
         #region 处理请求 +void InitRequest(System.Web.HttpContext context)
         /// <summary>
@@ -95,7 +68,7 @@ namespace CMS.Application.Comm
                         {
                             context.Response.Clear();
                             bool isNoFind = false;
-                            htmls = TempHelp.tempHelp.GetHtmlByUrl(urlHost, urlRaw, out isNoFind);
+                            htmls = new TempHelp().GetHtmlByUrl(urlHost, urlRaw, out isNoFind);
                             if (isNoFind)
                             {
                                 context.Response.StatusCode = 404;
@@ -229,7 +202,7 @@ namespace CMS.Application.Comm
             bool bState = false;
             //判断是否前台url
             //if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw) && Common.IsExistExtended(urlRaw))
-            if (TempHelp.tempHelp.IsWebSite(urlhost, urlRaw))
+            if (new TempHelp().IsWebSite(urlhost, urlRaw))
             {
                 bState = true;
             }
@@ -261,7 +234,7 @@ namespace CMS.Application.Comm
         public bool IsLoginHost(System.Web.HttpContext context)
         {
             bool bState = false;
-            string urlHost = GetHost(context); 
+            string urlHost = GetHost(context);
             //string urlPath = context.Request.Path.ToString();
 
             //if (urlPath.Length >= LOGINURLMARK.Length)
@@ -341,11 +314,11 @@ namespace CMS.Application.Comm
                 {
                     extPageModelReq.AttrDatas = Json.ToObject<Dictionary<string, string>>(attrDatas);
                 }
-                extPageModel = TempHelp.tempHelp.GetContentModels(extPageModelReq);
+                extPageModel = new TempHelp().GetContentModels(extPageModelReq);
             }
             return extPageModel;
         }
-        
+
         #endregion
 
         #region 获取请求路径栏目Id -string GetColumnIds(System.Web.HttpContext context)
@@ -383,7 +356,7 @@ namespace CMS.Application.Comm
             }
 
             return cIds;
-        } 
+        }
         #endregion
 
         #region 获取请求urlHost +string GetHost(System.Web.HttpContext context)
@@ -401,7 +374,7 @@ namespace CMS.Application.Comm
             }
             return urlHost;
         }
-        
+
         #endregion
 
         #region 获取请求urlHost +string GetHostRequest(System.Web.HttpRequestBase request)
@@ -418,7 +391,7 @@ namespace CMS.Application.Comm
                 urlHost = request.Url.Authority;
             }
             return urlHost;
-        } 
+        }
         #endregion
     }
 }

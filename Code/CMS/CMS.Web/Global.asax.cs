@@ -32,12 +32,12 @@ namespace CMS.Web
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
             HttpContext context = HttpContext.Current;
-            RequestHelp.requestHelp.InitRequest(context);
+            new RequestHelp().InitRequest(context);
         }
         protected void Application_EndRequest(object sender, EventArgs e)
         {
             HttpContext context = HttpContext.Current;
-            RequestHelp.requestHelp.EndRequest(context);
+            new RequestHelp().EndRequest(context);
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

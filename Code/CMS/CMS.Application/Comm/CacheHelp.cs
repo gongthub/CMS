@@ -12,37 +12,12 @@ namespace CMS.Application.Comm
 {
     public class CacheHelp
     {
+
+        private static CacheHelp _cacheHelp = new CacheHelp();
         private static ICacheRepository iCacheRepository = DataAccess.CreateICacheRepository();
-
-        #region 单例模式创建对象
-        //单例模式创建对象
-        private static CacheHelp _cacheHelp = null;
-        // Creates an syn object.
-        private static readonly object SynObject = new object();
-        CacheHelp()
+        public CacheHelp()
         {
         }
-
-        public static CacheHelp cacheHelp
-        {
-            get
-            {
-                // Double-Checked Locking
-                if (null == _cacheHelp)
-                {
-                    lock (SynObject)
-                    {
-                        if (null == _cacheHelp)
-                        {
-                            _cacheHelp = new CacheHelp();
-                            iCacheRepository = DataAccess.CreateICacheRepository();
-                        }
-                    }
-                }
-                return _cacheHelp;
-            }
-        }
-        #endregion
         /// <summary>
         /// 移除所有缓存
         /// </summary>

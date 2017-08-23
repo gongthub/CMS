@@ -80,7 +80,7 @@ namespace CMS.Application.WebManage
         public string GetWebSiteId(System.Web.HttpRequestBase request)
         {
             string webSiteIds = string.Empty;
-            string hosturl = Comm.RequestHelp.requestHelp.GetHostRequest(request);
+            string hosturl = new RequestHelp().GetHostRequest(request);
             WebSiteEntity webSiteEntity = GetModelByUrlHost(hosturl);
             if (webSiteEntity != null)
             {

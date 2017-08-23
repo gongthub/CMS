@@ -30,7 +30,7 @@ namespace CMS.Application.Comm.Tests
             HttpWorkerRequest wr = new MyWorkerRequest
             ("/", "", tw, address);
             HttpContext.Current = new HttpContext(wr);
-            RequestHelp.requestHelp.InitRequest(HttpContext.Current);
+            new RequestHelp().InitRequest(HttpContext.Current);
         }
 
         [TestMethod()]

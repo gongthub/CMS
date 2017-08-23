@@ -18,33 +18,33 @@ namespace CMS.Application.Comm
 {
     public class TempHelp
     {
+        private static TempHelp _tempHelp = new TempHelp();
         #region 单例模式创建对象
         //单例模式创建对象
-        private static TempHelp _tempHelp = null;
-        // Creates an syn object.
-        private static readonly object SynObject = new object();
-        TempHelp()
-        {
-        }
+        //// Creates an syn object.
+        //private static readonly object SynObject = new object();
+        //TempHelp()
+        //{
+        //}
 
-        public static TempHelp tempHelp
-        {
-            get
-            {
-                // Double-Checked Locking
-                if (null == _tempHelp)
-                {
-                    lock (SynObject)
-                    {
-                        if (null == _tempHelp)
-                        {
-                            _tempHelp = new TempHelp();
-                        }
-                    }
-                }
-                return _tempHelp;
-            }
-        }
+        //public static TempHelp tempHelp
+        //{
+        //    get
+        //    {
+        //        // Double-Checked Locking
+        //        if (null == _tempHelp)
+        //        {
+        //            lock (SynObject)
+        //            {
+        //                if (null == _tempHelp)
+        //                {
+        //                    _tempHelp = new TempHelp();
+        //                }
+        //            }
+        //        }
+        //        return _tempHelp;
+        //    }
+        //}
         #endregion
         /// <summary>
         /// 输出文件格式
