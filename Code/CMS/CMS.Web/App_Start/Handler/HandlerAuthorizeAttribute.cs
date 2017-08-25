@@ -16,7 +16,12 @@ namespace CMS.Web
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (SysLoginObjHelp.sysLoginObjHelp.GetOperator() != null && SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
+            var operatorProvider = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (operatorProvider != null && SysLoginObjHelp.sysLoginObjHelp.GetOperator().IsSystem)
+            {
+                return;
+            }
+            if (operatorProvider == null)
             {
                 return;
             }

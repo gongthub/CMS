@@ -29,7 +29,7 @@ namespace CMS.Web
             if (SysLoginObjHelp.sysLoginObjHelp.GetOperator() == null || SysLoginObjHelp.sysLoginObjHelp.GetOperator().UserId == null)
             {
                 WebHelper.WriteCookie("cms_login_error", "overdue");
-                filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Login/Index';</script>");
+                filterContext.HttpContext.Response.Write("<script>top.location.href = '" + WEBURL + "/Login/Index';</script>"); 
                 return;
             }
         }
