@@ -62,6 +62,18 @@ namespace CMS.Code
             }
         }
         /// <summary>
+        /// 是否记录请求记录
+        /// </summary>
+        public bool ISPROREQUESTLOG
+        {
+            get
+            {
+                bool IsProRequestLog = false;
+                bool.TryParse(Code.Configs.GetValue("IsProRequestLog").ToString(), out IsProRequestLog);
+                return IsProRequestLog;
+            }
+        }
+        /// <summary>
         /// 是否启用端口
         /// </summary>
         public bool ISOPENPORT

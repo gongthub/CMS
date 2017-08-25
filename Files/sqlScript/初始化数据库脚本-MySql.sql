@@ -1953,3 +1953,42 @@ CREATE TABLE `sys_websites` (
 -- ----------------------------
 -- Records of sys_websites
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sys_requestlog`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_requestlog`;
+CREATE TABLE `sys_requestlog` (
+  `Id` varchar(50) NOT NULL,
+  `WebSiteID` varchar(50) DEFAULT NULL,
+  `WebSiteName` varchar(50) DEFAULT NULL,
+  `StartID` varchar(50) DEFAULT NULL,
+  `EndID` varchar(50) DEFAULT NULL,
+  `SessionID` varchar(50) DEFAULT NULL,
+  `ClientID` varchar(50) DEFAULT NULL,
+  `IPAddress` varchar(50) DEFAULT NULL,
+  `Province` varchar(50) DEFAULT NULL,
+  `City` varchar(50) DEFAULT NULL,
+  `Area` varchar(200) DEFAULT NULL,
+  `NetType` varchar(200) DEFAULT NULL,
+  `Browser` varchar(200) DEFAULT NULL,
+  `BrowserID` varchar(200) DEFAULT NULL,
+  `BrowserVersion` varchar(200) DEFAULT NULL,
+  `BrowserType` varchar(200) DEFAULT NULL,
+  `BrowserPlatform` varchar(200) DEFAULT NULL,
+  `PUrlAddress` varchar(200) DEFAULT NULL,
+  `UrlAddress` varchar(200) DEFAULT NULL,
+  `UrlHost` varchar(200) DEFAULT NULL,
+  `UrlRaw` varchar(200) DEFAULT NULL,
+  `Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Description` varchar(255) DEFAULT NULL,
+  `DeleteMark` tinyint(4) DEFAULT NULL,
+  `EnabledMark` tinyint(4) DEFAULT NULL,
+  `DeleteTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DeleteUserId` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_requestlog
+-- ----------------------------

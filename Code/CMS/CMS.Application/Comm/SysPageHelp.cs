@@ -16,6 +16,7 @@ namespace CMS.Application.Comm
     public class SysPageHelp
     {
         private const string CLINETID = "CMS_CLIENTID";
+        private const string SYSREQUESTID = "CMS_SYSREQUESTID";
 
         #region 单例模式创建对象
         //单例模式创建对象
@@ -208,6 +209,211 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         /// <returns></returns>
         private AccessLogEntity InitAccessLog(AccessLogEntity entity, bool IsProcessWebSite)
+        {
+            WebSiteApp app = new WebSiteApp();
+            WebSiteEntity webSiteEntity = app.GetModelByUrlHost(entity.WebSiteName);
+            if (webSiteEntity != null)
+            {
+                entity.WebSiteId = webSiteEntity.Id;
+            }
+            return entity;
+        }
+        #endregion
+
+        #region 创建系统请求访问日志
+
+        /// <summary>
+        /// 创建请求开始日志
+        /// </summary>
+        /// <param name="context"></param>
+        public void AddStartRequestLog(System.Web.HttpContext context)
+        {
+            if (Code.ConfigHelp.configHelp.ISPROREQUESTLOG)
+            {
+                InitRequestId(context);
+                RequestLogEntity entity = InitStartRequestLog(context);
+                CreateRequestLog(entity, true);
+            }
+        }
+
+        /// <summary>
+        /// 创建请求结束日志
+        /// </summary>
+        /// <param name="context"></param>
+        public void AddEndRequestLog(System.Web.HttpContext context)
+        {
+            if (Code.ConfigHelp.configHelp.ISPROREQUESTLOG)
+            {
+                RequestLogEntity entity = InitEndRequestLog(context);
+                CreateRequestLog(entity, true);
+            }
+        }
+
+        /// <summary>
+        /// 初始化请求唯一标识
+        /// </summary>
+        /// <param name="accessLogEntity"></param>
+        public void InitRequestId(System.Web.HttpContext context)
+        {
+            context.Request.Cookies.Remove(SYSREQUESTID);
+            HttpCookie cookieSys = new HttpCookie(SYSREQUESTID, Guid.NewGuid().ToString());
+            context.Request.Cookies.Set(cookieSys);
+        }
+
+        /// <summary>
+        /// 创建系统请求访问日志
+        /// </summary>
+        /// <param name="accessLogEntity"></param>
+        public void CreateRequestLog(RequestLogEntity entity)
+        {
+            InsertRequestLog(entity);
+        }
+
+        /// <summary>
+        /// 创建前台页面访问日志
+        /// </summary>
+        /// <param name="accessLogEntity"></param>
+        public void CreateRequestLog(RequestLogEntity entity, bool IsAsync)
+        {
+            if (IsAsync)
+            {
+                Thread thread = new Thread(new ThreadStart(() =>
+                {
+                    InsertRequestLog(entity);
+                }));
+                thread.Start();
+
+            }
+            else
+            {
+                InsertRequestLog(entity);
+            }
+        }
+
+        /// <summary>
+        /// 创建前台页面访问日志
+        /// </summary>
+        /// <param name="accessLogEntity"></param>
+        private void InsertRequestLog(RequestLogEntity entity)
+        {
+            entity = InitRequestLog(entity, true);
+            RequestLogApp requestLogApp = new RequestLogApp();
+            requestLogApp.Createlog(entity);
+        }
+
+        /// <summary>
+        /// 处理访问参数
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private RequestLogEntity InitStartRequestLog(System.Web.HttpContext context)
+        {
+            string urlHost = new RequestHelp().GetHost(context);
+            string urlRaw = context.Request.RawUrl.ToString();
+            RequestLogEntity entity = new RequestLogEntity();
+            entity.UrlAddress = context.Request.Url.ToString();
+            entity.UrlHost = urlHost;
+            entity.UrlRaw = urlRaw;
+            entity.WebSiteName = urlHost;
+            if (context.Session != null)
+                entity.SessionID = context.Session.SessionID;
+            if (context.Request != null)
+            {
+                entity.IPAddress = context.Request.UserHostAddress;
+                entity.Browser = context.Request.Browser.Browser;
+                entity.BrowserID = context.Request.Browser.Id;
+                entity.BrowserVersion = context.Request.Browser.Version;
+                entity.BrowserType = context.Request.Browser.Type;
+                entity.BrowserPlatform = context.Request.Browser.Platform;
+                if (context.Request.UrlReferrer != null)
+                    entity.PUrlAddress = context.Request.UrlReferrer.ToString();
+            }
+            entity.EnabledMark = true;
+
+            HttpCookie cookie = context.Request.Cookies.Get(CLINETID);
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                entity.ClientID = cookie.Value;
+            }
+            else
+            {
+                string clientIds = Guid.NewGuid().ToString();
+                entity.ClientID = clientIds;
+                cookie = new HttpCookie(CLINETID);
+                cookie.Name = CLINETID;
+                cookie.Value = clientIds;
+                cookie.Expires = DateTime.Now.AddYears(1);
+                entity.ClientID = clientIds;
+
+                context.Response.Cookies.Set(cookie);
+            }
+            HttpCookie cookieSys = context.Request.Cookies.Get(SYSREQUESTID);
+            if (cookieSys != null && !string.IsNullOrEmpty(cookieSys.Value))
+            {
+                entity.StartId = cookieSys.Value;
+            }
+            return entity;
+        }
+
+        /// <summary>
+        /// 处理访问参数
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private RequestLogEntity InitEndRequestLog(System.Web.HttpContext context)
+        {
+            string urlHost = new RequestHelp().GetHost(context);
+            string urlRaw = context.Request.RawUrl.ToString();
+            RequestLogEntity entity = new RequestLogEntity();
+            entity.UrlAddress = context.Request.Url.ToString();
+            entity.UrlHost = urlHost;
+            entity.UrlRaw = urlRaw;
+            entity.WebSiteName = urlHost;
+            if (context.Session != null)
+                entity.SessionID = context.Session.SessionID;
+            if (context.Request != null)
+            {
+                entity.IPAddress = context.Request.UserHostAddress;
+                entity.Browser = context.Request.Browser.Browser;
+                entity.BrowserID = context.Request.Browser.Id;
+                entity.BrowserVersion = context.Request.Browser.Version;
+                entity.BrowserType = context.Request.Browser.Type;
+                entity.BrowserPlatform = context.Request.Browser.Platform;
+                if (context.Request.UrlReferrer != null)
+                    entity.PUrlAddress = context.Request.UrlReferrer.ToString();
+            }
+            entity.EnabledMark = true;
+
+            HttpCookie cookie = context.Request.Cookies.Get(CLINETID);
+            if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
+            {
+                entity.ClientID = cookie.Value;
+            }
+            else
+            {
+                string clientIds = Guid.NewGuid().ToString();
+                entity.ClientID = clientIds;
+                cookie = new HttpCookie(CLINETID);
+                cookie.Name = CLINETID;
+                cookie.Value = clientIds;
+                cookie.Expires = DateTime.Now.AddYears(1);
+                entity.ClientID = clientIds;
+
+                context.Response.Cookies.Set(cookie);
+            }
+            HttpCookie cookieSys = context.Request.Cookies.Get(SYSREQUESTID);
+            if (cookieSys != null && !string.IsNullOrEmpty(cookieSys.Value))
+            {
+                entity.EndId = cookieSys.Value;
+            }
+            return entity;
+        }
+        /// <summary>
+        /// 处理访问参数
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private RequestLogEntity InitRequestLog(RequestLogEntity entity, bool IsProcessWebSite)
         {
             WebSiteApp app = new WebSiteApp();
             WebSiteEntity webSiteEntity = app.GetModelByUrlHost(entity.WebSiteName);

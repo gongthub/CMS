@@ -27,6 +27,7 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
+            SysPageHelp.sysPageHelp.AddStartRequestLog(context);
             if (ConfigHelp.configHelp.ISPROREQUEST)
             {
                 string htmls = string.Empty;
@@ -113,6 +114,7 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void EndRequest(System.Web.HttpContext context)
         {
+            SysPageHelp.sysPageHelp.AddEndRequestLog(context);
             setResponse(context);
         }
 

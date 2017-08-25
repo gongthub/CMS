@@ -67,6 +67,7 @@
     <Compile Include="Entity\SystemManage\ModuleButtonEntity.cs" />
     <Compile Include="Entity\SystemManage\ModuleEntity.cs" />
     <Compile Include="Entity\SystemManage\OrganizeEntity.cs" />
+    <Compile Include="Entity\SystemManage\RequestLogEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleAuthorizeEntity.cs" />
     <Compile Include="Entity\SystemManage\RoleEntity.cs" />
     <Compile Include="Entity\SystemManage\SysColumnsEntity.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="IRepository\SystemManage\IModuleButtonRepository.cs" />
     <Compile Include="IRepository\SystemManage\IModuleRepository.cs" />
     <Compile Include="IRepository\SystemManage\IOrganizeRepository.cs" />
+    <Compile Include="IRepository\SystemManage\IRequestLogRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleAuthorizeRepository.cs" />
     <Compile Include="IRepository\SystemManage\IRoleRepository.cs" />
     <Compile Include="IRepository\SystemManage\ISysColumnsRepository.cs" />

@@ -64,6 +64,7 @@
     <Compile Include="SystemManage\ModuleButtonMap.cs" />
     <Compile Include="SystemManage\ModuleMap.cs" />
     <Compile Include="SystemManage\OrganizeMap.cs" />
+    <Compile Include="SystemManage\RequestLogMap.cs" />
     <Compile Include="SystemManage\RoleAuthorizeMap.cs" />
     <Compile Include="SystemManage\RoleMap.cs" />
     <Compile Include="SystemManage\SysColumnsMap.cs" />

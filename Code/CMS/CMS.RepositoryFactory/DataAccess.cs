@@ -1,4 +1,5 @@
 ﻿using CMS.Domain.IRepository;
+using CMS.Domain.IRepository.SystemManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -368,6 +369,16 @@ namespace CMS.RepositoryFactory
             string ClassNamespace = DLLPATHHASDB + ".WebSiteRepository";
             object objType = CreateObject(ClassNamespace);
             return (IWebSiteRepository)objType;
+        }
+        /// <summary>
+        /// 接口IRequestLogRepository映射 
+        /// </summary>
+        /// <returns></returns>
+        public static IRequestLogRepository CreateIRequestLogRepository()
+        {
+            string ClassNamespace = DLLPATHHASDB + ".RequestLogRepository";
+            object objType = CreateObject(ClassNamespace);
+            return (IRequestLogRepository)objType;
         }
         #endregion
     }
