@@ -99,7 +99,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(SysColumnsEntity moduleEntity, string sysTempletId, string keyValue)
         {
             try
@@ -117,7 +117,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             sysColumnsApp.DeleteForm(keyValue);

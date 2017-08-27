@@ -81,7 +81,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(OrganizeEntity organizeEntity, string keyValue)
         {
             organizeApp.SubmitForm(organizeEntity, keyValue);
@@ -90,7 +90,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             organizeApp.DeleteForm(keyValue);

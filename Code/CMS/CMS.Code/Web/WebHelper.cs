@@ -248,6 +248,101 @@ namespace CMS.Code
         }
         #endregion
 
+        #region Redis操作
+        /// <summary>
+        /// 写Redis
+        /// </summary>
+        /// <typeparam name="T">Redis键值的类型</typeparam>
+        /// <param name="key">Redis的键名</param>
+        /// <param name="value">Redis的键值</param>
+        public static void WriteRedis<T>(string key, T value)
+        {
+            if (key.IsEmpty())
+                return;
+            string keyT = key.Clone().ToString();
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session.SessionID != null)
+            {
+                keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
+            }
+            Redis.RedisHelp.redisHelp.AddCache(keyT, value);
+        }
+        /// <summary>
+        /// 写Redis
+        /// </summary>
+        /// <typeparam name="T">Redis键值的类型</typeparam>
+        /// <param name="key">Redis的键名</param>
+        /// <param name="value">Redis的键值</param>
+        public static void WriteRedis<T>(string key, T value, DateTime expireTime)
+        {
+            if (key.IsEmpty())
+                return;
+            string keyT = key.Clone().ToString();
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session.SessionID != null)
+            {
+                keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
+            }
+            Redis.RedisHelp.redisHelp.AddCache(keyT, value, expireTime);
+        }
+
+        /// <summary>
+        /// 写Redis
+        /// </summary>
+        /// <param name="key">Redis的键名</param>
+        /// <param name="value">Redis的键值</param>
+        public static void WriteRedis(string key, string value)
+        {
+            if (key.IsEmpty())
+                return;
+            WriteRedis<string>(key, value);
+        }
+
+        /// <summary>
+        /// 写cookie值
+        /// </summary>
+        /// <param name="strName">名称</param>
+        /// <param name="strValue">值</param>
+        /// <param name="strValue">过期时间(分钟)</param>
+        public static void WriteRedis(string key, string value, int expires)
+        {
+            DateTime expiresTime = DateTime.Now.AddMinutes(expires);
+            if (key.IsEmpty())
+                return;
+            WriteRedis<string>(key, value, expiresTime);
+        }
+        /// <summary>
+        /// 读取Redis的值
+        /// </summary>
+        /// <param name="key">Redis的键名</param>        
+        public static string GetRedis(string key)
+        {
+            if (key.IsEmpty())
+                return string.Empty;
+
+            string keyT = key.Clone().ToString();
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session.SessionID != null)
+            {
+                keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
+            }
+            return Redis.RedisHelp.redisHelp.GetCache<string>(keyT) as string;
+        }
+        /// <summary>
+        /// 删除指定Redis
+        /// </summary>
+        /// <param name="key">Redis的键名</param>
+        public static void RemoveRedis(string key)
+        {
+            if (key.IsEmpty())
+                return;
+            string keyT = key.Clone().ToString();
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session.SessionID != null)
+            {
+                keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
+            }
+            Redis.RedisHelp.redisHelp.RemoveCache(keyT);
+        }
+
+        #endregion
+
         #region GetFileControls(获取客户端文件控件集合)
 
         /// <summary>

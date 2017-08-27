@@ -46,7 +46,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(KeyWordsEntity moduleEntity, string keyValue)
         {
             try
@@ -64,7 +64,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             keyWordApp.DeleteForm(keyValue);

@@ -56,7 +56,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             messagesApp.DeleteForm(keyValue);

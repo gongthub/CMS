@@ -11,7 +11,7 @@ namespace CMS.Web.Areas.ExampleManage.Controllers
     {
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult SendMail(string account, string title, string content)
         {

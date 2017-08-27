@@ -35,7 +35,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue, string webSiteIds)
         {
             userApp.SubmitForm(userEntity, userLogOnEntity, keyValue, webSiteIds.Split(','));
@@ -44,7 +44,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAuthorize]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             userApp.DeleteForm(keyValue);
@@ -58,7 +58,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitRevisePassword(string userPassword, string keyValue)
         {
             userLogOnApp.RevisePassword(userPassword, keyValue);
@@ -67,7 +67,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DisabledAccount(string keyValue)
         {
             UserEntity userEntity = new UserEntity();
@@ -79,7 +79,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult EnabledAccount(string keyValue)
         {
             UserEntity userEntity = new UserEntity();

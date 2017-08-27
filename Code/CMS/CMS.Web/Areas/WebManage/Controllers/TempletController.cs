@@ -45,7 +45,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)
         {
@@ -64,7 +64,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             templetApp.DeleteForm(keyValue);

@@ -44,7 +44,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
          
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitFormAdd(string DirName, string keyValue)
         {
             try
@@ -63,7 +63,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             resourceApp.DeleteForm(Base_WebSiteId, keyValue);

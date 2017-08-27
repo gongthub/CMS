@@ -76,7 +76,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(ItemsEntity itemsEntity, string keyValue)
         {
             itemsApp.SubmitForm(itemsEntity, keyValue);
@@ -84,7 +84,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             itemsApp.DeleteForm(keyValue);

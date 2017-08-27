@@ -31,7 +31,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(DbBackupEntity dbBackupEntity)
         {
             dbBackupEntity.FilePath = Server.MapPath("~/Resource/DbBackup/" + dbBackupEntity.FileName + ".bak");
@@ -42,7 +42,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             dbBackupApp.DeleteForm(keyValue);

@@ -51,7 +51,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(RoleEntity roleEntity, string permissionIds, string keyValue)
         {
             roleApp.SubmitForm(roleEntity, permissionIds.Split(','), keyValue);
@@ -60,7 +60,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             roleApp.DeleteForm(keyValue);

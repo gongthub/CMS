@@ -105,6 +105,9 @@ namespace CMS.Code
                 case CMS.Code.Enums.LoginProvider.Session:
                     WebHelper.WriteSession(key, DESEncrypt.Encrypt(t.ToJson()));
                     break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    WebHelper.WriteRedis(key, DESEncrypt.Encrypt(t.ToJson()),30);
+                    break;
             }
         }
 
@@ -159,6 +162,12 @@ namespace CMS.Code
                     else
                         t = default(T);
                     break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    if (WebHelper.GetRedis(key) != null)
+                        t = DESEncrypt.Decrypt(WebHelper.GetRedis(key).ToString()).ToObject<T>();
+                    else
+                        t = default(T);
+                    break;
             }
             return t;
         } 
@@ -205,6 +214,9 @@ namespace CMS.Code
                     break;
                 case CMS.Code.Enums.LoginProvider.Session:
                     WebHelper.RemoveSession(key.Trim());
+                    break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    WebHelper.RemoveRedis(key.Trim());
                     break;
             }
         }

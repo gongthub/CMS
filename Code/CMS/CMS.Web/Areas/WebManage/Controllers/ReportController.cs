@@ -17,7 +17,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult GetAccessDayDates()
         {
             DateTime EndDate = DateTime.Now.Date;

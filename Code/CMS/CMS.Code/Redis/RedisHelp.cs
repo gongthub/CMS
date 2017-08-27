@@ -128,6 +128,21 @@ namespace CMS.Code.Redis
         }
 
         /// <summary>
+        /// 添加缓存项
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiration"></param>
+        /// <returns></returns>
+        public bool AddCache<T>(string key, T value, DateTime expireTime)
+        {
+            using (IRedisClient redisClient = RedisProvider.prcm.GetClient())
+            {
+                return redisClient.Add(key, value, expireTime);
+            }
+        }
+        /// <summary>
         /// 移除缓存
         /// </summary>
         /// <param name="key"></param>

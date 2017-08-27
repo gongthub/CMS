@@ -33,7 +33,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitRemoveLog(string keepTime)
         {
             logApp.RemoveLogByTime(keepTime);

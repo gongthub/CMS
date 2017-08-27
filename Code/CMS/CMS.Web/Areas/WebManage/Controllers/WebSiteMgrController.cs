@@ -78,7 +78,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)
         {
@@ -95,7 +95,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             webSiteApp.DeleteForm(keyValue);

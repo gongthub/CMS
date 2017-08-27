@@ -50,6 +50,12 @@
                     else
                         operatorModel = null;
                     break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    if (WebHelper.GetRedis(LoginUserKey) != null)
+                        operatorModel = DESEncrypt.Decrypt(WebHelper.GetRedis(LoginUserKey).ToString()).ToObject<OperatorModel>();
+                    else
+                        operatorModel = null;
+                    break;
             }
             return operatorModel;
         }
@@ -64,6 +70,9 @@
                 case CMS.Code.Enums.LoginProvider.Session:
                     WebHelper.WriteSession(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()));
                     break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    WebHelper.WriteRedis(LoginUserKey, DESEncrypt.Encrypt(operatorModel.ToJson()));
+                    break;
             }
         }
 
@@ -76,6 +85,9 @@
                     break;
                 case CMS.Code.Enums.LoginProvider.Session:
                     WebHelper.RemoveSession(LoginUserKey.Trim());
+                    break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    WebHelper.RemoveRedis(LoginUserKey.Trim());
                     break;
             }
         }

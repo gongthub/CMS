@@ -38,7 +38,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(FilterIPEntity filterIPEntity, string keyValue)
         {
             filterIPApp.SubmitForm(filterIPEntity, keyValue);
@@ -47,7 +47,7 @@ namespace CMS.Web.Areas.SystemSecurity.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             filterIPApp.DeleteForm(keyValue);

@@ -46,7 +46,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(SysTempletsEntity sysTempletsEntity, string keyValue, UpFileDTO upFileentity)
         {
             sysTempletsApp.SubmitForm(sysTempletsEntity, keyValue, upFileentity);
@@ -56,7 +56,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string keyValue)
         {
             sysTempletsApp.DeleteForm(keyValue);

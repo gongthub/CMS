@@ -22,7 +22,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
         [HttpPost]
         [HandlerAjaxOnly]
         [HandlerAuthorize]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteForm(string parentId, string keyValue)
         {
             sysTempletsApp.DeleteResourceForm(parentId, keyValue);
@@ -31,7 +31,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult SubmitFormAdd(string parentId, string DirName, string keyValue)
         {
             try
