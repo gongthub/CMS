@@ -2,9 +2,9 @@
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.IRepository;
 using CMS.MySqlRepository;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Text;
 
 namespace CMS.MySqlRepository
@@ -24,7 +24,7 @@ namespace CMS.MySqlRepository
                             ORDER BY d.SortCode ASC");
             DbParameter[] parameter = 
             {
-                 new SqlParameter("@enCode",enCode)
+                 new MySqlParameter("@enCode",enCode)
             };
             return this.FindList(strSql.ToString(), parameter);
         }
