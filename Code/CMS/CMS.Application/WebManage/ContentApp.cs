@@ -191,6 +191,24 @@ namespace CMS.Application.WebManage
 
             return models;
         }
+        public IQueryable<ContentEntity> GetListIqNoEnable(string itemId = "", string keyword = "")
+        {
+            IQueryable<ContentEntity> models;
+            var expression = ExtLinq.True<ContentEntity>();
+            if (!string.IsNullOrEmpty(itemId))
+            {
+                expression = expression.And(t => t.ColumnId == itemId);
+            }
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                expression = expression.And(t => t.FullName.Contains(keyword));
+            }
+            expression = expression.And(m => m.DeleteMark != true);
+            expression = expression.And(m => m.EnabledMark == true);
+            models = service.IQueryable(expression).OrderBy(t => t.SortCode);
+
+            return models;
+        }
         public List<ContentEntity> GetListByWebSiteId(string webSiteIds)
         {
             List<ContentEntity> models = new List<ContentEntity>();

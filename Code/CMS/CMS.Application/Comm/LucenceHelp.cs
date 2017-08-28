@@ -169,7 +169,7 @@ namespace CMS.Application.Comm
                         if (ids != null && ids.Count > 0)
                         {
                             ContentApp contentApp = new ContentApp();
-                            mdoels = contentApp.GetLists(m => ids.Contains(m.Id));
+                            mdoels = contentApp.GetLists(m => ids.Contains(m.Id) && m.DeleteMark != true && m.EnabledMark == true);
                         }
                         searcher.Dispose();
                     }
@@ -217,7 +217,7 @@ namespace CMS.Application.Comm
                     if (ids != null && ids.Count > 0)
                     {
                         ContentApp contentApp = new ContentApp();
-                        mdoels = contentApp.GetLists(m => ids.Contains(m.Id));
+                        mdoels = contentApp.GetLists(m => ids.Contains(m.Id) && m.DeleteMark != true && m.EnabledMark == true);
                     }
                     searcher.Dispose();
                 }
@@ -263,7 +263,7 @@ namespace CMS.Application.Comm
                     if (ids != null && ids.Count > 0)
                     {
                         ContentApp contentApp = new ContentApp();
-                        mdoels = contentApp.GetListsIq(m => ids.Contains(m.Id));
+                        mdoels = contentApp.GetListsIq(m => ids.Contains(m.Id) && m.DeleteMark != true && m.EnabledMark == true);
                     }
                     searcher.Dispose();
                 }

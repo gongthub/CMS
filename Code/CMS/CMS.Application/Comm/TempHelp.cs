@@ -1130,12 +1130,12 @@ namespace CMS.Application.Comm
                 moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
                 if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
                 {
-                    contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
+                    contententitysT = c_ContentApp.GetListIqNoEnable(moduleentity.Id);
                 }
             }
             else
             {
-                contententitysT = c_ContentApp.GetListIq(Ids);
+                contententitysT = c_ContentApp.GetListIqNoEnable(Ids);
             }
             if (contententitysT != null)
             {
