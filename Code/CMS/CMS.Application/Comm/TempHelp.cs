@@ -990,6 +990,20 @@ namespace CMS.Application.Comm
                     strs = ProContent<WebSiteEntity>(name, entity);
                 }
             }
+            else
+            {
+                ColumnsApp columnsApp = new ColumnsApp();
+                ColumnsEntity columnsEntity = columnsApp.GetFormNoDel(Ids);
+                if (columnsEntity != null && !string.IsNullOrEmpty(columnsEntity.Id) && !string.IsNullOrEmpty(columnsEntity.WebSiteId))
+                {
+                    WebSiteEntity entity = new WebSiteApp().GetFormNoDel(columnsEntity.WebSiteId);
+                    webSiteShortName = entity.ShortName;
+                    if (entity != null && !string.IsNullOrEmpty(entity.Id))
+                    {
+                        strs = ProContent<WebSiteEntity>(name, entity);
+                    }
+                }
+            }
 
             return strs;
         }
