@@ -207,9 +207,10 @@ namespace CMS.Code.Redis
         {
             using (IRedisClient redisClient = RedisProvider.prcm.GetClient())
             {
-                return redisClient.Set(key, value, expireTime);
+                return redisClient.Set<T>(key, value, expireTime);
             }
         }
+
 
         /// <summary>
         /// 获取缓存项

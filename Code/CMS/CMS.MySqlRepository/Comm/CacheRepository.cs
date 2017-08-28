@@ -1,6 +1,7 @@
 ﻿using CMS.Code;
 using CMS.Domain.IRepository;
 using CMS.Domain.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace CMS.MySqlRepository
     public class CacheRepository : ICacheRepository
     {
         private static ICache icache = CacheFactory.cacheFactory.Cache();
-         
+
         /// <summary>
         /// 菜单对象权限
         /// </summary>
@@ -42,7 +43,8 @@ namespace CMS.MySqlRepository
         /// <returns></returns>
         public void WriteAuthorizeurlDatas(List<AuthorizeActionModel> authorizeurldata, string roleId)
         {
-            icache.WriteCache(authorizeurldata, AUTHORIZEURLDATA + roleId, DateTime.Now.AddMinutes(5));
+            string authorizeurldataStr = JsonConvert.SerializeObject(authorizeurldata);
+            icache.WriteCache(authorizeurldataStr, AUTHORIZEURLDATA + roleId, DateTime.Now.AddMinutes(5));
         }
         /// <summary>
         /// 移除菜单对象权限缓存
@@ -79,7 +81,13 @@ namespace CMS.MySqlRepository
         /// <returns></returns>
         public List<AuthorizeActionModel> GetAuthorizeurlDatas(string roleId)
         {
-            List<AuthorizeActionModel> datas = icache.GetCache<List<AuthorizeActionModel>>(AUTHORIZEURLDATA + roleId);
+            List<AuthorizeActionModel> datas = new List<AuthorizeActionModel>(); 
+            object authorizeurldataObj=icache.GetCache<string>(AUTHORIZEURLDATA + roleId);
+            if(authorizeurldataObj!=null)
+            {
+                string authorizeurldataStr = authorizeurldataObj.ToString();
+                datas = JsonConvert.DeserializeObject<List<AuthorizeActionModel>>(authorizeurldataStr); 
+            } 
             return datas;
         }
 

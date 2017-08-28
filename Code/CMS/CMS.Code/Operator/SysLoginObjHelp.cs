@@ -106,7 +106,7 @@ namespace CMS.Code
                     WebHelper.WriteSession(key, DESEncrypt.Encrypt(t.ToJson()));
                     break;
                 case CMS.Code.Enums.LoginProvider.Redis:
-                    WebHelper.WriteRedis(key, DESEncrypt.Encrypt(t.ToJson()),30);
+                    WebHelper.WriteRedis(key, DESEncrypt.Encrypt(t.ToJson()));
                     break;
             }
         }

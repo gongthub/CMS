@@ -71,7 +71,7 @@ namespace CMS.Application.SystemManage
             var authorizeurldata = new List<AuthorizeActionModel>();
             //var cachedata = CacheFactory.cacheFactory.Cache().GetCache<List<AuthorizeActionModel>>("authorizeurldata_" + roleId);
             var cachedata = new CacheHelp().GetAuthorizeurlDatas(roleId);
-            if (cachedata == null)
+            if (cachedata == null || cachedata.Count <= 0)
             {
                 var moduledata = moduleApp.GetList();
                 var buttondata = moduleButtonApp.GetList();

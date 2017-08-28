@@ -264,7 +264,7 @@ namespace CMS.Code
             {
                 keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
             }
-            Redis.RedisHelp.redisHelp.AddCache(keyT, value);
+            Redis.RedisHelp.redisHelp.SetCache(keyT, value);
         }
         /// <summary>
         /// 写Redis
@@ -281,7 +281,7 @@ namespace CMS.Code
             {
                 keyT = HttpContext.Current.Session.SessionID + "_" + keyT;
             }
-            Redis.RedisHelp.redisHelp.AddCache(keyT, value, expireTime);
+            Redis.RedisHelp.redisHelp.SetCacheExp(keyT, value, expireTime);
         }
 
         /// <summary>
