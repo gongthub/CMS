@@ -274,10 +274,15 @@ namespace CMS.MySqlRepository
                 if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
                 {
                     InitSpareUrl(ref moduleEntity);
+                    WebSiteEntity moduleEntityOld = FindEntity(keyValue);
                     using (var db = new MySqlRepositoryBase().BeginTrans())
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {
+                            if (moduleEntityOld != null && !string.IsNullOrEmpty(moduleEntityOld.Id))
+                            {
+                                moduleEntity.ShortName = moduleEntityOld.ShortName;
+                            }
                             moduleEntity.Modify(keyValue);
                             db.Update(moduleEntity);
                             //添加日志
