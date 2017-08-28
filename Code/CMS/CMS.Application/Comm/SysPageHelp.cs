@@ -182,16 +182,17 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private AccessLogEntity InitAccessLog(System.Web.HttpContext context)
         {
+            string realIp = GetRealClientIp(context);
             string urlHost = new RequestHelp().GetHost(context);
             string urlRaw = context.Request.RawUrl.ToString();
             AccessLogEntity entity = new AccessLogEntity();
             entity.WebSiteName = urlHost;
-            entity.UrlAddress = urlRaw;
+            entity.UrlAddress = context.Request.Url.ToString();
             if (context.Session != null)
                 entity.SessionID = context.Session.SessionID;
             if (context.Request != null)
             {
-                entity.IPAddress = context.Request.UserHostAddress;
+                entity.IPAddress = realIp;
                 entity.Browser = context.Request.Browser.Browser;
                 entity.BrowserID = context.Request.Browser.Id;
                 entity.BrowserVersion = context.Request.Browser.Version;
@@ -308,6 +309,8 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private RequestLogEntity InitStartRequestLog(System.Web.HttpContext context)
         {
+            string realIp = GetRealClientIp(context);
+
             string urlHost = new RequestHelp().GetHost(context);
             string urlRaw = context.Request.RawUrl.ToString();
             RequestLogEntity entity = new RequestLogEntity();
@@ -319,7 +322,7 @@ namespace CMS.Application.Comm
                 entity.SessionID = context.Session.SessionID;
             if (context.Request != null)
             {
-                entity.IPAddress = context.Request.UserHostAddress;
+                entity.IPAddress = realIp;
                 entity.Browser = context.Request.Browser.Browser;
                 entity.BrowserID = context.Request.Browser.Id;
                 entity.BrowserVersion = context.Request.Browser.Version;
@@ -354,6 +357,19 @@ namespace CMS.Application.Comm
             }
             return entity;
         }
+        private string GetRealClientIp(System.Web.HttpContext context)
+        {
+            string ipStr = string.Empty;
+            if (context.Request.Headers["X-Real-IP"] != null)
+            {
+                ipStr = context.Request.Headers["X-Real-IP"].ToString();
+            }
+            else
+            {
+                ipStr = context.Request.UserHostAddress;
+            }
+            return ipStr;
+        }
 
         /// <summary>
         /// 处理访问参数
@@ -362,6 +378,7 @@ namespace CMS.Application.Comm
         /// <returns></returns>
         private RequestLogEntity InitEndRequestLog(System.Web.HttpContext context)
         {
+            string realIp = GetRealClientIp(context);
             string urlHost = new RequestHelp().GetHost(context);
             string urlRaw = context.Request.RawUrl.ToString();
             RequestLogEntity entity = new RequestLogEntity();
@@ -373,7 +390,7 @@ namespace CMS.Application.Comm
                 entity.SessionID = context.Session.SessionID;
             if (context.Request != null)
             {
-                entity.IPAddress = context.Request.UserHostAddress;
+                entity.IPAddress = realIp;
                 entity.Browser = context.Request.Browser.Browser;
                 entity.BrowserID = context.Request.Browser.Id;
                 entity.BrowserVersion = context.Request.Browser.Version;
