@@ -51,6 +51,24 @@ namespace CMS.Domain.Entity.SystemManage
         /// Area
         /// </summary>		
         public string Area { get; set; }
+        /// <summary>
+        /// Country
+        /// </summary>		
+        public string Country { get; set; }
+        /// <summary>
+        /// CountryNo
+        /// </summary>		
+        public string CountryNo { get; set; }
+        /// <summary>
+        /// BigArea
+        /// </summary>		
+        public string BigArea { get; set; }
+        /// <summary>
+        /// Isp
+        /// </summary>		
+        public string Isp { get; set; }
+        public bool? IsProcessIp { get; set; }
+
 
         /// <summary>
         /// NetType
