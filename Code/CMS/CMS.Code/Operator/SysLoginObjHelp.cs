@@ -62,7 +62,7 @@ namespace CMS.Code
 
         public void AddOperator(OperatorModel operatorModel)
         {
-            AddObj<OperatorModel>(operatorModel, LOGINUSERKEY);
+            AddObj<OperatorModel>(operatorModel, LOGINUSERKEY, Code.ConfigHelp.configHelp.USERLOGINTIMEOUT);
         }
         public void AddVerifyCode(string strCode)
         {
@@ -100,13 +100,29 @@ namespace CMS.Code
             switch (LOGINPROVIDER_ENUM)
             {
                 case CMS.Code.Enums.LoginProvider.Cookie:
-                    WebHelper.WriteCookie(key, DESEncrypt.Encrypt(t.ToJson()), 30);
+                    WebHelper.WriteCookie(key, DESEncrypt.Encrypt(t.ToJson()));
                     break;
                 case CMS.Code.Enums.LoginProvider.Session:
                     WebHelper.WriteSession(key, DESEncrypt.Encrypt(t.ToJson()));
                     break;
                 case CMS.Code.Enums.LoginProvider.Redis:
                     WebHelper.WriteRedis(key, DESEncrypt.Encrypt(t.ToJson()));
+                    break;
+            }
+        }
+
+        public void AddObj<T>(T t, string key,int minutes)
+        {
+            switch (LOGINPROVIDER_ENUM)
+            {
+                case CMS.Code.Enums.LoginProvider.Cookie:
+                    WebHelper.WriteCookie(key, DESEncrypt.Encrypt(t.ToJson()), minutes);
+                    break;
+                case CMS.Code.Enums.LoginProvider.Session:
+                    WebHelper.WriteSession(key, DESEncrypt.Encrypt(t.ToJson()));
+                    break;
+                case CMS.Code.Enums.LoginProvider.Redis:
+                    WebHelper.WriteRedis(key, DESEncrypt.Encrypt(t.ToJson()),minutes);
                     break;
             }
         }
@@ -119,6 +135,14 @@ namespace CMS.Code
         {
             OperatorModel operatorModel = new OperatorModel();
             operatorModel = GetObj<OperatorModel>(LOGINUSERKEY);
+            if (operatorModel != null)
+            {
+                AddObj<OperatorModel>(operatorModel, LOGINUSERKEY, Code.ConfigHelp.configHelp.USERLOGINTIMEOUT);
+            }
+            else
+            {
+                operatorModel = new OperatorModel();
+            }
             return operatorModel;
         }
         public string GetVerifyCode()

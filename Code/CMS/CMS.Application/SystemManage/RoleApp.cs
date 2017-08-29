@@ -31,13 +31,15 @@ namespace CMS.Application.SystemManage
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
                 {
-                    expression = expression.And(t => t.Type == LoginInfo.UserLevel.ToString());
+                    string userlevels = LoginInfo.UserLevel.ToString();
+                    expression = expression.And(t => t.Type == userlevels);
                 }
                 else
                 {
                     if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
                     {
-                        expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                        string types =((int)Code.Enums.UserLevel.WebSiteUser).ToString();
+                        expression = expression.And(t => t.Type == types);
                     }
                 }
             }
@@ -59,13 +61,15 @@ namespace CMS.Application.SystemManage
             {
                 if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.WebSiteUser)
                 {
-                    expression = expression.And(t => t.Type == LoginInfo.UserLevel.ToString());
+                    string userlevels = LoginInfo.UserLevel.ToString();
+                    expression = expression.And(t => t.Type == userlevels);
                 }
                 else
                 {
                     if (LoginInfo.UserLevel == (int)Code.Enums.UserLevel.RegisterUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.OrdinaryUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.GoldUser || LoginInfo.UserLevel == (int)Code.Enums.UserLevel.DiamondUser)
                     {
-                        expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                        string types = ((int)Code.Enums.UserLevel.WebSiteUser).ToString();
+                        expression = expression.And(t => t.Type == types);
                     }
                 }
             }
@@ -104,11 +108,13 @@ namespace CMS.Application.SystemManage
                     {
                         if (!string.IsNullOrEmpty(keyword))
                         {
-                            expression = expression.And(t => t.Type == strUserLevel || t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                            string types = ((int)Code.Enums.UserLevel.WebSiteUser).ToString();
+                            expression = expression.And(t => t.Type == strUserLevel || t.Type == types);
                         }
                         else
                         {
-                            expression = expression.And(t => t.Type == ((int)Code.Enums.UserLevel.WebSiteUser).ToString());
+                            string types = ((int)Code.Enums.UserLevel.WebSiteUser).ToString();
+                            expression = expression.And(t => t.Type == types);
                         }
                     }
                 }
@@ -126,11 +132,11 @@ namespace CMS.Application.SystemManage
             LogHelp.logHelp.WriteDbLog(true, "删除角色信息=>" + keyValue, Enums.DbLogType.Delete, "角色管理");
         }
         public void SubmitForm(RoleEntity roleEntity, string[] permissionIds, string keyValue)
-        { 
+        {
             if (!string.IsNullOrEmpty(keyValue))
             {
                 roleEntity.Modify(keyValue);
-                roleEntity.Id = keyValue; 
+                roleEntity.Id = keyValue;
             }
             else
             {
@@ -158,7 +164,7 @@ namespace CMS.Application.SystemManage
                 roleAuthorizeEntitys.Add(roleAuthorizeEntity);
             }
             service.SubmitForm(roleEntity, roleAuthorizeEntitys, keyValue);
-            
+
         }
     }
 }

@@ -17,8 +17,8 @@ namespace CMS.SqlServerRepository
 
         private ILogRepository iLogRepository = new LogRepository();
 
-        private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
-        private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
+        private readonly string SYSTEMADMINUSERNAME = Code.ConfigHelp.configHelp.SYSTEMADMINUSERNAME;
+        private readonly string SYSTEMADMINUSERPASSWORD = Code.ConfigHelp.configHelp.SYSTEMADMINUSERPASSWORD;
         public void DeleteForm(string keyValue)
         {
             using (var db = new SqlServerRepositoryBase().BeginTrans())

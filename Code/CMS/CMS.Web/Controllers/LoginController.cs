@@ -15,7 +15,7 @@ namespace CMS.Web.Controllers
 {
     public class LoginController : Controller
     {
-        private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
+        private readonly string SYSTEMADMINUSERNAME = Code.ConfigHelp.configHelp.SYSTEMADMINUSERNAME;
         [HttpGet]
         public virtual ActionResult Index()
         {

@@ -12,8 +12,8 @@ namespace CMS.Application.SystemManage
 {
     public class UserApp
     {
-        private static readonly string SYSTEMADMINUSERNAME = Code.Configs.GetValue("SystemUserName");
-        private static readonly string SYSTEMADMINUSERPASSWORD = Code.Configs.GetValue("SystemUserPassword");
+        private readonly string SYSTEMADMINUSERNAME = Code.ConfigHelp.configHelp.SYSTEMADMINUSERNAME;
+        private readonly string SYSTEMADMINUSERPASSWORD = Code.ConfigHelp.configHelp.SYSTEMADMINUSERPASSWORD;
         private IUserRepository service = DataAccess.CreateIUserRepository();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 

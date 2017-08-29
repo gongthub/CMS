@@ -98,6 +98,18 @@ namespace CMS.Code
                 return timenum;
             }
         }
+        /// <summary>
+        /// 登陆用户超时时间 分钟
+        /// </summary>
+        public int USERLOGINTIMEOUT
+        {
+            get
+            {
+                int UserLoginTimeOut = 0;
+                int.TryParse(Code.Configs.GetValue("UserLoginTimeOut").ToString(), out UserLoginTimeOut);
+                return UserLoginTimeOut;
+            }
+        }
 
         /// <summary>
         /// 系统模板路径
@@ -199,6 +211,37 @@ namespace CMS.Code
             get
             {
                 return Code.Configs.GetValue("htmlSrcPath").ToString();
+            }
+        }
+
+        /// <summary>
+        /// 系统超级用户用户名
+        /// </summary>
+        public string SYSTEMADMINUSERNAME
+        {
+            get
+            {
+                return Code.Configs.GetValue("SystemUserName").ToString();
+            }
+        }
+        /// <summary>
+        /// 系统超级用户密码
+        /// </summary>
+        public string SYSTEMADMINUSERPASSWORD
+        {
+            get
+            {
+                return Code.Configs.GetValue("SystemUserPassword").ToString();
+            }
+        }
+        /// <summary>
+        /// 系统url前缀
+        /// </summary>
+        public string WEBURLHTTP
+        {
+            get
+            {
+                return Code.Configs.GetValue("WebUrlHttp").ToString();
             }
         }
         #endregion

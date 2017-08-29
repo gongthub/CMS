@@ -11,8 +11,8 @@ namespace CMS.Application.WebManage
 {
     public class ResourceApp
     {
-        private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
-        private static readonly string WEBURLHTTP = Code.Configs.GetValue("WebUrlHttp");
+        private readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
+        private readonly string WEBURLHTTP = ConfigHelp.configHelp.WEBURLHTTP;
 
         /// <summary>
         /// 根据站点id获取站点资源文件
