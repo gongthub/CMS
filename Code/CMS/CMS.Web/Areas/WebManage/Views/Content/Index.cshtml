@@ -114,7 +114,7 @@
                 }).trigger('reloadGrid');
             });
         }
-         
+
         function btn_add() {
             if ($("#itemTree").getCurrentNode() == undefined || $("#itemTree").getCurrentNode() == null) {
                 alert("请选择左侧栏目！");
@@ -157,7 +157,8 @@
                     height: "650px",
                     btn: null
                 });
-            } else {
+            }
+            if (type == 1 || type == 2) {
                 $.modalOpen({
                     id: "Form",
                     title: moduleName + " 》新增内容",
