@@ -15,6 +15,7 @@ namespace CMS.Application.WebManage
     public class ColumnsApp
     {
         private IColumnsRepository service = DataAccess.CreateIColumnsRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         public ColumnsEntity GetForm(string keyValue)
         {
@@ -89,6 +90,13 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
+            ColumnsEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
+
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除栏目信息=>" + keyValue, Enums.DbLogType.Delete, "栏目管理");

@@ -18,6 +18,7 @@ namespace CMS.Application.WebManage
         private IWebSiteRepository service = DataAccess.CreateIWebSiteRepository();
         private IWebSiteForUrlRepository serviceWebSiteForUrl = DataAccess.CreateIWebSiteForUrlRepository();
         private IWebSiteConfigRepository webSiteConfigRepository = DataAccess.CreateIWebSiteConfigRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         private static string LUCENCEINDEXPATH = Configs.GetValue("LucenceIndexPath");
         /// <summary>
@@ -125,6 +126,12 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
+            WebSiteEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.Id);
+            }
             service.DeleteForm(keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除站点信息=>" + keyValue, Enums.DbLogType.Delete, "站点管理");
@@ -162,6 +169,8 @@ namespace CMS.Application.WebManage
 
         public bool UpdateSearchEnableByWebSiteId(string webSiteId, bool searchEnabled)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             bool bState = true;
             try
             {
@@ -187,6 +196,8 @@ namespace CMS.Application.WebManage
         }
         public bool UpdateMessageEnableByWebSiteId(string webSiteId, bool messageEnabled)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             bool bState = true;
             try
             {
@@ -212,6 +223,8 @@ namespace CMS.Application.WebManage
         }
         public bool UpdateAdvancedContentEnableByWebSiteId(string webSiteId, bool advancedContentEnabled)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             bool bState = true;
             try
             {
@@ -238,6 +251,8 @@ namespace CMS.Application.WebManage
 
         public bool UpdateServiceEnableByWebSiteId(string webSiteId, bool serviceEnabled)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             bool bState = true;
             try
             {

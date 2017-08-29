@@ -14,6 +14,7 @@ namespace CMS.MySqlRepository
     public class TempletRepository : MySqlRepositoryBase<TempletEntity>, ITempletRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
+        private IUserRepository iUserRepository = new UserRepository();
         public bool IsExistSearchModel(string WebSiteId)
         {
             bool bState = false;
@@ -67,6 +68,13 @@ namespace CMS.MySqlRepository
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
+                    TempletEntity moduleEntityT = FindEntity(keyValue);
+                    if (moduleEntityT != null)
+                    {
+                        //验证用户站点权限
+                        iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                        moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                    }
                     moduleEntity.Modify(keyValue);
                     Update(moduleEntity);
                     //添加日志

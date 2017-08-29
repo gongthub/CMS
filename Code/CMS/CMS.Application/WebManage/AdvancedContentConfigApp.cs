@@ -73,6 +73,7 @@ namespace CMS.Application.WebManage
         }
         public void AddForms(List<AdvancedContentConfigEntity> moduleEntitys)
         {
+
             if (moduleEntitys != null && moduleEntitys.Count > 0)
             {
                 foreach (AdvancedContentConfigEntity moduleEntity in moduleEntitys)

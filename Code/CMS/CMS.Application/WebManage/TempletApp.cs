@@ -14,6 +14,7 @@ namespace CMS.Application.WebManage
     public class TempletApp
     {
         private ITempletRepository service = DataAccess.CreateITempletRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         public TempletEntity GetForm(string keyValue)
         {
@@ -240,6 +241,12 @@ namespace CMS.Application.WebManage
 
         public void DeleteForm(string keyValue)
         {
+            TempletEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除模板信息=>" + keyValue, Enums.DbLogType.Delete, "模板管理");

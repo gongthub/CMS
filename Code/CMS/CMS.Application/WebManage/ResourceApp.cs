@@ -1,6 +1,8 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.WebManage;
+using CMS.Domain.IRepository;
+using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace CMS.Application.WebManage
     {
         private readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
         private readonly string WEBURLHTTP = ConfigHelp.configHelp.WEBURLHTTP;
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         /// <summary>
         /// 根据站点id获取站点资源文件
@@ -59,6 +62,8 @@ namespace CMS.Application.WebManage
         /// <returns></returns>
         public void CreateDirById(string webSiteId, string Id, string dirName)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             ResourceEntity model = GetForm(webSiteId, Id);
             if (model != null)
             {
@@ -84,6 +89,8 @@ namespace CMS.Application.WebManage
         /// <returns></returns>
         public void DeleteForm(string webSiteId, string Id)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
             ResourceEntity model = GetForm(webSiteId, Id);
             if (model != null)
             {

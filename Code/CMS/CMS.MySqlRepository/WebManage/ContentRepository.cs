@@ -19,6 +19,7 @@ namespace CMS.MySqlRepository
         private IColumnsRepository iColumnsRepository = new ColumnsRepository();
         private IUpFileRepository iUpFileRepository = new UpFileRepository();
         private ILogRepository iLogRepository = new LogRepository();
+        private IUserRepository iUserRepository = new UserRepository();
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
             string strKeyWords = string.Empty;
@@ -28,6 +29,13 @@ namespace CMS.MySqlRepository
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
+                        ContentEntity moduleEntityT = FindEntity(keyValue);
+                        if (moduleEntityT != null)
+                        {
+                            //验证用户站点权限
+                            iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                            moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                        }
                         moduleEntity.Modify(keyValue);
                         db.Update(moduleEntity);
                         //添加日志
@@ -67,6 +75,13 @@ namespace CMS.MySqlRepository
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
+                        ContentEntity moduleEntityT = FindEntity(keyValue);
+                        if (moduleEntityT != null)
+                        {
+                            //验证用户站点权限
+                            iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                            moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                        }
                         moduleEntity.Modify(keyValue);
                         db.Update(moduleEntity);
                         //添加日志
@@ -123,6 +138,13 @@ namespace CMS.MySqlRepository
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
+                        ContentEntity moduleEntityT = FindEntity(keyValue);
+                        if (moduleEntityT != null)
+                        {
+                            //验证用户站点权限
+                            iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                            moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                        }
                         moduleEntity.Modify(keyValue);
                         db.Update(moduleEntity);
                         //添加日志

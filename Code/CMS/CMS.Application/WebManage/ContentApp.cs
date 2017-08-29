@@ -18,6 +18,7 @@ namespace CMS.Application.WebManage
     public class ContentApp
     {
         private IContentRepository service = DataAccess.CreateIContentRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         public ContentEntity GetForm(string keyValue)
         {
@@ -228,12 +229,24 @@ namespace CMS.Application.WebManage
 
         public void DeleteForm(string keyValue)
         {
+            ContentEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.Delete(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除内容信息=>" + keyValue, Enums.DbLogType.Delete, "内容管理");
         }
         public void DeleteFormById(string keyValue)
         {
+            ContentEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除内容信息=>" + keyValue, Enums.DbLogType.Delete, "内容管理");
@@ -253,10 +266,22 @@ namespace CMS.Application.WebManage
 
         public void Up(string keyValue)
         {
+            ContentEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.Up(keyValue);
         }
         public void Down(string keyValue)
         {
+            ContentEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.Down(keyValue);
         }
 
@@ -289,6 +314,12 @@ namespace CMS.Application.WebManage
 
         public void GenStaticPage(string keyValue)
         {
+            ContentEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             ColumnsEntity module = GetModuleByContentID(keyValue);
             if (module != null)
             {

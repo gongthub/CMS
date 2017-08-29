@@ -14,6 +14,7 @@ namespace CMS.MySqlRepository
     public class ColumnsRepository : MySqlRepositoryBase<ColumnsEntity>, IColumnsRepository
     {
         private ILogRepository iLogRepository = new LogRepository();
+        private IUserRepository iUserRepository = new UserRepository();
 
         public ColumnsEntity GetFormNoDel(string keyValue)
         {
@@ -29,6 +30,14 @@ namespace CMS.MySqlRepository
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {
+                            ColumnsEntity moduleEntityT = FindEntity(keyValue);
+                            if (moduleEntityT != null)
+                            {
+                                //验证用户站点权限
+                                iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                                moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                            }
+
                             moduleEntity.Modify(keyValue);
                             if (moduleEntity.MainMark == true)
                             {

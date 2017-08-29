@@ -209,6 +209,8 @@ namespace CMS.MySqlRepository
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
+                        //验证用户站点权限
+                        iUserRepository.VerifyUserWebsiteRole(keyValue);
                         moduleEntity.Modify(keyValue);
                         db.Update(moduleEntity);
                         //添加日志
@@ -279,6 +281,8 @@ namespace CMS.MySqlRepository
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {
+                            //验证用户站点权限
+                            iUserRepository.VerifyUserWebsiteRole(keyValue);
                             if (moduleEntityOld != null && !string.IsNullOrEmpty(moduleEntityOld.Id))
                             {
                                 moduleEntity.ShortName = moduleEntityOld.ShortName;

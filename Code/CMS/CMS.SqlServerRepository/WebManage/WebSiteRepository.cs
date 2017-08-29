@@ -209,6 +209,8 @@ namespace CMS.SqlServerRepository
                 {
                     if (!string.IsNullOrEmpty(keyValue))
                     {
+                        //验证用户站点权限
+                        iUserRepository.VerifyUserWebsiteRole(keyValue);
                         moduleEntity.Modify(keyValue);
                         db.Update(moduleEntity);
                         //添加日志
@@ -278,6 +280,8 @@ namespace CMS.SqlServerRepository
                     {
                         if (!string.IsNullOrEmpty(keyValue))
                         {
+                            //验证用户站点权限
+                            iUserRepository.VerifyUserWebsiteRole(keyValue);
                             moduleEntity.Modify(keyValue);
                             db.Update(moduleEntity);
                             //添加日志

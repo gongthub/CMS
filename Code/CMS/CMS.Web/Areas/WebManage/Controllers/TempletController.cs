@@ -1,6 +1,6 @@
 ﻿using CMS.Application.WebManage;
 using CMS.Code;
-using CMS.Domain.Entity.WebManage; 
+using CMS.Domain.Entity.WebManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -16,6 +16,7 @@ namespace CMS.Application.WebManage
     public class MessageConfigApp
     {
         private IMessageConfigRepository service = DataAccess.CreateIMessageConfigRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         public string GetFormJsonStr(string webSiteId)
         {
@@ -65,7 +66,7 @@ namespace CMS.Application.WebManage
 
             return JsonStr.ToString();
         }
-         
+
 
         public List<MessageConfigEntity> GetViewShow(string webSiteId, string keyValue)
         {
@@ -114,12 +115,18 @@ namespace CMS.Application.WebManage
 
         public void DeleteForm(string webSiteId)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
+
             service.Delete(t => t.WebSiteId == webSiteId);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除站点留言配置信息=>" + webSiteId, Enums.DbLogType.Delete, "站点留言配置管理");
         }
         public void AddForm(MessageConfigEntity moduleEntity)
         {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+
             moduleEntity.Create();
             service.Insert(moduleEntity);
         }

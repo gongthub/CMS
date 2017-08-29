@@ -176,6 +176,51 @@ namespace CMS.SqlServerRepository
             return retBool;
         }
 
+        /// <summary>
+        /// 判断是用户是否有该站点权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public void VerifyUserWebsiteRole(string userId, string webSiteId)
+        {
+            bool bStatus = false;
 
+            UserEntity useEntity = FindEntity(userId);
+            if (useEntity != null && !string.IsNullOrEmpty(useEntity.Id))
+            {
+                if (IsSystemUserName(useEntity.Account))
+                {
+                    bStatus = true;
+                }
+                else
+                {
+                    List<string> userWebSiteIds = iUserWebSiteRepository.IQueryable(m => m.DeleteMark != true
+                        && m.UserId == userId).Select(m => m.WebSiteId).ToList();
+                    if (userWebSiteIds != null && userWebSiteIds.Count > 0)
+                    {
+                        bStatus = userWebSiteIds.Contains(webSiteId);
+                    }
+                }
+            }
+            if (!bStatus)
+            {
+                throw new Exception("当前用户无该站点操作权限！");
+            }
+        }
+        /// <summary>
+        /// 判断是用户是否有该站点权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="webSiteId"></param>
+        /// <returns></returns>
+        public void VerifyUserWebsiteRole(string webSiteId)
+        {
+            var operatorModel = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (operatorModel != null)
+            {
+                VerifyUserWebsiteRole(operatorModel.UserId, webSiteId);
+            }
+        }
     }
 }

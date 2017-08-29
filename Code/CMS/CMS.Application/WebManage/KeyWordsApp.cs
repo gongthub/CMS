@@ -14,6 +14,7 @@ namespace CMS.Application.WebManage
     public class KeyWordsApp
     {
         private IKeyWordsRespository service = DataAccess.CreateIKeyWordsRespository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
         public KeyWordsEntity GetForm(string keyValue)
         {
@@ -83,10 +84,18 @@ namespace CMS.Application.WebManage
 
         public void SubmitForm(KeyWordsEntity moduleEntity, string keyValue)
         {
+
             if (!service.IsExist(keyValue, "FullName", moduleEntity.FullName, moduleEntity.WebSiteId, true))
             {
                 if (!string.IsNullOrEmpty(keyValue))
                 {
+                    KeyWordsEntity moduleEntityT = service.FindEntity(keyValue);
+                    if (moduleEntityT != null)
+                    {
+                        //验证用户站点权限
+                        iUserRepository.VerifyUserWebsiteRole(moduleEntityT.WebSiteId);
+                        moduleEntity.WebSiteId = moduleEntityT.WebSiteId;
+                    }
                     moduleEntity.Modify(keyValue);
                     service.Update(moduleEntity);
                     //添加日志
@@ -107,6 +116,12 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
+            KeyWordsEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除关键词信息=>" + keyValue, Enums.DbLogType.Delete, "关键词管理");

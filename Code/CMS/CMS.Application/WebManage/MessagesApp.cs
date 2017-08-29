@@ -14,6 +14,7 @@ namespace CMS.Application.WebManage
     public class MessagesApp
     {
         private IMessagesRepository service = DataAccess.CreateIMessagesRepository();
+        private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
 
         public MessagesEntity GetForm(string keyValue)
@@ -96,6 +97,12 @@ namespace CMS.Application.WebManage
         }
         public void DeleteForm(string keyValue)
         {
+            MessagesEntity moduleEntity = service.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
             service.DeleteById(t => t.Id == keyValue);
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除留言信息=>" + keyValue, Enums.DbLogType.Delete, "留言管理");

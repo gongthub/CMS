@@ -115,7 +115,7 @@ namespace CMS.Application.SystemManage
         {
             int iWebSiteNum = service.GetUserWebSiteMaxNum();
             return iWebSiteNum;
-        }
+        } 
 
     }
 }
