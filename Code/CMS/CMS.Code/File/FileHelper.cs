@@ -249,9 +249,10 @@ namespace CMS.Code
         /// <param name="file">要删除的文件路径和名称</param>
         public static void DeleteFile(string file)
         {
-            if (File.Exists(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file))
+            string strPhyPaths = FileHelper.MapPath(file);
+            if (File.Exists(strPhyPaths))
             {
-                File.Delete(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file);
+                File.Delete(strPhyPaths);
             }
         }
         /// <summary>
@@ -262,7 +263,8 @@ namespace CMS.Code
         {
             if (!IsMapPath)
             {
-                file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;
+                string strPhyPaths = FileHelper.MapPath(file);
+                file = strPhyPaths;
             }
             if (File.Exists(file))
             {

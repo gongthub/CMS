@@ -45,11 +45,14 @@ namespace CMS.SqlServerRepository
                     {
                         string mIds = moduleEntity.ColumnId;
                         ColumnsEntity cmModel = iColumnsRepository.GetFormNoDel(mIds);
-                        if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                        if (cmModel.Type == (int)Code.Enums.ModuleType.Content || cmModel.Type == (int)Code.Enums.ModuleType.List || cmModel.Type == (int)Code.Enums.ModuleType.AdvancedList)
                         {
-                            string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
-                            moduleEntity.UrlAddress = urlAddress;
-                            //SubmitForm(moduleEntity, moduleEntity.Id);
+                            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                            {
+                                string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                                moduleEntity.UrlAddress = urlAddress;
+                                //SubmitForm(moduleEntity, moduleEntity.Id);
+                            }
                         }
                         moduleEntity.Create();
                         db.Insert(moduleEntity);
@@ -91,11 +94,14 @@ namespace CMS.SqlServerRepository
                     {
                         string mIds = moduleEntity.ColumnId;
                         ColumnsEntity cmModel = iColumnsRepository.GetFormNoDel(mIds);
-                        if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                        if (cmModel.Type == (int)Code.Enums.ModuleType.Content || cmModel.Type == (int)Code.Enums.ModuleType.List || cmModel.Type == (int)Code.Enums.ModuleType.AdvancedList)
                         {
-                            string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
-                            moduleEntity.UrlAddress = urlAddress;
-                            //SubmitForm(moduleEntity, moduleEntity.Id);
+                            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                            {
+                                string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                                moduleEntity.UrlAddress = urlAddress;
+                                //SubmitForm(moduleEntity, moduleEntity.Id);
+                            }
                         }
                         moduleEntity.Create();
                         db.Insert(moduleEntity);
@@ -155,11 +161,14 @@ namespace CMS.SqlServerRepository
                         moduleEntity.Create();
                         string mIds = moduleEntity.ColumnId;
                         ColumnsEntity cmModel = iColumnsRepository.GetFormNoDel(mIds);
-                        if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                        if (cmModel.Type == (int)Code.Enums.ModuleType.Content || cmModel.Type == (int)Code.Enums.ModuleType.List || cmModel.Type == (int)Code.Enums.ModuleType.AdvancedList)
                         {
-                            string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
-                            moduleEntity.UrlAddress = urlAddress;
-                            //SubmitForm(moduleEntity, moduleEntity.Id);
+                            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(cmModel) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(cmModel.Id))
+                            {
+                                string urlAddress = @"\" + cmModel.ActionName + @"\" + moduleEntity.Id;
+                                moduleEntity.UrlAddress = urlAddress;
+                                //SubmitForm(moduleEntity, moduleEntity.Id);
+                            }
                         }
                         db.Insert(moduleEntity);
                         //添加日志

@@ -196,7 +196,8 @@
                         height: "650px",
                         btn: null
                     });
-                } else {
+                }
+                if (type == 1 || type == 2) {
                     $.modalOpen({
                         id: "Form",
                         title: moduleName + " 》修改内容",

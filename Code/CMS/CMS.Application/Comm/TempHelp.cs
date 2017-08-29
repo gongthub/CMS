@@ -245,11 +245,12 @@ namespace CMS.Application.Comm
             {
                 string templets = GetHtmlPages(codes, Id);
                 ContentApp c_ContentApp = new ContentApp();
-                ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Id);
+                ContentEntity contentEntity = c_ContentApp.GetForm(Id);
                 if (contentEntity != null && contentEntity.ColumnId != null)
                 {
+                    string strPhyPaths = FileHelper.MapPath(contentEntity.UrlPath);
                     //已生成静态文件时
-                    if (contentEntity.UrlPath != null && FileHelper.IsExistFile(System.Web.HttpContext.Current.Request.PhysicalApplicationPath + contentEntity.UrlPath))
+                    if (contentEntity.UrlPath != null && FileHelper.IsExistFile(strPhyPaths))
                     {
                         FileHelper.DeleteFile(contentEntity.UrlPath);
                         GenHtml(contentEntity.UrlPath, templets);
