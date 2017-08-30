@@ -1288,8 +1288,9 @@ namespace CMS.Application.Comm
             List<UpFileEntity> upFileEntitys = new List<UpFileEntity>();
             UpFileApp upFileApp = new UpFileApp();
             IQueryable<UpFileEntity> upFileEntitysT = upFileApp.GetListIq();
+            upFileEntitysT = upFileEntitysT.Where(m => m.ParentId == Ids);
 
-            if (upFileEntitysT != null)
+            if (upFileEntitysT != null && upFileEntitysT.Count() > 0)
             {
                 //排序
                 if (attrs.ContainsKey("sort"))
@@ -1324,7 +1325,6 @@ namespace CMS.Application.Comm
                     }
 
                 }
-                upFileEntitysT = upFileEntitysT.Where(m => m.ParentId == Ids);
                 upFileEntitys = upFileEntitysT.ToList();
                 //处理连接地址
                 upFileEntitys.ForEach(delegate(UpFileEntity model)
