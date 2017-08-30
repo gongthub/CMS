@@ -143,11 +143,20 @@ namespace CMS.Application.SystemManage
                 string fileExtension = Path.GetExtension(fileName); // 文件扩展名  
                 string newFileName = GetFileNameByTime();
 
+
                 // 文件上传后的保存路径 
                 string filePath = InitSavePath(upPaths);
                 string saveName = newFileName + fileExtension; // 保存文件名称
                 filePaths = upPathsT + saveName;
-                file.SaveAs(filePath + saveName);
+                if (Code.ConfigHelp.configHelp.ISCOMPRESSIONIMG)
+                {
+                    System.Drawing.Image iSource = System.Drawing.Image.FromStream(file.InputStream);
+                    Code.ImageHelper.imageHelperp.GetPicThumbnail(iSource, filePath + saveName, Code.ConfigHelp.configHelp.COMPRESSIONIMGFLAG);
+                }
+                else
+                {
+                    file.SaveAs(filePath + saveName);
+                }
 
                 entity.Sys_FileName = saveName;
                 entity.Sys_FileOldName = fileName;
@@ -187,7 +196,15 @@ namespace CMS.Application.SystemManage
                 string filePath = InitSavePath(upPaths);
                 string saveName = newFileName + fileExtension; // 保存文件名称
                 filePaths = upPathsT + saveName;
-                file.SaveAs(filePath + saveName);
+                if (Code.ConfigHelp.configHelp.ISCOMPRESSIONIMG)
+                {
+                    System.Drawing.Image iSource = System.Drawing.Image.FromStream(file.InputStream);
+                    Code.ImageHelper.imageHelperp.GetPicThumbnail(iSource, filePath + saveName, Code.ConfigHelp.configHelp.COMPRESSIONIMGFLAG);
+                }
+                else
+                {
+                    file.SaveAs(filePath + saveName);
+                }
 
                 entity.Sys_FileName = saveName;
                 entity.Sys_FileOldName = fileName;

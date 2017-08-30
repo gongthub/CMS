@@ -78,6 +78,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
+        [HandlerAuthorize]
         //[ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult SubmitForm(WebSiteEntity moduleEntity, string keyValue, UpFileDTO upFileentity)

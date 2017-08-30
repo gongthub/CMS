@@ -19,7 +19,14 @@ namespace CMS.Web
             WEBURL = Configs.GetValue("WebUrl");
             if (!string.IsNullOrEmpty(HttpContext.Current.Request.Url.Authority))
             {
-                WEBURL = string.Format(WEBURL, HttpContext.Current.Request.Url.Authority);
+                if (Code.ConfigHelp.configHelp.ISOPENPORT)
+                {
+                    WEBURL = string.Format(WEBURL, HttpContext.Current.Request.Url.Authority);
+                }
+                else
+                {
+                    WEBURL = string.Format(WEBURL, HttpContext.Current.Request.Url.Host);
+                }
             }
         }
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -29,7 +36,6 @@ namespace CMS.Web
                 return;
             }
             Guid Ids = Guid.Empty;
-            //if (filterContext.HttpContext.Session["WEBSITEID"] == null || !Guid.TryParse(filterContext.HttpContext.Session["WEBSITEID"].ToString(), out Ids))
             if (SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId() == null || !Guid.TryParse(SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId(), out Ids))
             {
 
@@ -45,8 +51,6 @@ namespace CMS.Web
                     sbScript.Append("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
                     filterContext.Result = new ContentResult() { Content = sbScript.ToString() };
                 }
-                //WebHelper.WriteCookie("cms_login_error", "nowebsite");
-                //filterContext.HttpContext.Response.Write("<script>alert('站点信息丢失！请重新选择站点！');top.location.href = '" + WEBURL + "/Home/Index';</script>");
                 return;
             }
         }

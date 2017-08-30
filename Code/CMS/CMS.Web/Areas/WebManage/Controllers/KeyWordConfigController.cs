@@ -46,6 +46,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
         }
         [HttpPost]
         [HandlerAjaxOnly]
+        [HandlerAuthorize]
         //[ValidateAntiForgeryToken]
         public ActionResult SubmitForm(KeyWordsEntity moduleEntity, string keyValue)
         {

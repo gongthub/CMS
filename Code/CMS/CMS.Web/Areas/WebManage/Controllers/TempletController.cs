@@ -45,6 +45,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
 
         [HttpPost]
         [HandlerAjaxOnly]
+        [HandlerAuthorize]
         //[ValidateAntiForgeryToken]
         [ValidateInput(false)]
         public ActionResult SubmitForm(TempletEntity moduleEntity, string keyValue)

@@ -44,6 +44,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
          
         [HttpPost]
         [HandlerAjaxOnly]
+        [HandlerAuthorize]
         //[ValidateAntiForgeryToken]
         public ActionResult SubmitFormAdd(string DirName, string keyValue)
         {

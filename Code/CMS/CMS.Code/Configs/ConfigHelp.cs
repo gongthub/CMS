@@ -244,6 +244,32 @@ namespace CMS.Code
                 return Code.Configs.GetValue("WebUrlHttp").ToString();
             }
         }
+
+        /// <summary>
+        /// 是否压缩上传图片
+        /// </summary>
+        public bool ISCOMPRESSIONIMG
+        {
+            get
+            {
+                bool IsCompressionImg = false;
+                bool.TryParse(Code.Configs.GetValue("IsCompressionImg").ToString(), out IsCompressionImg);
+                return IsCompressionImg;
+            }
+        }
+
+        /// <summary>
+        /// 压缩上传图片 压缩比 1-100
+        /// </summary>
+        public int COMPRESSIONIMGFLAG
+        {
+            get
+            {
+                int CompressionImgFlag = 0;
+                int.TryParse(Code.Configs.GetValue("CompressionImgFlag").ToString(), out CompressionImgFlag);
+                return CompressionImgFlag;
+            }
+        }
         #endregion
 
         #region 上传图片配置

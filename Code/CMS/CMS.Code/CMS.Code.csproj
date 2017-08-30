@@ -115,6 +115,7 @@
     <Compile Include="File\FileHelper.cs" />
     <Compile Include="GZip.cs" />
     <Compile Include="Html\HtmlImporter.cs" />
+    <Compile Include="Image\ImageHelper.cs" />
     <Compile Include="Json\Json.cs" />
     <Compile Include="JudgmentHelp.cs" />
     <Compile Include="Licence.cs" />
