@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMS.Code;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,7 @@ public class CrawlerHandler : Handler
     public CrawlerHandler(HttpContext context)
         : base(context)
     {
-
-        if (context.Session["WEBSITESHORTNAME"] != null)
-        {
-            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
-        }
+        Base_WebSiteShortName = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteShortName();
     }
 
     public override void Process()

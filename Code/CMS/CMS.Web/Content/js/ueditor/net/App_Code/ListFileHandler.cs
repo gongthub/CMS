@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMS.Code;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,10 +36,8 @@ public class ListFileManager : Handler
     public ListFileManager(HttpContext context, string pathToList, string[] searchExtensions)
         : base(context)
     {
-        if (context.Session["WEBSITESHORTNAME"] != null)
-        {
-            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
-        }
+        Base_WebSiteShortName = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteShortName();
+
         this.SearchExtensions = searchExtensions.Select(x => x.ToLower()).ToArray();
         pathToList = pathToList.Replace("{websitename}", Base_WebSiteShortName);
         this.PathToList = pathToList;

@@ -69,10 +69,6 @@ namespace CMS.Web
             get
             {
                 string Ids = Guid.Empty.ToString();
-                //if (Session["WEBSITEID"] != null)
-                //{
-                //    Ids = Session["WEBSITEID"].ToString();
-                //}
                 Ids = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId();
                 return Ids;
             }
@@ -87,10 +83,6 @@ namespace CMS.Web
             get
             {
                 string strShortName = string.Empty;
-                //if (Session["WEBSITESHORTNAME"] != null)
-                //{
-                //    strShortName = Session["WEBSITESHORTNAME"].ToString();
-                //}
                 strShortName = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteShortName();
                 return strShortName;
             }
@@ -105,10 +97,6 @@ namespace CMS.Web
             get
             {
                 WebSiteEntity entity = new WebSiteEntity();
-                //if (Session["WEBSITEENTITY"] != null)
-                //{
-                //    entity = Session["WEBSITEENTITY"] as WebSiteEntity;
-                //}
                 entity = SysLoginObjHelp.sysLoginObjHelp.GetWebSit<WebSiteEntity>();
                 return entity;
             }

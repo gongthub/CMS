@@ -1,4 +1,5 @@
 ﻿using CMS.Application.SystemManage;
+using CMS.Code;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,14 +36,8 @@ public class UploadHandler : Handler
         this.UploadConfig = config;
         this.Result = new UploadResult() { State = UploadState.Unknown };
 
-        if (context.Session["WEBSITESHORTNAME"] != null)
-        {
-            Base_WebSiteShortName = context.Session["WEBSITESHORTNAME"].ToString();
-        }
-        if (context.Session["WEBSITEID"] != null)
-        {
-            Base_WebSiteId = context.Session["WEBSITEID"].ToString();
-        }
+        Base_WebSiteShortName = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteShortName();
+        Base_WebSiteId = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId();
     }
 
     public override void Process()

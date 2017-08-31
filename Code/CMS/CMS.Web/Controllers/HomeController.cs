@@ -36,16 +36,11 @@ namespace CMS.Web.Controllers
                 SysLoginObjHelp.sysLoginObjHelp.AddWebSiteId(entity.Id);
                 SysLoginObjHelp.sysLoginObjHelp.AddWebSiteName(entity.FullName);
                 SysLoginObjHelp.sysLoginObjHelp.AddWebSiteShortName(entity.ShortName);
-                //Session["WEBSITEID"] = entity.Id;
-                //Session["WEBSITENAME"] = entity.FullName;
-                //Session["WEBSITESHORTNAME"] = entity.ShortName;
                 if (!string.IsNullOrEmpty(entity.UrlAddress))
                 {
                     string strUrlAddress = entity.UrlAddress.ToLower().Replace("http://", "");
-                    //Session["WEBSITEURLADDRESS"] = strUrlAddress;
                     SysLoginObjHelp.sysLoginObjHelp.AddWebSiteAddress(strUrlAddress);
                 }
-                //Session["WEBSITEENTITY"] = entity;
                 SysLoginObjHelp.sysLoginObjHelp.AddWebSite<WebSiteEntity>(entity);
             }
 

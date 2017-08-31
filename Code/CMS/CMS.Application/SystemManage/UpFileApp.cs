@@ -456,9 +456,9 @@ namespace CMS.Application.SystemManage
                 if (IsSave)
                 {
                     string Ids = Guid.Empty.ToString();
-                    if (HttpContext.Current.Session["WEBSITEID"] != null)
+                    if (SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId() != null)
                     {
-                        Ids = HttpContext.Current.Session["WEBSITEID"].ToString();
+                        Ids = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId();
                         entity.Sys_WebSiteId = Ids;
                     }
                     UpFileApp upFileApp = new UpFileApp();
@@ -510,9 +510,9 @@ namespace CMS.Application.SystemManage
                 if (IsSave)
                 {
                     string Ids = Guid.Empty.ToString();
-                    if (HttpContext.Current.Session["WEBSITEID"] != null)
+                    if (SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId() != null)
                     {
-                        Ids = HttpContext.Current.Session["WEBSITEID"].ToString();
+                        Ids = SysLoginObjHelp.sysLoginObjHelp.GetWebSiteId();
                         entity.Sys_WebSiteId = Ids;
                     }
                     UpFileApp upFileApp = new UpFileApp();
