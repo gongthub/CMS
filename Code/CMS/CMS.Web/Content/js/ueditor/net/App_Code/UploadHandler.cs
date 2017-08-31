@@ -46,6 +46,7 @@ public class UploadHandler : Handler
         string uploadFileName = null;
         string newFileName = string.Empty;
         string extension = string.Empty;
+        Stream fileStream = null;
 
         if (UploadConfig.Base64)
         {
@@ -56,7 +57,7 @@ public class UploadHandler : Handler
         {
             var file = Request.Files[UploadConfig.UploadFieldName];
             uploadFileName = file.FileName;
-
+            fileStream = file.InputStream;
             if (!CheckFileType(uploadFileName))
             {
                 Result.State = UploadState.TypeNotAllow;
@@ -92,7 +93,21 @@ public class UploadHandler : Handler
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(localPath));
             }
-            File.WriteAllBytes(localPath, uploadFileBytes);
+            string imgConfigs = CMS.Code.ConfigHelp.configHelp.UPLOADIMGFORMAT;
+            string[] imgConfigsLst = null;
+            if (imgConfigs != null)
+            {
+                imgConfigsLst = imgConfigs.Split('|');
+            }
+            if (CMS.Code.ConfigHelp.configHelp.ISCOMPRESSIONIMG && imgConfigsLst != null && imgConfigsLst.Contains(extension))
+            {
+                System.Drawing.Image iSource = System.Drawing.Image.FromStream(fileStream);
+                CMS.Code.ImageHelper.imageHelperp.GetPicThumbnail(iSource, localPath, CMS.Code.ConfigHelp.configHelp.COMPRESSIONIMGFLAG);
+            }
+            else
+            {
+                File.WriteAllBytes(localPath, uploadFileBytes);
+            }
             Result.Url = savePath;
             Result.State = UploadState.Success;
         }
