@@ -1,6 +1,7 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
 using CMS.Domain.Entity.SystemManage;
+using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository;
 using CMS.RepositoryFactory;
 using System;
@@ -32,6 +33,58 @@ namespace CMS.Application.SystemManage
             return service.IQueryable(t => t.UserId == userId && t.DeleteMark != true).ToList();
         }
         /// <summary>
+        /// 获取当前用户所有站点简称
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<string> GetWebSiteShortName()
+        {
+            List<string> lstshortNames = new List<string>();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.IsSystem)
+                {
+                    lstshortNames = webSiteservice.IQueryable(t => t.DeleteMark != true).Select(m => m.ShortName).ToList();
+                }
+                else
+                {
+                    List<string> ids = service.IQueryable(t => t.UserId == LoginInfo.UserId && t.DeleteMark != true).Select(m => m.WebSiteId).ToList();
+                    lstshortNames = webSiteservice.IQueryable(t => t.DeleteMark != true && ids.Contains(t.Id)).Select(m => m.ShortName).ToList();
+                }
+            }
+            return lstshortNames;
+        }
+        /// <summary>
+        /// 获取当前用户所有站点简称
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<string> GetWebSiteShortName(out List<string> webSiteIds)
+        {
+            List<string> lstshortNames = new List<string>();
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            webSiteIds = new List<string>();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.IsSystem)
+                {
+                    List<WebSiteEntity> webSiteEntitys = webSiteservice.IQueryable(t => t.DeleteMark != true).ToList();
+                    lstshortNames = webSiteEntitys.Select(m => m.ShortName).ToList();
+                    webSiteIds = webSiteEntitys.Select(m => m.Id).ToList();
+                }
+                else
+                {
+                    List<string> ids = service.IQueryable(t => t.UserId == LoginInfo.UserId && t.DeleteMark != true).Select(m => m.WebSiteId).ToList();
+
+                    List<WebSiteEntity> webSiteEntitys = webSiteservice.IQueryable(t => t.DeleteMark != true && ids.Contains(t.Id)).ToList();
+                    lstshortNames = webSiteEntitys.Select(m => m.ShortName).ToList();
+                    webSiteIds = webSiteEntitys.Select(m => m.Id).ToList();
+                }
+            }
+            return lstshortNames;
+        }
+        /// <summary>
         /// 获取当前用户所有站点Id
         /// </summary>
         /// <param name="userId"></param>
@@ -39,7 +92,6 @@ namespace CMS.Application.SystemManage
         public List<string> GetWebSiteIds()
         {
             List<string> lstrids = new List<string>();
-            //var LoginInfo = OperatorProvider.Provider.GetCurrent();
             var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
             if (LoginInfo != null)
             {
@@ -53,6 +105,28 @@ namespace CMS.Application.SystemManage
                 }
             }
             return lstrids;
+        }
+        /// <summary>
+        /// 获取当前用户所有站点数量
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public int GetWebSiteNums()
+        {
+            int num = 0;
+            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+            if (LoginInfo != null)
+            {
+                if (LoginInfo.IsSystem)
+                {
+                    num = webSiteservice.IQueryable(t => t.DeleteMark != true).Select(m => m.Id).Count();
+                }
+                else
+                {
+                    num = service.IQueryable(t => t.UserId == LoginInfo.UserId && t.DeleteMark != true).Select(m => m.WebSiteId).Count();
+                }
+            }
+            return num;
         }
         /// <summary>
         /// 根据用户获取所属站点

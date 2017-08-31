@@ -131,6 +131,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\Common.css" />
     <Content Include="Content\css\framework-about.css" />
     <Content Include="Content\css\framework-font.css" />
     <Content Include="Content\css\framework-login.css" />
@@ -967,6 +968,7 @@
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
+    <Content Include="Views\Home\DefaultWebSite.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -380,6 +380,16 @@ namespace CMS.RepositoryFactory
             object objType = CreateObject(ClassNamespace);
             return (IRequestLogRepository)objType;
         }
+        /// <summary>
+        /// 接口IReportRepositoryy映射 
+        /// </summary>
+        /// <returns></returns>
+        public static IReportRepository CreateIReportRepository()
+        {
+            string ClassNamespace = DLLPATHHASDB + ".ReportRepository";
+            object objType = CreateObject(ClassNamespace);
+            return (IReportRepository)objType;
+        }
         #endregion
     }
 }

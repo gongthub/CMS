@@ -20,13 +20,14 @@ namespace CMS.Web.Areas.WebManage.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult GetAccessDayDates()
         {
+
             DateTime EndDate = DateTime.Now.Date;
             DateTime StartDate = DateTime.Now.AddMonths(-1).Date;
             //日期坐标集合
             List<string> days = GetDayList(StartDate, EndDate);
 
             AccessLogApp accessLogApp = new AccessLogApp();
-            List<AccessLogEntity> models = accessLogApp.GetListByDate(Base_WebSiteId,StartDate, EndDate);
+            List<AccessLogEntity> models = accessLogApp.GetListByDate(Base_WebSiteId, StartDate, EndDate);
             //总访问量集合
             List<string> allDatas = GetAllDatas(models, StartDate, EndDate);
             //老客户访问量集合

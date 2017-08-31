@@ -60,7 +60,7 @@
                                 </li>*@
                             <li class="dropdown profile-dropdown">
                                 <a href="#" class="dropdown" data-toggle="dropdown">
-                                    <img src="~/Content/img/samples/scarlet-159.png" alt="" />
+                                    <img src="~/Content/img/photo.jpg" alt="" />
                                     <span class="hidden-xs">
                                         @if (CMS.Code.SysLoginObjHelp.sysLoginObjHelp.GetOperator() != null)
                                         {
@@ -97,7 +97,8 @@
                         </button>
                         <nav class="page-tabs menuTabs">
                             <div class="page-tabs-content" style="margin-left: 0px;">
-                                <a href="javascript:actionIndex();" class="menuTab active" data-id="/Home/Index">返回首页</a>
+                                <a href="javascript:actionIndex();" class="menuTab" data-id="/Home/Index">平台首页</a>
+                                <a href="javascript:" class="menuTab active" data-id="/Home/DefaultWebSite">站点首页</a>
                             </div>
                         </nav>
                         <button class="roll-nav roll-right tabRight">
@@ -118,7 +119,7 @@
                     </div>
                     <div class="content-iframe" style="background-color: #f9f9f9; overflow: hidden;">
                         <div class="mainContent" id="content-main" style="margin: 10px; margin-bottom: 0px; padding: 0;">
-                            <iframe class="CMS_iframe" width="100%" height="100%" src="/Home/Default" frameborder="0" data-id="/Home/Default"></iframe>
+                            <iframe class="CMS_iframe" width="100%" height="100%" src="/Home/DefaultWebSite" frameborder="0" data-id="/Home/DefaultWebSite"></iframe>
                         </div>
                     </div>
                 </div>
