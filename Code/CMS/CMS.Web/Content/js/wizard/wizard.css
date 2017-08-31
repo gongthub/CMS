@@ -30,7 +30,10 @@
 .wizard ul li .chevron{border: 24px solid transparent;border-left: 14px solid #d4d4d4;border-right: 0;display: block;position: absolute;right: -14px;top: 0;z-index: 1;}
 .wizard ul li .chevron:before{border: 24px solid transparent;border-left: 14px solid #f5f5f5;border-right: 0;content: "";display: block;position: absolute;right: 1px;top: -24px;-webkit-transition: all .218s ease;-moz-transition: all .218s ease;-o-transition: all .218s ease;transition: all .218s ease;}
 .wizard ul li.complete{background: #f5f5f5;color: #444;}
-.wizard ul li.complete:before{display: block;content: "";position: absolute;bottom: 0;left: 0;right: -1px;height: 2px;max-height: 2px;overflow: hidden;background-color: #449d44;z-index: 10000;}
+.wizard ul li.complete:before{display: block;content: "";position: absolute;bottom: 0;left: 0;right: -1px;height: 2px;max-height: 2px;overflow: hidden;background-color: #449d44;
+                              /*z-index: 10000;*/
+
+}
 .wizard ul li.complete:hover{background: #eee;cursor: pointer;}
 .wizard ul li.complete:hover .chevron:before{border-left: 14px solid #eee;}
 .wizard ul li.complete .chevron:before{border-left: 14px solid #f5f5f5;}
@@ -38,7 +41,10 @@
 .wizard ul li.complete .step:before{display: block;position: absolute;top: 0;left: 0;bottom: 0;right: 0;line-height: 20px;text-align: center;border-radius: 100%;content: "";background-color: #fff;z-index: 3;font-family: FontAwesome;font-size: 12px;color: #449d44;}
 .wizard ul li.active{background: #fff;color: #262626;}
 .wizard ul li.active .step{border-color: #1ABC9C;color: #1ABC9C;}
-.wizard ul li.active:before{display: block;content: "";position: absolute;bottom: 0;left: 0;right: -1px;height: 2px;max-height: 2px;overflow: hidden;background-color: #1ABC9C;z-index: 10000;}
+.wizard ul li.active:before{display: block;content: "";position: absolute;bottom: 0;left: 0;right: -1px;height: 2px;max-height: 2px;overflow: hidden;background-color: #1ABC9C;
+                            /*z-index: 10000;*/
+
+}
 .wizard ul li.active .chevron:before{border-left: 14px solid #fff;}
 .wizard ul li .badge{margin-right: 8px;}
 .wizard ul li:first-child{-webkit-border-radius: 2px 0 0 0;-webkit-background-clip: padding-box;-moz-border-radius: 2px 0 0 0;-moz-background-clip: padding;border-radius: 2px 0 0 0;background-clip: padding-box;padding-left: 20px;}

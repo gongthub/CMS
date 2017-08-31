@@ -117,6 +117,7 @@ $.modalOpen = function (options) {
         content: options.url,
         btn: options.btn,
         btnclass: options.btnclass,
+        maxmin:true,
         yes: function () {
             options.callBack(options.id)
         }, cancel: function () {

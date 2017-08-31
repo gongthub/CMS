@@ -44,12 +44,12 @@ html #layui_layer_skinlayercss{display:none;position:absolute;width:1989px}
 .layui-layer-title{padding:0 0px 0 15px;height:40px;line-height:40px;font-size:14px;font-weight: 900;color:#fff;overflow:hidden;background-color:#34495e;border-radius:2px 2px 0 0;}
 .layui-layer-setwin{position:absolute;right:13px;*right:0;top:9px;font-size:0;line-height:initial}
 .layui-layer-setwin a{position:relative;width:16px;height:16px;margin-left:10px;font-size:12px;_overflow:hidden}
-.layui-layer-setwin .layui-layer-min cite{position:absolute;width:14px;height:2px;left:0;top:50%;margin-top:-1px;background-color:#2E2D3C;cursor:pointer;_overflow:hidden}
+.layui-layer-setwin .layui-layer-min cite{position:absolute;width:14px;height:2px;left:0;top:50%;margin-top:-1px;background-color:#ffffff;cursor:pointer;_overflow:hidden}
 .layui-layer-setwin .layui-layer-min:hover cite{background-color:#2D93CA}
-.layui-layer-setwin .layui-layer-max{background-position:-32px -40px}
-.layui-layer-setwin .layui-layer-max:hover{background-position:-16px -40px}
-.layui-layer-setwin .layui-layer-maxmin{background-position:-65px -40px}
-.layui-layer-setwin .layui-layer-maxmin:hover{background-position:-49px -40px}
+.layui-layer-setwin .layui-layer-max{background-position:-214px -53px;margin-top:3px}
+.layui-layer-setwin .layui-layer-max:hover{background-position:-214px -53px;margin-top:3px}
+.layui-layer-setwin .layui-layer-maxmin{background-position:-234px -53px;margin-top:3px}
+.layui-layer-setwin .layui-layer-maxmin:hover{background-position:-234px -53px;margin-top:3px}
 .layui-layer-setwin .layui-layer-close1{text-decoration: none;float: right;font-size: 25px;font-weight: 700;line-height: 1;color: #fff;text-shadow: 0 1px 0 #fff;width:14px;height:14px;}
 .layui-layer-setwin .layui-layer-close1:hover{opacity:.7}
 .layui-layer-setwin .layui-layer-close2{position:absolute;right:-28px;top:-28px;width:30px;height:30px;margin-left:0;background-position:-149px -31px;*right:-18px;_display:none}
