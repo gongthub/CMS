@@ -14,7 +14,7 @@
         <li><a href="/News/d7ec8ce3-5091-4127-9552-b50ac0af15de">新闻2</a></li>
 
         <li><a href="/News/f7a7f3af-6e38-4087-b983-ff031cb760cf">新闻3</a></li>
-        <div style='display:none;' id='hddivPageNew' totalcount='9' currcount='3' totalpage='3' currpage='1' eleid='divPageNew' class='hdsyspage' sort='FullName' sourcename='News' formattime_edittime='yyyy-MM-dd' pagestyle='pageajax' pageele='divPageNew'>
+        <div style='display:none;' id='hddivPageNew' totalcount='9' currcount='7' totalpage='7' currpage='1' eleid='divPageNew' class='hdsyspage' sort='FullName' sourcename='News' formattime_edittime='yyyy-MM-dd' pagestyle='pageajax' pageele='divPageNew'>
             <li><a href="@[model.UrlPage]@">@[model.FullName]@</a></li>
             <div style='display:none;'>
                 <span class='sysajaxpageattr' fname='formattime_edittime' fvalue='yyyy-MM-dd'></span>";
@@ -38,17 +38,20 @@
 
 <script src="/HtmlContent/SysContent/jquery-2.1.1.min.js"></script>
 <script src="/HtmlContent/SysContent/jquery.pagination.min.js"></script>
+<script src="HtmlContent/SysContent/ClientCommon.js"></script>
 <script type="text/javascript">
     $(function () {
-        var hdPageEle = $("#hddivPageNew");
-        var totalPages = hdPageEle.attr("totalPage");
-        var currPages = hdPageEle.attr("currPage");
-        var totalPage = Number(totalPages);
-        var currPage = Number(currPages);
-        if (currPages >= currPage)
-        {
-            initPage(currPage, totalPage);
-        }
+
+        initNewPageEle("divPageNew");
+        //var hdPageEle = $("#hddivPageNew");
+        //var totalPages = hdPageEle.attr("totalPage");
+        //var currPages = hdPageEle.attr("currPage");
+        //var totalPage = Number(totalPages);
+        //var currPage = Number(currPages);
+        //if (currPages >= currPage)
+        //{
+        //    initPage(currPage, totalPage);
+        //}
     });
     function initPage(currpage, totalpage) {
 

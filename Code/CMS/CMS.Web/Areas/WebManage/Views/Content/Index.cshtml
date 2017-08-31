@@ -77,7 +77,7 @@
                 url: "/WebManage/Content/GetGrid",
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
-                    { label: '排序', name: 'SortCode', width: 150, align: 'left' },
+                    { label: '排序', name: 'SortCode', width: 50, align: 'left' },
                     { label: '名称', name: 'FullName', width: 120, align: 'left' },
                     {
                         label: '栏目', name: 'ColumnId', width: 80, align: 'left',
@@ -87,12 +87,10 @@
                     },
                     { label: '作者', name: 'Author', width: 80, align: 'left' },
                     {
-                        label: '编辑时间', name: 'EditTime', width: 150, align: 'left',
-                        formatter: "date", formatoptions: { srcformat: 'Y-m-d H:m:s', newformat: 'Y-m-d H:m:s' }
+                        label: '编辑时间', name: 'EditTime', width: 150, align: 'left'
                     },
                     {
-                        label: '创建时间', name: 'CreatorTime', width: 150, align: 'left',
-                        formatter: "date", formatoptions: { srcformat: 'Y-m-d H:m:s', newformat: 'Y-m-d H:m:s' }
+                        label: '创建时间', name: 'CreatorTime', width: 150, align: 'left'
                     },
                     {
                         label: "是否发布", name: "EnabledMark", width: 60, align: "center",
