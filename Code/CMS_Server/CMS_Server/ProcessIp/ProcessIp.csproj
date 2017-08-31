@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Achieve.cs" />
     <Compile Include="Model\AccessLogEntity.cs" />
+    <Compile Include="Model\CommonOldLogEntity.cs" />
     <Compile Include="Model\RequestLogEntity.cs" />
     <Compile Include="Model\ResultIp.cs" />
     <Compile Include="Model\ResultIpData.cs" />

@@ -54,13 +54,17 @@ namespace ProcessIp.Service
 
         private void InitAccessLogIpForMySql()
         {
+            InitAccessLogIpLocalForMySql();
+
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
             List<AccessLogEntity> models = dbContext.AccessLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
-            if (models != null && models.Count > 0)
+
+            List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
+            if (IpLst != null && IpLst.Count > 0)
             {
                 int num = 1;
                 int sTime = 0;
-                foreach (AccessLogEntity model in models)
+                foreach (string IpAddress in IpLst)
                 {
                     sTime++;
                     if (sTime >= 100)
@@ -68,24 +72,33 @@ namespace ProcessIp.Service
                         sTime = 0;
                         System.Threading.Thread.Sleep(5000);
                     }
-                    if (!string.IsNullOrEmpty(model.IPAddress))
+                    if (!string.IsNullOrEmpty(IpAddress))
                     {
                         try
                         {
-                            ResultIpData data = GetIpAddress(model.IPAddress);
+                            ResultIpData data = GetIpAddress(IpAddress);
                             if (data != null && !string.IsNullOrEmpty(data.ip))
                             {
-                                model.Country = data.country;
-                                model.CountryNo = data.country_id;
-                                model.BigArea = data.area;
-                                model.Isp = data.isp;
-                                model.Province = data.region;
-                                model.City = data.city;
-                                model.Area = data.county;
-                                model.IsProcessIp = true;
-                                dbContext.AccessLogEntitys.Add(model);
-                                dbContext.Entry<AccessLogEntity>(model).State = EntityState.Modified;
-                                dbContext.SaveChanges();
+                                if (models != null && models.Count > 0)
+                                {
+                                    models.ForEach(delegate(AccessLogEntity accessModel)
+                                    {
+                                        if (accessModel.IPAddress == IpAddress)
+                                        {
+                                            accessModel.Country = data.country;
+                                            accessModel.CountryNo = data.country_id;
+                                            accessModel.BigArea = data.area;
+                                            accessModel.Isp = data.isp;
+                                            accessModel.Province = data.region;
+                                            accessModel.City = data.city;
+                                            accessModel.Area = data.county;
+                                            accessModel.IsProcessIp = true;
+                                            dbContext.AccessLogEntitys.Add(accessModel);
+                                            dbContext.Entry<AccessLogEntity>(accessModel).State = EntityState.Modified;
+                                            dbContext.SaveChanges();
+                                        }
+                                    });
+                                }
                             }
                             else
                             {
@@ -104,13 +117,16 @@ namespace ProcessIp.Service
         }
         private void InitAccessLogIpForSqlServer()
         {
+            InitAccessLogIpLocalForSqlServer();
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
             List<AccessLogEntity> models = dbContext.AccessLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
-            if (models != null && models.Count > 0)
+
+            List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
+            if (IpLst != null && IpLst.Count > 0)
             {
                 int num = 1;
                 int sTime = 0;
-                foreach (AccessLogEntity model in models)
+                foreach (string IpAddress in IpLst)
                 {
                     sTime++;
                     if (sTime >= 100)
@@ -118,28 +134,37 @@ namespace ProcessIp.Service
                         sTime = 0;
                         System.Threading.Thread.Sleep(5000);
                     }
-                    if (!string.IsNullOrEmpty(model.IPAddress))
+                    if (!string.IsNullOrEmpty(IpAddress))
                     {
                         try
                         {
-                            ResultIpData data = GetIpAddress(model.IPAddress);
+                            ResultIpData data = GetIpAddress(IpAddress);
                             if (data != null && !string.IsNullOrEmpty(data.ip))
                             {
-                                model.Country = data.country;
-                                model.CountryNo = data.country_id;
-                                model.BigArea = data.area;
-                                model.Isp = data.isp;
-                                model.Province = data.region;
-                                model.City = data.city;
-                                model.Area = data.county;
-                                model.IsProcessIp = true;
-                                dbContext.AccessLogEntitys.Add(model);
-                                dbContext.Entry<AccessLogEntity>(model).State = EntityState.Modified;
-                                dbContext.SaveChanges();
+                                if (models != null && models.Count > 0)
+                                {
+                                    models.ForEach(delegate(AccessLogEntity accessModel)
+                                    {
+                                        if (accessModel.IPAddress == IpAddress)
+                                        {
+                                            accessModel.Country = data.country;
+                                            accessModel.CountryNo = data.country_id;
+                                            accessModel.BigArea = data.area;
+                                            accessModel.Isp = data.isp;
+                                            accessModel.Province = data.region;
+                                            accessModel.City = data.city;
+                                            accessModel.Area = data.county;
+                                            accessModel.IsProcessIp = true;
+                                            dbContext.AccessLogEntitys.Add(accessModel);
+                                            dbContext.Entry<AccessLogEntity>(accessModel).State = EntityState.Modified;
+                                            dbContext.SaveChanges();
+                                        }
+                                    });
+                                }
                             }
                             else
                             {
-                                iLog.WriteLog("InitAccessLogIpForMySql：未获取到结果", 1);
+                                iLog.WriteLog("InitAccessLogIpForSqlServer：未获取到结果", 1);
                             }
                         }
                         catch (Exception ex)
@@ -154,13 +179,16 @@ namespace ProcessIp.Service
         }
         private void InitRequestLogIpForMySql()
         {
+            InitRequestLogLocalForMySql();
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
             List<RequestLogEntity> models = dbContext.RequestLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
-            if (models != null && models.Count > 0)
+
+            List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
+            if (IpLst != null && IpLst.Count > 0)
             {
                 int num = 1;
                 int sTime = 0;
-                foreach (RequestLogEntity model in models)
+                foreach (string IpAddress in IpLst)
                 {
                     sTime++;
                     if (sTime >= 100)
@@ -168,24 +196,33 @@ namespace ProcessIp.Service
                         sTime = 0;
                         System.Threading.Thread.Sleep(5000);
                     }
-                    if (!string.IsNullOrEmpty(model.IPAddress))
+                    if (!string.IsNullOrEmpty(IpAddress))
                     {
                         try
                         {
-                            ResultIpData data = GetIpAddress(model.IPAddress);
+                            ResultIpData data = GetIpAddress(IpAddress);
                             if (data != null && !string.IsNullOrEmpty(data.ip))
                             {
-                                model.Country = data.country;
-                                model.CountryNo = data.country_id;
-                                model.BigArea = data.area;
-                                model.Isp = data.isp;
-                                model.Province = data.region;
-                                model.City = data.city;
-                                model.Area = data.county;
-                                model.IsProcessIp = true;
-                                dbContext.RequestLogEntitys.Add(model);
-                                dbContext.Entry<RequestLogEntity>(model).State = EntityState.Modified;
-                                dbContext.SaveChanges();
+                                if (models != null && models.Count > 0)
+                                {
+                                    models.ForEach(delegate(RequestLogEntity requestModel)
+                                    {
+                                        if (requestModel.IPAddress == IpAddress)
+                                        {
+                                            requestModel.Country = data.country;
+                                            requestModel.CountryNo = data.country_id;
+                                            requestModel.BigArea = data.area;
+                                            requestModel.Isp = data.isp;
+                                            requestModel.Province = data.region;
+                                            requestModel.City = data.city;
+                                            requestModel.Area = data.county;
+                                            requestModel.IsProcessIp = true;
+                                            dbContext.RequestLogEntitys.Add(requestModel);
+                                            dbContext.Entry<RequestLogEntity>(requestModel).State = EntityState.Modified;
+                                            dbContext.SaveChanges();
+                                        }
+                                    });
+                                }
                             }
                             else
                             {
@@ -204,13 +241,16 @@ namespace ProcessIp.Service
         }
         private void InitRequestLogIpForSqlServer()
         {
+            InitRequestLogLocalForSqlServer();
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
             List<RequestLogEntity> models = dbContext.RequestLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
-            if (models != null && models.Count > 0)
+
+            List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
+            if (IpLst != null && IpLst.Count > 0)
             {
                 int num = 1;
                 int sTime = 0;
-                foreach (RequestLogEntity model in models)
+                foreach (string IpAddress in IpLst)
                 {
                     sTime++;
                     if (sTime >= 100)
@@ -218,24 +258,33 @@ namespace ProcessIp.Service
                         sTime = 0;
                         System.Threading.Thread.Sleep(5000);
                     }
-                    if (!string.IsNullOrEmpty(model.IPAddress))
+                    if (!string.IsNullOrEmpty(IpAddress))
                     {
                         try
                         {
-                            ResultIpData data = GetIpAddress(model.IPAddress);
+                            ResultIpData data = GetIpAddress(IpAddress);
                             if (data != null && !string.IsNullOrEmpty(data.ip))
                             {
-                                model.Country = data.country;
-                                model.CountryNo = data.country_id;
-                                model.BigArea = data.area;
-                                model.Isp = data.isp;
-                                model.Province = data.region;
-                                model.City = data.city;
-                                model.Area = data.county;
-                                model.IsProcessIp = true;
-                                dbContext.RequestLogEntitys.Add(model);
-                                dbContext.Entry<RequestLogEntity>(model).State = EntityState.Modified;
-                                dbContext.SaveChanges();
+                                if (models != null && models.Count > 0)
+                                {
+                                    models.ForEach(delegate(RequestLogEntity requestModel)
+                                    {
+                                        if (requestModel.IPAddress == IpAddress)
+                                        {
+                                            requestModel.Country = data.country;
+                                            requestModel.CountryNo = data.country_id;
+                                            requestModel.BigArea = data.area;
+                                            requestModel.Isp = data.isp;
+                                            requestModel.Province = data.region;
+                                            requestModel.City = data.city;
+                                            requestModel.Area = data.county;
+                                            requestModel.IsProcessIp = true;
+                                            dbContext.RequestLogEntitys.Add(requestModel);
+                                            dbContext.Entry<RequestLogEntity>(requestModel).State = EntityState.Modified;
+                                            dbContext.SaveChanges();
+                                        }
+                                    });
+                                }
                             }
                             else
                             {
@@ -251,6 +300,164 @@ namespace ProcessIp.Service
                     num++;
                 }
             }
+        }
+
+        private void InitAccessLogIpLocalForMySql()
+        {
+            string strSql = @"SELECT distinct A.id,A.IPAddress,B.Country,B.CountryNo,B.BigArea,B.Isp,B.Province,B.City,B.Area from (
+	                            SELECT A.Id,A.IPAddress from sys_accesslog as A
+	                            where IsProcessIp is NULL or IsProcessIp =0
+                            )as A
+                            left join sys_accesslog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
+
+            MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
+            models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
+            if (models != null && models.Count > 0)
+            {
+                List<string> modelIds = models.Select(m => m.Id).ToList();
+                List<AccessLogEntity> modelsT = dbContext.AccessLogEntitys.Where(m => modelIds.Contains(m.Id)).ToList();
+                if (modelsT != null && modelsT.Count > 0)
+                {
+                    foreach (AccessLogEntity model in modelsT)
+                    {
+                        CommonOldLogEntity modelT = models.Find(m => m.Id == model.Id);
+                        if (modelT != null)
+                        {
+                            model.Country = modelT.Country;
+                            model.CountryNo = modelT.CountryNo;
+                            model.BigArea = modelT.BigArea;
+                            model.Isp = modelT.Isp;
+                            model.Province = modelT.Province;
+                            model.City = modelT.City;
+                            model.Area = modelT.Area;
+                            model.IsProcessIp = true;
+                            dbContext.AccessLogEntitys.Add(model);
+                            dbContext.Entry<AccessLogEntity>(model).State = EntityState.Modified;
+                            dbContext.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+        }
+        private void InitRequestLogLocalForMySql()
+        {
+            string strSql = @"SELECT distinct A.id,A.IPAddress,B.Country,B.CountryNo,B.BigArea,B.Isp,B.Province,B.City,B.Area from (
+	                            SELECT A.Id,A.IPAddress from sys_requestlog as A
+	                            where IsProcessIp is NULL or IsProcessIp =0
+                            )as A
+                            left join sys_requestlog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
+
+            MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
+            models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
+            if (models != null && models.Count > 0)
+            {
+                List<string> modelIds = models.Select(m => m.Id).ToList();
+                List<RequestLogEntity> modelsT = dbContext.RequestLogEntitys.Where(m => modelIds.Contains(m.Id)).ToList();
+                if (modelsT != null && modelsT.Count > 0)
+                {
+                    foreach (RequestLogEntity model in modelsT)
+                    {
+                        CommonOldLogEntity modelT = models.Find(m => m.Id == model.Id);
+                        if (modelT != null)
+                        {
+                            model.Country = modelT.Country;
+                            model.CountryNo = modelT.CountryNo;
+                            model.BigArea = modelT.BigArea;
+                            model.Isp = modelT.Isp;
+                            model.Province = modelT.Province;
+                            model.City = modelT.City;
+                            model.Area = modelT.Area;
+                            model.IsProcessIp = true;
+                            dbContext.RequestLogEntitys.Add(model);
+                            dbContext.Entry<RequestLogEntity>(model).State = EntityState.Modified;
+                            dbContext.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void InitAccessLogIpLocalForSqlServer()
+        {
+            string strSql = @"SELECT distinct A.id,A.IPAddress,B.Country,B.CountryNo,B.BigArea,B.Isp,B.Province,B.City,B.Area from (
+	                            SELECT A.Id,A.IPAddress from sys_accesslog as A
+	                            where IsProcessIp is NULL or IsProcessIp =0
+                            )as A
+                            left join sys_accesslog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
+
+            SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
+            models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
+            if (models != null && models.Count > 0)
+            {
+                List<string> modelIds = models.Select(m => m.Id).ToList();
+                List<AccessLogEntity> modelsT = dbContext.AccessLogEntitys.Where(m => modelIds.Contains(m.Id)).ToList();
+                if (modelsT != null && modelsT.Count > 0)
+                {
+                    foreach (AccessLogEntity model in modelsT)
+                    {
+                        CommonOldLogEntity modelT = models.Find(m => m.Id == model.Id);
+                        if (modelT != null)
+                        {
+                            model.Country = modelT.Country;
+                            model.CountryNo = modelT.CountryNo;
+                            model.BigArea = modelT.BigArea;
+                            model.Isp = modelT.Isp;
+                            model.Province = modelT.Province;
+                            model.City = modelT.City;
+                            model.Area = modelT.Area;
+                            model.IsProcessIp = true;
+                            dbContext.AccessLogEntitys.Add(model);
+                            dbContext.Entry<AccessLogEntity>(model).State = EntityState.Modified;
+                            dbContext.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+        }
+        private void InitRequestLogLocalForSqlServer()
+        {
+            string strSql = @"SELECT distinct A.id,A.IPAddress,B.Country,B.CountryNo,B.BigArea,B.Isp,B.Province,B.City,B.Area from (
+	                            SELECT A.Id,A.IPAddress from sys_requestlog as A
+	                            where IsProcessIp is NULL or IsProcessIp =0
+                            )as A
+                            left join sys_requestlog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
+
+            SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
+            models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
+            if (models != null && models.Count > 0)
+            {
+                List<string> modelIds = models.Select(m => m.Id).ToList();
+                List<RequestLogEntity> modelsT = dbContext.RequestLogEntitys.Where(m => modelIds.Contains(m.Id)).ToList();
+                if (modelsT != null && modelsT.Count > 0)
+                {
+                    foreach (RequestLogEntity model in modelsT)
+                    {
+                        CommonOldLogEntity modelT = models.Find(m => m.Id == model.Id);
+                        if (modelT != null)
+                        {
+                            model.Country = modelT.Country;
+                            model.CountryNo = modelT.CountryNo;
+                            model.BigArea = modelT.BigArea;
+                            model.Isp = modelT.Isp;
+                            model.Province = modelT.Province;
+                            model.City = modelT.City;
+                            model.Area = modelT.Area;
+                            model.IsProcessIp = true;
+                            dbContext.RequestLogEntitys.Add(model);
+                            dbContext.Entry<RequestLogEntity>(model).State = EntityState.Modified;
+                            dbContext.SaveChanges();
+                        }
+                    }
+                }
+            }
+
         }
 
         private const String host = "https://dm-81.data.aliyun.com";
