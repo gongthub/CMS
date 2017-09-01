@@ -143,6 +143,7 @@
     <Content Include="Content\img\button_pm_close.png" />
     <Content Include="Content\img\cy-reward-title-bg.jpg" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\photo.jpg" />
     <Content Include="Content\img\radio1.jpg" />
     <Content Include="Content\img\radio2.jpg" />
     <Content Include="Content\img\signet.gif" />
