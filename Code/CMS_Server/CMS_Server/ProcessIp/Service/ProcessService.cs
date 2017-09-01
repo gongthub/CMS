@@ -57,6 +57,7 @@ namespace ProcessIp.Service
             InitAccessLogIpLocalForMySql();
 
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<AccessLogEntity> models = dbContext.AccessLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
 
             List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
@@ -119,6 +120,7 @@ namespace ProcessIp.Service
         {
             InitAccessLogIpLocalForSqlServer();
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<AccessLogEntity> models = dbContext.AccessLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
 
             List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
@@ -181,6 +183,7 @@ namespace ProcessIp.Service
         {
             InitRequestLogLocalForMySql();
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<RequestLogEntity> models = dbContext.RequestLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
 
             List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
@@ -243,6 +246,7 @@ namespace ProcessIp.Service
         {
             InitRequestLogLocalForSqlServer();
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<RequestLogEntity> models = dbContext.RequestLogEntitys.Where(m => m.IsProcessIp != true && m.IPAddress != "::1").ToList();
 
             List<string> IpLst = models.Select(m => m.IPAddress).Distinct().ToList();
@@ -311,6 +315,7 @@ namespace ProcessIp.Service
                             left join sys_accesslog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
 
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
             models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
             if (models != null && models.Count > 0)
@@ -350,6 +355,7 @@ namespace ProcessIp.Service
                             left join sys_requestlog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
 
             MySqlCMSDbContext dbContext = new MySqlCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
             models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
             if (models != null && models.Count > 0)
@@ -390,6 +396,7 @@ namespace ProcessIp.Service
                             left join sys_accesslog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
 
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
             models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
             if (models != null && models.Count > 0)
@@ -429,6 +436,7 @@ namespace ProcessIp.Service
                             left join sys_requestlog as B ON A.ipaddress=b.IPAddress AND B.IsProcessIp=1";
 
             SqlServerCMSDbContext dbContext = new SqlServerCMSDbContext();
+            ((System.Data.Entity.Infrastructure.IObjectContextAdapter)dbContext).ObjectContext.CommandTimeout = 0;
             List<CommonOldLogEntity> models = new List<CommonOldLogEntity>();
             models = dbContext.Database.SqlQuery<CommonOldLogEntity>(strSql).ToList<CommonOldLogEntity>();
             if (models != null && models.Count > 0)
