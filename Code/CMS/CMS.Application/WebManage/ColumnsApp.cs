@@ -88,6 +88,10 @@ namespace CMS.Application.WebManage
         {
             return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
         }
+        public List<ColumnsEntity> GetListNoEnableByWebSiteId(string webSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == webSiteId && m.DeleteMark != true && m.EnabledMark == true).OrderBy(t => t.SortCode).ToList();
+        }
         public void DeleteForm(string keyValue)
         {
             ColumnsEntity moduleEntity = service.FindEntity(keyValue);

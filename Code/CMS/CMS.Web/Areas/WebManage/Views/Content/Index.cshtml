@@ -60,7 +60,7 @@
 
         function treeView() {
             $("#itemTree").treeview({
-                url: "/WebManage/Columns/GetTreeJson",
+                url: "/WebManage/Columns/GetTreeJsonNoEnable",
                 onnodeclick: function (item) {
                     var $operate = $(".operate");
                     $operate.animate({ "left": '-100.1%' }, 200);

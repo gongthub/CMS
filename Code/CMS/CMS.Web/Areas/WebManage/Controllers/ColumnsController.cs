@@ -52,6 +52,27 @@ namespace CMS.Web.Areas.WebManage.Controllers
             }
             return Content(treeList.TreeViewJson());
         }
+        [HttpGet]
+        [HandlerAjaxOnly]
+        public ActionResult GetTreeJsonNoEnable()
+        {
+            var data = c_ModulesApp.GetListNoEnableByWebSiteId(Base_WebSiteId);
+            var treeList = new List<TreeViewModel>();
+            foreach (ColumnsEntity item in data)
+            {
+                TreeViewModel tree = new TreeViewModel();
+                bool hasChildren = data.Count(t => t.ParentId == item.Id) == 0 ? false : true;
+                tree.id = item.Id;
+                tree.text = item.FullName;
+                tree.value = item.Type.ToString();
+                tree.parentId = item.ParentId;
+                tree.isexpand = true;
+                tree.complete = true;
+                tree.hasChildren = hasChildren;
+                treeList.Add(tree);
+            }
+            return Content(treeList.TreeViewJson());
+        }
 
         [HttpGet]
         [HandlerAjaxOnly]
