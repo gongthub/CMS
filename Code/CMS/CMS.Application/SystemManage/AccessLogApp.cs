@@ -4,6 +4,7 @@ using CMS.Domain.IRepository;
 using CMS.RepositoryFactory;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,17 @@ namespace CMS.Application.SystemManage
         public AccessLogEntity GetForm(string keyValue)
         {
             return service.FindEntity(keyValue);
+        }
+
+        public int GetToDayNum(string webSiteId)
+        {
+            DateTime toDate = DateTime.Now.Date;
+            DateTime nextDate = toDate.AddDays(1);
+            return service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == webSiteId && m.Date >= toDate && m.Date < nextDate).Count();
+        }
+        public int GetAllNum(string webSiteId)
+        {
+            return service.IQueryable(m => m.DeleteMark != true && m.WebSiteId == webSiteId).Count();
         }
         public void SubmitForm(AccessLogEntity accessLogEntity, string keyValue)
         {

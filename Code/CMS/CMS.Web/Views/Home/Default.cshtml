@@ -68,6 +68,9 @@
             tooltip: {
                 trigger: 'axis'
             },
+            legend: {
+                data: []
+            },
             grid: {
                 left: '3%',
                 right: '4%',
@@ -91,6 +94,7 @@
                 success: function (data) {
                     var da = eval(data);
                     option.series = da.data
+                    option.legend.data = da.name
                     myChart.setOption(option);
                 }
             })

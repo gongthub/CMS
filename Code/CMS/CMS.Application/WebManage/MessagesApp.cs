@@ -69,6 +69,11 @@ namespace CMS.Application.WebManage
             expression = expression.And(t => t.DeleteMark != true && t.EnabledMark == true);
             return service.IQueryable(expression).ToList();
         }
+        public int GetCountByWebSiteId(string WebSiteId)
+        {
+            return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).Count();
+
+        }
         public void AddForm(MessagesEntity moduleEntity)
         {
             VerityTime(moduleEntity);

@@ -227,6 +227,10 @@ namespace CMS.Application.WebManage
             return models;
         }
 
+        public int GetCountByWebSiteId(string webSiteIds)
+        {
+            return service.IQueryable(t => t.DeleteMark != true && t.WebSiteId == webSiteIds).Count();
+        }
         public void DeleteForm(string keyValue)
         {
             ContentEntity moduleEntity = service.FindEntity(keyValue);

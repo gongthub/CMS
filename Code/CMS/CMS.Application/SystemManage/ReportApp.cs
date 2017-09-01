@@ -31,5 +31,9 @@ namespace CMS.Application.SystemManage
             }
             return service.GetWebSiteAccessDates(userIds);
         }
+        public List<WebSiteAccessToDayReport> GetWebSiteAccessToDates(string webSiteIds)
+        {
+            return service.GetWebSiteAccessToDates(webSiteIds);
+        }
     }
 }

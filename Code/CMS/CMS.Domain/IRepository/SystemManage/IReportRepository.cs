@@ -10,5 +10,6 @@ namespace CMS.Domain.IRepository.SystemManage
     public interface IReportRepository
     {
         List<WebSiteAccessReport> GetWebSiteAccessDates(string userIds);
+        List<WebSiteAccessToDayReport> GetWebSiteAccessToDates(string webSiteId);
     }
 }
