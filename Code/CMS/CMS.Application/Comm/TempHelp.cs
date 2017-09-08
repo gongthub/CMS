@@ -2024,6 +2024,23 @@ namespace CMS.Application.Comm
                     }
                 }
             }
+            //处理字符串截取长度格式
+            string formatSubStringNames = ("formatsubstring_" + context).ToLower();
+            if (attrs.ContainsKey(formatSubStringNames))
+            {
+                string formats = "0";
+                if (attrs.TryGetValue(formatSubStringNames, out formats))
+                {
+                    int num = 0;
+                    if (Int32.TryParse(formats, out num))
+                    {
+                        if (contexts != null && contexts.Length > num)
+                        {
+                            contexts = contexts.Substring(0, num);
+                        }
+                    }
+                }
+            }
             return contexts;
         }
         #endregion
@@ -2039,7 +2056,6 @@ namespace CMS.Application.Comm
         private string InitFormat(string name, string context, Dictionary<string, string> attrs)
         {
             string contexts = context;
-
             //处理时间格式
             string formatNames = ("formattime_" + name).ToLower();
             if (attrs.ContainsKey(formatNames))
@@ -2052,6 +2068,24 @@ namespace CMS.Application.Comm
                     if (attrs.TryGetValue(formatNames, out formats))
                     {
                         contexts = Times.ToString(formats);
+                    }
+                }
+            }
+            //处理字符串截取长度格式
+            string formatSubStringNames = ("formatsubstring_" + name).ToLower();
+            if (attrs.ContainsKey(formatSubStringNames))
+            {
+                string formats = "0";
+                if (attrs.TryGetValue(formatSubStringNames, out formats))
+                {
+                    int num = 0;
+                    if (Int32.TryParse(formats, out num))
+                    {
+                        if (contexts != null && contexts.Length > num)
+                        {
+                            string contents = HtmlCodeFormat.NoHTML(contexts);
+                            contexts = contents.Substring(0, num);
+                        }
                     }
                 }
             }
