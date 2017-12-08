@@ -347,6 +347,29 @@ namespace CMS.Application.WebManage
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
         }
+        public void GenAllStaticPage(string webSiteId)
+        {
+            int fNum = 0;
+            List<ContentEntity> models = GetListByWebSiteId(webSiteId);
+            if (models != null && models.Count > 0)
+            {
+                foreach (ContentEntity model in models)
+                {
+                    try
+                    {
+                        GenStaticPage(model.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        fNum++;
+                    }
+                }
+            }
+            if (fNum > 0)
+            {
+                throw new Exception("失败条数：" + fNum);
+            }
+        }
 
         /// <summary>
         /// 获取静态HTML

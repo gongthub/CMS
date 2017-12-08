@@ -16,6 +16,7 @@ namespace CMS.Web.Areas.WebManage.Controllers
     public class WebSiteConfigController : ControllerBase
     {
         private WebSiteApp webSiteApp = new WebSiteApp();
+        private ContentApp contentApp = new ContentApp();
 
         [HttpGet]
         [HandlerAuthorize]
@@ -182,6 +183,23 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 LucenceHelp.CreateIndex(Base_WebSiteId, Base_WebSiteShortName);
+                return Success("生成成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GenAllHtmls()
+        {
+            try
+            {
+                contentApp.GenAllStaticPage(Base_WebSiteId);
                 return Success("生成成功。");
             }
             catch (Exception e)
