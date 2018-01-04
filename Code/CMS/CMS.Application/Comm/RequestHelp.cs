@@ -27,7 +27,6 @@ namespace CMS.Application.Comm
         /// <param name="context"></param>
         public void InitRequest(System.Web.HttpContext context)
         {
-            SysPageHelp.sysPageHelp.AddStartRequestLog(context);
             if (ConfigHelp.configHelp.ISPROREQUEST)
             {
                 string htmls = string.Empty;
@@ -102,6 +101,7 @@ namespace CMS.Application.Comm
                     context.ApplicationInstance.CompleteRequest();
 
                     LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
+                    throw;
                 }
             }
         }

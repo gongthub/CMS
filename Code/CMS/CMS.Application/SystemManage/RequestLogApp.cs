@@ -21,7 +21,7 @@ namespace CMS.Application.SystemManage
         public List<RequestLogEntity> GetListByDate(DateTime startDate, DateTime endDate)
         {
             endDate = endDate.AddDays(1);
-            return service.IQueryable(m => m.DeleteMark != true && m.Date >= startDate && m.Date < endDate).ToList();
+            return service.IQueryable(m => m.DeleteMark != true && m.StartDateTime >= startDate && m.StartDateTime < endDate).ToList();
         }
         public RequestLogEntity GetForm(string keyValue)
         {
@@ -48,8 +48,9 @@ namespace CMS.Application.SystemManage
         public void Createlog(RequestLogEntity accessLogEntity)
         {
             accessLogEntity.Id = Common.GuId();
-            accessLogEntity.Date = DateTime.Now;
+            accessLogEntity.EndDateTime = DateTime.Now;
             service.Insert(accessLogEntity);
+            LogFactory.GetLogger(this.GetType()).Info("异常：结束插入请求日志111\r\n");
         }
     }
 }

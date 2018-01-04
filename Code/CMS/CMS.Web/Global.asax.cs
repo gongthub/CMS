@@ -31,9 +31,6 @@ namespace CMS.Web
         }
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
-            //string oldimgpath = Code.FileHelper.MapPath("/Uploads/Files/1.png");
-            //string newimgpath = Code.FileHelper.MapPath("/Uploads/Files/2.png");
-            //Code.Image.ImageHelper.imageHelperp.GetPicThumbnail(oldimgpath, newimgpath, 50);
             HttpContext context = HttpContext.Current;
             new RequestHelp().InitRequest(context);
         }
@@ -45,7 +42,8 @@ namespace CMS.Web
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-
+            HttpContext context = HttpContext.Current;
+            SysPageHelp.sysPageHelp.AddStartRequestLog(context);
         }
 
         protected void Application_Error(object sender, EventArgs e)

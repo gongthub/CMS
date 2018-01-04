@@ -21,15 +21,15 @@ namespace CMS.Domain.Entity.SystemManage
         /// WebSiteName
         /// </summary>		
         public string WebSiteName { get; set; }
-        /// <summary>
-        /// StartId
-        /// </summary>		
-        public string StartId { get; set; }
+        ///// <summary>
+        ///// StartId
+        ///// </summary>		
+        //public string StartId { get; set; }
 
-        /// <summary>
-        /// EndId
-        /// </summary>		
-        public string EndId { get; set; }
+        ///// <summary>
+        ///// EndId
+        ///// </summary>		
+        //public string EndId { get; set; }
 
         /// <summary>
         /// SessionID
@@ -123,9 +123,13 @@ namespace CMS.Domain.Entity.SystemManage
         public string UrlRaw { get; set; }
 
         /// <summary>
-        /// Date
+        /// StartDateTime
         /// </summary>		
-        public DateTime Date { get; set; }
+        public DateTime StartDateTime { get; set; }
+        /// <summary>
+        /// EndDateTime
+        /// </summary>		
+        public DateTime EndDateTime { get; set; }
 
         /// <summary>
         /// Description
