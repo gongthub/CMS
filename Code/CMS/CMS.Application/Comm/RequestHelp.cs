@@ -134,6 +134,7 @@ namespace CMS.Application.Comm
                         context.Response.StatusDescription = "Forbidden";
                         htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
                         DoResponse(context, htmls);
+                        //context.RewritePath(ConfigHelp.configHelp.SYSPAGE_NOFIND);
                     }
                     break;
                 case 404:
@@ -143,6 +144,7 @@ namespace CMS.Application.Comm
                         context.Response.StatusDescription = "Not Found";
                         htmls = Comm.SysPageHelp.sysPageHelp.GetNoFindPage();
                         DoResponse(context, htmls);
+                        //context.RewritePath(ConfigHelp.configHelp.SYSPAGE_NOFIND);
                     }
                     break;
                 case 500:
@@ -152,6 +154,7 @@ namespace CMS.Application.Comm
                         context.Response.StatusDescription = "Internal Server Error";
                         htmls = Comm.SysPageHelp.sysPageHelp.GetErrorPage();
                         DoResponse(context, htmls);
+                        //context.RewritePath(ConfigHelp.configHelp.SYSPAGE_ERROR);
                     }
                     break;
             }

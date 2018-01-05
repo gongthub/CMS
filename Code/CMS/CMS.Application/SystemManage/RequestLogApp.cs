@@ -50,7 +50,6 @@ namespace CMS.Application.SystemManage
             accessLogEntity.Id = Common.GuId();
             accessLogEntity.EndDateTime = DateTime.Now;
             service.Insert(accessLogEntity);
-            LogFactory.GetLogger(this.GetType()).Info("异常：结束插入请求日志111\r\n");
         }
     }
 }
