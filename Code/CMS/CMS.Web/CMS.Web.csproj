@@ -14,11 +14,13 @@
     <RootNamespace>CMS.Web</RootNamespace>
     <AssemblyName>CMS.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -733,6 +735,7 @@
     <Compile Include="Areas\SystemManage\Controllers\ItemsTypeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\ModuleButtonController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\ModuleController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\OrganizeColumnController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\OrganizeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleAuthorizeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleController.cs" />
@@ -946,6 +949,9 @@
     <Content Include="Areas\SystemManage\Views\SysColumns\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\SysColumns\Index.cshtml" />
     <Content Include="Areas\WebManage\Views\Report\AccessDay.cshtml" />
+    <Content Include="Areas\SystemManage\Views\OrganizeColumn\Details.cshtml" />
+    <Content Include="Areas\SystemManage\Views\OrganizeColumn\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\OrganizeColumn\Index.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />
@@ -1010,7 +1016,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1128</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2147/</IISUrl>
+          <IISUrl>http://localhost/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

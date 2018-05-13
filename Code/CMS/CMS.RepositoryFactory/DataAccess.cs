@@ -381,7 +381,7 @@ namespace CMS.RepositoryFactory
             return (IRequestLogRepository)objType;
         }
         /// <summary>
-        /// 接口IReportRepositoryy映射 
+        /// 接口IReportRepository映射 
         /// </summary>
         /// <returns></returns>
         public static IReportRepository CreateIReportRepository()
@@ -389,6 +389,16 @@ namespace CMS.RepositoryFactory
             string ClassNamespace = DLLPATHHASDB + ".ReportRepository";
             object objType = CreateObject(ClassNamespace);
             return (IReportRepository)objType;
+        }
+        /// <summary>
+        /// 接口IOrganizeColumnRepository映射 
+        /// </summary>
+        /// <returns></returns>
+        public static IOrganizeColumnRepository CreateIOrganizeColumnRepository()
+        {
+            string ClassNamespace = DLLPATHHASDB + ".OrganizeColumnRepository";
+            object objType = CreateObject(ClassNamespace);
+            return (IOrganizeColumnRepository)objType;
         }
         #endregion
     }

@@ -56,7 +56,7 @@ namespace CMS.Web.Controllers
                     operatorModel.UserId = userEntity.Id;
                     operatorModel.UserCode = userEntity.Account;
                     operatorModel.UserName = userEntity.RealName;
-                    operatorModel.CompanyId = userEntity.OrganizeId;
+                    operatorModel.OrganizeId = userEntity.OrganizeId;
                     operatorModel.DepartmentId = userEntity.DepartmentId;
                     operatorModel.RoleId = userEntity.RoleId;
                     operatorModel.UserLevel = userEntity.UserLevel == null ? (int)Code.Enums.UserLevel.WebSiteUser : (int)userEntity.UserLevel;

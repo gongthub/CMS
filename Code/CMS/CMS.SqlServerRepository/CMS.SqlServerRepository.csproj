@@ -51,6 +51,7 @@
     <Compile Include="SystemManage\ItemsRepository.cs" />
     <Compile Include="SystemManage\ModuleButtonRepository.cs" />
     <Compile Include="SystemManage\ModuleRepository.cs" />
+    <Compile Include="SystemManage\OrganizeColumnRepository.cs" />
     <Compile Include="SystemManage\OrganizeRepository.cs" />
     <Compile Include="SystemManage\ReportRepository.cs" />
     <Compile Include="SystemManage\RequestLogRepository.cs" />

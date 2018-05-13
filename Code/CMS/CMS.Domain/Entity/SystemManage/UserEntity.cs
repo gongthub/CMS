@@ -27,7 +27,7 @@ namespace CMS.Domain.Entity.SystemManage
         public int? SecurityLevel { get; set; }
         public string Signature { get; set; }
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
-        [Description("公司")]
+        [Description("组织")]
         public string OrganizeId { get; set; }
         [Verify(Code.Enums.VerifyType.IsNullOrGuid)]
         [Description("部门")]

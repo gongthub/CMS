@@ -106,6 +106,7 @@
     <Compile Include="SystemManage\OrganizeApp.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SystemManage\OrganizeColumnApp.cs" />
     <Compile Include="SystemManage\ReportApp.cs" />
     <Compile Include="SystemManage\RequestLogApp.cs" />
     <Compile Include="SystemManage\RoleApp.cs">
