@@ -291,26 +291,31 @@ namespace CMS.Application.Comm
                 string templets = System.Web.HttpUtility.HtmlDecode(codes);
                 int i = templets.IndexOf(STARTCHAR);
                 int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                while (i > 0 && j > 0)
+
+                Guid TId = Guid.Empty;
+                if (Guid.TryParse(Id, out TId))
                 {
-                    string templetst = templets.Substring(i, j - i);
-                    string strAttr = "";
-                    //获取属性
-                    Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
-                    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
-                    if (!string.IsNullOrEmpty(strAttr))
-                        strt = strt.Replace(strAttr, "");
-                    string[] strts = strt.Split('.');
-
-                    if (strts.Length >= 2 && strts[1] != null)
+                    while (i > 0 && j > 0)
                     {
-                        string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs);
-                        templets = templets.Replace(templetst, htmlt);
+                        string templetst = templets.Substring(i, j - i);
+                        string strAttr = "";
+                        //获取属性
+                        Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
+                        string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
+                        if (!string.IsNullOrEmpty(strAttr))
+                            strt = strt.Replace(strAttr, "");
+                        string[] strts = strt.Split('.');
 
+                        if (strts.Length >= 2 && strts[1] != null)
+                        {
+                            string templetstm = ProModels(ref strt, strts);
+                            string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs);
+                            templets = templets.Replace(templetst, htmlt);
+
+                        }
+                        i = templets.IndexOf(STARTCHAR);
+                        j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                     }
-                    i = templets.IndexOf(STARTCHAR);
-                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                 }
                 strs = templets;
                 //格式化

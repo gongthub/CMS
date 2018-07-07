@@ -22,8 +22,8 @@ function initNewPageEle(eleId) {
             prevPageText: "上一页",
             nextPageText: "下一页",
             callback: function (current) {
-                var origin = window.location.href.origin;
-                var pathnames = window.location.href.pathname;
+                var origin = window.location.origin;
+                var pathnames = window.location.pathname;
                 var strs = pathnames.split('/');
                 if (strs.length >= 2) {
                     var colNames = "";
