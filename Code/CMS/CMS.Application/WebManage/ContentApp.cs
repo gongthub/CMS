@@ -72,7 +72,7 @@ namespace CMS.Application.WebManage
         {
             List<ContentEntity> models = new List<ContentEntity>();
             models = service.IQueryable(t => t.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -94,7 +94,7 @@ namespace CMS.Application.WebManage
             }
             expression = expression.And(m => m.DeleteMark != true);
             models = service.FindList(expression, pagination);
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -120,7 +120,7 @@ namespace CMS.Application.WebManage
             }
             expression = expression.And(m => m.DeleteMark != true);
             models = service.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -144,7 +144,7 @@ namespace CMS.Application.WebManage
             expression = expression.And(m => m.DeleteMark != true);
 
             models = service.FindList(expression, pagination);
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -160,7 +160,7 @@ namespace CMS.Application.WebManage
         {
             List<ContentEntity> models = new List<ContentEntity>();
             models = service.IQueryable(predicate).OrderBy(t => t.SortCode).ToList();
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -218,7 +218,7 @@ namespace CMS.Application.WebManage
         {
             List<ContentEntity> models = new List<ContentEntity>();
             models = service.IQueryable(t => t.DeleteMark != true && t.WebSiteId == webSiteIds).OrderBy(t => t.SortCode).ToList();
-            models.ForEach(delegate(ContentEntity model)
+            models.ForEach(delegate (ContentEntity model)
             {
 
                 if (model != null && model.UrlAddress != null)
@@ -335,13 +335,18 @@ namespace CMS.Application.WebManage
                 {
                     throw new Exception("该站点空间已不足，请联系管理员！");
                 }
-                TempletApp templetapp = new TempletApp();
-                TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
-                if (templet != null)
+                WebSiteApp webSiteApp = new WebSiteApp();
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(module.WebSiteId);
+                if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
                 {
-                    string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                    TempletApp templetapp = new TempletApp();
+                    TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
+                    if (templet != null)
+                    {
+                        string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
 
-                    new TempHelp().GenHtmlPage(templets, keyValue);
+                        new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
+                    }
                 }
             }
             //添加日志
@@ -382,14 +387,19 @@ namespace CMS.Application.WebManage
             ColumnsEntity module = GetModuleByContentID(keyValue);
             if (module != null)
             {
-                TempletApp templetapp = new TempletApp();
-                TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
-                if (templet != null)
+                WebSiteApp webSiteApp = new WebSiteApp();
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(module.WebSiteId);
+                if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
                 {
-                    string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                    TempletApp templetapp = new TempletApp();
+                    TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
+                    if (templet != null)
+                    {
+                        string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
 
-                    new TempHelp().GenHtmlPage(templets, keyValue);
-                    htmls = new TempHelp().GetHtmlPages(templets, keyValue);
+                        new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
+                        htmls = new TempHelp().GetHtmlPages(templets, keyValue, webSiteEntity.ShortName);
+                    }
                 }
             }
 

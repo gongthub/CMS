@@ -24,10 +24,14 @@ namespace CMS.Application.WebManage
         {
             return service.FindEntity(m => m.DeleteMark != true && m.EnabledMark == true && m.Id == keyValue);
         }
-        public TempletEntity GetFormByName(string Name)
+        public TempletEntity GetFormByName(string webSiteShortName, string Name)
         {
             TempletEntity model = new TempletEntity();
-            model = service.FindEntity(m => m.FullName == Name && m.DeleteMark != true);
+            WebSiteEntity entity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+            if (entity != null && !string.IsNullOrEmpty(entity.Id))
+            {
+                model = service.FindEntity(m => m.FullName == Name && m.WebSiteId == entity.Id && m.DeleteMark != true);
+            }
             return model;
         }
 
