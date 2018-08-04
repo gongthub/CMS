@@ -8,7 +8,7 @@
     .Content_Form_divContents {
         position: fixed;
         width: 100%;
-        height: 100%;
+        height: 90%;
         overflow: auto;
     }
 
@@ -280,5 +280,10 @@
             var ue = UE.getEditor(id);
             ue.setDisabled();
         }
+        $(function () {
+            var wh = document.body.clientHeight;
+            wh = wh - 60;
+            $(".editordes").css("height", wh + "px");
+        })
     </script>
 }

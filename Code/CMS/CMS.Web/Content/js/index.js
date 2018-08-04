@@ -150,9 +150,13 @@ $(function ($) {
             $('#ajax-loader').fadeOut();
         }, 300);
     });
+    var scw = window.screen.width;
+    if (scw != null && scw < 1600) {
+        $('#page-wrapper').toggleClass('nav-small');
+    }
 });
-function GetLoadNav() { 
-    var data = top.clients.authorizeMenu; 
+function GetLoadNav() {
+    var data = top.clients.authorizeMenu;
     var _html = "";
     $.each(data, function (i) {
         var row = data[i];
@@ -178,7 +182,7 @@ function GetLoadNav() {
 
 
 function GetLoadNavIndex() {
-    var data = top.clients.authorizeMenuIndex; 
+    var data = top.clients.authorizeMenuIndex;
     var _html = "";
     $.each(data, function (i) {
         var row = data[i];
