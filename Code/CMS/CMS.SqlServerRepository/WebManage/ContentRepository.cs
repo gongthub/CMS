@@ -7,6 +7,8 @@ using CMS.Domain.IRepository;
 using CMS.SqlServerRepository;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -204,7 +206,6 @@ namespace CMS.SqlServerRepository
                 throw new Exception("存在非法关键词，请检查！关键字：" + strKeyWords);
             }
         }
-
         public void Up(string keyValue)
         {
             ContentEntity contentEntity = FindEntity(keyValue);
@@ -240,6 +241,66 @@ namespace CMS.SqlServerRepository
                     db.Commit();
                 }
             }
+        }
+        public List<ContentEntity> GetAllEnableModels(string webSiteId)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append(@"SELECT
+	                                A.Id,
+	                                A.WebSiteId,
+	                                A.ColumnId,
+	                                A.SortCode,
+	                                A.ShortName,
+	                                A.FullName,
+	                                A.Author,
+	                                A.Description,
+	                                A.EditTime,
+	                                A.UrlPath,
+	                                A.UrlAddress,
+	                                A.FilePath,
+	                                A.Icon,
+	                                A.Content,
+	                                A.SEOTitle,
+	                                A.SEOKeyWords,
+	                                A.SEODesc,
+	                                A.ViewNum,
+	                                A.EnabledMark,
+	                                A.DeleteMark,
+	                                A.CreatorUserId,
+	                                A.CreatorTime,
+	                                A.DeleteUserId,
+	                                A.DeleteTime,
+	                                A.LastModifyUserId,
+	                                A.LastModifyTime,
+	                                A.Description1,
+	                                A.Description2,
+	                                A.Description3,
+	                                A.Description4,
+	                                A.Description5,
+	                                A.Description6,
+	                                A.Description7,
+	                                A.Description8,
+	                                A.Description9,
+	                                A.Description10
+                                FROM
+	                                c_contents A
+                                LEFT JOIN c_columns B ON A.ColumnId = B.Id
+                                AND B.EnabledMark = 1
+                                AND (
+	                                B.DeleteMark = 0
+	                                OR B.DeleteMark IS NULL
+                                )
+                                WHERE
+	                                A.WebSiteId =@websiteid AND A.EnabledMark = 1
+                                AND (
+	                                A.DeleteMark = 0
+	                                OR A.DeleteMark IS NULL
+                                )");
+            DbParameter[] parameter =
+            {
+                 new SqlParameter("@websiteid",webSiteId)
+            };
+            return this.FindList(strSql.ToString(), parameter);
         }
     }
 }

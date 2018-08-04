@@ -117,7 +117,7 @@ $.modalOpen = function (options) {
         content: options.url,
         btn: options.btn,
         btnclass: options.btnclass,
-        maxmin:true,
+        maxmin: true,
         yes: function () {
             options.callBack(options.id)
         }, cancel: function () {
@@ -148,6 +148,33 @@ $.modalAlert = function (content, type) {
     if (type == 'warning') {
         icon = "fa-exclamation-circle";
     }
+    top.layer.alert(content, {
+        icon: icon,
+        title: "系统提示",
+        btn: ['确认'],
+        btnclass: ['btn btn-primary'],
+    });
+}
+$.modalAlertSuccess = function (content) {
+    var icon = "fa-check-circle";
+    top.layer.alert(content, {
+        icon: icon,
+        title: "系统提示",
+        btn: ['确认'],
+        btnclass: ['btn btn-primary'],
+    });
+}
+$.modalAlertError = function (content) {
+    var icon = "fa-times-circle";
+    top.layer.alert(content, {
+        icon: icon,
+        title: "系统提示",
+        btn: ['确认'],
+        btnclass: ['btn btn-primary'],
+    });
+}
+$.modalAlertWarning = function (content) {
+    var icon = "fa-exclamation-circl";
     top.layer.alert(content, {
         icon: icon,
         title: "系统提示",
@@ -342,7 +369,7 @@ $.fn.jqGridRowValue = function () {
     if (selectedRowIds != "") {
         var json = [];
         var len = selectedRowIds.length;
-        for (var i = 0; i < len ; i++) {
+        for (var i = 0; i < len; i++) {
             var rowData = $grid.jqGrid('getRowData', selectedRowIds[i]);
             json.push(rowData);
         }

@@ -128,7 +128,7 @@
                 url: "/WebManage/WebSiteConfig/UpdateSearchEnabled",
                 param: { searchEnabled: state },
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }
@@ -138,7 +138,7 @@
                 url: "/WebManage/WebSiteConfig/UpdateMessageEnabled",
                 param: { messageEnabled: state },
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }
@@ -149,7 +149,7 @@
                 url: "/WebManage/WebSiteConfig/UpdateServiceEnabled",
                 param: { serviceEnabled: state },
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }
@@ -160,7 +160,7 @@
                 url: "/WebManage/WebSiteConfig/UpdateAdvancedContentEnabled",
                 param: { advancedContentEnabled: state },
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }
@@ -181,7 +181,7 @@
                             btn: null
                         });
                     } else {
-                        $.modalAlert('请先开启高级列表功能！');
+                        $.modalAlertWarning('请先开启高级列表功能！');
                     }
                 }
             })
@@ -203,7 +203,7 @@
                             btn: null
                         });
                     } else {
-                        $.modalAlert('请先开启留言板功能！');
+                        $.modalAlertWarning('请先开启留言板功能！');
                     }
                 }
             })
@@ -215,7 +215,7 @@
                 url: "/WebManage/WebSiteConfig/CreateSearchIndex",
                 param: {},
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }
@@ -225,7 +225,7 @@
                 url: "/WebManage/WebSiteConfig/GenAllHtmls",
                 param: {},
                 success: function (data) {
-                    $.modalAlert(data.message);
+                    $.modalAlertSuccess(data.message);
                 }
             })
         }

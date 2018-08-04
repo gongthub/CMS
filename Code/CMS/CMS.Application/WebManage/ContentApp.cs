@@ -17,6 +17,7 @@ namespace CMS.Application.WebManage
 {
     public class ContentApp
     {
+        Log log = LogFactory.GetLogger("ContentApp");
         private IContentRepository service = DataAccess.CreateIContentRepository();
         private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
 
@@ -217,7 +218,7 @@ namespace CMS.Application.WebManage
         public List<ContentEntity> GetListByWebSiteId(string webSiteIds)
         {
             List<ContentEntity> models = new List<ContentEntity>();
-            models = service.IQueryable(t => t.DeleteMark != true && t.WebSiteId == webSiteIds).OrderBy(t => t.SortCode).ToList();
+            models = service.GetAllEnableModels(webSiteIds);
             models.ForEach(delegate (ContentEntity model)
             {
 
@@ -348,9 +349,9 @@ namespace CMS.Application.WebManage
                         new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
                     }
                 }
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
             }
-            //添加日志
-            LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
         }
         public void GenAllStaticPage(string webSiteId)
         {
@@ -367,6 +368,7 @@ namespace CMS.Application.WebManage
                     catch (Exception ex)
                     {
                         fNum++;
+                        log.Error(ex.Message);
                     }
                 }
             }

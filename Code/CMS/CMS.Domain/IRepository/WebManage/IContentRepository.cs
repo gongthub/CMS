@@ -16,5 +16,10 @@ namespace CMS.Domain.IRepository
         void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys, List<string> lstRemoveImgIds);
         void Up(string keyValue);
         void Down(string keyValue);
+        /// <summary>
+        /// 根据站点ID获取所有已发布和栏目可用的文章
+        /// </summary>
+        /// <returns></returns>
+        List<ContentEntity> GetAllEnableModels(string webSiteId);
     }
 }
