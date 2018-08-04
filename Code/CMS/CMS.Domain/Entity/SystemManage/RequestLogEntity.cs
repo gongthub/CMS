@@ -21,15 +21,6 @@ namespace CMS.Domain.Entity.SystemManage
         /// WebSiteName
         /// </summary>		
         public string WebSiteName { get; set; }
-        ///// <summary>
-        ///// StartId
-        ///// </summary>		
-        //public string StartId { get; set; }
-
-        ///// <summary>
-        ///// EndId
-        ///// </summary>		
-        //public string EndId { get; set; }
 
         /// <summary>
         /// SessionID

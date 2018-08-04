@@ -222,18 +222,7 @@ namespace CMS.Application.Comm
         #endregion
 
         #region 创建系统请求访问日志
-
-        /// <summary>
-        /// 创建请求开始日志
-        /// </summary>
-        /// <param name="context"></param>
-        public void AddStartRequestLog(System.Web.HttpContext context)
-        {
-            if (Code.ConfigHelp.configHelp.ISPROREQUESTLOG)
-            {
-                InitRequestStartTime(context);
-            }
-        }
+        
 
         /// <summary>
         /// 创建请求结束日志
@@ -246,17 +235,6 @@ namespace CMS.Application.Comm
                 RequestLogEntity entity = InitEndRequestLog(context);
                 CreateRequestLog(entity, true);
             }
-        }
-
-        /// <summary>
-        /// 初始化请求唯一标识
-        /// </summary>
-        /// <param name="accessLogEntity"></param>
-        public void InitRequestStartTime(System.Web.HttpContext context)
-        {
-            context.Request.Cookies.Remove(SYSREQUESTSTARTTIME);
-            HttpCookie cookieSysStartTime = new HttpCookie(SYSREQUESTSTARTTIME, DateTime.Now.ToString());
-            context.Request.Cookies.Set(cookieSysStartTime);
         }
 
         /// <summary>
@@ -361,16 +339,7 @@ namespace CMS.Application.Comm
 
                 context.Response.Cookies.Set(cookie);
             }
-            HttpCookie cookieSys = context.Request.Cookies.Get(SYSREQUESTSTARTTIME);
-            if (cookieSys != null && !string.IsNullOrEmpty(cookieSys.Value))
-            {
-                string startTimes = cookieSys.Value;
-                DateTime startTime = DateTime.Now;
-                if (DateTime.TryParse(startTimes, out startTime))
-                {
-                    entity.StartDateTime = startTime;
-                }
-            }
+            entity.StartDateTime = context.Timestamp;
             return entity;
         }
         /// <summary>

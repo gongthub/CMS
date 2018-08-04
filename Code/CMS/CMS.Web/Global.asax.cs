@@ -42,8 +42,6 @@ namespace CMS.Web
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
-            HttpContext context = HttpContext.Current;
-            SysPageHelp.sysPageHelp.AddStartRequestLog(context);
         }
 
         protected void Application_Error(object sender, EventArgs e)
