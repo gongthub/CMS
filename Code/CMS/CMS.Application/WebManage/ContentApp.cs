@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CMS.Application.WebManage
 {
@@ -270,7 +271,12 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue, List<UpFileDTO> upFileentitys, List<string> lstRemoveImgIds)
         {
+            if (new WebSiteApp().IsOverSizeByWebSiteId(moduleEntity.WebSiteId))
+            {
+                throw new Exception("该站点空间已不足，请联系管理员！");
+            }
             service.SubmitForm(moduleEntity, keyValue, upFileentitys, lstRemoveImgIds);
+            GenStaticPage(moduleEntity.Id);
         }
 
         public void Up(string keyValue)
@@ -330,7 +336,7 @@ namespace CMS.Application.WebManage
                 iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
             }
             ColumnsEntity module = GetModuleByContentID(keyValue);
-            if (module != null)
+            if (module != null && module.Type == (int)Enums.ModuleType.List)
             {
                 if (new WebSiteApp().IsOverSizeByWebSiteId(module.WebSiteId))
                 {

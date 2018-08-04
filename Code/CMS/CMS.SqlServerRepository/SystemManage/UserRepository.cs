@@ -217,7 +217,7 @@ namespace CMS.SqlServerRepository
         public void VerifyUserWebsiteRole(string webSiteId)
         {
             var operatorModel = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-            if (operatorModel != null)
+            if (operatorModel != null && !operatorModel.IsSystem)
             {
                 VerifyUserWebsiteRole(operatorModel.UserId, webSiteId);
             }
