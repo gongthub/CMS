@@ -261,6 +261,22 @@ namespace CMS.Application.WebManage
             //添加日志
             LogHelp.logHelp.WriteDbLog(true, "删除内容信息=>" + keyValue, Enums.DbLogType.Delete, "内容管理");
         }
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+        /// <param name="ids"></param>
+        public void DeleteFormByIds(string ids)
+        {
+            string[] sids = ids.Split(',');
+            if (sids != null && sids.Length > 0)
+            {
+                for (int i = 0; i < sids.Length; i++)
+                {
+                    string id = sids[i];
+                    DeleteFormById(id);
+                }
+            }
+        }
         public void SubmitForm(ContentEntity moduleEntity, string keyValue)
         {
             service.SubmitForm(moduleEntity, keyValue);
@@ -289,6 +305,23 @@ namespace CMS.Application.WebManage
             }
             service.Up(keyValue);
         }
+
+        /// <summary>
+        /// 批量发布
+        /// </summary>
+        /// <param name="ids"></param>
+        public void Ups(string ids)
+        {
+            string[] sids = ids.Split(',');
+            if (sids != null && sids.Length > 0)
+            {
+                for (int i = 0; i < sids.Length; i++)
+                {
+                    string id = sids[i];
+                    Up(id);
+                }
+            }
+        }
         public void Down(string keyValue)
         {
             ContentEntity moduleEntity = service.FindEntity(keyValue);
@@ -298,6 +331,23 @@ namespace CMS.Application.WebManage
                 iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
             }
             service.Down(keyValue);
+        }
+
+        /// <summary>
+        /// 批量移除
+        /// </summary>
+        /// <param name="ids"></param>
+        public void Downs(string ids)
+        {
+            string[] sids = ids.Split(',');
+            if (sids != null && sids.Length > 0)
+            {
+                for (int i = 0; i < sids.Length; i++)
+                {
+                    string id = sids[i];
+                    Down(id);
+                }
+            }
         }
 
         public void UpdateViewNum(string keyValue)
@@ -327,6 +377,22 @@ namespace CMS.Application.WebManage
 
         }
 
+        /// <summary>
+        /// 批量生成静态页
+        /// </summary>
+        /// <param name="ids"></param>
+        public void GenStaticPages(string ids)
+        {
+            string[] sids = ids.Split(',');
+            if (sids != null && sids.Length > 0)
+            {
+                for (int i = 0; i < sids.Length; i++)
+                {
+                    string id = sids[i];
+                    GenStaticPage(id);
+                }
+            }
+        }
         public void GenStaticPage(string keyValue)
         {
             ContentEntity moduleEntity = service.FindEntity(keyValue);

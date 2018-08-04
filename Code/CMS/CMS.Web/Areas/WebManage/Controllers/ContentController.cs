@@ -88,9 +88,27 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAjaxOnly]
         [HandlerAuthorize]
         //[ValidateAntiForgeryToken]
+        public ActionResult DeleteForms(string ids)
+        {
+            c_contentApp.DeleteFormByIds(ids);
+            return Success("删除成功。");
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
         public ActionResult UpForm(string keyValue)
         {
             c_contentApp.Up(keyValue);
+            return Success("发布成功。");
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult UpForms(string ids)
+        {
+            c_contentApp.Ups(ids);
             return Success("发布成功。");
         }
         [HttpPost]
@@ -102,6 +120,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
             c_contentApp.Down(keyValue);
             return Success("移除成功。");
         }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DownForms(string ids)
+        {
+            c_contentApp.Downs(ids);
+            return Success("移除成功。");
+        }
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -110,6 +137,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult GetStaticPage(string keyValue)
         {
             c_contentApp.GenStaticPage(keyValue);
+            return Success("生成成功。");
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GetStaticPages(string ids)
+        {
+            c_contentApp.GenStaticPages(ids);
             return Success("生成成功。");
         }
 

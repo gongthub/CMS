@@ -75,6 +75,8 @@
             $gridList.dataGrid({
                 height: $(window).height() - 128,
                 url: "/WebManage/Content/GetGrid",
+                multiselect: true,//复选框 
+                shrinkToFit: true,
                 colModel: [
                     { label: "主键", name: "Id", hidden: true, key: true },
                     { label: '排序', name: 'SortCode', width: 50, align: 'left' },
@@ -169,8 +171,18 @@
         }
 
         function btn_edit() {
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
+            if (ids.length > 1) {
+                alert("只能选择一条数据!");
+                return;
+            }
+            var keyValue = ids[0];
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
             var type = $("#itemTree").getCurrentNode().value;
             if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
                 //3为链接
@@ -211,12 +223,17 @@
         }
 
         function btn_delete() {
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
-            if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            if (moduleName != null && moduleName != undefined && ids != null && ids != undefined) {
                 $.deleteForm({
-                    url: "/WebManage/Content/DeleteForm",
-                    param: { keyValue: keyValue },
+                    url: "/WebManage/Content/DeleteForms",
+                    param: { ids: ids.toString() },
                     success: function () {
                         $("#gridList").resetSelection();
                         $("#gridList").trigger("reloadGrid");
@@ -228,9 +245,18 @@
         }
 
         function btn_details() {
-
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
+            if (ids.length > 1) {
+                alert("只能选择一条数据!");
+                return;
+            }
+            var keyValue = ids[0];
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
             var type = $("#itemTree").getCurrentNode().value;
             if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
                 //3为链接
@@ -271,17 +297,22 @@
 
         //生成静态页
         function btn_staticpage() {
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
-            if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            if (moduleName != null && moduleName != undefined && ids != null && ids != undefined) {
                 var type = $("#itemTree").getCurrentNode().value;
                 if (type != 2) {
                     alert("栏目只能为列表才能生成静态页！");
                     return false;
                 }
                 $.getStaticPage({
-                    url: "/WebManage/Content/GetStaticPage",
-                    param: { keyValue: keyValue },
+                    url: "/WebManage/Content/GetStaticPages",
+                    param: { ids: ids.toString() },
                     success: function () {
                         $("#gridList").resetSelection();
                         $("#gridList").trigger("reloadGrid");
@@ -292,12 +323,17 @@
             }
         }
         function btn_up() {
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
-            if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            if (moduleName != null && moduleName != undefined && ids != null && ids != undefined) {
                 $.submitForm({
-                    url: "/WebManage/Content/UpForm",
-                    param: { keyValue: keyValue },
+                    url: "/WebManage/Content/UpForms",
+                    param: { ids: ids.toString() },
                     success: function () {
                         $("#gridList").resetSelection();
                         $("#gridList").trigger("reloadGrid");
@@ -308,12 +344,17 @@
             }
         }
         function btn_down() {
+            //获取多选到的id集合
+            var ids = $("#gridList").jqGrid("getGridParam", "selarrrow");
+            if (ids == "") {
+                alert("请选择一条数据!");
+                return;
+            }
             var moduleName = $("#itemTree").getCurrentNode().text;
-            var keyValue = $("#gridList").jqGridRowValue().Id;
-            if (moduleName != null && moduleName != undefined && keyValue != null && keyValue != undefined) {
+            if (moduleName != null && moduleName != undefined && ids != null && ids != undefined) {
                 $.submitForm({
-                    url: "/WebManage/Content/DownForm",
-                    param: { keyValue: keyValue },
+                    url: "/WebManage/Content/DownForms",
+                    param: { ids: ids.toString() },
                     success: function () {
                         $("#gridList").resetSelection();
                         $("#gridList").trigger("reloadGrid");
