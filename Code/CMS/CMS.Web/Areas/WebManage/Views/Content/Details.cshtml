@@ -49,11 +49,23 @@
                                 <td class="formValue">
                                     <input id="EditTime" name="EditTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss' })" />
                                 </td>
-                                <th class="formTitle" style="height: 35px;">是否发布</th>
-                                <td class="formValue" style="padding-top: 1px;">
-                                    <div class="ckbox">
-                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">发布</label>
-                                    </div>
+                                <td colspan="2">
+                                    <table>
+                                        <tr>
+                                            <th class="formTitle" style="height: 35px;">是否发布</th>
+                                            <td class="formValue" style="padding-top: 1px;">
+                                                <div class="ckbox">
+                                                    <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">发布</label>
+                                                </div>
+                                            </td>
+                                            <th class="formTitle" style="height: 35px;">是否置顶</th>
+                                            <td class="formValue" style="padding-top: 1px;">
+                                                <div class="ckbox">
+                                                    <input id="TopMark" name="TopMark" type="checkbox" data-switch-no-init="true"><label for="TopMark">置顶</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </td>
                             </tr>
                             <tr>

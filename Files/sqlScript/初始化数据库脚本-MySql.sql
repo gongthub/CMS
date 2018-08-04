@@ -100,6 +100,7 @@ CREATE TABLE `c_contents` (
   `SEODesc` varchar(200) DEFAULT NULL,
   `ViewNum` bigint(20) DEFAULT NULL,
   `EnabledMark` tinyint(4) DEFAULT NULL,
+  `TopMark` tinyint(4) DEFAULT NULL,
   `DeleteMark` tinyint(4) DEFAULT NULL,
   `CreatorUserId` varchar(50) DEFAULT NULL,
   `CreatorTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

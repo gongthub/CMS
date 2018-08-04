@@ -266,6 +266,7 @@ namespace CMS.MySqlRepository
 	                                A.SEODesc,
 	                                A.ViewNum,
 	                                A.EnabledMark,
+	                                A.TopMark,
 	                                A.DeleteMark,
 	                                A.CreatorUserId,
 	                                A.CreatorTime,

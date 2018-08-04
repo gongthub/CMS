@@ -40,6 +40,7 @@ namespace CMS.Domain.Entity.WebManage
         public string SEODesc { get; set; }
         public long ViewNum { get; set; }
         public bool EnabledMark { get; set; }
+        public bool TopMark { get; set; }
         public bool? DeleteMark { get; set; }
         public string CreatorUserId { get; set; }
         public DateTime? CreatorTime { get; set; }

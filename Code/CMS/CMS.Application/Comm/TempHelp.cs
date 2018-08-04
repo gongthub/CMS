@@ -1166,7 +1166,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sort", out val);
 
                     string sortName = val;
-                    contententitysT = contententitysT.OrderBy(sortName);
+                    contententitysT = contententitysT.OrderByDescending("TopMark").ThenBy(sortName);
 
 
                 }
@@ -1177,7 +1177,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sortdesc", out val);
 
                     string sortName = val;
-                    contententitysT = contententitysT.OrderBy(sortName, true);
+                    contententitysT = contententitysT.OrderByDescending("TopMark").ThenByDescending(sortName);
 
                 }
 
@@ -1243,7 +1243,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sortdesc", out val);
 
                     string sortName = val;
-                    contententitys = contententitys.OrderBy(sortName, true);
+                    contententitys = contententitys.OrderByDescending(sortName);
                 }
                 //行数
                 if (attrs.ContainsKey("tatol"))
@@ -1315,7 +1315,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sortdesc", out val);
 
                     string sortName = val;
-                    upFileEntitysT = upFileEntitysT.OrderBy(sortName, true);
+                    upFileEntitysT = upFileEntitysT.OrderByDescending(sortName);
 
                 }
                 //行数
@@ -2104,7 +2104,7 @@ namespace CMS.Application.Comm
                                 string sortName = "";
                                 if (attrs.TryGetValue("sortdesc", out sortName))
                                 {
-                                    contentEntitys.OrderBy(sortName, true);
+                                    contentEntitys.OrderByDescending(sortName);
                                 }
                             }
 
