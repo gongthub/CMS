@@ -1166,7 +1166,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sort", out val);
 
                     string sortName = val;
-                    contententitysT = contententitysT.OrderByDescending("TopMark").ThenBy(sortName);
+                    contententitysT = contententitysT.OrderByDescending(m=>m.TopMark).ThenBy(sortName);
 
 
                 }
@@ -1177,7 +1177,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sortdesc", out val);
 
                     string sortName = val;
-                    contententitysT = contententitysT.OrderByDescending("TopMark").ThenByDescending(sortName);
+                    contententitysT = contententitysT.OrderByDescending(m => m.TopMark).ThenByDescending(sortName);
 
                 }
 
