@@ -274,6 +274,50 @@ namespace CMS.Application.Comm
             return b;
 
         }
+        /// <summary>
+        /// 生成静态页面保存文件
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns></returns>
+        public bool GenHtmlPageCol(string colId, string webSiteId, string templetId, string actionName)
+        {
+            bool b = true;
+            try
+            {
+                WebSiteApp webSiteApp = new WebSiteApp();
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(webSiteId);
+                if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
+                {
+                    TempletApp templetapp = new TempletApp();
+                    TempletEntity templet = templetapp.GetFormNoDel(templetId);
+                    if (templet != null)
+                    {
+                        string templetstrs = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                        string htmlstrs = new TempHelp().GetHtmlPages(webSiteEntity.ShortName, templetstrs, colId, (int)Enums.TempletType.Common);
+                        string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\";
+                        string urlPathStr = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\" + actionName + ".html";
+                        string strPhyPaths = FileHelper.MapPath(urlPathStr);
+                        //已生成静态文件时
+                        if (FileHelper.IsExistFile(strPhyPaths))
+                        {
+                            FileHelper.DeleteFile(urlPathStr);
+                            GenHtml(urlPath, htmlstrs);
+                        }
+                        else
+                        {
+                            //创建静态页面
+                            FileHelper.CreateAndWrite(urlPath, actionName + ".html", htmlstrs);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                b = false;
+            }
+            return b;
+
+        }
         #endregion
 
         #region 获取模板元素集合 +string GetHtmlPages(string codes, string Id,string webSiteShortName)
@@ -282,7 +326,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string codes, string Id,string webSiteShortName)
+        public string GetHtmlPages(string codes, string Id, string webSiteShortName)
         {
             string strs = string.Empty;
             try
@@ -671,7 +715,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName,modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
                         break;
                     case "syssite":
                         htmls = GetWebSiteById(modelStr, Id);
@@ -733,7 +777,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName,modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
                         break;
                     case "syssite":
                         htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
@@ -798,7 +842,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName,modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
                         break;
                     case "syssite":
                         htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
@@ -1166,7 +1210,7 @@ namespace CMS.Application.Comm
                     attrs.TryGetValue("sort", out val);
 
                     string sortName = val;
-                    contententitysT = contententitysT.OrderByDescending(m=>m.TopMark).ThenBy(sortName);
+                    contententitysT = contententitysT.OrderByDescending(m => m.TopMark).ThenBy(sortName);
 
 
                 }
@@ -1207,7 +1251,7 @@ namespace CMS.Application.Comm
 
                     contententitys = contententitysT.ToList();
                     //处理连接地址
-                    contententitys.ForEach(delegate(ContentEntity model)
+                    contententitys.ForEach(delegate (ContentEntity model)
                     {
 
                         if (model != null && model.UrlAddress != null)
@@ -1269,7 +1313,7 @@ namespace CMS.Application.Comm
                     contententitysT = contententitys.ToList();
 
                     //处理连接地址
-                    contententitysT.ForEach(delegate(ContentEntity model)
+                    contententitysT.ForEach(delegate (ContentEntity model)
                     {
                         if (model != null && model.UrlAddress != null)
                         {
@@ -1332,7 +1376,7 @@ namespace CMS.Application.Comm
                 }
                 upFileEntitys = upFileEntitysT.ToList();
                 //处理连接地址
-                upFileEntitys.ForEach(delegate(UpFileEntity model)
+                upFileEntitys.ForEach(delegate (UpFileEntity model)
                 {
 
                     if (model != null && model.FilePath != null)
@@ -1469,7 +1513,7 @@ namespace CMS.Application.Comm
         {
             string strs = string.Empty;
             TempletApp templetapp = new TempletApp();
-            TempletEntity templet = templetapp.GetFormByName(webSiteShortName,name);
+            TempletEntity templet = templetapp.GetFormByName(webSiteShortName, name);
             if (templet != null)
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
@@ -1728,7 +1772,7 @@ namespace CMS.Application.Comm
                     {
                         List<string> urlRaws = WebHelper.GetUrls(urlRaw);
                         ContentApp contentApp = new ContentApp();
-                        if (!contentApp.GetHtmlStrs(entity.Id, urlRaw, out htmls))
+                        if (!contentApp.GetHtmlStrs(entity.Id, entity.ShortName, urlRaw, out htmls))
                         {
                             TempletApp templetApp = new TempletApp();
                             TempletEntity templetmodel = new TempletEntity();
@@ -1819,7 +1863,7 @@ namespace CMS.Application.Comm
                     {
                         List<string> urlRaws = WebHelper.GetUrls(urlRaw);
                         ContentApp contentApp = new ContentApp();
-                        if (!contentApp.GetHtmlStrs(entity.Id, urlRaw, out htmls))
+                        if (!contentApp.GetHtmlStrs(entity.Id, entity.ShortName, urlRaw, out htmls))
                         {
                             TempletApp templetApp = new TempletApp();
                             TempletEntity templetmodel = new TempletEntity();
@@ -2237,7 +2281,7 @@ namespace CMS.Application.Comm
                 if (contententitys != null && contententitys.Count > 0)
                 {
                     //处理连接地址
-                    contententitys.ForEach(delegate(ContentEntity model)
+                    contententitys.ForEach(delegate (ContentEntity model)
                     {
 
                         if (model != null && model.UrlAddress != null)

@@ -148,6 +148,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
             c_contentApp.GenStaticPages(ids);
             return Success("生成成功。");
         }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult GenStaticPageByCol(string colId)
+        {
+            c_contentApp.GenStaticPageByCol(colId);
+            return Success("生成成功。");
+        }
 
         [HttpGet]
         [HandlerAuthorize]

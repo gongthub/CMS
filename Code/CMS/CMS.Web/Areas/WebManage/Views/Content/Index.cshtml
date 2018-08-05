@@ -15,6 +15,9 @@
                 <div class="btn-group">
                     <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建内容</a>
                 </div>
+                <div class="btn-group">
+                    <a id="NF-staticpagecol" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_staticpagecol()"><i class="fa fa-file-o"></i>生成栏目静态页</a>
+                </div>
                 <div class="operate">
                     <ul class="nav nav-pills">
                         <li class="first">已选中<span>1</span>项</li>
@@ -301,6 +304,33 @@
             }
         }
 
+        //生成栏目静态页
+        function btn_staticpagecol() {
+            if ($("#itemTree").getCurrentNode() == null || $("#itemTree").getCurrentNode() == undefined) {
+                alert("请选择栏目！");
+                return false;
+            }
+            var type = $("#itemTree").getCurrentNode().value;
+            if (type != null && type != undefined) {
+                if (type == 1) {
+                    var colId = $("#itemTree").getCurrentNode().id;
+                    $.getStaticPage({
+                        url: "/WebManage/Content/GenStaticPageByCol",
+                        param: { colId: colId },
+                        success: function () {
+                            $("#gridList").resetSelection();
+                            $("#gridList").trigger("reloadGrid");
+                        }
+                    });
+                } else {
+                    alert("栏目只能为内容才能生成栏目静态页！");
+                    return false;
+                }
+            } else {
+                alert("请选择栏目！");
+                return false;
+            }
+        }
         //生成静态页
         function btn_staticpage() {
             //获取多选到的id集合
@@ -312,18 +342,19 @@
             var moduleName = $("#itemTree").getCurrentNode().text;
             if (moduleName != null && moduleName != undefined && ids != null && ids != undefined) {
                 var type = $("#itemTree").getCurrentNode().value;
-                if (type != 2) {
+                if (type == 2 || type == 4) {
+                    $.getStaticPage({
+                        url: "/WebManage/Content/GetStaticPages",
+                        param: { ids: ids.toString() },
+                        success: function () {
+                            $("#gridList").resetSelection();
+                            $("#gridList").trigger("reloadGrid");
+                        }
+                    });
+                } else {
                     alert("栏目只能为列表才能生成静态页！");
                     return false;
                 }
-                $.getStaticPage({
-                    url: "/WebManage/Content/GetStaticPages",
-                    param: { ids: ids.toString() },
-                    success: function () {
-                        $("#gridList").resetSelection();
-                        $("#gridList").trigger("reloadGrid");
-                    }
-                })
             } else {
                 alert("请选择一条数据！");
             }

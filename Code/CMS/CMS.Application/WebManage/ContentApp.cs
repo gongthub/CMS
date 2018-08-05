@@ -21,6 +21,7 @@ namespace CMS.Application.WebManage
         Log log = LogFactory.GetLogger("ContentApp");
         private IContentRepository service = DataAccess.CreateIContentRepository();
         private IUserRepository iUserRepository = DataAccess.CreateIUserRepository();
+        private IColumnsRepository iColumnsRepository = DataAccess.CreateIColumnsRepository();
 
         public ContentEntity GetForm(string keyValue)
         {
@@ -293,6 +294,7 @@ namespace CMS.Application.WebManage
             }
             service.SubmitForm(moduleEntity, keyValue, upFileentitys, lstRemoveImgIds);
             GenStaticPage(moduleEntity.Id);
+            GenStaticPageByCol(moduleEntity.ColumnId);
         }
 
         public void Up(string keyValue)
@@ -402,7 +404,8 @@ namespace CMS.Application.WebManage
                 iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
             }
             ColumnsEntity module = GetModuleByContentID(keyValue);
-            if (module != null && module.Type == (int)Enums.ModuleType.List)
+            if (module != null &&
+                (module.Type == (int)Enums.ModuleType.List || module.Type == (int)Enums.ModuleType.AdvancedList))
             {
                 if (new WebSiteApp().IsOverSizeByWebSiteId(module.WebSiteId))
                 {
@@ -422,7 +425,7 @@ namespace CMS.Application.WebManage
                     }
                 }
                 //添加日志
-                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
+                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成列表详情静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
             }
         }
         public void GenAllStaticPage(string webSiteId)
@@ -450,6 +453,29 @@ namespace CMS.Application.WebManage
             }
         }
 
+        /// <summary>
+        /// 生成栏目静态文件
+        /// </summary>
+        /// <param name="keyValue"></param>
+        public void GenStaticPageByCol(string keyValue)
+        {
+            ColumnsEntity moduleEntity = iColumnsRepository.FindEntity(keyValue);
+            if (moduleEntity != null)
+            {
+                //验证用户站点权限
+                iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
+            }
+            if (moduleEntity != null && moduleEntity.Type == (int)Enums.ModuleType.Content)
+            {
+                if (new WebSiteApp().IsOverSizeByWebSiteId(moduleEntity.WebSiteId))
+                {
+                    throw new Exception("该站点空间已不足，请联系管理员！");
+                }
+                new TempHelp().GenHtmlPageCol(keyValue, moduleEntity.WebSiteId, moduleEntity.TempletId, moduleEntity.ActionName);
+                //添加日志
+                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成栏目静态页" + moduleEntity.FullName, Enums.DbLogType.Submit, "内容管理");
+            }
+        }
         /// <summary>
         /// 获取静态HTML
         /// </summary>
@@ -502,27 +528,49 @@ namespace CMS.Application.WebManage
         /// <param name="webSiteId"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool GetHtmlStrs(string webSiteId, string url, out string htmls)
+        public bool GetHtmlStrs(string webSiteId, string webSiteShortName, string url, out string htmls)
         {
             bool isHave = false;
             htmls = string.Empty;
-            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/", @"\"))).FirstOrDefault();
-            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
+            isHave = GetHtmlStrsByColUrl(webSiteShortName, url, out htmls);
+            if (!isHave)
             {
-                string urlPath = contentEntity.UrlPath;
-
-                if (Code.FileHelper.IsExistFile(urlPath, true))
+                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId
+                && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/", @"\"))).FirstOrDefault();
+                if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
                 {
-                    htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
-                    if (contentEntity.ViewNum < 0)
+                    string urlPath = contentEntity.UrlPath;
+
+                    if (Code.FileHelper.IsExistFile(urlPath, true))
                     {
-                        contentEntity.ViewNum = 0;
+                        htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
+                        if (contentEntity.ViewNum < 0)
+                        {
+                            contentEntity.ViewNum = 0;
+                        }
+                        //处理页面浏览数
+                        htmls = htmls.Replace(TempHelp.STATICHTMLCONTENTNUM, contentEntity.ViewNum.ToString());
+                        UpdateViewNum(contentEntity.Id, true);
+                        isHave = true;
                     }
-                    //处理页面浏览数
-                    htmls = htmls.Replace(TempHelp.STATICHTMLCONTENTNUM, contentEntity.ViewNum.ToString());
-                    UpdateViewNum(contentEntity.Id, true);
-                    isHave = true;
                 }
+            }
+            return isHave;
+        }
+
+        /// <summary>
+        /// 获取栏目静态文件
+        /// </summary>
+        /// <returns></returns>
+        private bool GetHtmlStrsByColUrl(string webSiteShortName, string url, out string htmls)
+        {
+            bool isHave = false;
+            htmls = string.Empty;
+            string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteShortName + @"\" + url + ".html";
+            if (Code.FileHelper.IsExistFile(urlPath, true))
+            {
+                htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
+                isHave = true;
             }
             return isHave;
         }
