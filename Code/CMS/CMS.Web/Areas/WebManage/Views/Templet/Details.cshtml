@@ -118,5 +118,16 @@
             }
         });
     }
+    $(function () {
+        initContentH();
+    });
+    $(window).resize(function () {
+        initContentH();
+    });
+    function initContentH() {
+        var wh = $(document).height();
+        wh = wh - 80;
+        $("#Content").css("height", wh + "px");
+    }
 </script>
 }
