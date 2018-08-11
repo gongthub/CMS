@@ -564,6 +564,11 @@ namespace CMS.Application.WebManage
                     }
                 }
             }
+            if (!string.IsNullOrWhiteSpace(htmls) && requestModel.webSiteEntity != null)
+            {
+                //处理页面域名
+                htmls = htmls.Replace(requestModel.webSiteEntity.UrlAddress, requestModel.UrlHost);
+            }
             return isHave;
         }
 

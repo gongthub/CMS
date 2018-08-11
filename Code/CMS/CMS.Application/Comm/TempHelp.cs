@@ -316,13 +316,13 @@ namespace CMS.Application.Comm
                                             Ids = requestModel.UrlRaws[1];
                                         }
                                         TempHelp temphelp = new TempHelp();
-                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType, pageNumber);
+                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType, pageNumber, requestModel.UrlHost);
                                         isNoFind = false;
                                     }
                                     else
                                     {
                                         TempHelp temphelp = new TempHelp();
-                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType);
+                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType, requestModel.UrlHost);
                                         isNoFind = false;
                                     }
                                     //更新浏览数
@@ -555,7 +555,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string codes, string Id, string webSiteShortName)
+        public string GetHtmlPages(string codes, string Id, string webSiteShortName, string urlHost = "")
         {
             string strs = string.Empty;
             try
@@ -582,7 +582,7 @@ namespace CMS.Application.Comm
                         if (strts.Length >= 2 && strts[1] != null)
                         {
                             string templetstm = ProModels(ref strt, strts);
-                            string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName);
+                            string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, urlHost);
                             templets = templets.Replace(templetst, htmlt);
 
                         }
@@ -606,7 +606,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType)
+        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, string urlHost = "")
         {
             string strs = string.Empty;
             try
@@ -629,7 +629,7 @@ namespace CMS.Application.Comm
                     if (strts.Length >= 2 && strts[1] != null)
                     {
                         string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType);
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, urlHost);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -652,7 +652,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, int pageNumber)
+        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, int pageNumber, string urlHost = "")
         {
             string strs = string.Empty;
             try
@@ -675,7 +675,7 @@ namespace CMS.Application.Comm
                     if (strts.Length >= 2 && strts[1] != null)
                     {
                         string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, pageNumber);
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, pageNumber, urlHost);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -917,7 +917,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName)
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, string urlHost = "")
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -944,7 +944,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id, urlHost);
                         break;
                     case "syssite":
                         htmls = GetWebSiteById(modelStr, Id);
@@ -963,10 +963,25 @@ namespace CMS.Application.Comm
                             case "resourceurl":
                                 string shortNames = string.Empty;
                                 string webSiteUrls = GetWebSiteById("UrlAddress", Id, out shortNames);
+                                if (!string.IsNullOrWhiteSpace(urlHost))
+                                {
+                                    webSiteUrls = urlHost;
+                                }
                                 string urlStr = webSiteUrls + HTMLCONTENTSRC + shortNames + "/";
                                 urlStr = urlStr.Replace(@"\", @"/");
                                 urlStr = urlStr.Replace(@"//", @"/");
                                 htmls = WEBURLHTTP + urlStr;
+                                break;
+                            case "weburl":
+                                if (!string.IsNullOrWhiteSpace(urlHost))
+                                {
+                                    htmls = urlHost;
+                                }
+                                else
+                                {
+                                    WebSiteEntity webSiteEntityT = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                    htmls = webSiteEntityT?.UrlAddress;
+                                }
                                 break;
                         }
                         break;
@@ -979,7 +994,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType)
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, string urlHost = "")
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -1006,7 +1021,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id, urlHost);
                         break;
                     case "syssite":
                         htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
@@ -1023,14 +1038,29 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "resourceurl":
-                                WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                if (webSiteEntity != null)
+                                string webSiteUrls = urlHost;
+                                if (string.IsNullOrWhiteSpace(urlHost))
                                 {
-                                    string webSiteUrls = webSiteEntity.UrlAddress;
-                                    string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
-                                    urlStr = urlStr.Replace(@"\", @"/");
-                                    urlStr = urlStr.Replace(@"//", @"/");
-                                    htmls = WEBURLHTTP + urlStr;
+                                    WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                    if (webSiteEntity != null)
+                                    {
+                                        webSiteUrls = webSiteEntity.UrlAddress;
+                                    }
+                                }
+                                string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
+                                urlStr = urlStr.Replace(@"\", @"/");
+                                urlStr = urlStr.Replace(@"//", @"/");
+                                htmls = WEBURLHTTP + urlStr;
+                                break;
+                            case "weburl":
+                                if (!string.IsNullOrWhiteSpace(urlHost))
+                                {
+                                    htmls = urlHost;
+                                }
+                                else
+                                {
+                                    WebSiteEntity webSiteEntityT = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                    htmls = webSiteEntityT?.UrlAddress;
                                 }
                                 break;
                         }
@@ -1044,7 +1074,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, int pageNumber)
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, int pageNumber, string urlHost = "")
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -1071,7 +1101,7 @@ namespace CMS.Application.Comm
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id);
+                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id, urlHost);
                         break;
                     case "syssite":
                         htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
@@ -1088,14 +1118,29 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "resourceurl":
-                                WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                if (webSiteEntity != null)
+                                string webSiteUrls = urlHost;
+                                if (string.IsNullOrWhiteSpace(urlHost))
                                 {
-                                    string webSiteUrls = webSiteEntity.UrlAddress;
-                                    string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
-                                    urlStr = urlStr.Replace(@"\", @"/");
-                                    urlStr = urlStr.Replace(@"//", @"/");
-                                    htmls = WEBURLHTTP + urlStr;
+                                    WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                    if (webSiteEntity != null)
+                                    {
+                                        webSiteUrls = webSiteEntity.UrlAddress;
+                                    }
+                                }
+                                string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
+                                urlStr = urlStr.Replace(@"\", @"/");
+                                urlStr = urlStr.Replace(@"//", @"/");
+                                htmls = WEBURLHTTP + urlStr;
+                                break;
+                            case "weburl":
+                                if (!string.IsNullOrWhiteSpace(urlHost))
+                                {
+                                    htmls = urlHost;
+                                }
+                                else
+                                {
+                                    WebSiteEntity webSiteEntityT = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                                    htmls = webSiteEntityT?.UrlAddress;
                                 }
                                 break;
                         }
@@ -1738,7 +1783,7 @@ namespace CMS.Application.Comm
         /// 根据模板名称获取模板信息
         /// </summary>
         /// <returns></returns>
-        private string GetHtmlsByTempletName(string webSiteShortName, string name, string Id)
+        private string GetHtmlsByTempletName(string webSiteShortName, string name, string Id, string urlHost = "")
         {
             string strs = string.Empty;
             TempletApp templetapp = new TempletApp();
@@ -1747,7 +1792,7 @@ namespace CMS.Application.Comm
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
                 TempHelp temphelp = new TempHelp();
-                strs = temphelp.GetHtmlPages(templets, Id, webSiteShortName);
+                strs = temphelp.GetHtmlPages(templets, Id, webSiteShortName, urlHost);
             }
             return strs;
         }
