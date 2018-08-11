@@ -485,18 +485,21 @@ $.fn.bindSelect = function (options) {
     }
 }
 $.fn.authorizeButton = function () {
-    var moduleId = top.$(".CMS_iframe:visible").attr("id").substr(6);
-    var dataJson = top.clients.authorizeButton[moduleId];
-    var $element = $(this);
-    $element.find('a[authorize=yes]').attr('authorize', 'no');
-    if (dataJson != undefined) {
-        $.each(dataJson, function (i) {
-            $element.find("#" + dataJson[i].EnCode).attr('authorize', 'yes');
-        });
+    if (top.$(".CMS_iframe:visible").attr("id") != null) {
+        var moduleId = top.$(".CMS_iframe:visible").attr("id").substr(6);
+        var dataJson = top.clients.authorizeButton[moduleId];
+        var $element = $(this);
+        $element.find('a[authorize=yes]').attr('authorize', 'no');
+        if (dataJson != undefined) {
+            $.each(dataJson, function (i) {
+                $element.find("#" + dataJson[i].EnCode).attr('authorize', 'yes');
+                $element.find("#" + dataJson[i].EnCode).attr('style', 'display:block');
+            });
+        }
+        $element.find("[authorize=no]").parents('li').prev('.split').remove();
+        $element.find("[authorize=no]").parents('li').remove();
+        $element.find('[authorize=no]').remove();
     }
-    $element.find("[authorize=no]").parents('li').prev('.split').remove();
-    $element.find("[authorize=no]").parents('li').remove();
-    $element.find('[authorize=no]').remove();
 }
 $.fn.dataGrid = function (options) {
     var defaults = {
@@ -679,3 +682,7 @@ $.getPostAndData = function (options) {
     }, 500);
 
 }
+
+$(function () {
+    $('.toolbar').authorizeButton();
+})

@@ -614,4 +614,7 @@ a:hover,a:focus{color:#475059;}
         border-color: #ccc;
         text-decoration: none;
     }
+a[authorize] {
+    display: none;
+}
 /**************************************自定义样式 结束******************************************/
