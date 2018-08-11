@@ -271,90 +271,120 @@ namespace CMS.MySqlRepository
         }
         public void SubmitForm(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue, UpFileDTO upFileentity)
         {
+            VerifyUrlAddres(keyValue, webSiteForUrlEntitys, moduleEntity.UrlAddress);
             if (string.IsNullOrEmpty(moduleEntity.SysTempletId))
             {
                 moduleEntity.SysTempletId = null;
             }
             moduleEntity.UrlAddress = moduleEntity.UrlAddress.Trim();
             moduleEntity.Id = keyValue;
-            if (!iWebSiteForUrlRepository.IsExistUrl(moduleEntity, moduleEntity.UrlAddress))
+            if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
             {
-                if (!IsExist(keyValue, "ShortName", moduleEntity.ShortName, true))
+                InitSpareUrl(ref moduleEntity);
+                WebSiteEntity moduleEntityOld = FindEntity(keyValue);
+                using (var db = new MySqlRepositoryBase().BeginTrans())
                 {
-                    InitSpareUrl(ref moduleEntity);
-                    WebSiteEntity moduleEntityOld = FindEntity(keyValue);
-                    using (var db = new MySqlRepositoryBase().BeginTrans())
+                    if (!string.IsNullOrEmpty(keyValue))
                     {
-                        if (!string.IsNullOrEmpty(keyValue))
+                        //验证用户站点权限
+                        iUserRepository.VerifyUserWebsiteRole(keyValue);
+                        if (moduleEntityOld != null && !string.IsNullOrEmpty(moduleEntityOld.Id))
                         {
-                            //验证用户站点权限
-                            iUserRepository.VerifyUserWebsiteRole(keyValue);
-                            if (moduleEntityOld != null && !string.IsNullOrEmpty(moduleEntityOld.Id))
+                            moduleEntity.ShortName = moduleEntityOld.ShortName;
+                        }
+                        moduleEntity.Modify(keyValue);
+                        db.Update(moduleEntity);
+                        //添加日志
+                        iLogRepository.WriteDbLog(true, "修改站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "站点管理");
+                    }
+                    else
+                    {
+                        int iWebSiteNum = 0;
+                        if (IsOverNum(out iWebSiteNum))
+                        {
+                            moduleEntity.Create();
+                            db.Insert(moduleEntity);
+                            keyValue = moduleEntity.Id;
+
+                            var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
+                            if (LoginInfo != null)
                             {
-                                moduleEntity.ShortName = moduleEntityOld.ShortName;
+                                if (!string.IsNullOrEmpty(moduleEntity.Id))
+                                {
+                                    UserWebSiteEntity entity = new UserWebSiteEntity();
+                                    entity.Create();
+                                    entity.UserId = LoginInfo.UserId;
+                                    entity.WebSiteId = moduleEntity.Id;
+                                    entity.EnabledMark = true;
+                                    db.Insert(entity);
+                                }
                             }
-                            moduleEntity.Modify(keyValue);
-                            db.Update(moduleEntity);
+                            //添加配置表
+                            AddWebSiteConfig(moduleEntity, db);
+                            List<TempletEntity> TempletModels = new List<TempletEntity>();
+                            //添加站点模板 
+                            CreateTemplet(moduleEntity, db, out TempletModels);
+                            //添加站点搜索模板
+                            AddSearchModel(moduleEntity, db);
+                            //添加站点移动端搜索模板
+                            AddMSearchModel(moduleEntity, db);
+                            //添加站点栏目
+                            AddColumns(moduleEntity, db, TempletModels);
                             //添加日志
-                            iLogRepository.WriteDbLog(true, "修改站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Update, "站点管理");
+                            iLogRepository.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
                         }
                         else
                         {
-                            int iWebSiteNum = 0;
-                            if (IsOverNum(out iWebSiteNum))
-                            {
-                                moduleEntity.Create();
-                                db.Insert(moduleEntity);
-                                keyValue = moduleEntity.Id;
-
-                                var LoginInfo = SysLoginObjHelp.sysLoginObjHelp.GetOperator();
-                                if (LoginInfo != null)
-                                {
-                                    if (!string.IsNullOrEmpty(moduleEntity.Id))
-                                    {
-                                        UserWebSiteEntity entity = new UserWebSiteEntity();
-                                        entity.Create();
-                                        entity.UserId = LoginInfo.UserId;
-                                        entity.WebSiteId = moduleEntity.Id;
-                                        entity.EnabledMark = true;
-                                        db.Insert(entity);
-                                    }
-                                }
-                                //添加配置表
-                                AddWebSiteConfig(moduleEntity, db);
-                                List<TempletEntity> TempletModels = new List<TempletEntity>();
-                                //添加站点模板 
-                                CreateTemplet(moduleEntity, db, out TempletModels);
-                                //添加站点搜索模板
-                                AddSearchModel(moduleEntity, db);
-                                //添加站点移动端搜索模板
-                                AddMSearchModel(moduleEntity, db);
-                                //添加站点栏目
-                                AddColumns(moduleEntity, db, TempletModels);
-                                //添加日志
-                                iLogRepository.WriteDbLog(true, "添加站点信息=>" + moduleEntity.FullName, Enums.DbLogType.Create, "站点管理");
-                            }
-                            else
-                            {
-                                throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
-                            }
+                            throw new Exception("当前用户最多可添加" + iWebSiteNum + "个站点，如需添加更多站点，请联系管理员！");
                         }
-                        //更新上传文件表 
-                        AddUppFile(moduleEntity, keyValue, upFileentity, db);
-                        //保存备用域名
-                        SaveWebSiteForUrl(moduleEntity, webSiteForUrlEntitys, keyValue, db);
-
-                        db.Commit();
                     }
-                }
-                else
-                {
-                    throw new Exception("简称已存在，请重新输入！");
+                    //更新上传文件表 
+                    AddUppFile(moduleEntity, keyValue, upFileentity, db);
+                    //保存备用域名
+                    SaveWebSiteForUrl(moduleEntity, webSiteForUrlEntitys, keyValue, db);
+
+                    db.Commit();
                 }
             }
             else
             {
-                throw new Exception("域名已存在，请重新输入！");
+                throw new Exception("简称已存在，请重新输入！");
+            }
+        }
+
+        private void VerifyUrlAddres(string webSiteId, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string urlAddress)
+        {
+            List<WebSiteForUrlEntity> webSiteForUrlEntities = new List<WebSiteForUrlEntity>();
+            List<string> urlAddresslst = new List<string>();
+            urlAddresslst.Add(urlAddress);
+            if (webSiteForUrlEntitys != null && webSiteForUrlEntitys.Count > 0)
+            {
+                urlAddresslst.AddRange(webSiteForUrlEntitys.Select(m => m.UrlAddress).ToList());
+            }
+            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            {
+                if (!string.IsNullOrWhiteSpace(webSiteId))
+                {
+                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => m.WebSiteId != webSiteId
+                      && urlAddresslst.Contains(m.UrlAddress)).ToList();
+                }
+                else
+                {
+                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => urlAddresslst.Contains(m.UrlAddress)).ToList();
+                }
+            }
+            urlAddresslst = webSiteForUrlEntities?.Where(m => m.UrlAddress != "").Select(m => m.UrlAddress).Distinct().ToList();
+            if (urlAddresslst != null && urlAddresslst.Count > 0)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("域名：");
+                foreach (var item in urlAddresslst)
+                {
+                    stringBuilder.Append(item + ";");
+                }
+                stringBuilder.Append("已存在！");
+                string strmsg = stringBuilder.ToString();
+                throw new Exception(strmsg);
             }
         }
 
@@ -610,24 +640,16 @@ namespace CMS.MySqlRepository
                         {
                             TwebIds = TwebSiteForUrlEntity.Id;
                         }
-                        if (!iWebSiteForUrlRepository.IsExist(TwebIds, "UrlAddress", webSiteForUrlEntityT.UrlAddress, true))
+                        if (TwebSiteForUrlEntity != null && !string.IsNullOrEmpty(TwebSiteForUrlEntity.Id))
                         {
-                            if (TwebSiteForUrlEntity != null && !string.IsNullOrEmpty(TwebSiteForUrlEntity.Id))
-                            {
-                                TwebSiteForUrlEntity.Modify(TwebSiteForUrlEntity.Id);
-                                TwebSiteForUrlEntity.UrlAddress = webSiteForUrlEntityT.UrlAddress;
-                                db.Update(TwebSiteForUrlEntity);
-                            }
-                            else
-                            {
-                                webSiteForUrlEntityT.Create();
-                                db.Insert(webSiteForUrlEntityT);
-                            }
+                            TwebSiteForUrlEntity.Modify(TwebSiteForUrlEntity.Id);
+                            TwebSiteForUrlEntity.UrlAddress = webSiteForUrlEntityT.UrlAddress;
+                            db.Update(TwebSiteForUrlEntity);
                         }
                         else
                         {
-
-                            throw new Exception("域名：" + webSiteForUrlEntityT.UrlAddress + "已绑定站点，请重新输入！");
+                            webSiteForUrlEntityT.Create();
+                            db.Insert(webSiteForUrlEntityT);
                         }
                     }
                 }
