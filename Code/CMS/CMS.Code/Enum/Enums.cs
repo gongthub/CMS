@@ -148,7 +148,9 @@ namespace CMS.Code
             [Description("Common")]
             Common = 0,
             [Description("Search")]
-            Search = 1
+            Search = 1,
+            [Description("MSearch")]
+            MSearch = 2
         }
         /// <summary>
         /// 上传文件类型

@@ -181,7 +181,35 @@ namespace CMS.Application.WebManage
                     webSiteConfigEntity.SearchEnabledMark = searchEnabled;
                     webSiteConfigRepository.Update(webSiteConfigEntity);
                     //添加日志
-                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置全站搜索=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + searchEnabled, Enums.DbLogType.Create, "站点配置=>全站搜索");
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置PC端全站搜索=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + searchEnabled, Enums.DbLogType.Create, "站点配置=>全站搜索");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
+
+        public bool UpdateMSearchEnableByWebSiteId(string webSiteId, bool searchEnabled)
+        {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.MSearchEnabledMark = searchEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置移动端全站搜索=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + searchEnabled, Enums.DbLogType.Create, "站点配置=>全站搜索");
                 }
                 else
                 {
@@ -276,9 +304,41 @@ namespace CMS.Application.WebManage
             }
             return bState;
         }
+
+        public bool UpdateMobileEnableByWebSiteId(string webSiteId, bool mobileEnabled)
+        {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.MobileEnabledMark = mobileEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置启用移动端=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + mobileEnabled, Enums.DbLogType.Create, "站点配置=>站点维护");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
         public bool IsSearch(string webSiteId)
         {
             return webSiteConfigRepository.IsSearch(webSiteId);
+        }
+        public bool IsMSearch(string webSiteId)
+        {
+            return webSiteConfigRepository.IsMSearch(webSiteId);
         }
         public bool IsService(string webSiteId)
         {
@@ -291,6 +351,10 @@ namespace CMS.Application.WebManage
         public bool IsAdvancedContent(string webSiteId)
         {
             return webSiteConfigRepository.IsAdvancedContent(webSiteId);
+        }
+        public bool IsMobile(string webSiteId)
+        {
+            return webSiteConfigRepository.IsMobile(webSiteId);
         }
 
 

@@ -7,15 +7,25 @@
         <div style="padding-top: 20px; margin-right: 30px;">
             <table class="form">
                 <tr>
+                    <th class="formTitle">排序</th>
+                    <td class="formValue">
+                        <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
+                    </td>
                     <th class="formTitle">上级</th>
                     <td class="formValue">
                         <select id="ParentId" name="ParentId" class="form-control required">
                             <option value="0">父节点</option>
                         </select>
                     </td>
+                </tr>
+                <tr>
                     <th class="formTitle">名称</th>
                     <td class="formValue">
                         <input id="FullName" name="FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                    </td>
+                    <th class="formTitle">简称</th>
+                    <td class="formValue">
+                        <input id="ActionName" name="ActionName" type="text" class="form-control required" />
                     </td>
                 </tr>
                 <tr>
@@ -25,46 +35,39 @@
                             <option value="">==请选择==</option>
                         </select>
                     </td>
+                    <th class="formTitle">连接</th>
+                    <td class="formValue">
+                        <input id="UrlAddress" name="UrlAddress" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
                     <th class="formTitle">栏目模板</th>
                     <td class="formValue">
                         <select id="TempletId" name="TempletId" class="form-control required">
                             <option value="">==请选择==</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
                     <th class="formTitle">内容模板</th>
                     <td class="formValue">
                         <select id="CTempletId" name="CTempletId" class="form-control">
                             <option value="">==请选择==</option>
                         </select>
                     </td>
-                    <th class="formTitle">排序</th>
-                    <td class="formValue">
-                        <input id="SortCode" name="SortCode" type="text" class="form-control required" placeholder="请输入排序" />
-                    </td>
                 </tr>
                 <tr>
-                    <th class="formTitle">简称</th>
+                    <th class="formTitle">M栏目模板</th>
                     <td class="formValue">
-                        <input id="ActionName" name="ActionName" type="text" class="form-control required" />
+                        <select id="MTempletId" name="MTempletId" class="form-control">
+                            <option value="">==请选择==</option>
+                        </select>
                     </td>
-                    <th class="formTitle">连接</th>
+                    <th class="formTitle">M内容模板</th>
                     <td class="formValue">
-                        <input id="UrlAddress" name="UrlAddress" type="text" class="form-control" />
+                        <select id="MCTempletId" name="MCTempletId" class="form-control">
+                            <option value="">==请选择==</option>
+                        </select>
                     </td>
                 </tr>
-                @*<tr>
-                        <th class="formTitle">图标</th>
-                        <td class="formValue">
-                            <div class="input-group">
-                                <input id="Icon" name="Icon" type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
-                                </span>
-                            </div>
-                        </td
-                    </tr>>*@
                 <tr>
                     <th class="formTitle">有效</th>
                     <td class="formValue">
@@ -117,6 +120,16 @@
                 text: "FullName"
             });
             $("#CTempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#MTempletId").bindSelect({
+                url: "/WebManage/Templet/GetGridJson",
+                id: "Id",
+                text: "FullName"
+            });
+            $("#MCTempletId").bindSelect({
                 url: "/WebManage/Templet/GetGridJson",
                 id: "Id",
                 text: "FullName"

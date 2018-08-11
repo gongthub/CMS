@@ -423,6 +423,16 @@ namespace CMS.Application.WebManage
 
                         new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
                     }
+                    if (new WebSiteApp().IsMobile(webSiteEntity.Id))
+                    {
+                        templet = templetapp.GetFormNoDel(module.MCTempletId);
+                        if (templet != null)
+                        {
+                            string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+
+                            new TempHelp().GenMHtmlPage(templets, keyValue, webSiteEntity.ShortName);
+                        }
+                    }
                 }
                 //添加日志
                 LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成列表详情静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
@@ -431,6 +441,8 @@ namespace CMS.Application.WebManage
         public void GenAllStaticPage(string webSiteId)
         {
             int fNum = 0;
+
+            #region 生成内容静态文件
             List<ContentEntity> models = GetListByWebSiteId(webSiteId);
             if (models != null && models.Count > 0)
             {
@@ -447,6 +459,28 @@ namespace CMS.Application.WebManage
                     }
                 }
             }
+            #endregion
+
+            #region 生成栏目为内容的静态文件
+            List<ColumnsEntity> columnsEntities = new ColumnsApp().GetListByWebSiteId(webSiteId);
+            if (columnsEntities != null && columnsEntities.Count > 0)
+            {
+                columnsEntities = columnsEntities.Where(m => m.Type == (int)Enums.ModuleType.Content).Distinct().ToList();
+                foreach (ColumnsEntity model in columnsEntities)
+                {
+                    try
+                    {
+                        GenStaticPageByCol(model.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        fNum++;
+                        log.Error(ex.Message);
+                    }
+                }
+            }
+            #endregion
+
             if (fNum > 0)
             {
                 throw new Exception("失败条数：" + fNum);
@@ -457,9 +491,9 @@ namespace CMS.Application.WebManage
         /// 生成栏目静态文件
         /// </summary>
         /// <param name="keyValue"></param>
-        public void GenStaticPageByCol(string keyValue)
+        public void GenStaticPageByCol(string columnId)
         {
-            ColumnsEntity moduleEntity = iColumnsRepository.FindEntity(keyValue);
+            ColumnsEntity moduleEntity = iColumnsRepository.FindEntity(columnId);
             if (moduleEntity != null)
             {
                 //验证用户站点权限
@@ -471,39 +505,11 @@ namespace CMS.Application.WebManage
                 {
                     throw new Exception("该站点空间已不足，请联系管理员！");
                 }
-                new TempHelp().GenHtmlPageCol(keyValue, moduleEntity.WebSiteId, moduleEntity.TempletId, moduleEntity.ActionName);
+                new TempHelp().GenHtmlPageCol(columnId, moduleEntity.WebSiteId, moduleEntity.TempletId, moduleEntity.ActionName);
+                new TempHelp().GenMHtmlPageCol(columnId, moduleEntity.WebSiteId, moduleEntity.MTempletId, moduleEntity.ActionName);
                 //添加日志
                 LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成栏目静态页" + moduleEntity.FullName, Enums.DbLogType.Submit, "内容管理");
             }
-        }
-        /// <summary>
-        /// 获取静态HTML
-        /// </summary>
-        /// <param name="keyValue"></param>
-        /// <returns></returns>
-        public string GetStaticHtmls(string keyValue)
-        {
-            string htmls = "";
-            ColumnsEntity module = GetModuleByContentID(keyValue);
-            if (module != null)
-            {
-                WebSiteApp webSiteApp = new WebSiteApp();
-                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(module.WebSiteId);
-                if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
-                {
-                    TempletApp templetapp = new TempletApp();
-                    TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
-                    if (templet != null)
-                    {
-                        string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
-
-                        new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
-                        htmls = new TempHelp().GetHtmlPages(templets, keyValue, webSiteEntity.ShortName);
-                    }
-                }
-            }
-
-            return htmls;
         }
 
         /// <summary>
@@ -525,22 +531,25 @@ namespace CMS.Application.WebManage
         /// <summary>
         /// 根据站点ID和虚拟路径获取html
         /// </summary>
-        /// <param name="webSiteId"></param>
-        /// <param name="name"></param>
+        /// <param name="requestModel"></param>
         /// <returns></returns>
-        public bool GetHtmlStrs(string webSiteId, string webSiteShortName, string url, out string htmls)
+        public bool GetHtmlStrs(RequestModel requestModel, out string htmls)
         {
             bool isHave = false;
             htmls = string.Empty;
-            isHave = GetHtmlStrsByColUrl(webSiteShortName, url, out htmls);
+            isHave = GetHtmlStrsByColUrl(requestModel, out htmls);
             if (!isHave)
             {
-                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == webSiteId
-                && (m.UrlAddress == url || m.UrlAddress == url.Replace(@"/", @"\"))).FirstOrDefault();
+                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSiteEntity.Id
+                && (m.UrlAddress == requestModel.UrlRaw || m.UrlAddress == requestModel.UrlRaw.Replace(@"/", @"\"))).FirstOrDefault();
                 if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
                 {
                     string urlPath = contentEntity.UrlPath;
 
+                    if (requestModel.IsMobile)
+                    {
+                        urlPath = contentEntity.MUrlPath;
+                    }
                     if (Code.FileHelper.IsExistFile(urlPath, true))
                     {
                         htmls = Code.FileHelper.ReadTxtFile(urlPath, true);
@@ -562,11 +571,19 @@ namespace CMS.Application.WebManage
         /// 获取栏目静态文件
         /// </summary>
         /// <returns></returns>
-        private bool GetHtmlStrsByColUrl(string webSiteShortName, string url, out string htmls)
+        private bool GetHtmlStrsByColUrl(RequestModel requestModel, out string htmls)
         {
             bool isHave = false;
             htmls = string.Empty;
-            string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteShortName + @"\" + url + ".html";
+            string urlPath = string.Empty;
+            if (requestModel.IsMobile)
+            {
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
+            }
+            else
+            {
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\" + requestModel.UrlRaw + ".html";
+            }
             if (Code.FileHelper.IsExistFile(urlPath, true))
             {
                 htmls = Code.FileHelper.ReadTxtFile(urlPath, true);

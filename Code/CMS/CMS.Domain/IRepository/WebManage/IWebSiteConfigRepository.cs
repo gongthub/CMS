@@ -12,8 +12,10 @@ namespace CMS.Domain.IRepository
     {
         WebSiteConfigEntity GetFormByWebSiteId(string webSiteId);
         bool IsSearch(string webSiteId);
+        bool IsMSearch(string webSiteId);
         bool IsService(string webSiteId);
         bool IsMessage(string webSiteId);
-         bool IsAdvancedContent(string webSiteId);
+        bool IsAdvancedContent(string webSiteId);
+        bool IsMobile(string webSiteId);
     }
 }

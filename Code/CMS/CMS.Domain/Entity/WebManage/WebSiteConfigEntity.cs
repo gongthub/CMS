@@ -23,9 +23,13 @@ namespace CMS.Domain.Entity.WebManage
         public string WebSiteId { get; set; }
 
         /// <summary>
-        /// 全站搜索标识
+        /// PC端全站搜索标识
         /// </summary>		
         public bool SearchEnabledMark { get; set; }
+        /// <summary>
+        /// 移动端全站搜索标识
+        /// </summary>		
+        public bool MSearchEnabledMark { get; set; }
         /// <summary>
         /// 网站维护中标识
         /// </summary>		
@@ -38,6 +42,10 @@ namespace CMS.Domain.Entity.WebManage
         /// 高级列表标识
         /// </summary>		
         public bool AdvancedContentEnabledMark { get; set; }
+        /// <summary>
+        /// 移动端网站标识
+        /// </summary>		
+        public bool MobileEnabledMark { get; set; }
 
         /// <summary>
         /// EnabledMark

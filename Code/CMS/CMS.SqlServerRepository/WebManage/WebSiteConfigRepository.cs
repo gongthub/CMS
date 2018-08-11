@@ -41,6 +41,27 @@ namespace CMS.SqlServerRepository
             }
             return bState;
         }
+        public bool IsMSearch(string webSiteId)
+        {
+            bool bState = false;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.MSearchEnabledMark;
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
         public bool IsService(string webSiteId)
         {
             bool bState = true;
@@ -71,6 +92,27 @@ namespace CMS.SqlServerRepository
                 if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
                 {
                     bState = webSiteConfigEntity.MessageEnabledMark;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            catch
+            {
+                bState = true;
+            }
+            return bState;
+        }
+        public bool IsMobile(string webSiteId)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.MobileEnabledMark;
                 }
                 else
                 {

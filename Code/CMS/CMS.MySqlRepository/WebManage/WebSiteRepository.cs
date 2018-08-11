@@ -85,18 +85,22 @@ namespace CMS.MySqlRepository
         /// <summary>
         /// 根据站点获取模板
         /// </summary>
-        /// <param name="WebSiteId"></param>
+        /// <param name="webSiteId"></param>
         /// <returns></returns>
-        public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
+        public List<TempletEntity> GetListByWebSiteId(string webSiteId)
         {
-            if (iWebSiteConfigRepository.IsSearch(WebSiteId))
+            var expression = ExtLinq.True<TempletEntity>();
+            expression = expression.And(t => t.DeleteMark != true && t.WebSiteId == webSiteId);
+            expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common);
+            if (iWebSiteConfigRepository.IsSearch(webSiteId))
             {
-                return iTempletRepository.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+                expression = expression.Or(t => t.TempletType == (int)Code.Enums.TempletType.Search);
             }
-            else
+            else if (iWebSiteConfigRepository.IsMSearch(webSiteId))
             {
-                return iTempletRepository.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true && m.TempletType == (int)Code.Enums.TempletType.Common).OrderBy(t => t.SortCode).ToList();
+                expression = expression.Or(t => t.TempletType == (int)Code.Enums.TempletType.MSearch);
             }
+            return iTempletRepository.IQueryable(expression).OrderBy(t => t.SortCode).ToList();
         }
 
         public List<WebSiteEntity> GetListForUserId()
@@ -244,6 +248,8 @@ namespace CMS.MySqlRepository
                             CreateTemplet(moduleEntity, db, out TempletModels);
                             //添加站点搜索模板
                             AddSearchModel(moduleEntity, db);
+                            //添加站点移动端搜索模板
+                            AddMSearchModel(moduleEntity, db);
                             //添加站点栏目
                             AddColumns(moduleEntity, db, TempletModels);
 
@@ -321,6 +327,8 @@ namespace CMS.MySqlRepository
                                 CreateTemplet(moduleEntity, db, out TempletModels);
                                 //添加站点搜索模板
                                 AddSearchModel(moduleEntity, db);
+                                //添加站点移动端搜索模板
+                                AddMSearchModel(moduleEntity, db);
                                 //添加站点栏目
                                 AddColumns(moduleEntity, db, TempletModels);
                                 //添加日志
@@ -374,7 +382,7 @@ namespace CMS.MySqlRepository
                     foreach (SysColumnsEntity model in models)
                     {
                         string strNewIds = Guid.NewGuid().ToString();
-                        models.ForEach(delegate(SysColumnsEntity m)
+                        models.ForEach(delegate (SysColumnsEntity m)
                         {
                             if (m.ParentId == model.Id)
                             {
@@ -385,6 +393,8 @@ namespace CMS.MySqlRepository
                             {
                                 SysTempletItemsEntity systempsModelT = systempsModels.Find(t => t.Id == m.TempletId);
                                 SysTempletItemsEntity systempsModelCT = systempsModels.Find(t => t.Id == m.CTempletId);
+                                SysTempletItemsEntity systempsModelMT = systempsModels.Find(t => t.Id == m.MTempletId);
+                                SysTempletItemsEntity systempsModelMCT = systempsModels.Find(t => t.Id == m.MCTempletId);
                                 if (systempsModelT != null && !string.IsNullOrEmpty(systempsModelT.Id))
                                 {
                                     TempletEntity tempModelT = tempModels.Find(t => t.FullName == systempsModelT.FullName);
@@ -399,6 +409,22 @@ namespace CMS.MySqlRepository
                                     if (tempModelCT != null && !string.IsNullOrEmpty(tempModelCT.Id))
                                     {
                                         m.CTempletId = tempModelCT.Id;
+                                    }
+                                }
+                                if (systempsModelMT != null && !string.IsNullOrEmpty(systempsModelMT.Id))
+                                {
+                                    TempletEntity tempModelMT = tempModels.Find(t => t.FullName == systempsModelMT.FullName);
+                                    if (tempModelMT != null && !string.IsNullOrEmpty(tempModelMT.Id))
+                                    {
+                                        m.MTempletId = tempModelMT.Id;
+                                    }
+                                }
+                                if (systempsModelMCT != null && !string.IsNullOrEmpty(systempsModelMCT.Id))
+                                {
+                                    TempletEntity tempModelMCT = tempModels.Find(t => t.FullName == systempsModelMCT.FullName);
+                                    if (tempModelMCT != null && !string.IsNullOrEmpty(tempModelMCT.Id))
+                                    {
+                                        m.MCTempletId = tempModelMCT.Id;
                                     }
                                 }
                             }
@@ -434,6 +460,26 @@ namespace CMS.MySqlRepository
                 templetEntity.FullName = ConfigHelp.configHelp.WEBSITESEARCHPATH;
                 templetEntity.Description = "全站搜索模板";
                 templetEntity.TempletType = (int)Code.Enums.TempletType.Search;
+                templetEntity.EnabledMark = true;
+                templetEntity.Create();
+                db.Insert(templetEntity);
+            }
+        }
+        /// <summary>
+        /// 添加站点搜索模板
+        /// </summary>
+        /// <param name="moduleEntity"></param>
+        /// <param name="db"></param>
+        private void AddMSearchModel(WebSiteEntity moduleEntity, IRepositoryBase db)
+        {
+            if (!iTempletRepository.IsExistMSearchModel(moduleEntity.Id))
+            {
+                TempletEntity templetEntity = new TempletEntity();
+                templetEntity.WebSiteId = moduleEntity.Id;
+                templetEntity.SortCode = 0;
+                templetEntity.FullName = ConfigHelp.configHelp.WEBSITESEARCHPATH;
+                templetEntity.Description = "移动端全站搜索模板";
+                templetEntity.TempletType = (int)Code.Enums.TempletType.MSearch;
                 templetEntity.EnabledMark = true;
                 templetEntity.Create();
                 db.Insert(templetEntity);
@@ -721,6 +767,8 @@ namespace CMS.MySqlRepository
                            ParentId = list.ParentId,
                            TempletId = list.TempletId,
                            CTempletId = list.CTempletId,
+                           MTempletId = list.MTempletId,
+                           MCTempletId = list.MCTempletId,
                            SortCode = list.SortCode,
                            FullName = list.FullName,
                            Type = list.Type,

@@ -25,6 +25,16 @@ namespace CMS.MySqlRepository
             }
             return bState;
         }
+        public bool IsExistMSearchModel(string WebSiteId)
+        {
+            bool bState = false;
+            TempletEntity model = GetMSearchModel(WebSiteId);
+            if (model != null && !string.IsNullOrEmpty(model.Id))
+            {
+                bState = true;
+            }
+            return bState;
+        }
         public bool IsSearchModel(string WebSiteId)
         {
             bool bState = false;
@@ -46,6 +56,22 @@ namespace CMS.MySqlRepository
             if (!string.IsNullOrEmpty(webSiteId))
             {
                 expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.EnabledMark == true && t.TempletType == (int)Enums.TempletType.Search);
+            }
+            templet = FindEntity(expression);
+            return templet;
+        }
+        /// <summary>
+        /// 获取全站搜索模板
+        /// </summary>
+        /// <returns></returns>
+        public TempletEntity GetMSearchModel(string webSiteId)
+        {
+            TempletEntity templet = new TempletEntity();
+            var expression = ExtLinq.True<TempletEntity>();
+            if (!string.IsNullOrEmpty(webSiteId))
+            {
+                expression = expression.And(t => t.WebSiteId == webSiteId 
+                && t.DeleteMark != true && t.EnabledMark == true && t.TempletType == (int)Enums.TempletType.MSearch);
             }
             templet = FindEntity(expression);
             return templet;

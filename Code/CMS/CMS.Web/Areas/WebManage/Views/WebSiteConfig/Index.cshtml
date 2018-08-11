@@ -20,7 +20,16 @@
                             <input id="ckIsServiceEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
                         }
                     </td>
-
+                    <th class="formTitle">网站空间</th>
+                    <td class="formValue">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: @ViewBag.WebSiteSizePer%;background-color:#14a689;">
+                            </div>
+                            <span style="position:absolute;left:30%;right:30%;color:red;line-height:1.8;white-space:nowrap">@Model.WebSiteUseResourceSize M / @Model.WebSiteResourceSize M  已使用 @ViewBag.WebSiteSizePer%</span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th class="formTitle">留言板</th>
@@ -57,23 +66,24 @@
                     </td>
                 </tr>
                 <tr>
-                    <th class="formTitle">网站空间</th>
+                    <th class="formTitle">移动端网站</th>
                     <td class="formValue">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                                 style="width: @ViewBag.WebSiteSizePer%;background-color:#14a689;">
-                            </div>
-                            <span style="position:absolute;left:30%;right:30%;color:red;line-height:1.8;white-space:nowrap">@Model.WebSiteUseResourceSize M / @Model.WebSiteResourceSize M  已使用 @ViewBag.WebSiteSizePer%</span>
-                        </div>
+                        @if (Model.MobileEnabledMark)
+                        {
+                            <input id="ckIsMobileEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsMobileEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
                     </td>
                     <th class="formTitle">一键生成静态页</th>
                     <td class="formValue">
                         <a onclick="genAllHtmls()" class="btn  btn-primary">一键生成静态页</a>
                     </td>
                     @*<th class="formTitle">升级空间</th>
-                    <td class="formValue"> 
-                    </td>*@
+        <td class="formValue">
+        </td>*@
 
                 </tr>
             </table>
@@ -84,7 +94,7 @@
         <div class="mail-body">
             <table class="form">
                 <tr>
-                    <th class="formTitle">是否启用</th>
+                    <th class="formTitle">PC端是否启用</th>
                     <td class="formValue">
                         @if (Model.SearchEnabledMark)
                         {
@@ -95,6 +105,19 @@
                             <input id="ckIsSearchEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
                         }
                     </td>
+                    <th class="formTitle">移动端是否启用</th>
+                    <td class="formValue">
+                        @if (Model.MSearchEnabledMark)
+                        {
+                            <input id="ckIsMSearchEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsMSearchEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
+                    </td>
+                </tr>
+                <tr>
                     <th class="formTitle">生成索引</th>
                     <td class="formValue">
                         <a onclick="createIndex()" class="btn  btn-primary">立即生成</a>
@@ -111,6 +134,9 @@
             $("#ckIsSearchEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setSearchEnabled(state);
             });
+            $("#ckIsMSearchEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setMSearchEnabled(state);
+            });
             $("#ckIsServiceEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setServiceEnabled(state);
             });
@@ -120,8 +146,21 @@
             $("#ckIsAdvancedContentEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setAdvancedContentEnabled(state);
             });
+            $("#ckIsMobileEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setckIsMobileEnabled(state);
+            });
         });
 
+        //设置全站搜索开关
+        function setMSearchEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateMSearchEnabled",
+                param: { searchEnabled: state },
+                success: function (data) {
+                    $.modalAlertSuccess(data.message);
+                }
+            })
+        }
         //设置全站搜索开关
         function setSearchEnabled(state) {
             $.getPostNoConfirm({
@@ -209,6 +248,16 @@
             })
         }
 
+        //设置高级列表标识
+        function setckIsMobileEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateMobileEnabled",
+                param: { mobileEnabled: state },
+                success: function (data) {
+                    $.modalAlertSuccess(data.message);
+                }
+            })
+        }
         //立即生成索引
         function createIndex() {
             $.getPost({

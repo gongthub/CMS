@@ -82,7 +82,7 @@ namespace CMS.Application.Comm
         {
             try
             {
-                if (!new WebSiteApp().IsSearch(wenSiteIds))
+                if (!new WebSiteApp().IsSearch(wenSiteIds)|| !new WebSiteApp().IsMSearch(wenSiteIds))
                 {
                     throw new Exception("该站点未启用全站搜索功能！");
                 }

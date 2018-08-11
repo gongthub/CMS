@@ -12,7 +12,7 @@
             <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建栏目</a>
         </div>
         <div class="btn-group">
-            <a id="NF-back" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_back()"><i class="fa fa-backward"></i>返回</a>
+            <a id="NF-back" class="btn btn-primary dropdown-text" onclick="btn_back()"><i class="fa fa-backward"></i>返回</a>
         </div>
         <div class="operate">
             <ul class="nav nav-pills">
@@ -103,7 +103,7 @@
                 title: "新增栏目",
                 url: "/SystemManage/SysColumns/Form?sysTempletId=" + parentId,
                 width: "700px",
-                height: "440px",
+                height: "500px",
                 callBack: function (iframeId) {
                     top.frames[iframeId].submitForm();
                 }
@@ -117,7 +117,7 @@
                     title: "修改栏目",
                     url: "/SystemManage/SysColumns/Form?keyValue=" + keyValue + "&sysTempletId=" + parentId,
                     width: "700px",
-                    height: "440px",
+                    height: "500px",
                     callBack: function (iframeId) {
                         top.frames[iframeId].submitForm();
                     }
@@ -151,7 +151,7 @@
                     title: "查看栏目",
                     url: "/SystemManage/SysColumns/Details?keyValue=" + keyValue + "&sysTempletId=" + parentId,
                     width: "700px",
-                    height: "490px",
+                    height: "500px",
                     btn: null,
                 });
             }

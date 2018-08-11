@@ -21,9 +21,14 @@ namespace CMS.Domain.Entity.SystemManage
         public string ParentId { get; set; }
 
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsNull, Code.Enums.VerifyType.IsGuid)]
-        [Description("栏目模板")]
+        [Description("PC端栏目模板")]
         public string TempletId { get; set; }
+        [Description("PC端内容模板")]
         public string CTempletId { get; set; }
+        [Description("移动端栏目模板")]
+        public string MTempletId { get; set; }
+        [Description("移动端内容模板")]
+        public string MCTempletId { get; set; }
 
         [Verify(Code.Enums.VerifyType.IsNullOrEmpty, Code.Enums.VerifyType.IsInt)]
         [Description("排序")]

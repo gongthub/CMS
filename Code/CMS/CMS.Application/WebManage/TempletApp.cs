@@ -1,5 +1,6 @@
 ﻿using CMS.Application.Comm;
 using CMS.Code;
+using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.WebManage;
 using CMS.Domain.IRepository;
 using CMS.RepositoryFactory;
@@ -39,45 +40,25 @@ namespace CMS.Application.WebManage
         /// 获取默认模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetMain()
+        public TempletEntity GetMain(RequestModel requestModel)
         {
             TempletEntity templet = new TempletEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            ColumnsEntity module = c_ModulesApp.GetMain();
+            ColumnsEntity module = c_ModulesApp.GetMain(requestModel.webSiteEntity?.Id);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark == true && m.DeleteMark != true);
-            }
-            return templet;
-        }
-        /// <summary>
-        /// 获取默认模板
-        /// </summary>
-        /// <returns></returns>
-        public TempletEntity GetMain(string webSiteId)
-        {
-            TempletEntity templet = new TempletEntity();
-            ColumnsApp c_ModulesApp = new ColumnsApp();
-            ColumnsEntity module = c_ModulesApp.GetMain(webSiteId);
-            if (module != null)
-            {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
-            }
-            return templet;
-        }
-
-        /// <summary>
-        /// 根据名称获取模板
-        /// </summary>
-        /// <returns></returns>
-        public TempletEntity GetModelByActionName(string actionName)
-        {
-            TempletEntity templet = new TempletEntity();
-            ColumnsApp c_ModulesApp = new ColumnsApp();
-            ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName);
-            if (module != null)
-            {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.EnabledMark == true && m.DeleteMark != true);
+                if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity.Id))
+                {
+                    templet = service.FindEntity(m => m.Id == module.MTempletId
+                    && m.WebSiteId == requestModel.webSiteEntity.Id
+                    && m.EnabledMark == true && m.DeleteMark != true);
+                }
+                else
+                {
+                    templet = service.FindEntity(m => m.Id == module.TempletId
+                    && m.WebSiteId == requestModel.webSiteEntity.Id
+                    && m.EnabledMark == true && m.DeleteMark != true);
+                }
             }
             return templet;
         }
@@ -86,13 +67,26 @@ namespace CMS.Application.WebManage
         /// 获取全站搜索模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetSearchModel(string webSiteId)
+        public TempletEntity GetSearchModel(string webSiteId, bool isMobile)
         {
             TempletEntity templet = new TempletEntity();
             var expression = ExtLinq.True<TempletEntity>();
             if (!string.IsNullOrEmpty(webSiteId))
             {
-                expression = expression.And(t => t.WebSiteId == webSiteId && t.DeleteMark != true && t.EnabledMark == true && t.TempletType == (int)Enums.TempletType.Search);
+                if (isMobile && new WebSiteApp().IsMobile(webSiteId))
+                {
+                    expression = expression.And(t => t.WebSiteId == webSiteId
+                                    && t.DeleteMark != true
+                                    && t.EnabledMark == true
+                                    && t.TempletType == (int)Enums.TempletType.MSearch);
+                }
+                else
+                {
+                    expression = expression.And(t => t.WebSiteId == webSiteId
+                                    && t.DeleteMark != true
+                                    && t.EnabledMark == true
+                                    && t.TempletType == (int)Enums.TempletType.Search);
+                }
             }
             templet = service.FindEntity(expression);
             return templet;
@@ -101,63 +95,32 @@ namespace CMS.Application.WebManage
         /// 根据路径获取模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId)
+        public TempletEntity GetModelByUrlRaws(RequestModel requestModel, ref int irequestType)
         {
             TempletEntity templet = new TempletEntity();
-            if (urlRaws != null)
+            if (requestModel.UrlRaws != null)
             {
-                if (Common.IsSearchForUrl(urlRaws))
+                if (Common.IsSearchForUrl(requestModel.UrlRaws))
                 {
-                    if (new WebSiteApp().IsSearch(webSiteId))
+                    if (new WebSiteApp().IsSearch(requestModel.webSiteEntity?.Id)
+                        || new WebSiteApp().IsMSearch(requestModel.webSiteEntity?.Id))
                     {
-                        templet = GetSearchModel(webSiteId);
-                    }
-                }
-                else
-                {
-                    string Ids = urlRaws.LastOrDefault();
-                    int Id = 0;
-                    if (urlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
-                    {
-                        templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
-                    }
-                    else
-                    {
-                        templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
-                    }
-                }
-            }
-            return templet;
-        }
-        /// <summary>
-        /// 根据路径获取模板
-        /// </summary>
-        /// <returns></returns>
-        public TempletEntity GetModelByUrlRaws(List<string> urlRaws, string webSiteId, ref int irequestType)
-        {
-            TempletEntity templet = new TempletEntity();
-            if (urlRaws != null)
-            {
-                if (Common.IsSearchForUrl(urlRaws))
-                {
-                    if (new WebSiteApp().IsSearch(webSiteId))
-                    {
-                        templet = GetSearchModel(webSiteId);
+                        templet = GetSearchModel(requestModel.webSiteEntity?.Id, requestModel.IsMobile);
                         irequestType = (int)Enums.TempletType.Search;
                     }
                 }
                 else
                 {
 
-                    string Ids = urlRaws.LastOrDefault();
+                    string Ids = requestModel.UrlRaws.LastOrDefault();
                     int Id = 0;
-                    if (urlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
+                    if (requestModel.UrlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
                     {
-                        templet = GetModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                        templet = GetModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSiteEntity?.Id, requestModel.IsMobile);
                     }
                     else
                     {
-                        templet = GetCModelByActionName(urlRaws.FirstOrDefault(), webSiteId);
+                        templet = GetCModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSiteEntity?.Id, requestModel.IsMobile);
                     }
                 }
             }
@@ -168,14 +131,27 @@ namespace CMS.Application.WebManage
         /// 根据名称获取模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetModelByActionName(string actionName, string webSiteId)
+        public TempletEntity GetModelByActionName(string actionName, string webSiteId, bool isMobile)
         {
             TempletEntity templet = new TempletEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
             ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.TempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
+                if (isMobile && new WebSiteApp().IsMobile(webSiteId))
+                {
+                    templet = service.FindEntity(m => m.Id == module.MTempletId
+                                    && m.WebSiteId == webSiteId
+                                    && m.EnabledMark == true
+                                    && m.DeleteMark != true);
+                }
+                else
+                {
+                    templet = service.FindEntity(m => m.Id == module.TempletId
+                                    && m.WebSiteId == webSiteId
+                                    && m.EnabledMark == true
+                                    && m.DeleteMark != true);
+                }
             }
             return templet;
         }
@@ -184,14 +160,27 @@ namespace CMS.Application.WebManage
         /// 根据名称获取内容模板
         /// </summary>
         /// <returns></returns>
-        public TempletEntity GetCModelByActionName(string actionName, string webSiteId)
+        public TempletEntity GetCModelByActionName(string actionName, string webSiteId, bool isMobile)
         {
             TempletEntity templet = new TempletEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
             ColumnsEntity module = c_ModulesApp.GetModelByActionName(actionName, webSiteId);
             if (module != null)
             {
-                templet = service.FindEntity(m => m.Id == module.CTempletId && m.WebSiteId == webSiteId && m.EnabledMark == true && m.DeleteMark != true);
+                if (isMobile && new WebSiteApp().IsMobile(webSiteId))
+                {
+                    templet = service.FindEntity(m => m.Id == module.MCTempletId
+                                    && m.WebSiteId == webSiteId
+                                    && m.EnabledMark == true
+                                    && m.DeleteMark != true);
+                }
+                else
+                {
+                    templet = service.FindEntity(m => m.Id == module.CTempletId
+                                    && m.WebSiteId == webSiteId
+                                    && m.EnabledMark == true
+                                    && m.DeleteMark != true);
+                }
             }
             return templet;
         }
@@ -211,13 +200,17 @@ namespace CMS.Application.WebManage
         }
         public List<TempletEntity> GetListByWebSiteId(string WebSiteId)
         {
-            if (new WebSiteApp().IsSearch(WebSiteId))
+            if (new WebSiteApp().IsSearch(WebSiteId)
+                || new WebSiteApp().IsMSearch(WebSiteId))
             {
-                return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
+                return service.IQueryable(m => m.WebSiteId == WebSiteId
+                && m.DeleteMark != true).OrderBy(t => t.SortCode).ToList();
             }
             else
             {
-                return service.IQueryable(m => m.WebSiteId == WebSiteId && m.DeleteMark != true && m.TempletType == (int)Code.Enums.TempletType.Common).OrderBy(t => t.SortCode).ToList();
+                return service.IQueryable(m => m.WebSiteId == WebSiteId
+                && m.DeleteMark != true
+                && m.TempletType == (int)Code.Enums.TempletType.Common).OrderBy(t => t.SortCode).ToList();
             }
         }
         public List<TempletEntity> GetListByWebSiteId(Pagination pagination, string keyword, string WebSiteId)
@@ -231,12 +224,31 @@ namespace CMS.Application.WebManage
             {
                 expression = expression.And(t => t.WebSiteId == WebSiteId);
             }
-            if (!new WebSiteApp().IsSearch(WebSiteId))
-            {
-                expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common);
-            }
             expression = expression.And(t => t.DeleteMark != true);
-            return service.FindList(expression, pagination);
+            if (new WebSiteApp().IsSearch(WebSiteId) && new WebSiteApp().IsMSearch(WebSiteId))
+            {
+                expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common
+                || t.TempletType == (int)Code.Enums.TempletType.Search
+                || t.TempletType == (int)Code.Enums.TempletType.MSearch);
+            }
+            else
+            {
+                if (new WebSiteApp().IsSearch(WebSiteId))
+                {
+                    expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common
+                    || t.TempletType == (int)Code.Enums.TempletType.Search);
+                }
+                else if (new WebSiteApp().IsMSearch(WebSiteId))
+                {
+                    expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common
+                    || t.TempletType == (int)Code.Enums.TempletType.MSearch);
+                }
+                else
+                {
+                    expression = expression.And(t => t.TempletType == (int)Code.Enums.TempletType.Common);
+                }
+            }
+            return service.FindList(expression, pagination).Distinct().ToList();
         }
         public void SubmitForm(TempletEntity moduleEntity, string keyValue)
         {

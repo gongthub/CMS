@@ -122,6 +122,22 @@ namespace CMS.Web.Areas.WebManage.Controllers
                 return Error(e.Message);
             }
         }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult UpdateMSearchEnabled(bool searchEnabled)
+        {
+            try
+            {
+                webSiteApp.UpdateMSearchEnableByWebSiteId(Base_WebSiteId, searchEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
 
         [HttpPost]
         [HandlerAjaxOnly]
@@ -166,6 +182,22 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 webSiteApp.UpdateServiceEnableByWebSiteId(Base_WebSiteId, serviceEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult UpdateMobileEnabled(bool mobileEnabled)
+        {
+            try
+            {
+                webSiteApp.UpdateMobileEnableByWebSiteId(Base_WebSiteId, mobileEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)

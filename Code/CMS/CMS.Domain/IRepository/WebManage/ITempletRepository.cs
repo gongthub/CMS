@@ -11,6 +11,7 @@ namespace CMS.Domain.IRepository
     public interface ITempletRepository : IRepositoryBase<TempletEntity>
     {
         bool IsExistSearchModel(string WebSiteId);
+        bool IsExistMSearchModel(string WebSiteId);
         void SubmitForm(TempletEntity moduleEntity, string keyValue);
     }
 }

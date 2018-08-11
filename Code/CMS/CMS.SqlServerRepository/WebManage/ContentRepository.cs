@@ -256,6 +256,7 @@ namespace CMS.SqlServerRepository
 	                                A.Description,
 	                                A.EditTime,
 	                                A.UrlPath,
+	                                A.MUrlPath,
 	                                A.UrlAddress,
 	                                A.FilePath,
 	                                A.Icon,
