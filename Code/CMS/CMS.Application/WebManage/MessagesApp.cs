@@ -76,6 +76,10 @@ namespace CMS.Application.WebManage
         }
         public void AddForm(MessagesEntity moduleEntity)
         {
+            if (!new WebSiteApp().IsMessage(moduleEntity.WebSiteId))
+            {
+                throw new Exception("本网站留言功能未开启！");
+            }
             VerityTime(moduleEntity);
             moduleEntity.EnabledMark = true;
             moduleEntity.Create();

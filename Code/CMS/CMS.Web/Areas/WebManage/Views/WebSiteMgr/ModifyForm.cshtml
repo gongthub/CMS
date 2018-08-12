@@ -220,6 +220,11 @@
             if (!$('#form1').formValid()) {
                 return false;
             }
+            var shortName = $("#ShortName").val();
+            if (/^[A-Za-z0-9]+$/.test(shortName) == false) {
+                $.modalAlertError("简称只能为字母或数字！");
+                return false;
+            }
             var jsonDataIcon = uploadImg("IconUp");
             if (jsonDataIcon.success == true) {
                 var iconData = jsonDataIcon.data;

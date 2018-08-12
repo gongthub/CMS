@@ -237,7 +237,7 @@
             $('#wizard').wizard().on('change', function (e, data) {
                 var $finish = $("#btn_finish");
                 var $next = $("#btn_next");
-                if (data.direction == "next") { 
+                if (data.direction == "next") {
                     switch (data.step) {
                         case 2:
                             if (!$('#form1').formValid()) {
@@ -260,7 +260,12 @@
 
             if (!$('#form1').formValid()) {
                 return false;
-            } 
+            }
+            var shortName = $("#ShortName").val();
+            if (/^[A-Za-z0-9]+$/.test(shortName) == false) {
+                $.modalAlertError("简称只能为字母或数字！");
+                return false;
+            }
             var tid = getSysTempletId();
             var jsonDataIcon = uploadSysImg("IconUp");
             if (jsonDataIcon.success == true) {
@@ -307,8 +312,7 @@
             });
         }
 
-        function getSysTempletId()
-        {
+        function getSysTempletId() {
             var tid = "";
             var temps = $(".divShowTem_hover");
             if (temps != null && temps.length > 0) {

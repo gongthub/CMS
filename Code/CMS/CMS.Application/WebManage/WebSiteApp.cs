@@ -142,6 +142,14 @@ namespace CMS.Application.WebManage
         }
         public void SubmitForm(WebSiteEntity moduleEntity, List<WebSiteForUrlEntity> webSiteForUrlEntitys, string keyValue, UpFileDTO upFileentity)
         {
+            if (string.IsNullOrWhiteSpace(moduleEntity.ShortName))
+            {
+                throw new Exception("网站简称不能为空！");
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(moduleEntity.ShortName, "^[0-9a-zA-Z]+$"))
+            {
+                throw new Exception("网站简称只能为字母或数字！");
+            }
             service.SubmitForm(moduleEntity, webSiteForUrlEntitys, keyValue, upFileentity);
         }
 

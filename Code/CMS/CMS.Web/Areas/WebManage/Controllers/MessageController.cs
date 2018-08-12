@@ -49,8 +49,14 @@ namespace CMS.Web.Areas.WebManage.Controllers
         [HandlerAuthorize]
         public override ActionResult Index()
         {
-            List<MessagesEntity> models = messagesApp.GetListByWebSiteId(Base_WebSiteId);
-            return View();
+            if (!new WebSiteApp().IsMessage(Base_WebSiteId))
+            {
+                return Content("当前站点未启用留言板功能！");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]

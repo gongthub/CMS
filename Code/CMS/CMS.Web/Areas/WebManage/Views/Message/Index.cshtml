@@ -48,23 +48,23 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    var dataT = eval('(' + data + ')');
-                    var $gridList = $("#gridList");
-                    $gridList.dataGrid({
-                        url: "/WebManage/Message/GetGrid",
-                        height: $(window).height() - 128,
-                        colModel: dataT,
-                        rowNum: 1,
-                        rowList: [1, 2, 30],
-                        pager: "#gridPager",
-                        sortname: 'CreatorTime desc',
-                        viewrecords: true
-                    });
-                    $("#btn_search").click(function () {
-                        $gridList.jqGrid('setGridParam', {
-                            postData: { keyword: $("#txt_keyword").val() },
-                        }).trigger('reloadGrid');
-                    });
+                    if (data != null && data != undefined && data != "") {
+                        var dataT = eval('(' + data + ')');
+                        var $gridList = $("#gridList");
+                        $gridList.dataGrid({
+                            url: "/WebManage/Message/GetGrid",
+                            height: $(window).height() - 128,
+                            colModel: dataT,
+                            pager: "#gridPager",
+                            sortname: 'CreatorTime desc',
+                            viewrecords: true
+                        });
+                        $("#btn_search").click(function () {
+                            $gridList.jqGrid('setGridParam', {
+                                postData: { keyword: $("#txt_keyword").val() },
+                            }).trigger('reloadGrid');
+                        });
+                    }
                 }
             });
         }

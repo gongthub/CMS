@@ -701,6 +701,7 @@
     <Content Include="HtmlContent\SysContent\jquery-2.1.1.min.js" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.css" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.min.js" />
+    <Content Include="HtmlContent\SysContent\webSiteCommon.js" />
     <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
     <Content Include="SysPage\404\404\Main.jpg" />
