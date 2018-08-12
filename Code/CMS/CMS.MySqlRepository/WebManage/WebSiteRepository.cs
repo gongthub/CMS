@@ -361,16 +361,18 @@ namespace CMS.MySqlRepository
             {
                 urlAddresslst.AddRange(webSiteForUrlEntitys.Select(m => m.UrlAddress).ToList());
             }
-            using (var db = new SqlServerRepositoryBase().BeginTrans())
+            using (var db = new MySqlRepositoryBase().BeginTrans())
             {
                 if (!string.IsNullOrWhiteSpace(webSiteId))
                 {
                     webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => m.WebSiteId != webSiteId
+                      && m.DeleteMark != true
                       && urlAddresslst.Contains(m.UrlAddress)).ToList();
                 }
                 else
                 {
-                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => urlAddresslst.Contains(m.UrlAddress)).ToList();
+                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => m.DeleteMark != true
+                    && urlAddresslst.Contains(m.UrlAddress)).ToList();
                 }
             }
             urlAddresslst = webSiteForUrlEntities?.Where(m => m.UrlAddress != "").Select(m => m.UrlAddress).Distinct().ToList();

@@ -361,11 +361,13 @@ namespace CMS.SqlServerRepository
                 if (!string.IsNullOrWhiteSpace(webSiteId))
                 {
                     webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => m.WebSiteId != webSiteId
+                      && m.DeleteMark != true
                       && urlAddresslst.Contains(m.UrlAddress)).ToList();
                 }
                 else
                 {
-                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => urlAddresslst.Contains(m.UrlAddress)).ToList();
+                    webSiteForUrlEntities = db.IQueryable<WebSiteForUrlEntity>(m => m.DeleteMark != true
+                    && urlAddresslst.Contains(m.UrlAddress)).ToList();
                 }
             }
             urlAddresslst = webSiteForUrlEntities?.Where(m => m.UrlAddress != "").Select(m => m.UrlAddress).Distinct().ToList();
