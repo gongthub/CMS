@@ -546,7 +546,7 @@ namespace CMS.Application.WebManage
                 {
                     string urlPath = contentEntity.UrlPath;
 
-                    if (requestModel.IsMobile)
+                    if (requestModel.IsMobile&&new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
                     {
                         urlPath = contentEntity.MUrlPath;
                     }
@@ -581,7 +581,7 @@ namespace CMS.Application.WebManage
             bool isHave = false;
             htmls = string.Empty;
             string urlPath = string.Empty;
-            if (requestModel.IsMobile)
+            if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
             {
                 urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
             }
