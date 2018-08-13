@@ -2186,14 +2186,15 @@ namespace CMS.Application.Comm
                     {
                         if (attrs.ContainsKey("sort") || attrs.ContainsKey("sortdesc"))
                         {
+                            List<ContentEntity> contentEntitysT = new List<ContentEntity>();
                             IQueryable<ContentEntity> contentEntitys = null;
-                            contentEntitys = c_ContentApp.GetListIq(contentEntity.ColumnId);
+                            contentEntitys = c_ContentApp.GetListIqNoEnable(contentEntity.ColumnId);
                             if (attrs.ContainsKey("sort"))
                             {
                                 string sortName = "";
                                 if (attrs.TryGetValue("sort", out sortName))
                                 {
-                                    contentEntitys.OrderBy(sortName);
+                                    contentEntitysT = contentEntitys.OrderByDescending(m => m.TopMark).ThenBy(sortName).ToList();
                                 }
                             }
                             else
@@ -2201,11 +2202,11 @@ namespace CMS.Application.Comm
                                 string sortName = "";
                                 if (attrs.TryGetValue("sortdesc", out sortName))
                                 {
-                                    contentEntitys.OrderByDescending(sortName);
+                                    contentEntitysT = contentEntitys.OrderByDescending(m => m.TopMark).ThenByDescending(sortName).ToList();
                                 }
                             }
 
-                            List<ContentEntity> contentEntitysT = contentEntitys.ToList();
+                            //List<ContentEntity> contentEntitysT = contentEntitys.ToList();
                             if (contentEntitysT != null && contentEntitysT.Count > 0)
                             {
                                 string lastornextVal = "";
