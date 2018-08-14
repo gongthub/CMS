@@ -159,6 +159,7 @@
     <Content Include="Content\js\bootstrap\bootstrap.min.css" />
     <Content Include="Content\js\charts\Chart.js" />
     <Content Include="Content\js\charts\Chart.min.js" />
+    <Content Include="favicon.ico" />
     <Content Include="HtmlContent\SysContent\ClientCommon.js" />
     <Content Include="Content\js\Common.js" />
     <Content Include="Content\js\cookie\jquery.cookie.js" />
