@@ -46,6 +46,17 @@ namespace CMS.Web
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            Exception exception = Server.GetLastError();
+            HttpException httpException = exception as HttpException;
+            switch (httpException.GetHttpCode())
+            {
+                case 404:
+                    System.Web.HttpContext.Current.Response.StatusCode = 404;
+                    break;
+                case 500:
+                    System.Web.HttpContext.Current.Response.StatusCode = 500;
+                    break;
+            }
             //在出现未处理的错误时运行的代码         
             Exception objError = Server.GetLastError().GetBaseException();
             string errortime = string.Empty;
