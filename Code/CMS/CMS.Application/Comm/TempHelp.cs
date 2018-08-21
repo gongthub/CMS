@@ -930,13 +930,13 @@ namespace CMS.Application.Comm
                 switch (modelName.Trim().ToLower())
                 {
                     case "model":
-                        htmls = GetModelById(modelStr, Id, attrs);
+                        htmls = GetModelById(modelStr, Id, webSiteShortName, attrs);
                         break;
                     case "models":
                         switch (modelStr.Trim().ToLower())
                         {
                             case "contents":
-                                htmls = GetContentsById(Id, mcodes, attrs);
+                                htmls = GetContentsById(Id, mcodes, webSiteShortName, attrs);
                                 break;
                             case "images":
                                 htmls = GetImagessById(Id, mcodes, attrs);
@@ -1007,7 +1007,7 @@ namespace CMS.Application.Comm
                 switch (modelName.Trim().ToLower())
                 {
                     case "model":
-                        htmls = GetModelById(modelStr, Id, attrs);
+                        htmls = GetModelById(modelStr, Id, webSiteShortName, attrs);
                         break;
                     case "models":
                         switch (modelStr.Trim().ToLower())
@@ -1087,7 +1087,7 @@ namespace CMS.Application.Comm
                 switch (modelName.Trim().ToLower())
                 {
                     case "model":
-                        htmls = GetModelById(modelStr, Id, attrs);
+                        htmls = GetModelById(modelStr, Id, webSiteShortName, attrs);
                         break;
                     case "models":
                         switch (modelStr.Trim().ToLower())
@@ -1242,10 +1242,10 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetModelById(string name, string Ids, Dictionary<string, string> attrs)
+        private string GetModelById(string name, string Ids, string webSiteShortName, Dictionary<string, string> attrs)
         {
             string strs = string.Empty;
-            ContentEntity contentEntity = InitModelAttr(Ids, attrs);
+            ContentEntity contentEntity = InitModelAttr(Ids, webSiteShortName, attrs);
             if (contentEntity != null)
             {
                 strs = ProContent<ContentEntity>(name, contentEntity, attrs);
@@ -1334,6 +1334,34 @@ namespace CMS.Application.Comm
         #endregion
 
         #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes,Dictionary<string, string> attrs)
+
+        /// <summary>
+        /// 根据栏目id获取内容集合
+        /// </summary>
+        /// <param name="Ids"></param>
+        /// <returns></returns>
+        private string GetContentsById(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs)
+        {
+            string strs = string.Empty;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, webSiteShortName, attrs, 1, ref extHtmls);
+
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                int index = 1;
+                int indexn = 0;
+                foreach (ContentEntity contententity in contententitys)
+                {
+                    contententity.ContentIndex = index;
+                    contententity.ContentIndexN = indexn;
+                    strs += GetHtmlPage(mcodes, contententity, attrs); 
+                    index++;
+                    indexn++;
+                }
+            }
+            strs += extHtmls;
+            return strs;
+        }
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
@@ -1346,7 +1374,7 @@ namespace CMS.Application.Comm
             switch (irequestType)
             {
                 case (int)Enums.TempletType.Common:
-                    strs = GetContentsById(Ids, mcodes, attrs);
+                    strs = GetContentsById(Ids, mcodes, webSiteShortName, attrs);
                     break;
                 case (int)Enums.TempletType.Search:
                     strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs);
@@ -1366,7 +1394,7 @@ namespace CMS.Application.Comm
             switch (irequestType)
             {
                 case (int)Enums.TempletType.Common:
-                    strs = GetContentsById(Ids, mcodes, attrs, pageNumber);
+                    strs = GetContentsByIdAndWebSite(Ids, mcodes, webSiteShortName, attrs, pageNumber);
                     break;
                 case (int)Enums.TempletType.Search:
                     strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs, pageNumber);
@@ -1380,39 +1408,23 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs)
+        private string GetContentsByIdAndWebSite(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber)
         {
             string strs = string.Empty;
             string extHtmls = string.Empty;
-            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, attrs, 1, ref extHtmls);
+            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, webSiteShortName, attrs, pageNumber, ref extHtmls);
 
             if (contententitys != null && contententitys.Count > 0)
             {
+                int index = 1;
+                int indexn = 0;
                 foreach (ContentEntity contententity in contententitys)
                 {
+                    contententity.ContentIndex = index;
+                    contententity.ContentIndexN = indexn;
                     strs += GetHtmlPage(mcodes, contententity, attrs);
-                }
-            }
-            strs += extHtmls;
-            return strs;
-        }
-
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
-        {
-            string strs = string.Empty;
-            string extHtmls = string.Empty;
-            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, attrs, pageNumber, ref extHtmls);
-
-            if (contententitys != null && contententitys.Count > 0)
-            {
-                foreach (ContentEntity contententity in contententitys)
-                {
-                    strs += GetHtmlPage(mcodes, contententity, attrs);
+                    index++;
+                    indexn++;
                 }
             }
             strs += extHtmls;
@@ -1451,7 +1463,7 @@ namespace CMS.Application.Comm
 
             return strs;
         }
-        private List<ContentEntity> GetContentsByAttrs(string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
+        private List<ContentEntity> GetContentsByAttrs(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
         {
             string strs = string.Empty;
             List<ContentEntity> contententitys = new List<ContentEntity>();
@@ -1465,10 +1477,15 @@ namespace CMS.Application.Comm
                 attrs.TryGetValue("sourcename", out sourceName);
                 ColumnsEntity moduleentity = new ColumnsEntity();
                 ColumnsApp c_ModulesApp = new ColumnsApp();
-                moduleentity = c_ModulesApp.GetFormByActionName(sourceName);
-                if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+
+                WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                if (webSiteEntity != null && !string.IsNullOrWhiteSpace(webSiteEntity.Id))
                 {
-                    contententitysT = c_ContentApp.GetListIqNoEnable(moduleentity.Id);
+                    moduleentity = c_ModulesApp.GetFormByActionName(sourceName, webSiteEntity.Id);
+                    if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+                    {
+                        contententitysT = c_ContentApp.GetListIqNoEnable(moduleentity.Id);
+                    }
                 }
             }
             else
@@ -2157,7 +2174,7 @@ namespace CMS.Application.Comm
         /// 初始化单个模板属性
         /// </summary>
         /// <returns></returns>
-        private ContentEntity InitModelAttr(string Ids, Dictionary<string, string> attrs)
+        private ContentEntity InitModelAttr(string Ids, string webSiteShortName, Dictionary<string, string> attrs)
         {
             ContentApp c_ContentApp = new ContentApp();
             ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
@@ -2169,7 +2186,7 @@ namespace CMS.Application.Comm
                 {
                     ContentEntity contentEntityT = new ContentEntity();
                     ContentApp contentApp = new ContentApp();
-                    contentEntityT = contentApp.GetContentByActionCode(sourceName);
+                    contentEntityT = contentApp.GetContentByActionCode(sourceName, webSiteShortName);
                     if (contentEntityT != null && contentEntityT.Id != Guid.Empty.ToString())
                     {
                         Ids = contentEntityT.Id.ToString();
@@ -2269,7 +2286,7 @@ namespace CMS.Application.Comm
         /// 获取ajax 分页数据
         /// </summary>
         /// <returns></returns>
-        public ExtPageModel GetContentModels(ExtPageModel pageModel)
+        public ExtPageModel GetContentModels(ExtPageModel pageModel, string webSiteShortName)
         {
             ExtPageModel extPageModel = new ExtPageModel();
             string strs = string.Empty;
@@ -2282,10 +2299,14 @@ namespace CMS.Application.Comm
             {
                 ColumnsEntity moduleentity = new ColumnsEntity();
                 ColumnsApp c_ModulesApp = new ColumnsApp();
-                moduleentity = c_ModulesApp.GetFormByActionName(pageModel.SourceName);
-                if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+                WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+                if (webSiteEntity != null && !string.IsNullOrWhiteSpace(webSiteEntity.Id))
                 {
-                    contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
+                    moduleentity = c_ModulesApp.GetFormByActionName(pageModel.SourceName);
+                    if (moduleentity != null && moduleentity.Id != Guid.Empty.ToString())
+                    {
+                        contententitysT = c_ContentApp.GetListIq(moduleentity.Id);
+                    }
                 }
             }
             else

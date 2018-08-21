@@ -62,6 +62,10 @@ namespace CMS.Domain.Entity.WebManage
 
         [NotMapped]
         public string UrlPage { get; set; }
+        [NotMapped]
+        public int ContentIndex { get; set; }
+        [NotMapped]
+        public int ContentIndexN { get; set; }
 
         [NotMapped]
         public List<Entity.SystemManage.UpFileEntity> UpImages { get; set; }

@@ -313,19 +313,25 @@ namespace CMS.Application.Comm
         public ExtPageModel GetPageModels(System.Web.HttpContext context)
         {
             ExtPageModel extPageModel = new ExtPageModel();
-            string strRqs = context.Request["pageDatas"];
-            if (!string.IsNullOrEmpty(strRqs))
+            string urlHost = GetHost(context);
+            WebSiteApp app = new WebSiteApp();
+            WebSiteEntity entity = app.GetModelByUrlHost(urlHost);
+            if (entity != null && !string.IsNullOrWhiteSpace(entity.Id))
             {
-                ExtPageModel extPageModelReq = Json.ToObject<ExtPageModel>(strRqs);
-                string cIds = GetColumnIds(context);
-                extPageModelReq.SourceIds = cIds;
-
-                string attrDatas = context.Request["attrDatas"];
-                if (!string.IsNullOrEmpty(attrDatas))
+                string strRqs = context.Request["pageDatas"];
+                if (!string.IsNullOrEmpty(strRqs))
                 {
-                    extPageModelReq.AttrDatas = Json.ToObject<Dictionary<string, string>>(attrDatas);
+                    ExtPageModel extPageModelReq = Json.ToObject<ExtPageModel>(strRqs);
+                    string cIds = GetColumnIds(context);
+                    extPageModelReq.SourceIds = cIds;
+
+                    string attrDatas = context.Request["attrDatas"];
+                    if (!string.IsNullOrEmpty(attrDatas))
+                    {
+                        extPageModelReq.AttrDatas = Json.ToObject<Dictionary<string, string>>(attrDatas);
+                    }
+                    extPageModel = new TempHelp().GetContentModels(extPageModelReq, entity.ShortName);
                 }
-                extPageModel = new TempHelp().GetContentModels(extPageModelReq);
             }
             return extPageModel;
         }

@@ -58,16 +58,21 @@ namespace CMS.Application.WebManage
         /// </summary>
         /// <param name="actionCode"></param>
         /// <returns></returns>
-        public ContentEntity GetContentByActionCode(string actionCode)
+        public ContentEntity GetContentByActionCode(string actionCode, string webSiteShortName)
         {
             ColumnsEntity moduleEntity = new ColumnsEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
             ContentEntity contentEntity = new ContentEntity();
-            moduleEntity = c_ModulesApp.GetFormByActionName(actionCode);
-            if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
+            WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
+            if (webSiteEntity != null && !string.IsNullOrWhiteSpace(webSiteEntity.Id))
             {
-                contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id && m.EnabledMark == true && m.DeleteMark != true).FirstOrDefault();
+                moduleEntity = c_ModulesApp.GetFormByActionName(actionCode, webSiteEntity.Id);
+                if (JudgmentHelp.judgmentHelp.IsNullEntity<ColumnsEntity>(moduleEntity) && JudgmentHelp.judgmentHelp.IsNullOrEmptyOrGuidEmpty(moduleEntity.Id))
+                {
+                    contentEntity = service.IQueryable(m => m.ColumnId == moduleEntity.Id
+                    && m.EnabledMark == true && m.DeleteMark != true).FirstOrDefault();
 
+                }
             }
             return contentEntity;
         }
@@ -546,7 +551,7 @@ namespace CMS.Application.WebManage
                 {
                     string urlPath = contentEntity.UrlPath;
 
-                    if (requestModel.IsMobile&&new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
+                    if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
                     {
                         urlPath = contentEntity.MUrlPath;
                     }
