@@ -20,7 +20,7 @@ jQuery.fn.extend({
             Img: "ImgPr",
             Width: 100,
             Height: 100,
-            ImgType: ["gif", "jpeg", "jpg", "bmp", "png"],
+            ImgType: ["gif", "jpeg", "jpg", "bmp", "png", "ico"],
             Callback: function () { }
         }, opts || {});
         _self.getObjectURL = function (file) {

@@ -1,6 +1,6 @@
 ﻿
 //初始化新页面分页加载控件
-function initNewPageEle(eleId) {
+function initNewPageEle(eleId,countNum,isShow) {
     var hdPageEle = $("#hd" + eleId);
     var totalPages = hdPageEle.attr("totalPage");
     var currPages = hdPageEle.attr("currPage");
@@ -15,8 +15,8 @@ function initNewPageEle(eleId) {
         $("#pageEle" + eleId).pagination({
             currentPage: pageInt,
             totalPage: totalPageint,
-            isShow: true,
-            count: 7,
+            isShow: isShow,
+            count: countNum,
             homePageText: "首页",
             endPageText: "尾页",
             prevPageText: "上一页",
@@ -42,14 +42,14 @@ function initNewPageEle(eleId) {
 }
 
 //初始化Ajax分页加载控件 重新填充当前区域
-function initAjaxPageEle(eleId) {
+function initAjaxPageEle(eleId, countNum, isShow) {
     var hdPageEle = $("#hd" + eleId);
     var totalPages = hdPageEle.attr("totalPage");
     var currPages = hdPageEle.attr("currPage");
     var totalPage = Number(totalPages);
     var currPage = Number(currPages);
     if (totalPage >= currPage) {
-        initPage(eleId, currPage, totalPage);
+        initPage(eleId, currPage, totalPage, countNum, isShow);
     }
 }
 
@@ -69,13 +69,13 @@ function initAjaxPageEleOver(eleId) {
     $("#pageEle" + eleId).append(nextdiv);
 }
 
-function initPage(eleId, currpage, totalpage) {
+function initPage(eleId, currpage, totalpage, countNum, isShow) {
 
     $("#pageEle" + eleId).pagination({
         currentPage: currpage,
         totalPage: totalpage,
-        isShow: true,
-        count: 7,
+        isShow: isShow,
+        count: countNum,
         homePageText: "首页",
         endPageText: "尾页",
         prevPageText: "上一页",
