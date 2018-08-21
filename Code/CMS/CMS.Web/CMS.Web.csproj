@@ -700,6 +700,7 @@
     <Content Include="Content\js\zsign\signet.gif" />
     <Content Include="Global.asax" />
     <Content Include="HtmlContent\SysContent\jquery-2.1.1.min.js" />
+    <Content Include="HtmlContent\SysContent\jquery.pagination2.css" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.css" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.min.js" />
     <Content Include="HtmlContent\SysContent\webSiteCommon.js" />
