@@ -545,13 +545,13 @@ namespace CMS.Application.WebManage
             isHave = GetHtmlStrsByColUrl(requestModel, out htmls);
             if (!isHave)
             {
-                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSiteEntity.Id
+                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSite.Id
                 && (m.UrlAddress == requestModel.UrlRaw || m.UrlAddress == requestModel.UrlRaw.Replace(@"/", @"\"))).FirstOrDefault();
                 if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
                 {
                     string urlPath = contentEntity.UrlPath;
 
-                    if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
+                    if (requestModel.IsMobile && requestModel.webSiteConfig.MobileEnabledMark)
                     {
                         urlPath = contentEntity.MUrlPath;
                     }
@@ -569,10 +569,10 @@ namespace CMS.Application.WebManage
                     }
                 }
             }
-            if (!string.IsNullOrWhiteSpace(htmls) && requestModel.webSiteEntity != null)
+            if (!string.IsNullOrWhiteSpace(htmls) && requestModel.webSite != null)
             {
                 //处理页面域名
-                htmls = htmls.Replace(requestModel.webSiteEntity.UrlAddress, requestModel.UrlHost);
+                htmls = htmls.Replace(requestModel.webSite.UrlAddress, requestModel.UrlHost);
             }
             return isHave;
         }
@@ -586,13 +586,13 @@ namespace CMS.Application.WebManage
             bool isHave = false;
             htmls = string.Empty;
             string urlPath = string.Empty;
-            if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
+            if (requestModel.IsMobile && requestModel.webSiteConfig.MobileEnabledMark)
             {
-                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSite.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
             }
             else
             {
-                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\" + requestModel.UrlRaw + ".html";
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSite.ShortName + @"\" + requestModel.UrlRaw + ".html";
             }
             if (Code.FileHelper.IsExistFile(urlPath, true))
             {

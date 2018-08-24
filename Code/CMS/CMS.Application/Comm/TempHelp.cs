@@ -183,33 +183,6 @@ namespace CMS.Application.Comm
         /// 创建静态页面
         /// </summary>
         /// <param name="htmls"></param>
-        private void GenHtml(string htmls)
-        {
-            string filename = GenUrlName() + HTMLFOR;
-            FileHelper.CreateAndWrite(HTMLSAVEPATH, filename, htmls);
-        }
-        /// <summary>
-        /// 创建静态页面
-        /// </summary>
-        /// <param name="htmls"></param>
-        private void GenHtml(string htmls, out string filePath)
-        {
-            string filename = GenUrlName() + HTMLFOR;
-            FileHelper.CreateAndWrite(HTMLSAVEPATH, filename, htmls);
-            int index = HTMLSAVEPATH.LastIndexOf('\\');
-            if (index >= 0)
-            {
-                filePath = HTMLSAVEPATH + filename;
-            }
-            else
-            {
-                filePath = HTMLSAVEPATH + @"\" + filename;
-            }
-        }
-        /// <summary>
-        /// 创建静态页面
-        /// </summary>
-        /// <param name="htmls"></param>
         private void GenHtmlByFilePath(string htmls, ref string filePath, ref string urlAddress)
         {
             string filename = GenUrlName() + HTMLFOR;
@@ -248,11 +221,13 @@ namespace CMS.Application.Comm
             isNoFind = false;
             try
             {
-                //处理Url参数
+                //处理请求参数
                 requestModel.UrlRaw = Common.HandleUrlRaw(requestModel.UrlRaw);
                 WebSiteApp app = new WebSiteApp();
                 WebSiteEntity entity = app.GetModelByUrlHost(requestModel.UrlHost);
-                requestModel.webSiteEntity = entity;
+                requestModel.WebSiteId = entity.Id;
+                requestModel.webSite = entity;
+                requestModel.webSiteConfig = app.GetWebSiteConfigFormByWebSiteId(entity.Id);
                 htmls = GetHtmlStrsByWebSite(requestModel, out isNoFind);
             }
             catch
@@ -268,65 +243,68 @@ namespace CMS.Application.Comm
             {
                 isNoFind = true;
                 int irequestType = (int)Enums.TempletType.Common;
-                if (requestModel.webSiteEntity != null && !string.IsNullOrEmpty(requestModel.webSiteEntity.Id))
+                if (requestModel.webSite != null && !string.IsNullOrEmpty(requestModel.WebSiteId))
                 {
-                    if (!new WebSiteApp().IsService(requestModel.webSiteEntity.Id))
+                    if (!new WebSiteApp().IsService(requestModel.WebSiteId))
                     {
                         requestModel.UrlRaws = WebHelper.GetUrls(requestModel.UrlRaw);
                         ContentApp contentApp = new ContentApp();
                         if (!contentApp.GetHtmlStrs(requestModel, out htmls))
                         {
+                            #region 获取栏目/模板/内容信息
                             TempletApp templetApp = new TempletApp();
-                            TempletEntity templetmodel = new TempletEntity();
-                            ColumnsEntity columnentity = new ColumnsEntity();
                             ColumnsApp c_ModulesApp = new ColumnsApp();
-                            string Ids = "";
                             if (requestModel.UrlRaws == null || requestModel.UrlRaws.Count == 0)
                             {
-                                templetmodel = templetApp.GetMain(requestModel);
-                                columnentity = c_ModulesApp.GetMain(requestModel.webSiteEntity.Id);
-                                if (columnentity != null)
-                                    Ids = columnentity.Id;
+                                requestModel.Templet = templetApp.GetMain(requestModel);
+                                requestModel.Column = c_ModulesApp.GetMain(requestModel.WebSiteId);
+                                if (requestModel.Column != null)
+                                    requestModel.ColumnId = requestModel.Column.Id;
                             }
                             else
                             {
                                 if (requestModel.UrlRaws.Count > 0)
                                 {
-                                    templetmodel = templetApp.GetModelByUrlRaws(requestModel, ref irequestType);
-                                    columnentity = c_ModulesApp.GetFormByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSiteEntity.Id);
+                                    requestModel.Templet = templetApp.GetModelByUrlRaws(requestModel, ref irequestType);
+                                    requestModel.Column = c_ModulesApp.GetFormByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.WebSiteId);
                                 }
-                                if (columnentity != null)
-                                    Ids = columnentity.Id;
+                                if (requestModel.Column != null)
+                                    requestModel.ColumnId = requestModel.Column.Id;
                                 if (requestModel.UrlRaws.Count >= 2)
                                 {
-                                    Ids = requestModel.UrlRaws.LastOrDefault();
+                                    requestModel.ContentId = requestModel.UrlRaws.LastOrDefault();
                                 }
                             }
-                            if (templetmodel != null)
+                            #endregion
+
+                            if (requestModel.Templet != null)
                             {
-                                htmls = System.Web.HttpUtility.HtmlDecode(templetmodel.Content);
-                                if (templetmodel != null && !string.IsNullOrEmpty(templetmodel.Id))
+                                requestModel.TempletContent = System.Web.HttpUtility.HtmlDecode(requestModel.Templet.Content);
+                                htmls = requestModel.TempletContent;
+                                if (requestModel.Templet != null && !string.IsNullOrEmpty(requestModel.Templet.Id))
                                 {
                                     Guid TId = Guid.Empty;
                                     int pageNumber = 0;
-                                    if (!Guid.TryParse(Ids, out TId) && Int32.TryParse(Ids, out pageNumber))
+                                    if (!Guid.TryParse(requestModel.ContentId, out TId) && Int32.TryParse(requestModel.ContentId, out pageNumber))
                                     {
-                                        if (templetmodel.TempletType == (int)Code.Enums.TempletType.Search && requestModel.UrlRaws.Count == 3)
+                                        requestModel.PageNumber = pageNumber;
+                                        if ((requestModel.Templet.TempletType == (int)Code.Enums.TempletType.Search
+                                            || requestModel.Templet.TempletType == (int)Code.Enums.TempletType.MSearch)
+                                            && requestModel.UrlRaws.Count == 3)
                                         {
-                                            Ids = requestModel.UrlRaws[1];
+                                            requestModel.IsSearch = true;
+                                            requestModel.SearchKeyWord = requestModel.UrlRaws[1];
                                         }
-                                        TempHelp temphelp = new TempHelp();
-                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType, pageNumber, requestModel.UrlHost);
+                                        htmls = GetHtmlPages(requestModel.webSite.ShortName, htmls, requestModel.ContentId, irequestType, requestModel.UrlHost, pageNumber);
                                         isNoFind = false;
                                     }
                                     else
                                     {
-                                        TempHelp temphelp = new TempHelp();
-                                        htmls = temphelp.GetHtmlPages(requestModel.webSiteEntity.ShortName, htmls, Ids, irequestType, requestModel.UrlHost);
+                                        htmls = GetHtmlPages(requestModel.webSite.ShortName, htmls, requestModel.ContentId, irequestType, requestModel.UrlHost);
                                         isNoFind = false;
                                     }
                                     //更新浏览数
-                                    new ContentApp().UpdateViewNum(Ids, true);
+                                    contentApp.UpdateViewNum(requestModel.ContentId, true);
                                 }
                             }
                         }
@@ -555,13 +533,14 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, string urlHost = "")
+        public string GetHtmlPages(RequestModel requestModel)
         {
             string strs = string.Empty;
             try
             {
-                codes = codes == null ? "" : codes;
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
+                TempleteProcessModel templeteProcessModel = new TempleteProcessModel();
+                templeteProcessModel.requestModel = requestModel;
+                string templets = requestModel.TempletContent == null ? "" : requestModel.TempletContent;
                 int i = templets.IndexOf(STARTCHAR);
                 int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
                 while (i > 0 && j > 0)
@@ -569,7 +548,7 @@ namespace CMS.Application.Comm
                     string templetst = templets.Substring(i, j - i);
                     string strAttr = "";
                     //获取属性
-                    Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
+                    templeteProcessModel.TempletPieceAttrs = GetAttrs(templetst, out strAttr);
                     string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
                     if (!string.IsNullOrEmpty(strAttr))
                         strt = strt.Replace(strAttr, "");
@@ -577,8 +556,9 @@ namespace CMS.Application.Comm
 
                     if (strts.Length >= 2 && strts[1] != null)
                     {
-                        string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, urlHost);
+                        templeteProcessModel.TempletPieceContent = ProModels(ref strt, strts);
+                        templeteProcessModel.TempletPiece = strt.Trim();
+                        string htmlt = GetTModel(templeteProcessModel);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -594,14 +574,13 @@ namespace CMS.Application.Comm
                 throw;
             }
             return strs;
-
         }
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, int pageNumber, string urlHost = "")
+        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, string urlHost = "", int pageNumber = 1)
         {
             string strs = string.Empty;
             try
@@ -624,7 +603,7 @@ namespace CMS.Application.Comm
                     if (strts.Length >= 2 && strts[1] != null)
                     {
                         string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, pageNumber, urlHost);
+                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, urlHost, pageNumber);
                         templets = templets.Replace(templetst, htmlt);
 
                     }
@@ -668,81 +647,6 @@ namespace CMS.Application.Comm
         #endregion
 
         #region 获取模板元素集合 +string GetHtmlPage(string codes, ContentEntity model)
-        /// <summary>
-        /// 获取模板元素集合
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public string GetHtmlPage(string codes, ContentEntity model)
-        {
-            string strs = string.Empty;
-            try
-            {
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                int i = templets.IndexOf(STARTMC);
-                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                while (i > 0 && j > 0)
-                {
-                    string templetst = templets.Substring(i, j - i);
-                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
-                    string[] strts = strt.Split('.');
-
-                    if (strts.Length >= 2 && strts[1] != null)
-                    {
-                        string htmlt = GetModelById(strts[1], model);
-                        templets = templets.Replace(templetst, htmlt);
-
-                    }
-                    i = templets.IndexOf(STARTMC);
-                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                }
-                strs = templets;
-            }
-            catch
-            {
-                strs = string.Empty;
-            }
-            return strs;
-
-        }
-        /// <summary>
-        /// 获取模板元素集合
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public string GetHtmlPage<T>(string codes, T model)
-        {
-            string strs = string.Empty;
-            try
-            {
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                int i = templets.IndexOf(STARTMC);
-                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                while (i > 0 && j > 0)
-                {
-                    string templetst = templets.Substring(i, j - i);
-                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
-                    string[] strts = strt.Split('.');
-
-                    if (strts.Length >= 2 && strts[1] != null)
-                    {
-                        string htmlt = GetModelById(strts[1], model);
-                        templets = templets.Replace(templetst, htmlt);
-
-                    }
-                    i = templets.IndexOf(STARTMC);
-                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                }
-                strs = templets;
-            }
-            catch
-            {
-                strs = string.Empty;
-            }
-            return strs;
-
-        }
-
         /// <summary>
         /// 获取模板元素集合
         /// </summary>
@@ -819,44 +723,6 @@ namespace CMS.Application.Comm
             return strs;
 
         }
-
-        /// <summary>
-        /// 获取模板元素集合
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public string GetHtmlPageForImages(string codes, UpFileEntity model, Dictionary<string, string> attrs)
-        {
-            string strs = string.Empty;
-            try
-            {
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                int i = templets.IndexOf(STARTMC);
-                int j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                while (i > 0 && j > 0)
-                {
-                    string templetst = templets.Substring(i, j - i);
-                    string strt = templetst.Replace(STARTMC, "").Replace(ENDMC, "");
-                    string[] strts = strt.Split('.');
-
-                    if (strts.Length >= 2 && strts[1] != null)
-                    {
-                        string htmlt = GetModelById(strts[1], model, attrs);
-                        templets = templets.Replace(templetst, htmlt);
-
-                    }
-                    i = templets.IndexOf(STARTMC);
-                    j = templets.IndexOf(ENDMC) + ENDMC.Length;
-                }
-                strs = templets;
-            }
-            catch
-            {
-                strs = string.Empty;
-            }
-            return strs;
-
-        }
         #endregion
 
         #endregion
@@ -866,10 +732,10 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, string urlHost = "")
+        private string GetTModel(TempleteProcessModel templeteProcessModel)
         {
-            string htmls = codes;
-            string[] strs = codes.Split('.');
+            string htmls = templeteProcessModel.TempletPiece;
+            string[] strs = templeteProcessModel.TempletPiece.Split('.');
             if (strs != null && strs.Length == 2)
             {
                 //获取名称
@@ -879,30 +745,45 @@ namespace CMS.Application.Comm
                 switch (modelName.Trim().ToLower())
                 {
                     case "model":
-                        htmls = GetModelById(modelStr, Id, webSiteShortName, attrs);
+                        htmls = GetModelById(modelStr, templeteProcessModel.requestModel.ContentId, templeteProcessModel.requestModel.webSite.ShortName, templeteProcessModel.TempletPieceAttrs);
                         break;
                     case "models":
                         switch (modelStr.Trim().ToLower())
                         {
                             case "contents":
-                                htmls = GetContentsById(webSiteShortName, Id, mcodes, attrs, irequestType);
+                                if (templeteProcessModel.requestModel.IsSearch)
+                                {
+                                    htmls = GetSearchContents(templeteProcessModel.requestModel.webSite.ShortName, templeteProcessModel.requestModel.SearchKeyWord,
+                                        templeteProcessModel.TempletPieceContent, templeteProcessModel.TempletPieceAttrs,
+                                        templeteProcessModel.requestModel.PageNumber);
+                                }
+                                else
+                                {
+                                    htmls = GetContentsByIdAndWebSite(templeteProcessModel.requestModel.webSite.ShortName, templeteProcessModel.requestModel.ColumnId,
+                                        templeteProcessModel.TempletPieceContent, templeteProcessModel.TempletPieceAttrs,
+                                        templeteProcessModel.requestModel.PageNumber);
+                                }
                                 break;
                             case "images":
-                                htmls = GetImagessById(Id, mcodes, attrs);
+                                htmls = GetImagessById(templeteProcessModel.requestModel.ContentId,
+                                    templeteProcessModel.TempletPieceContent, templeteProcessModel.TempletPieceAttrs);
+                                break;
+                            case "cols":
+
                                 break;
                         }
                         break;
                     case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id, irequestType, urlHost);
+                        htmls = GetHtmlsByTempletName(modelStr, templeteProcessModel);
                         break;
                     case "syssite":
-                        htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
+                        htmls = GetSiteAttrName(modelStr, templeteProcessModel.requestModel.webSite);
                         break;
                     case "content":
                         switch (modelStr.Trim().ToLower())
                         {
                             case "viewnum":
-                                htmls = new ContentApp().GetViewNum(Id).ToString();
+                                htmls = new ContentApp().GetViewNum(templeteProcessModel.requestModel.ContentId).ToString();
                                 break;
                         }
                         break;
@@ -910,29 +791,24 @@ namespace CMS.Application.Comm
                         switch (modelStr.Trim().ToLower())
                         {
                             case "resourceurl":
-                                string webSiteUrls = urlHost;
-                                if (string.IsNullOrWhiteSpace(urlHost))
+                                string webSiteUrls = templeteProcessModel.requestModel.UrlHost;
+                                if (string.IsNullOrWhiteSpace(templeteProcessModel.requestModel.UrlHost))
                                 {
-                                    WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                    if (webSiteEntity != null)
-                                    {
-                                        webSiteUrls = webSiteEntity.UrlAddress;
-                                    }
+                                    webSiteUrls = templeteProcessModel.requestModel.webSite.UrlAddress;
                                 }
-                                string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
+                                string urlStr = webSiteUrls + HTMLCONTENTSRC + templeteProcessModel.requestModel.webSite.ShortName + "/";
                                 urlStr = urlStr.Replace(@"\", @"/");
                                 urlStr = urlStr.Replace(@"//", @"/");
                                 htmls = WEBURLHTTP + urlStr;
                                 break;
                             case "weburl":
-                                if (!string.IsNullOrWhiteSpace(urlHost))
+                                if (!string.IsNullOrWhiteSpace(templeteProcessModel.requestModel.UrlHost))
                                 {
-                                    htmls = urlHost;
+                                    htmls = templeteProcessModel.requestModel.UrlHost;
                                 }
                                 else
                                 {
-                                    WebSiteEntity webSiteEntityT = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                    htmls = webSiteEntityT?.UrlAddress;
+                                    htmls = templeteProcessModel.requestModel.webSite.UrlAddress;
                                 }
                                 break;
                         }
@@ -946,7 +822,7 @@ namespace CMS.Application.Comm
         /// 获取html静态页面
         /// </summary>
         /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, int pageNumber, string urlHost = "")
+        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, string urlHost, int pageNumber = 1)
         {
             string htmls = codes;
             string[] strs = codes.Split('.');
@@ -969,6 +845,9 @@ namespace CMS.Application.Comm
                                 break;
                             case "images":
                                 htmls = GetImagessById(Id, mcodes, attrs);
+                                break;
+                            case "cols":
+
                                 break;
                         }
                         break;
@@ -1025,38 +904,6 @@ namespace CMS.Application.Comm
         #endregion
 
         #region 获取内容信息 -string GetModelById(string name, string Ids)
-        /// <summary>
-        /// 根据model获取内容
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetModelById(string name, ContentEntity model)
-        {
-            string strs = string.Empty;
-            if (model != null)
-            {
-                strs = ProContent<ContentEntity>(name, model);
-            }
-
-            return strs;
-        }
-
-
-        /// <summary>
-        /// 根据model获取内容
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetModelById<T>(string name, T model)
-        {
-            string strs = string.Empty;
-            if (model != null)
-            {
-                strs = ProContent<T>(name, model);
-            }
-
-            return strs;
-        }
 
         /// <summary>
         /// 根据model获取内容
@@ -1091,23 +938,6 @@ namespace CMS.Application.Comm
 
             return strs;
         }
-        /// <summary>
-        /// 根据id获取内容
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetModelById(string name, string Ids)
-        {
-            string strs = string.Empty;
-            ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
-            if (contentEntity != null)
-            {
-                strs = ProContent<ContentEntity>(name, contentEntity);
-            }
-
-            return strs;
-        }
 
         /// <summary>
         /// 根据id获取内容
@@ -1128,24 +958,18 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据id获取，站点信息 -string GetWebSiteById(string name, string Ids)
+        #region 根据id获取，站点信息 -string ProSite(string name, string Ids)
         /// <summary>
-        /// 根据id获取，站点信息
+        /// 根据ShortName获取，站点信息
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetWebSiteById(string name, string Ids)
+        private string GetSiteAttrName(string name, WebSiteEntity entity)
         {
             string strs = string.Empty;
-            ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
-            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
+            if (entity != null && !string.IsNullOrEmpty(entity.Id))
             {
-                WebSiteEntity entity = new WebSiteApp().GetFormNoDel(contentEntity.WebSiteId);
-                if (entity != null && !string.IsNullOrEmpty(entity.Id))
-                {
-                    strs = ProContent<WebSiteEntity>(name, entity);
-                }
+                strs = ProContent<WebSiteEntity>(name, entity);
             }
 
             return strs;
@@ -1166,100 +990,15 @@ namespace CMS.Application.Comm
 
             return strs;
         }
-        /// <summary>
-        /// 根据id获取，站点信息
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetWebSiteById(string name, string Ids, out string webSiteShortName)
-        {
-            webSiteShortName = string.Empty;
-            string strs = string.Empty;
-            ContentApp c_ContentApp = new ContentApp();
-            ContentEntity contentEntity = c_ContentApp.GetFormNoDel(Ids);
-            if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id) && !string.IsNullOrEmpty(contentEntity.WebSiteId))
-            {
-                WebSiteEntity entity = new WebSiteApp().GetFormNoDel(contentEntity.WebSiteId);
-                webSiteShortName = entity.ShortName;
-                if (entity != null && !string.IsNullOrEmpty(entity.Id))
-                {
-                    strs = ProContent<WebSiteEntity>(name, entity);
-                }
-            }
-            else
-            {
-                ColumnsApp columnsApp = new ColumnsApp();
-                ColumnsEntity columnsEntity = columnsApp.GetFormNoDel(Ids);
-                if (columnsEntity != null && !string.IsNullOrEmpty(columnsEntity.Id) && !string.IsNullOrEmpty(columnsEntity.WebSiteId))
-                {
-                    WebSiteEntity entity = new WebSiteApp().GetFormNoDel(columnsEntity.WebSiteId);
-                    webSiteShortName = entity.ShortName;
-                    if (entity != null && !string.IsNullOrEmpty(entity.Id))
-                    {
-                        strs = ProContent<WebSiteEntity>(name, entity);
-                    }
-                }
-            }
-
-            return strs;
-        }
         #endregion
 
         #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes,Dictionary<string, string> attrs)
-
         /// <summary>
         /// 根据栏目id获取内容集合
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetContentsById(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs)
-        {
-            string strs = string.Empty;
-            string extHtmls = string.Empty;
-            List<ContentEntity> contententitys = GetContentsByAttrs(Ids, mcodes, webSiteShortName, attrs, 1, ref extHtmls);
-
-            if (contententitys != null && contententitys.Count > 0)
-            {
-                int index = 1;
-                int indexn = 0;
-                foreach (ContentEntity contententity in contententitys)
-                {
-                    contententity.ContentIndex = index;
-                    contententity.ContentIndexN = indexn;
-                    strs += GetHtmlPage(mcodes, contententity, attrs); 
-                    index++;
-                    indexn++;
-                }
-            }
-            strs += extHtmls;
-            return strs;
-        }
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType)
-        {
-            string strs = string.Empty;
-
-            switch (irequestType)
-            {
-                case (int)Enums.TempletType.Common:
-                    strs = GetContentsById(Ids, mcodes, webSiteShortName, attrs);
-                    break;
-                case (int)Enums.TempletType.Search:
-                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs);
-                    break;
-            }
-            return strs;
-        }
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType, int pageNumber)
+        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType, int pageNumber = 1)
         {
             string strs = string.Empty;
 
@@ -1280,7 +1019,7 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="Ids"></param>
         /// <returns></returns>
-        private string GetContentsByIdAndWebSite(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber)
+        private string GetContentsByIdAndWebSite(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber = 1)
         {
             string strs = string.Empty;
             string extHtmls = string.Empty;
@@ -1300,39 +1039,6 @@ namespace CMS.Application.Comm
                 }
             }
             strs += extHtmls;
-            return strs;
-        }
-        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs)
-        {
-            string strs = string.Empty;
-            string extHtmls = string.Empty;
-            List<ContentEntity> contententitys = GetSearchsByAttrs(webSiteShortName, Ids, mcodes, attrs, 1, ref extHtmls);
-
-            if (contententitys != null && contententitys.Count > 0)
-            {
-                foreach (ContentEntity contententity in contententitys)
-                {
-                    strs += GetHtmlPage(mcodes, contententity, attrs);
-                }
-            }
-            strs += extHtmls;
-
-            return strs;
-        }
-        private string GetSearchContents(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber)
-        {
-            string strs = string.Empty;
-            string extHtmls = string.Empty;
-            List<ContentEntity> contententitys = GetSearchsByAttrs(webSiteShortName, Ids, mcodes, attrs, pageNumber, ref extHtmls);
-
-            if (contententitys != null && contententitys.Count > 0)
-            {
-                foreach (ContentEntity contententity in contententitys)
-                {
-                    strs += GetHtmlPage(mcodes, contententity, attrs);
-                }
-            }
-
             return strs;
         }
         private List<ContentEntity> GetContentsByAttrs(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
@@ -1428,7 +1134,23 @@ namespace CMS.Application.Comm
             }
             return contententitys;
         }
-        private List<ContentEntity> GetSearchsByAttrs(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
+        private string GetSearchContents(string webSiteShortName, string keyWords, string mcodes, Dictionary<string, string> attrs, int pageNumber)
+        {
+            string strs = string.Empty;
+            string extHtmls = string.Empty;
+            List<ContentEntity> contententitys = GetSearchsByAttrs(keyWords, mcodes, webSiteShortName, attrs, pageNumber, ref extHtmls);
+
+            if (contententitys != null && contententitys.Count > 0)
+            {
+                foreach (ContentEntity contententity in contententitys)
+                {
+                    strs += GetHtmlPage(mcodes, contententity, attrs);
+                }
+            }
+
+            return strs;
+        }
+        private List<ContentEntity> GetSearchsByAttrs(string Ids, string mcodes, string webSiteShortName, Dictionary<string, string> attrs, int pageNumber, ref string extHtmls)
         {
             string strs = string.Empty;
             List<ContentEntity> contententitysT = new List<ContentEntity>();
@@ -1672,7 +1394,7 @@ namespace CMS.Application.Comm
         /// 根据模板名称获取模板信息
         /// </summary>
         /// <returns></returns>
-        private string GetHtmlsByTempletName(string webSiteShortName, string name, string Id,int irequestType, string urlHost = "")
+        private string GetHtmlsByTempletName(string webSiteShortName, string name, string Id, int irequestType, string urlHost = "")
         {
             string strs = string.Empty;
             TempletApp templetapp = new TempletApp();
@@ -1682,6 +1404,23 @@ namespace CMS.Application.Comm
                 string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
                 TempHelp temphelp = new TempHelp();
                 strs = temphelp.GetHtmlPages(webSiteShortName, templets, Id, irequestType, urlHost);
+            }
+            return strs;
+        }
+        /// <summary>
+        /// 根据模板名称获取模板信息
+        /// </summary>
+        /// <returns></returns>
+        private string GetHtmlsByTempletName(string name, TempleteProcessModel templeteProcessModel)
+        {
+            string strs = string.Empty;
+            TempletApp templetapp = new TempletApp();
+            TempletEntity templet = templetapp.GetFormByName(templeteProcessModel.requestModel.webSite.ShortName, name);
+            if (templet != null)
+            {
+                string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                TempHelp temphelp = new TempHelp();
+                strs = temphelp.GetHtmlPages(templeteProcessModel.requestModel);
             }
             return strs;
         }
@@ -1798,48 +1537,6 @@ namespace CMS.Application.Comm
         #endregion
 
         #region 获取属性集合 -Dictionary<string, string> GetAttrs(string attrs)
-        /// <summary>
-        /// 获取属性集合
-        /// </summary>
-        /// <param name="attrs"></param>
-        /// <returns></returns>
-        private Dictionary<string, string> GetAttrs(string templetst)
-        {
-            Dictionary<string, string> attrsD = new Dictionary<string, string>();
-
-            int i = templetst.IndexOf(ATTRS);
-            int j = templetst.IndexOf(ENDMCNA) + ENDMCNA.Length;
-            if (i >= 0 && j >= 0 && j >= i)
-            {
-                string attrs = templetst.Substring(i, j - i);
-                if (!string.IsNullOrEmpty(attrs))
-                {
-                    string sStrT = ATTRS + STARTMCNA;
-                    int iT = attrs.IndexOf(sStrT) + sStrT.Length;
-                    int jT = attrs.IndexOf(ENDMCNA);
-                    if (iT >= 0 && jT >= 0 && jT >= iT)
-                    {
-                        string attrsT = attrs.Substring(iT, jT - iT);
-                        if (!string.IsNullOrEmpty(attrsT))
-                        {
-                            string[] attrsTs = attrsT.Split(',');
-                            if (attrsTs != null && attrsTs.Count() > 0)
-                            {
-                                foreach (string item in attrsTs)
-                                {
-                                    string[] itemT = item.Split('=');
-                                    if (itemT != null && itemT.Length == 2)
-                                    {
-                                        attrsD.Add(itemT[0].ToLower(), itemT[1]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return attrsD;
-        }
 
         /// <summary>
         /// 获取属性集合
@@ -1892,31 +1589,6 @@ namespace CMS.Application.Comm
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public bool IsWebSite(string urlRaw)
-        {
-            bool retBol = true;
-            List<string> urlRaws = WebHelper.GetUrls(urlRaw);
-
-            ColumnsApp c_ModulesApp = new ColumnsApp();
-            List<ColumnsEntity> models = c_ModulesApp.GetListNoDel();
-            if (models != null && models.Count > 0)
-            {
-                List<string> actionNames = models.Select(m => m.ActionName).ToList();
-                if (urlRaws.Count > 0)
-                {
-                    if (actionNames.Contains(urlRaws.FirstOrDefault()))
-                    {
-                        retBol = false;
-                    }
-                }
-            }
-            return retBol;
-        }
-        /// <summary>
-        /// 判断请求路径是否为网站前台地址
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
         public bool IsWebSite(string urlhost, string urlRaw)
         {
             bool retBol = false;
@@ -1944,55 +1616,6 @@ namespace CMS.Application.Comm
             return retBol;
         }
         #endregion
-
-        #region 字段格式化处理 -InitFormat(string context, Dictionary<string, string> attrs)
-        /// <summary>
-        /// 字段格式化处理
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="context"></param>
-        /// <param name="attrs"></param>
-        /// <returns></returns>
-        private string InitFormat(string context, Dictionary<string, string> attrs)
-        {
-            string contexts = context;
-
-            //处理时间格式
-            string formatNames = "formattime_" + context;
-            if (attrs.ContainsKey(formatNames))
-            {
-                DateTime Times = new DateTime();
-                if (DateTime.TryParse(context, out Times))
-                {
-                    string formats = "yyyy-MM-dd HH:mm:ss";
-
-                    if (attrs.TryGetValue(formatNames, out formats))
-                    {
-                        contexts = Times.ToString(formats);
-                    }
-                }
-            }
-            //处理字符串截取长度格式
-            string formatSubStringNames = ("formatsubstring_" + context).ToLower();
-            if (attrs.ContainsKey(formatSubStringNames))
-            {
-                string formats = "0";
-                if (attrs.TryGetValue(formatSubStringNames, out formats))
-                {
-                    int num = 0;
-                    if (Int32.TryParse(formats, out num))
-                    {
-                        if (contexts != null && contexts.Length > num)
-                        {
-                            contexts = contexts.Substring(0, num);
-                        }
-                    }
-                }
-            }
-            return contexts;
-        }
-        #endregion
-
         #region 字段格式化处理 -string InitFormat(string name, string context, Dictionary<string, string> attrs)
         /// <summary>
         /// 字段格式化处理
@@ -2257,7 +1880,6 @@ namespace CMS.Application.Comm
             }
             return extPageModel;
         }
-
 
         #endregion
     }
