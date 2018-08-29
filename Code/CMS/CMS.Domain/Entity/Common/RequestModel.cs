@@ -58,7 +58,7 @@ namespace CMS.Domain.Entity.Common
         /// <summary>
         /// 是否详情页
         /// </summary>
-        public bool IsDetailPage { get; set; }
+        public bool IsDetailPage { get; set; } = false;
         /// <summary>
         /// 访问者域名
         /// </summary>
@@ -74,6 +74,6 @@ namespace CMS.Domain.Entity.Common
         /// <summary>
         /// 访问者是否为手机
         /// </summary>
-        public bool IsMobile { get; set; }
+        public bool IsMobile { get; set; } = false;
     }
 }

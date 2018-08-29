@@ -19,33 +19,6 @@ namespace CMS.Application.Comm
     public class TempHelp
     {
         private static TempHelp _tempHelp = new TempHelp();
-        #region 单例模式创建对象
-        //单例模式创建对象
-        //// Creates an syn object.
-        //private static readonly object SynObject = new object();
-        //TempHelp()
-        //{
-        //}
-
-        //public static TempHelp tempHelp
-        //{
-        //    get
-        //    {
-        //        // Double-Checked Locking
-        //        if (null == _tempHelp)
-        //        {
-        //            lock (SynObject)
-        //            {
-        //                if (null == _tempHelp)
-        //                {
-        //                    _tempHelp = new TempHelp();
-        //                }
-        //            }
-        //        }
-        //        return _tempHelp;
-        //    }
-        //}
-        #endregion
         /// <summary>
         /// 输出文件格式
         /// </summary>
@@ -177,38 +150,7 @@ namespace CMS.Application.Comm
             return names;
         }
         #endregion
-
-        #region 创建静态页面 -void GenHtml(string htmls)
-        /// <summary>
-        /// 创建静态页面
-        /// </summary>
-        /// <param name="htmls"></param>
-        private void GenHtmlByFilePath(string htmls, ref string filePath, ref string urlAddress)
-        {
-            string filename = GenUrlName() + HTMLFOR;
-            FileHelper.CreateAndWrite(filePath, filename, htmls);
-            int index = filePath.LastIndexOf('\\');
-            if (index >= 0)
-            {
-                filePath = filePath + filename;
-                urlAddress = urlAddress + filename;
-            }
-            else
-            {
-                filePath = filePath + @"\" + filename;
-                urlAddress = urlAddress + @"\" + filename;
-            }
-        }
-        /// <summary>
-        /// 创建静态页面
-        /// </summary>
-        /// <param name="htmls"></param>
-        private void GenHtml(string paths, string htmls)
-        {
-            FileHelper.WriteText(paths, htmls);
-        }
-        #endregion
-
+        
         #region 根据urlRaw获取html +string GetHtmlByUrl(string urlRaw)
         /// <summary>
         /// 根据requestModel获取html
@@ -295,14 +237,9 @@ namespace CMS.Application.Comm
                                             requestModel.IsSearch = true;
                                             requestModel.SearchKeyWord = requestModel.UrlRaws[1];
                                         }
-                                        htmls = GetHtmlPages(requestModel.webSite.ShortName, htmls, requestModel.ContentId, irequestType, requestModel.UrlHost, pageNumber);
-                                        isNoFind = false;
                                     }
-                                    else
-                                    {
-                                        htmls = GetHtmlPages(requestModel.webSite.ShortName, htmls, requestModel.ContentId, irequestType, requestModel.UrlHost);
-                                        isNoFind = false;
-                                    }
+                                    htmls = GetHtmlPages(requestModel);
+                                    isNoFind = false;
                                     //更新浏览数
                                     contentApp.UpdateViewNum(requestModel.ContentId, true);
                                 }
@@ -354,18 +291,14 @@ namespace CMS.Application.Comm
 
         #region 生成html
 
-        #region 生成静态页面保存文件 +bool GenHtmlPage(string codes, string Id,string webSiteShortName)
-        /// <summary>
-        /// 生成静态页面保存文件
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public bool GenHtmlPage(string codes, string Id, string webSiteShortName)
+        #region 生成静态页面保存文件
+        public bool GenHtmlPage(string Id, WebSiteEntity webSite, ColumnsEntity column, TempletEntity templet)
         {
             bool b = true;
             try
             {
-                string templets = GetHtmlPages(webSiteShortName, codes, Id, (int)Enums.TempletType.Common);
+                RequestModel requestModel = GenRequest(Id, webSite, column, templet);
+                string htmls = GetHtmlPages(requestModel);
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetForm(Id);
                 if (contentEntity != null && contentEntity.ColumnId != null)
@@ -375,7 +308,7 @@ namespace CMS.Application.Comm
                     if (contentEntity.UrlPath != null && FileHelper.IsExistFile(strPhyPaths))
                     {
                         FileHelper.DeleteFile(contentEntity.UrlPath);
-                        GenHtml(contentEntity.UrlPath, templets);
+                        GenHtml(contentEntity.UrlPath, htmls);
                     }
                     else
                     {
@@ -383,7 +316,7 @@ namespace CMS.Application.Comm
                         string urlAddress = "";
                         InitHtmlSavePath(Id, out filePaths, out urlAddress);
                         //创建静态页面
-                        GenHtmlByFilePath(templets, ref filePaths, ref urlAddress);
+                        GenHtmlByFilePath(htmls, ref filePaths, ref urlAddress);
                         //更新链接地址
                         UpdateContentById(filePaths, urlAddress, Id);
                     }
@@ -396,27 +329,23 @@ namespace CMS.Application.Comm
             return b;
 
         }
-        /// <summary>
-        /// 生成移动端静态页面保存文件
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public bool GenMHtmlPage(string codes, string Id, string webSiteShortName)
+        public bool GenMHtmlPage(string Id, WebSiteEntity webSite, ColumnsEntity column, TempletEntity templet)
         {
             bool b = true;
             try
             {
-                string templets = GetHtmlPages(webSiteShortName, codes, Id, (int)Enums.TempletType.Common);
+                RequestModel requestModel = GenRequest(Id, webSite, column, templet);
+                string htmls = GetHtmlPages(requestModel);
                 ContentApp c_ContentApp = new ContentApp();
                 ContentEntity contentEntity = c_ContentApp.GetForm(Id);
                 if (contentEntity != null && contentEntity.ColumnId != null)
                 {
-                    string strPhyPaths = FileHelper.MapPath(contentEntity.MUrlPath);
+                    string strPhyPaths = FileHelper.MapPath(contentEntity.UrlPath);
                     //已生成静态文件时
                     if (contentEntity.UrlPath != null && FileHelper.IsExistFile(strPhyPaths))
                     {
-                        FileHelper.DeleteFile(contentEntity.MUrlPath);
-                        GenHtml(contentEntity.MUrlPath, templets);
+                        FileHelper.DeleteFile(contentEntity.UrlPath);
+                        GenHtml(contentEntity.UrlPath, htmls);
                     }
                     else
                     {
@@ -424,7 +353,7 @@ namespace CMS.Application.Comm
                         string urlAddress = "";
                         InitMHtmlSavePath(Id, out filePaths, out urlAddress);
                         //创建静态页面
-                        GenHtmlByFilePath(templets, ref filePaths, ref urlAddress);
+                        GenHtmlByFilePath(htmls, ref filePaths, ref urlAddress);
                         //更新链接地址
                         UpdateMContentById(filePaths, urlAddress, Id);
                     }
@@ -437,28 +366,23 @@ namespace CMS.Application.Comm
             return b;
 
         }
-        /// <summary>
-        /// 生成静态页面保存文件
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public bool GenHtmlPageCol(string colId, string webSiteId, string templetId, string actionName)
+        public bool GenHtmlPageCol(ColumnsEntity column)
         {
             bool b = true;
             try
             {
                 WebSiteApp webSiteApp = new WebSiteApp();
-                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(webSiteId);
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(column.WebSiteId);
                 if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
                 {
                     TempletApp templetapp = new TempletApp();
-                    TempletEntity templet = templetapp.GetFormNoDel(templetId);
+                    TempletEntity templet = templetapp.GetFormNoDel(column.TempletId);
                     if (templet != null)
                     {
-                        string templetstrs = System.Web.HttpUtility.HtmlDecode(templet.Content);
-                        string htmlstrs = new TempHelp().GetHtmlPages(webSiteEntity.ShortName, templetstrs, colId, (int)Enums.TempletType.Common);
+                        RequestModel requestModel = GenRequest(null, webSiteEntity, column, templet);
+                        string htmlstrs = GetHtmlPages(requestModel);
                         string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\";
-                        string urlPathStr = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\" + actionName + ".html";
+                        string urlPathStr = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\" + column.ActionName + ".html";
                         string strPhyPaths = FileHelper.MapPath(urlPathStr);
                         //已生成静态文件时
                         if (FileHelper.IsExistFile(strPhyPaths))
@@ -469,7 +393,7 @@ namespace CMS.Application.Comm
                         else
                         {
                             //创建静态页面
-                            FileHelper.CreateAndWrite(urlPath, actionName + ".html", htmlstrs);
+                            FileHelper.CreateAndWrite(urlPath, column.ActionName + ".html", htmlstrs);
                         }
                     }
                 }
@@ -481,28 +405,23 @@ namespace CMS.Application.Comm
             return b;
 
         }
-        /// <summary>
-        /// 生成移动端静态页面保存文件
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public bool GenMHtmlPageCol(string colId, string webSiteId, string templetId, string actionName)
+        public bool GenMHtmlPageCol(ColumnsEntity column)
         {
             bool b = true;
             try
             {
                 WebSiteApp webSiteApp = new WebSiteApp();
-                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(webSiteId);
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(column.WebSiteId);
                 if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
                 {
                     TempletApp templetapp = new TempletApp();
-                    TempletEntity templet = templetapp.GetFormNoDel(templetId);
+                    TempletEntity templet = templetapp.GetFormNoDel(column.MTempletId);
                     if (templet != null)
                     {
-                        string templetstrs = System.Web.HttpUtility.HtmlDecode(templet.Content);
-                        string htmlstrs = new TempHelp().GetHtmlPages(webSiteEntity.ShortName, templetstrs, colId, (int)Enums.TempletType.Common);
-                        string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\m\";
-                        string urlPathStr = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\m\" + actionName + ".html";
+                        RequestModel requestModel = GenRequest(null, webSiteEntity, column, templet);
+                        string htmlstrs = GetHtmlPages(requestModel);
+                        string urlPath = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\";
+                        string urlPathStr = Code.ConfigHelp.configHelp.HTMLSRC + webSiteEntity.ShortName + @"\" + column.ActionName + ".html";
                         string strPhyPaths = FileHelper.MapPath(urlPathStr);
                         //已生成静态文件时
                         if (FileHelper.IsExistFile(strPhyPaths))
@@ -513,7 +432,7 @@ namespace CMS.Application.Comm
                         else
                         {
                             //创建静态页面
-                            FileHelper.CreateAndWrite(urlPath, actionName + ".html", htmlstrs);
+                            FileHelper.CreateAndWrite(urlPath, column.ActionName + ".html", htmlstrs);
                         }
                     }
                 }
@@ -524,6 +443,49 @@ namespace CMS.Application.Comm
             }
             return b;
 
+        }
+        private RequestModel GenRequest(string contentId, WebSiteEntity webSite, ColumnsEntity column, TempletEntity templet)
+        {
+            RequestModel requestModel = new RequestModel();
+            requestModel.webSite = webSite;
+            requestModel.WebSiteId = webSite.Id;
+            requestModel.webSiteConfig = new WebSiteApp().GetWebSiteConfigFormByWebSiteId(webSite.Id);
+            requestModel.Column = column;
+            requestModel.ColumnId = column.Id;
+            requestModel.Templet = templet;
+            requestModel.TempletContent = System.Web.HttpUtility.HtmlDecode(templet.Content);
+            requestModel.ContentId = contentId;
+            requestModel.UrlHost = webSite.UrlAddress;
+            return requestModel;
+        }
+
+        /// <summary>
+        /// 创建静态页面
+        /// </summary>
+        /// <param name="htmls"></param>
+        private void GenHtmlByFilePath(string htmls, ref string filePath, ref string urlAddress)
+        {
+            string filename = GenUrlName() + HTMLFOR;
+            FileHelper.CreateAndWrite(filePath, filename, htmls);
+            int index = filePath.LastIndexOf('\\');
+            if (index >= 0)
+            {
+                filePath = filePath + filename;
+                urlAddress = urlAddress + filename;
+            }
+            else
+            {
+                filePath = filePath + @"\" + filename;
+                urlAddress = urlAddress + @"\" + filename;
+            }
+        }
+        /// <summary>
+        /// 创建静态页面
+        /// </summary>
+        /// <param name="htmls"></param>
+        private void GenHtml(string paths, string htmls)
+        {
+            FileHelper.WriteText(paths, htmls);
         }
         #endregion
 
@@ -574,52 +536,6 @@ namespace CMS.Application.Comm
                 throw;
             }
             return strs;
-        }
-        /// <summary>
-        /// 获取模板元素集合
-        /// </summary>
-        /// <param name="codes"></param>
-        /// <returns></returns>
-        public string GetHtmlPages(string webSiteShortName, string codes, string Id, int irequestType, string urlHost = "", int pageNumber = 1)
-        {
-            string strs = string.Empty;
-            try
-            {
-                codes = codes == null ? "" : codes;
-                string templets = System.Web.HttpUtility.HtmlDecode(codes);
-                int i = templets.IndexOf(STARTCHAR);
-                int j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                while (i > 0 && j > 0)
-                {
-                    string templetst = templets.Substring(i, j - i);
-                    string strAttr = "";
-                    //获取属性
-                    Dictionary<string, string> attrs = GetAttrs(templetst, out strAttr);
-                    string strt = templetst.Replace(STARTCHAR, "").Replace(ENDCHAR, "");
-                    if (!string.IsNullOrEmpty(strAttr))
-                        strt = strt.Replace(strAttr, "");
-                    string[] strts = strt.Split('.');
-
-                    if (strts.Length >= 2 && strts[1] != null)
-                    {
-                        string templetstm = ProModels(ref strt, strts);
-                        string htmlt = GetTModel(strt.Trim(), templetstm, Id, attrs, webSiteShortName, irequestType, urlHost, pageNumber);
-                        templets = templets.Replace(templetst, htmlt);
-
-                    }
-                    i = templets.IndexOf(STARTCHAR);
-                    j = templets.IndexOf(ENDCHAR) + ENDCHAR.Length;
-                }
-                strs = templets;
-                //格式化
-                //strs = HtmlCodeFormat.Format(strs);
-            }
-            catch
-            {
-                throw;
-            }
-            return strs;
-
         }
         /// <summary>
         /// 处理存在内容时
@@ -818,89 +734,6 @@ namespace CMS.Application.Comm
             }
             return htmls;
         }
-        /// <summary>
-        /// 获取html静态页面
-        /// </summary>
-        /// <returns></returns>
-        private string GetTModel(string codes, string mcodes, string Id, Dictionary<string, string> attrs, string webSiteShortName, int irequestType, string urlHost, int pageNumber = 1)
-        {
-            string htmls = codes;
-            string[] strs = codes.Split('.');
-            if (strs != null && strs.Length == 2)
-            {
-                //获取名称
-                string modelName = strs[0];
-                //获取指定内容
-                string modelStr = strs[1];
-                switch (modelName.Trim().ToLower())
-                {
-                    case "model":
-                        htmls = GetModelById(modelStr, Id, webSiteShortName, attrs);
-                        break;
-                    case "models":
-                        switch (modelStr.Trim().ToLower())
-                        {
-                            case "contents":
-                                htmls = GetContentsById(webSiteShortName, Id, mcodes, attrs, irequestType, pageNumber);
-                                break;
-                            case "images":
-                                htmls = GetImagessById(Id, mcodes, attrs);
-                                break;
-                            case "cols":
-
-                                break;
-                        }
-                        break;
-                    case "templet":
-                        htmls = GetHtmlsByTempletName(webSiteShortName, modelStr, Id, irequestType, urlHost);
-                        break;
-                    case "syssite":
-                        htmls = GetWebSiteByShortName(modelStr, webSiteShortName);
-                        break;
-                    case "content":
-                        switch (modelStr.Trim().ToLower())
-                        {
-                            case "viewnum":
-                                htmls = new ContentApp().GetViewNum(Id).ToString();
-                                break;
-                        }
-                        break;
-                    case "sys":
-                        switch (modelStr.Trim().ToLower())
-                        {
-                            case "resourceurl":
-                                string webSiteUrls = urlHost;
-                                if (string.IsNullOrWhiteSpace(urlHost))
-                                {
-                                    WebSiteEntity webSiteEntity = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                    if (webSiteEntity != null)
-                                    {
-                                        webSiteUrls = webSiteEntity.UrlAddress;
-                                    }
-                                }
-                                string urlStr = webSiteUrls + HTMLCONTENTSRC + webSiteShortName + "/";
-                                urlStr = urlStr.Replace(@"\", @"/");
-                                urlStr = urlStr.Replace(@"//", @"/");
-                                htmls = WEBURLHTTP + urlStr;
-                                break;
-                            case "weburl":
-                                if (!string.IsNullOrWhiteSpace(urlHost))
-                                {
-                                    htmls = urlHost;
-                                }
-                                else
-                                {
-                                    WebSiteEntity webSiteEntityT = new WebSiteApp().GetFormByShortName(webSiteShortName);
-                                    htmls = webSiteEntityT?.UrlAddress;
-                                }
-                                break;
-                        }
-                        break;
-                }
-
-            }
-            return htmls;
-        }
         #endregion
 
         #region 获取内容信息 -string GetModelById(string name, string Ids)
@@ -958,7 +791,7 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据id获取，站点信息 -string ProSite(string name, string Ids)
+        #region 根据id获取，站点信息
         /// <summary>
         /// 根据ShortName获取，站点信息
         /// </summary>
@@ -974,45 +807,9 @@ namespace CMS.Application.Comm
 
             return strs;
         }
-        /// <summary>
-        /// 根据ShortName获取，站点信息
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetWebSiteByShortName(string name, string webSiteShortName)
-        {
-            string strs = string.Empty;
-            WebSiteEntity entity = new WebSiteApp().GetFormByShortName(webSiteShortName);
-            if (entity != null && !string.IsNullOrEmpty(entity.Id))
-            {
-                strs = ProContent<WebSiteEntity>(name, entity);
-            }
-
-            return strs;
-        }
         #endregion
 
-        #region 根据栏目id获取内容集合 -string GetContentsById(string Ids, string mcodes,Dictionary<string, string> attrs)
-        /// <summary>
-        /// 根据栏目id获取内容集合
-        /// </summary>
-        /// <param name="Ids"></param>
-        /// <returns></returns>
-        private string GetContentsById(string webSiteShortName, string Ids, string mcodes, Dictionary<string, string> attrs, int irequestType, int pageNumber = 1)
-        {
-            string strs = string.Empty;
-
-            switch (irequestType)
-            {
-                case (int)Enums.TempletType.Common:
-                    strs = GetContentsByIdAndWebSite(Ids, mcodes, webSiteShortName, attrs, pageNumber);
-                    break;
-                case (int)Enums.TempletType.Search:
-                    strs = GetSearchContents(webSiteShortName, Ids, mcodes, attrs, pageNumber);
-                    break;
-            }
-            return strs;
-        }
+        #region 根据栏目id获取内容集合
 
         /// <summary>
         /// 根据栏目id获取内容集合
@@ -1389,24 +1186,7 @@ namespace CMS.Application.Comm
 
         #endregion
 
-        #region 根据模板名称获取模板信息 -string GetHtmlsByTempletName(string name, string Id)
-        /// <summary>
-        /// 根据模板名称获取模板信息
-        /// </summary>
-        /// <returns></returns>
-        private string GetHtmlsByTempletName(string webSiteShortName, string name, string Id, int irequestType, string urlHost = "")
-        {
-            string strs = string.Empty;
-            TempletApp templetapp = new TempletApp();
-            TempletEntity templet = templetapp.GetFormByName(webSiteShortName, name);
-            if (templet != null)
-            {
-                string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
-                TempHelp temphelp = new TempHelp();
-                strs = temphelp.GetHtmlPages(webSiteShortName, templets, Id, irequestType, urlHost);
-            }
-            return strs;
-        }
+        #region 根据模板名称获取模板信息
         /// <summary>
         /// 根据模板名称获取模板信息
         /// </summary>
