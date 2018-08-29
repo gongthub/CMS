@@ -107,7 +107,7 @@ namespace CMS.Application.Comm
                     context.ApplicationInstance.CompleteRequest();
 
                     LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
-                    throw;
+                    //throw;
                 }
             }
         }

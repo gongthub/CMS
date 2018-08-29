@@ -598,5 +598,12 @@ namespace CMS.Application.WebManage
             }
             return isHave;
         }
+
+        public ContentEntity GetContentByReq(RequestModel requestModel)
+        {
+            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSite.Id
+            && (m.UrlAddress == requestModel.UrlRaw || m.UrlAddress == requestModel.UrlRaw.Replace(@"/", @"\"))).FirstOrDefault();
+            return contentEntity;
+        }
     }
 }

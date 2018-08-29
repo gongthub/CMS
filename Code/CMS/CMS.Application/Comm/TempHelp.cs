@@ -150,7 +150,7 @@ namespace CMS.Application.Comm
             return names;
         }
         #endregion
-        
+
         #region 根据urlRaw获取html +string GetHtmlByUrl(string urlRaw)
         /// <summary>
         /// 根据requestModel获取html
@@ -215,6 +215,15 @@ namespace CMS.Application.Comm
                                 if (requestModel.UrlRaws.Count >= 2)
                                 {
                                     requestModel.ContentId = requestModel.UrlRaws.LastOrDefault();
+                                }
+                                Guid TId = Guid.Empty;
+                                if (!Guid.TryParse(requestModel.ContentId, out TId))
+                                {
+                                    ContentEntity contentEntity = new ContentApp().GetContentByReq(requestModel);
+                                    if (contentEntity != null && !string.IsNullOrWhiteSpace(contentEntity.Id))
+                                    {
+                                        requestModel.ContentId = contentEntity.Id;
+                                    }
                                 }
                             }
                             #endregion
@@ -501,6 +510,8 @@ namespace CMS.Application.Comm
             try
             {
                 TempleteProcessModel templeteProcessModel = new TempleteProcessModel();
+                if (requestModel.TempletContent != null)
+                    requestModel.TempletContent = System.Web.HttpUtility.HtmlDecode(requestModel.TempletContent);
                 templeteProcessModel.requestModel = requestModel;
                 string templets = requestModel.TempletContent == null ? "" : requestModel.TempletContent;
                 int i = templets.IndexOf(STARTCHAR);
@@ -675,8 +686,8 @@ namespace CMS.Application.Comm
                                 }
                                 else
                                 {
-                                    htmls = GetContentsByIdAndWebSite(templeteProcessModel.requestModel.webSite.ShortName, templeteProcessModel.requestModel.ColumnId,
-                                        templeteProcessModel.TempletPieceContent, templeteProcessModel.TempletPieceAttrs,
+                                    htmls = GetContentsByIdAndWebSite(templeteProcessModel.requestModel.ColumnId, templeteProcessModel.TempletPieceContent,
+                                        templeteProcessModel.requestModel.webSite.ShortName, templeteProcessModel.TempletPieceAttrs,
                                         templeteProcessModel.requestModel.PageNumber);
                                 }
                                 break;
@@ -1199,8 +1210,8 @@ namespace CMS.Application.Comm
             if (templet != null)
             {
                 string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
-                TempHelp temphelp = new TempHelp();
-                strs = temphelp.GetHtmlPages(templeteProcessModel.requestModel);
+                templeteProcessModel.requestModel.TempletContent = templet.Content;
+                strs = GetHtmlPages(templeteProcessModel.requestModel);
             }
             return strs;
         }
