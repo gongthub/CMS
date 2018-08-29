@@ -703,6 +703,7 @@
     <Content Include="HtmlContent\SysContent\jquery.pagination2.css" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.css" />
     <Content Include="HtmlContent\SysContent\jquery.pagination.min.js" />
+    <Content Include="HtmlContent\SysContent\lowsrc.js" />
     <Content Include="HtmlContent\SysContent\webSiteCommon.js" />
     <Content Include="Index.htm" />
     <Content Include="SysPage\404\404.html" />
