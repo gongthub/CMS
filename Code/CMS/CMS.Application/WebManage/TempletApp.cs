@@ -44,19 +44,19 @@ namespace CMS.Application.WebManage
         {
             TempletEntity templet = new TempletEntity();
             ColumnsApp c_ModulesApp = new ColumnsApp();
-            ColumnsEntity module = c_ModulesApp.GetMain(requestModel.webSiteEntity?.Id);
+            ColumnsEntity module = c_ModulesApp.GetMain(requestModel.WebSiteId);
             if (module != null)
             {
-                if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity.Id))
+                if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.WebSiteId))
                 {
                     templet = service.FindEntity(m => m.Id == module.MTempletId
-                    && m.WebSiteId == requestModel.webSiteEntity.Id
+                    && m.WebSiteId == requestModel.WebSiteId
                     && m.EnabledMark == true && m.DeleteMark != true);
                 }
                 else
                 {
                     templet = service.FindEntity(m => m.Id == module.TempletId
-                    && m.WebSiteId == requestModel.webSiteEntity.Id
+                    && m.WebSiteId == requestModel.WebSiteId
                     && m.EnabledMark == true && m.DeleteMark != true);
                 }
             }
@@ -102,10 +102,10 @@ namespace CMS.Application.WebManage
             {
                 if (Common.IsSearchForUrl(requestModel.UrlRaws))
                 {
-                    if (new WebSiteApp().IsSearch(requestModel.webSiteEntity?.Id)
-                        || new WebSiteApp().IsMSearch(requestModel.webSiteEntity?.Id))
+                    if (new WebSiteApp().IsSearch(requestModel.webSite?.Id)
+                        || new WebSiteApp().IsMSearch(requestModel.webSite?.Id))
                     {
-                        templet = GetSearchModel(requestModel.webSiteEntity?.Id, requestModel.IsMobile);
+                        templet = GetSearchModel(requestModel.webSite?.Id, requestModel.IsMobile);
                         irequestType = (int)Enums.TempletType.Search;
                     }
                 }
@@ -116,11 +116,11 @@ namespace CMS.Application.WebManage
                     int Id = 0;
                     if (requestModel.UrlRaws.Count == 1 || Int32.TryParse(Ids, out Id))
                     {
-                        templet = GetModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSiteEntity?.Id, requestModel.IsMobile);
+                        templet = GetModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSite?.Id, requestModel.IsMobile);
                     }
                     else
                     {
-                        templet = GetCModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSiteEntity?.Id, requestModel.IsMobile);
+                        templet = GetCModelByActionName(requestModel.UrlRaws.FirstOrDefault(), requestModel.webSite?.Id, requestModel.IsMobile);
                     }
                 }
             }

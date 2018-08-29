@@ -408,39 +408,36 @@ namespace CMS.Application.WebManage
                 //验证用户站点权限
                 iUserRepository.VerifyUserWebsiteRole(moduleEntity.WebSiteId);
             }
-            ColumnsEntity module = GetModuleByContentID(keyValue);
-            if (module != null &&
-                (module.Type == (int)Enums.ModuleType.List || module.Type == (int)Enums.ModuleType.AdvancedList))
+            ColumnsEntity columnsEntity = GetModuleByContentID(keyValue);
+            if (columnsEntity != null &&
+                (columnsEntity.Type == (int)Enums.ModuleType.List || columnsEntity.Type == (int)Enums.ModuleType.AdvancedList))
             {
-                if (new WebSiteApp().IsOverSizeByWebSiteId(module.WebSiteId))
+                if (new WebSiteApp().IsOverSizeByWebSiteId(columnsEntity.WebSiteId))
                 {
                     throw new Exception("该站点空间已不足，请联系管理员！");
                 }
                 WebSiteApp webSiteApp = new WebSiteApp();
-                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(module.WebSiteId);
+                WebSiteEntity webSiteEntity = webSiteApp.GetFormNoDel(columnsEntity.WebSiteId);
                 if (webSiteEntity != null && !string.IsNullOrEmpty(webSiteEntity.Id))
                 {
                     TempletApp templetapp = new TempletApp();
-                    TempletEntity templet = templetapp.GetFormNoDel(module.CTempletId);
+                    TempletEntity templet = templetapp.GetFormNoDel(columnsEntity.CTempletId);
                     if (templet != null)
                     {
-                        string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
-
-                        new TempHelp().GenHtmlPage(templets, keyValue, webSiteEntity.ShortName);
+                        new TempHelp().GenHtmlPage(keyValue, webSiteEntity, columnsEntity, templet);
                     }
                     if (new WebSiteApp().IsMobile(webSiteEntity.Id))
                     {
-                        templet = templetapp.GetFormNoDel(module.MCTempletId);
+                        templet = templetapp.GetFormNoDel(columnsEntity.MCTempletId);
                         if (templet != null)
                         {
-                            string templets = System.Web.HttpUtility.HtmlDecode(templet.Content);
+                            new TempHelp().GenMHtmlPage(keyValue, webSiteEntity, columnsEntity, templet);
 
-                            new TempHelp().GenMHtmlPage(templets, keyValue, webSiteEntity.ShortName);
                         }
                     }
                 }
                 //添加日志
-                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成列表详情静态页" + module.FullName, Enums.DbLogType.Submit, "内容管理");
+                LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成列表详情静态页" + columnsEntity.FullName, Enums.DbLogType.Submit, "内容管理");
             }
         }
         public void GenAllStaticPage(string webSiteId)
@@ -510,8 +507,8 @@ namespace CMS.Application.WebManage
                 {
                     throw new Exception("该站点空间已不足，请联系管理员！");
                 }
-                new TempHelp().GenHtmlPageCol(columnId, moduleEntity.WebSiteId, moduleEntity.TempletId, moduleEntity.ActionName);
-                new TempHelp().GenMHtmlPageCol(columnId, moduleEntity.WebSiteId, moduleEntity.MTempletId, moduleEntity.ActionName);
+                new TempHelp().GenHtmlPageCol(moduleEntity);
+                new TempHelp().GenMHtmlPageCol(moduleEntity);
                 //添加日志
                 LogHelp.logHelp.WriteDbLog(true, "内容信息=>生成栏目静态页" + moduleEntity.FullName, Enums.DbLogType.Submit, "内容管理");
             }
@@ -545,13 +542,13 @@ namespace CMS.Application.WebManage
             isHave = GetHtmlStrsByColUrl(requestModel, out htmls);
             if (!isHave)
             {
-                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSiteEntity.Id
+                ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSite.Id
                 && (m.UrlAddress == requestModel.UrlRaw || m.UrlAddress == requestModel.UrlRaw.Replace(@"/", @"\"))).FirstOrDefault();
                 if (contentEntity != null && !string.IsNullOrEmpty(contentEntity.Id))
                 {
                     string urlPath = contentEntity.UrlPath;
 
-                    if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
+                    if (requestModel.IsMobile && requestModel.webSiteConfig.MobileEnabledMark)
                     {
                         urlPath = contentEntity.MUrlPath;
                     }
@@ -569,10 +566,10 @@ namespace CMS.Application.WebManage
                     }
                 }
             }
-            if (!string.IsNullOrWhiteSpace(htmls) && requestModel.webSiteEntity != null)
+            if (!string.IsNullOrWhiteSpace(htmls) && requestModel.webSite != null)
             {
                 //处理页面域名
-                htmls = htmls.Replace(requestModel.webSiteEntity.UrlAddress, requestModel.UrlHost);
+                htmls = htmls.Replace(requestModel.webSite.UrlAddress, requestModel.UrlHost);
             }
             return isHave;
         }
@@ -586,13 +583,13 @@ namespace CMS.Application.WebManage
             bool isHave = false;
             htmls = string.Empty;
             string urlPath = string.Empty;
-            if (requestModel.IsMobile && new WebSiteApp().IsMobile(requestModel.webSiteEntity?.Id))
+            if (requestModel.IsMobile && requestModel.webSiteConfig.MobileEnabledMark)
             {
-                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSite.ShortName + @"\m\" + requestModel.UrlRaw + ".html";
             }
             else
             {
-                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSiteEntity?.ShortName + @"\" + requestModel.UrlRaw + ".html";
+                urlPath = Code.ConfigHelp.configHelp.HTMLSRC + requestModel.webSite.ShortName + @"\" + requestModel.UrlRaw + ".html";
             }
             if (Code.FileHelper.IsExistFile(urlPath, true))
             {
@@ -600,6 +597,13 @@ namespace CMS.Application.WebManage
                 isHave = true;
             }
             return isHave;
+        }
+
+        public ContentEntity GetContentByReq(RequestModel requestModel)
+        {
+            ContentEntity contentEntity = service.IQueryable(m => m.WebSiteId == requestModel.webSite.Id
+            && (m.UrlAddress == requestModel.UrlRaw || m.UrlAddress == requestModel.UrlRaw.Replace(@"/", @"\"))).FirstOrDefault();
+            return contentEntity;
         }
     }
 }
