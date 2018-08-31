@@ -72,18 +72,28 @@
                             <tr>
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
-                                    @*<input id="Icon" name="Icon" type="text" class="form-control" placeholder="请输入图标" />*@
                                     <div>
-                                        @*<form action="/WebManage/Content/UploadImg" id="form_uploadimg">*@
                                         <div class="sys-div-imgupload">
                                             <div class="sys-div-upload">
                                                 <input id="IconUp" type="file" />请选择图片
                                             </div>
                                             <img id="ImgPr" width="30" height="30" />
                                         </div>
-                                        @*</form>*@
                                     </div>
                                 </td>
+                                <th class="formTitle">缩略图</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="LowIconUp" type="file" />请选择缩略图
+                                            </div>
+                                            <img id="LowImgPr" width="30" height="30" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="formTitle">附件</th>
                                 <td class="formValue">
                                     <div>
@@ -92,6 +102,17 @@
                                                 <input id="FileUp" type="file" />请选择文件
                                             </div>
                                             <span id="lbFilePath"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <th class="formTitle">备用附件</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="FileSpareUp" type="file" />请选择图片
+                                            </div>
+                                            <span id="lbFileSparePath"></span>
                                         </div>
                                     </div>
                                 </td>
@@ -175,14 +196,17 @@
                             data.Content = htmlDecode(data.Content);
                             insertHtml(data.Content);
                             $("#ImgPr").attr("src", data.Icon);
+                            $("#LowImgPr").attr("src", data.LowIcon);
                             $("#lbFilePath").text(data.FilePath);
+                            $("#lbFileSparePath").text(data.FilePathSpare);
                             $("#form1").formSerialize(data);
                         }
                     });
                 }
 
                 $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
-            })
+                $("#LowIconUp").uploadPreview({ Img: "LowImgPr", Width: 120, Height: 120 });
+            });
         });
 
         function initControl() {
@@ -212,23 +236,38 @@
                 return false;
             }
             var jsonDataIcon = uploadImg("IconUp");
+            var jsonDataLowIcon = uploadImg("LowIconUp");
             var jsonDataFile = uploadFile("FileUp");
-            if (jsonDataIcon.success == true && jsonDataFile.success == true) {
+            var jsonDataFileSpare = uploadFile("FileSpareUp");
+            if (jsonDataIcon.success == true
+                && jsonDataLowIcon.success == true
+                && jsonDataFile.success == true
+                && jsonDataFileSpare.success == true) {
                 var iconData = jsonDataIcon.data;
+                var lowiconData = jsonDataLowIcon.data;
                 var fileData = jsonDataFile.data;
+                var filespareData = jsonDataFileSpare.data;
                 var postData = $("#form1").formSerialize();
                 var contentstrs = getContent();
                 postData["Content"] = htmlEncode(contentstrs);
                 postData["ColumnId"] = columnId;
                 postData["Icon"] = iconData.Sys_FilePath;
+                postData["LowIcon"] = lowiconData.Sys_FilePath;
                 postData["FilePath"] = fileData.Sys_FilePath;
+                postData["FilePathSpare"] = filespareData.Sys_FilePath;
 
                 var upfiles = [];
                 if (iconData != null && iconData != undefined) {
                     upfiles.push(iconData);
                 }
+                if (lowiconData != null && lowiconData != undefined) {
+                    upfiles.push(lowiconData);
+                }
                 if (fileData != null && fileData != undefined) {
                     upfiles.push(fileData);
+                }
+                if (filespareData != null && filespareData != undefined) {
+                    upfiles.push(filespareData);
                 }
 
                 postData["upFileentitys"] = JSON.stringify(upfiles);

@@ -72,11 +72,20 @@
                                 <th class="formTitle">图标</th>
                                 <td class="formValue">
                                     <img id="ImgPr" width="30" height="30" />
-                                    @*<input id="Icon" name="Icon" type="text" class="form-control" placeholder="请输入图标" />*@
                                 </td>
+                                <th class="formTitle">缩略图</th>
+                                <td class="formValue">
+                                    <img id="LowImgPr" width="30" height="30" />
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="formTitle">附件</th>
                                 <td class="formValue">
                                     <span id="lbFilePath"></span>
+                                </td>
+                                <th class="formTitle">备用附件</th>
+                                <td class="formValue">
+                                    <span id="lbFileSparePath"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -157,7 +166,9 @@
                             data.Content = htmlDecode(data.Content);
                             insertHtml(data.Content);
                             $("#ImgPr").attr("src", data.Icon);
+                            $("#LowImgPr").attr("src", data.LowIcon);
                             $("#lbFilePath").text(data.FilePath);
+                            $("#lbFileSparePath").text(data.FilePathSpare);
                             $("#form1").formSerialize(data);
                             setDisabled();
                             $("#form1").find('.form-control,select,input').attr('disabled', 'disabled');

@@ -34,7 +34,9 @@ namespace CMS.Domain.Entity.WebManage
         public string MUrlPath { get; set; }
         public string UrlAddress { get; set; }
         public string FilePath { get; set; }
+        public string FilePathSpare { get; set; }
         public string Icon { get; set; }
+        public string LowIcon { get; set; }
         public string Content { get; set; }
         public string SEOTitle { get; set; }
         public string SEOKeyWords { get; set; }

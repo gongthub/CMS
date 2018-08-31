@@ -37,23 +37,25 @@
                                         <img id="ImgPr" width="30" height="30" />
                                     </div>
                                 </td>
-                                <td colspan="2">
-                                    <table>
-                                        <tr>
-                                            <th class="formTitle" style="height: 35px;">是否发布</th>
-                                            <td class="formValue" style="padding-top: 1px;">
-                                                <div class="ckbox">
-                                                    <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">发布</label>
-                                                </div>
-                                            </td>
-                                            <th class="formTitle" style="height: 35px;">是否置顶</th>
-                                            <td class="formValue" style="padding-top: 1px;">
-                                                <div class="ckbox">
-                                                    <input id="TopMark" name="TopMark" type="checkbox" data-switch-no-init="true"><label for="TopMark">置顶</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <th class="formTitle">缩略图</th>
+                                <td class="formValue">
+                                    <div>
+                                        <img id="LowImgPr" width="30" height="30" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">是否发布</th>
+                                <td class="formValue">
+                                    <div class="ckbox">
+                                        <input id="EnabledMark" name="EnabledMark" type="checkbox" checked="checked" data-switch-no-init="true"><label for="EnabledMark">发布</label>
+                                    </div>
+                                </td>
+                                <th class="formTitle">是否置顶</th>
+                                <td class="formValue">
+                                    <div class="ckbox">
+                                        <input id="TopMark" name="TopMark" type="checkbox" data-switch-no-init="true"><label for="TopMark">置顶</label>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -87,6 +89,7 @@
                     success: function (data) {
                         data.Content = htmlDecode(data.Content);
                         $("#ImgPr").attr("src", data.Icon);
+                        $("#LowImgPr").attr("src", data.LowIcon);
                         $("#form1").formSerialize(data);
                         $("#form1").find('.form-control,select,input').attr('disabled', 'disabled');
                         $("#form1").find('div.ckbox label').attr('for', '');

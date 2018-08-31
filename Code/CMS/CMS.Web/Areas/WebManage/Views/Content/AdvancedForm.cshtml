@@ -105,30 +105,54 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th class="formTitle">图标</th>
-                                    <td class="formValue">
-                                        <div>
-                                            <div class="sys-div-imgupload">
-                                                <div class="sys-div-upload">
-                                                    <input id="IconUp" type="file" />请选择图片
-                                                </div>
-                                                <img id="ImgPr" width="30" height="30" />
+                            <tr>
+                                <th class="formTitle">图标</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="IconUp" type="file" />请选择图片
                                             </div>
+                                            <img id="ImgPr" width="30" height="30" />
                                         </div>
-                                    </td>
-                                    <th class="formTitle">附件</th>
-                                    <td class="formValue">
-                                        <div>
-                                            <div class="sys-div-imgupload">
-                                                <div class="sys-div-upload">
-                                                    <input id="FileUp" type="file" />请选择文件
-                                                </div>
-                                                <span id="lbFilePath"></span>
+                                    </div>
+                                </td>
+                                <th class="formTitle">缩略图</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="LowIconUp" type="file" />请选择缩略图
                                             </div>
+                                            <img id="LowImgPr" width="30" height="30" />
                                         </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">附件</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="FileUp" type="file" />请选择文件
+                                            </div>
+                                            <span id="lbFilePath"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <th class="formTitle">备用附件</th>
+                                <td class="formValue">
+                                    <div>
+                                        <div class="sys-div-imgupload">
+                                            <div class="sys-div-upload">
+                                                <input id="FileSpareUp" type="file" />请选择图片
+                                            </div>
+                                            <span id="lbFileSparePath"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                                 <tr>
                                     <th class="formTitle" valign="top" style="padding-top: 5px;">
                                         备注
@@ -216,6 +240,7 @@
             initControl();
             initEditor();
             $("#IconUp").uploadPreview({ Img: "ImgPr", Width: 120, Height: 120 });
+            $("#LowIconUp").uploadPreview({ Img: "LowImgPr", Width: 120, Height: 120 });
             $("#IconUpM").uploadPreviews({ div: "divShowImg", Width: 120, Height: 120 });
         })
 
@@ -247,25 +272,41 @@
                 return false;
             }
             var jsonDataIcon = uploadImg("IconUp");
+            var jsonDataLowIcon = uploadImg("LowIconUp");
             var jsonDataFile = uploadFile("FileUp");
+            var jsonDataFileSpare = uploadFile("FileSpareUp");
             var files = GetImgs();
             var jsonDataImages = uploadImgs("IconUpM", files);
-            if (jsonDataIcon.success == true && jsonDataFile.success == true) {
+            if (jsonDataIcon.success == true
+                && jsonDataLowIcon.success == true
+                && jsonDataFile.success == true
+                && jsonDataFileSpare.success == true)) {
                 var iconData = jsonDataIcon.data;
+                var lowiconData = jsonDataLowIcon.data;
                 var fileData = jsonDataFile.data;
+                var filespareData = jsonDataFileSpare.data;
                 var imagesData = jsonDataImages.data;
                 var postData = $("#form1").formSerialize();
                 postData["ColumnId"] = columnId;
                 postData["Icon"] = iconData.Sys_FilePath;
+                postData["LowIcon"] = lowiconData.Sys_FilePath;
                 postData["FilePath"] = fileData.Sys_FilePath;
+                postData["FilePathSpare"] = filespareData.Sys_FilePath;
 
                 var upfiles = [];
                 if (iconData != null && iconData != undefined && iconData != "") {
                     upfiles.push(iconData);
                 }
+                if (lowiconData != null && lowiconData != undefined) {
+                    upfiles.push(lowiconData);
+                }
                 if (fileData != null && fileData != undefined && fileData != "") {
                     upfiles.push(fileData);
                 }
+                if (filespareData != null && filespareData != undefined) {
+                    upfiles.push(filespareData);
+                }
+
                 if (imagesData != null && imagesData != undefined && imagesData.length > 0 && imagesData != "") {
                     for (var i = 0; i < imagesData.length; i++) {
                         upfiles.push(imagesData[i]);
@@ -331,7 +372,9 @@
                     async: false,
                     success: function (data) {
                         $("#ImgPr").attr("src", data.Icon);
+                        $("#LowImgPr").attr("src", data.LowIcon);
                         $("#lbFilePath").text(data.FilePath);
+                        $("#lbFileSparePath").text(data.FilePathSpare);
                         $("#form1").formSerialize(data);
                         var idName = "editor_";
                         var editors = $(".editordes");
