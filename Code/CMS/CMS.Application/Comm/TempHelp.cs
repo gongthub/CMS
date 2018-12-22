@@ -287,14 +287,17 @@ namespace CMS.Application.Comm
         /// <param name="htmls"></param>
         private static void ProcessRootFile(RequestModel requestModel, ref bool isNoFind, ref string htmls)
         {
-            string fileName = requestModel.UrlRaws[0];
-            if (isNoFind
-                && new WebSiteApp().IsRoot(requestModel.WebSiteId)
-                && requestModel.UrlRaws.Count == 1
-                && new ResourceApp().IsRootFile(requestModel.WebSiteId, fileName))
+            if (requestModel.UrlRaws.Count > 0)
             {
-                htmls = new ResourceApp().GetRootContent(requestModel.WebSiteId, fileName);
-                isNoFind = false;
+                string fileName = requestModel.UrlRaws[0];
+                if (isNoFind
+                    && new WebSiteApp().IsRoot(requestModel.WebSiteId)
+                    && requestModel.UrlRaws.Count == 1
+                    && new ResourceApp().IsRootFile(requestModel.WebSiteId, fileName))
+                {
+                    htmls = new ResourceApp().GetRootContent(requestModel.WebSiteId, fileName);
+                    isNoFind = false;
+                }
             }
         }
 
