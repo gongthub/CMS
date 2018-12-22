@@ -46,6 +46,10 @@ namespace CMS.Domain.Entity.WebManage
         /// 移动端网站标识
         /// </summary>		
         public bool MobileEnabledMark { get; set; }
+        /// <summary>
+        /// 根目录标识
+        /// </summary>		
+        public bool RootEnabledMark { get; set; }
 
         /// <summary>
         /// EnabledMark

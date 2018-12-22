@@ -17,5 +17,6 @@ namespace CMS.Domain.IRepository
         bool IsMessage(string webSiteId);
         bool IsAdvancedContent(string webSiteId);
         bool IsMobile(string webSiteId);
+        bool IsRoot(string webSiteId);
     }
 }

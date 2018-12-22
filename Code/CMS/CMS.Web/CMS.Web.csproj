@@ -956,6 +956,7 @@
     <Content Include="Areas\SystemManage\Views\OrganizeColumn\Details.cshtml" />
     <Content Include="Areas\SystemManage\Views\OrganizeColumn\Form.cshtml" />
     <Content Include="Areas\SystemManage\Views\OrganizeColumn\Index.cshtml" />
+    <Content Include="Areas\WebManage\Views\WebSiteConfig\RootConfig.cshtml" />
     <None Include="Properties\PublishProfiles\cms.pubxml" />
     <Content Include="Views\Home\WebSiteMgr.cshtml" />
     <Content Include="Views\Home\WebSiteList.cshtml" />

@@ -82,9 +82,26 @@
                         <a onclick="genAllHtmls()" class="btn  btn-primary">一键生成静态页</a>
                     </td>
                     @*<th class="formTitle">升级空间</th>
-        <td class="formValue">
-        </td>*@
+            <td class="formValue">
+            </td>*@
 
+                </tr>
+                <tr>
+                    <th class="formTitle">根目录</th>
+                    <td class="formValue">
+                        @if (Model.RootEnabledMark)
+                        {
+                            <input id="ckIsRootEnable" type="checkbox" checked data-on-text="Yes" data-off-text="No">
+                        }
+                        else
+                        {
+                            <input id="ckIsRootEnable" type="checkbox" data-on-text="Yes" data-off-text="No">
+                        }
+                    </td>
+                    <th class="formTitle">根目录配置</th>
+                    <td class="formValue">
+                        <a onclick="setRootConfig()" class="btn  btn-primary">根目录配置</a>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -148,6 +165,9 @@
             });
             $("#ckIsMobileEnable").on('switchChange.bootstrapSwitch', function (e, state) {
                 setckIsMobileEnabled(state);
+            });
+            $("#ckIsRootEnable").on('switchChange.bootstrapSwitch', function (e, state) {
+                setckIsRootEnabled(state);
             });
         });
 
@@ -247,12 +267,43 @@
                 }
             })
         }
+        //根目录配置
+        function setRootConfig() {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/IsRoot",
+                param: {},
+                success: function (data) {
+                    if (data.message == 'true') {
+                        $.modalOpen({
+                            id: "RootConfig",
+                            title: "根目录配置",
+                            url: "/WebManage/WebSiteConfig/RootConfig",
+                            width: "800px",
+                            height: "550px",
+                            btn: null
+                        });
+                    } else {
+                        $.modalAlertWarning('请先开启根目录功能！');
+                    }
+                }
+            })
+        }
 
         //设置高级列表标识
         function setckIsMobileEnabled(state) {
             $.getPostNoConfirm({
                 url: "/WebManage/WebSiteConfig/UpdateMobileEnabled",
                 param: { mobileEnabled: state },
+                success: function (data) {
+                    $.modalAlertSuccess(data.message);
+                }
+            })
+        }
+        //设置根目录标识
+        function setckIsRootEnabled(state) {
+            $.getPostNoConfirm({
+                url: "/WebManage/WebSiteConfig/UpdateRootEnabled",
+                param: { rootEnabled: state },
                 success: function (data) {
                     $.modalAlertSuccess(data.message);
                 }

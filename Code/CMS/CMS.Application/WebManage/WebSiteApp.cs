@@ -29,6 +29,10 @@ namespace CMS.Application.WebManage
         /// 网站资源文件根目录
         /// </summary>
         private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
+        /// <summary>
+        /// 网站根目录资源文件根目录
+        /// </summary>
+        private static readonly string HTMLROOTCONTENTSRC = ConfigHelp.configHelp.HTMLROOTCONTENTSRC;
 
         /// <summary>
         /// 上传图片保存路径
@@ -340,6 +344,33 @@ namespace CMS.Application.WebManage
             }
             return bState;
         }
+        public bool UpdateRootEnableByWebSiteId(string webSiteId, bool rootEnabled)
+        {
+            //验证用户站点权限
+            iUserRepository.VerifyUserWebsiteRole(webSiteId);
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetWebSiteConfigFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    webSiteConfigEntity.Modify(webSiteConfigEntity.Id);
+                    webSiteConfigEntity.RootEnabledMark = rootEnabled;
+                    webSiteConfigRepository.Update(webSiteConfigEntity);
+                    //添加日志
+                    LogHelp.logHelp.WriteDbLog(true, "更新站点配置启用根目录=>" + webSiteConfigEntity.WebSiteId + "=>状态：" + rootEnabled, Enums.DbLogType.Create, "站点配置=>站点维护");
+                }
+                else
+                {
+                    bState = false;
+                }
+            }
+            catch
+            {
+                bState = false;
+            }
+            return bState;
+        }
         public bool IsSearch(string webSiteId)
         {
             return webSiteConfigRepository.IsSearch(webSiteId);
@@ -363,6 +394,10 @@ namespace CMS.Application.WebManage
         public bool IsMobile(string webSiteId)
         {
             return webSiteConfigRepository.IsMobile(webSiteId);
+        }
+        public bool IsRoot(string webSiteId)
+        {
+            return webSiteConfigRepository.IsRoot(webSiteId);
         }
 
 
@@ -507,12 +542,14 @@ namespace CMS.Application.WebManage
                 string lucenceFilePaths = FileHelper.MapPath(string.Format(LUCENCEINDEXPATH, webSiteEntity.ShortName));
                 string htmlSrcPaths = FileHelper.MapPath(HTMLSRC + @"\" + webSiteEntity.ShortName + @"\");
                 string htmlContentSrcPaths = FileHelper.MapPath(HTMLCONTENTSRC + @"\" + webSiteEntity.ShortName + @"\");
+                string htmlRootContentSrcPaths = FileHelper.MapPath(HTMLROOTCONTENTSRC + @"\" + webSiteEntity.ShortName + @"\");
                 string uploadImgPaths = FileHelper.MapPath(UPLOADIMGPATH + @"\" + webSiteEntity.ShortName + @"\");
                 string uploadFilePaths = FileHelper.MapPath(UPLOADFILEPATH + @"\" + webSiteEntity.ShortName + @"\");
 
                 dirSize += FileHelper.GetDirectoryLength(lucenceFilePaths);
                 dirSize += FileHelper.GetDirectoryLength(htmlSrcPaths);
                 dirSize += FileHelper.GetDirectoryLength(htmlContentSrcPaths);
+                dirSize += FileHelper.GetDirectoryLength(htmlRootContentSrcPaths);
                 dirSize += FileHelper.GetDirectoryLength(uploadImgPaths);
                 dirSize += FileHelper.GetDirectoryLength(uploadFilePaths);
 

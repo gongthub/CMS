@@ -395,6 +395,46 @@ function uploadResourceFiles(fileId, resourceId) {
     });
     return dataret;
 }
+//上传多个站点根目录资源文件
+function uploadRootResourceFiles(fileId) {
+    $.loading(true, "正在上传文件……");
+    var dataret = { success: true, data: "" };
+    var formData = new FormData();
+    var upfiles = $("#" + fileId + "")[0].files;
+    if (upfiles != null) {
+        for (var i = 0; i < upfiles.length; i++) {
+            formData.append("files" + i, upfiles[i]);
+        }
+    }
+    $.ajax({
+        type: "POST",
+        url: "/SystemManage/UpFile/uploadRootResourceFiles",
+        dataType: "json",
+        data: formData,
+        async: false,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        success: function (data) {
+            var jsonData = eval(data);
+            if (jsonData.message == "true") {
+                if (jsonData.data != null && jsonData.data != undefined) {
+                    //filePath = jsonData.data; 
+                    dataret.success = true;
+                    dataret.data = jsonData.data;
+                }
+            } else {
+                dataret.success = false;
+                dataret.data = jsonData.data;
+                alert(jsonData.data);
+                return;
+            }
+            $.loading(false);
+        }
+    });
+    return dataret;
+}
 
 //上传多个系统模板资源文件
 function uploadSysResourceFiles(fileId, parentId, resourceId) {

@@ -17,6 +17,7 @@ namespace CMS.Web.Areas.SystemManage.Controllers
     {
 
         private static readonly string HTMLCONTENTSRC = ConfigHelp.configHelp.HTMLCONTENTSRC;
+        private static readonly string HTMLROOTCONTENTSRC = ConfigHelp.configHelp.HTMLROOTCONTENTSRC;
         private static readonly string HTMLSYSCONTENTSRC = Code.ConfigHelp.configHelp.HTMLSYSCONTENTSRC;
 
         [HttpPost]
@@ -311,6 +312,46 @@ namespace CMS.Web.Areas.SystemManage.Controllers
                 {
                     return Success("false", "未选择资源文件夹！");
                 }
+
+            }
+            catch (Exception ex)
+            {
+                return Success("false", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 上传网站根目录资源文件
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [HandlerAuthorize]
+        public ActionResult UploadRootResourceFiles()
+        {
+            try
+            {
+                ResourceApp resourceApp = new ResourceApp();
+
+                UpFileDTO entity = new UpFileDTO();
+                if (HttpContext.Request.Files.Count > 0)
+                {
+                    var upFiles = HttpContext.Request.Files;
+                    for (int i = 0; i < upFiles.Count; i++)
+                    {
+                        if (new WebSiteApp().IsOverSizeByWebSiteId(Base_WebSiteId, upFiles[i].ContentLength))
+                        {
+                            throw new Exception("该站点空间已不足，请联系管理员！");
+                        }
+                        CMS.Application.SystemManage.UpFileApp upfileApp = new Application.SystemManage.UpFileApp();
+                        string savePaths = HTMLROOTCONTENTSRC + @"\\" + Base_WebSiteShortName+ @"\\";
+                        upfileApp.UpLoadFile(upFiles[i], savePaths, true, false);
+                    }
+                }
+                else
+                {
+                    return Success("true");
+                }
+                return Success("true");
 
             }
             catch (Exception ex)

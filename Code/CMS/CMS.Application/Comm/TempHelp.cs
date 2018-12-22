@@ -264,6 +264,8 @@ namespace CMS.Application.Comm
                         htmls = Comm.SysPageHelp.sysPageHelp.GetServicePage();
                         isNoFind = false;
                     }
+
+                    ProcessRootFile(requestModel, ref isNoFind, ref htmls);
                 }
                 if (isNoFind)
                 {
@@ -275,6 +277,25 @@ namespace CMS.Application.Comm
                 throw;
             }
             return htmls;
+        }
+
+        /// <summary>
+        /// 处理网站根目录文件
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <param name="isNoFind"></param>
+        /// <param name="htmls"></param>
+        private static void ProcessRootFile(RequestModel requestModel, ref bool isNoFind, ref string htmls)
+        {
+            string fileName = requestModel.UrlRaws[0];
+            if (isNoFind
+                && new WebSiteApp().IsRoot(requestModel.WebSiteId)
+                && requestModel.UrlRaws.Count == 1
+                && new ResourceApp().IsRootFile(requestModel.WebSiteId, fileName))
+            {
+                htmls = new ResourceApp().GetRootContent(requestModel.WebSiteId, fileName);
+                isNoFind = false;
+            }
         }
 
         #endregion

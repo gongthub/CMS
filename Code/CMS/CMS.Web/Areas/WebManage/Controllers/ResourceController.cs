@@ -33,6 +33,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
             var data = resourceApp.GetList(Base_WebSiteId);
             return Content(data.ToJson());
         }
+        [HttpGet]
+        public ActionResult GetRootGridJson()
+        {
+            var data = resourceApp.GetRootList(Base_WebSiteId);
+            return Content(data.ToJson());
+        }
 
         [HttpGet]
         [HandlerAjaxOnly]
@@ -68,6 +74,15 @@ namespace CMS.Web.Areas.WebManage.Controllers
         public ActionResult DeleteForm(string keyValue)
         {
             resourceApp.DeleteForm(Base_WebSiteId, keyValue);
+            return Success("删除成功。");
+        } 
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult DeleteRoot(string keyValue)
+        {
+            resourceApp.DeleteRoot(Base_WebSiteId, keyValue);
             return Success("删除成功。");
         } 
     }

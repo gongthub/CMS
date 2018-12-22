@@ -125,6 +125,27 @@ namespace CMS.MySqlRepository
             }
             return bState;
         }
+        public bool IsRoot(string webSiteId)
+        {
+            bool bState = true;
+            try
+            {
+                WebSiteConfigEntity webSiteConfigEntity = GetFormByWebSiteId(webSiteId);
+                if (webSiteConfigEntity != null && !string.IsNullOrEmpty(webSiteConfigEntity.Id))
+                {
+                    bState = webSiteConfigEntity.RootEnabledMark;
+                }
+                else
+                {
+                    bState = true;
+                }
+            }
+            catch
+            {
+                bState = true;
+            }
+            return bState;
+        }
         public bool IsAdvancedContent(string webSiteId)
         {
             bool bState = true;

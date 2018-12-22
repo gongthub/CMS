@@ -204,6 +204,16 @@ namespace CMS.Code
             }
         }
         /// <summary>
+        /// 网站根目录资源文件路径
+        /// </summary>
+        public string HTMLROOTCONTENTSRC
+        {
+            get
+            {
+                return Code.Configs.GetValue("htmlRootContentSrc").ToString();
+            }
+        }
+        /// <summary>
         /// 静态页面相对路径
         /// </summary>
         public string HTMLSRCPATH

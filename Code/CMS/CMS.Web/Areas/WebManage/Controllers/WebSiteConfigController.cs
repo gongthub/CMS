@@ -48,6 +48,12 @@ namespace CMS.Web.Areas.WebManage.Controllers
         {
             return View();
         }
+        [HttpGet]
+        [HandlerAuthorize]
+        public ActionResult RootConfig()
+        {
+            return View();
+        }
 
         [HttpGet]
         [HandlerAuthorize]
@@ -98,6 +104,22 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 bool bState = webSiteApp.IsAdvancedContent(Base_WebSiteId);
+                return Success(bState.ToString().ToLower());
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult IsRoot()
+        {
+            try
+            {
+                bool bState = webSiteApp.IsRoot(Base_WebSiteId);
                 return Success(bState.ToString().ToLower());
             }
             catch (Exception e)
@@ -198,6 +220,22 @@ namespace CMS.Web.Areas.WebManage.Controllers
             try
             {
                 webSiteApp.UpdateMobileEnableByWebSiteId(Base_WebSiteId, mobileEnabled);
+                return Success("设置成功。");
+            }
+            catch (Exception e)
+            {
+                return Error(e.Message);
+            }
+        }
+        [HttpPost]
+        [HandlerAjaxOnly]
+        [HandlerAuthorize]
+        //[ValidateAntiForgeryToken]
+        public ActionResult UpdateRootEnabled(bool rootEnabled)
+        {
+            try
+            {
+                webSiteApp.UpdateRootEnableByWebSiteId(Base_WebSiteId, rootEnabled);
                 return Success("设置成功。");
             }
             catch (Exception e)

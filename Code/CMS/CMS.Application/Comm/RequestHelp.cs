@@ -198,7 +198,10 @@ namespace CMS.Application.Comm
         private bool IsProcess(string urlHost, string urlRaw)
         {
             bool bState = false;
-            if (!Common.IsBlackName(urlRaw) && !Common.IsSystemHaveUrlName(urlRaw) && IsWebSiteUrl(urlHost, urlRaw))
+            if (!Common.IsBlackName(urlRaw)
+                && !Common.IsSystemHaveUrlName(urlRaw)
+                && (IsWebSiteUrl(urlHost, urlRaw)
+                || IsRootUrl(urlHost, urlRaw)))
             {
                 bState = true;
             }
@@ -233,6 +236,30 @@ namespace CMS.Application.Comm
             }
             if (!bState)
                 bState = Common.IsSearchForUrl(urlRaw);
+            return bState;
+        }
+
+        /// <summary>
+        /// 判断是否为根目录文件
+        /// </summary>
+        /// <returns></returns>
+        private bool IsRootUrl(string urlhost, string urlRaw)
+        {
+            bool bState = false;
+            WebSiteEntity webSiteEntity = new WebSiteApp().GetModelByUrlHost(urlhost);
+            if (webSiteEntity != null && !string.IsNullOrWhiteSpace(webSiteEntity.Id))
+            {
+                List<string> urlRaws = WebHelper.GetUrls(urlRaw);
+                if (new WebSiteApp().IsRoot(webSiteEntity.Id)
+                    && urlRaws.Count == 1)
+                {
+                    string fileName = urlRaws[0];
+                    string[] fileNames = fileName.Split('.');
+                    if (fileNames.Length == 2)
+                        bState = new ResourceApp().IsRootFile(webSiteEntity.Id, fileName);
+
+                }
+            }
             return bState;
         }
         #endregion
