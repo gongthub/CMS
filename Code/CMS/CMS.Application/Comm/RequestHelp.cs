@@ -3,6 +3,7 @@ using CMS.Code;
 using CMS.Domain.Entity.Common;
 using CMS.Domain.Entity.SystemManage;
 using CMS.Domain.Entity.WebManage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -106,7 +107,7 @@ namespace CMS.Application.Comm
                     context.Response.StatusCode = 500;
                     context.ApplicationInstance.CompleteRequest();
 
-                    LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n");
+                    LogFactory.GetLogger(this.GetType()).Error("异常：" + ex.Message + "\r\n" + JsonConvert.SerializeObject(ex) + "\r\n");
                     //throw;
                 }
             }

@@ -167,6 +167,10 @@ namespace CMS.Application.Comm
                 requestModel.UrlRaw = Common.HandleUrlRaw(requestModel.UrlRaw);
                 WebSiteApp app = new WebSiteApp();
                 WebSiteEntity entity = app.GetModelByUrlHost(requestModel.UrlHost);
+                if (entity == null || entity.Id == null || entity.Id == "")
+                {
+                    throw new Exception("站点不存在");
+                }
                 requestModel.WebSiteId = entity.Id;
                 requestModel.webSite = entity;
                 requestModel.webSiteConfig = app.GetWebSiteConfigFormByWebSiteId(entity.Id);
